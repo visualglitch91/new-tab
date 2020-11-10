@@ -61,7 +61,7 @@ const links = [
   },
   {
     name: "Slack",
-    url: "https://app.slack.com/",
+    url: "https://app.slack.com/client/T041LLY3A",
     icon:
       "https://a.slack-edge.com/80588/marketing/img/meta/slack_hash_256.png",
   },
@@ -97,7 +97,7 @@ const links = [
   // },
   {
     name: "Home Assistant",
-    url: "https://127.0.0.1:8123",
+    url: "http://127.0.0.1:8123",
     icon:
       "https://play-lh.googleusercontent.com/iS3Wa525QXuFdSkWi-s45GUK4oiPpOgmWQosv81pk0P1dF8Al6opybbofk5v-5hTQhua=s180-rw",
   },
