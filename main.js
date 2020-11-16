@@ -68,8 +68,7 @@ const links = [
   {
     name: "WhatsApp",
     url: "https://web.whatsapp.com/",
-    icon:
-      "https://cdn3.iconfinder.com/data/icons/cute-flat-social-media-icons-3/512/whatsapp.png",
+    icon: "icons/whatsapp.png",
   },
   {
     name: "Spotify",
