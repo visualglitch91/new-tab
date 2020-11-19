@@ -62,7 +62,7 @@ li span {
   font-size: 13px;
   text-align: center;
   background: rgba(10, 10, 10, 0.3);
-  padding: 4px;
+  padding: 4px 8px;
   border-radius: 8px;
   transition: background 100ms linear;
 }
