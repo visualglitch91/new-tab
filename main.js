@@ -37,7 +37,7 @@ const links = [
   },
   {
     name: "Dropbox",
-    url: "https://dopbox.com/home",
+    url: "https://dropbox.com/home",
     icon:
       "https://is2-ssl.mzstatic.com/image/thumb/Purple124/v4/df/26/d2/df26d227-6334-ec00-8b58-4c982c12db2e/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/230x0w.webp",
   },
