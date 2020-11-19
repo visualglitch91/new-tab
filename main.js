@@ -88,17 +88,22 @@ const links = [
     icon:
       "https://play-lh.googleusercontent.com/prPgPlq7wRcd7OGw0MKylsmoe9mB5r23n8K1YGYh417__fBP9bI_PhhLhTwZsrO8SA=s180-rw",
   },
-  // {
-  //   name: "IFTTT",
-  //   url: "https://ifttt.com",
-  //   icon:
-  //     "https://is5-ssl.mzstatic.com/image/thumb/Purple124/v4/54/b8/36/54b836ca-2e71-54c6-e650-f699535cabb0/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.webp",
-  // },
+  {
+    name: "qBittorrent",
+    url: "http://localhost:9999/",
+    icon: "icons/qbittorrent.png",
+  },
   {
     name: "Home Assistant",
     url: "http://127.0.0.1:8123",
     icon:
       "https://play-lh.googleusercontent.com/iS3Wa525QXuFdSkWi-s45GUK4oiPpOgmWQosv81pk0P1dF8Al6opybbofk5v-5hTQhua=s180-rw",
+  },
+  {
+    name: "IFTTT",
+    url: "https://ifttt.com",
+    icon:
+      "https://is5-ssl.mzstatic.com/image/thumb/Purple124/v4/54/b8/36/54b836ca-2e71-54c6-e650-f699535cabb0/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/246x0w.webp",
   },
   {
     name: "Feedly",
@@ -143,3 +148,5 @@ function renderTime() {
 setInterval(renderTime, 1000);
 renderTime();
 renderLinks();
+
+setTimeout(() => document.body.classList.add("loaded"), 100);

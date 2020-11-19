@@ -1,11 +1,16 @@
 html,
-body {
+body,
+#root {
   height: 100%;
 }
 
 body {
   padding: 0;
   margin: 0;
+  background-color: #333;
+}
+
+#root {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,6 +20,12 @@ body {
   font-family: "Open Sans", sans-serif;
   font-weight: 500;
   color: white;
+  opacity: 0;
+  transition: opacity 300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+body.loaded #root {
+  opacity: 1;
 }
 
 #time {
@@ -29,7 +40,7 @@ ul {
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   column-gap: 28px;
   grid-gap: 28px;
 }
