@@ -59,11 +59,17 @@ const links = [
     icon:
       "https://hrlocker.ams3.cdn.digitaloceanspaces.com/wp-content/uploads/2019/01/cropped-HRLocker_wp_site_logo_512clear-270x270.png",
   },
+  // {
+  //   name: "Slack",
+  //   url: "https://app.slack.com/client/T041LLY3A",
+  //   icon:
+  //     "https://a.slack-edge.com/80588/marketing/img/meta/slack_hash_256.png",
+  // },
   {
-    name: "Slack",
-    url: "https://app.slack.com/client/T041LLY3A",
+    name: "Mercado Livre",
+    url: "https://mercadolivre.com.br",
     icon:
-      "https://a.slack-edge.com/80588/marketing/img/meta/slack_hash_256.png",
+      "https://play-lh.googleusercontent.com/Ed5JtmBBRXogvZgW0xO8Cj96wo54k7-1c8NPjoUC3FqcCd2jGgMPaWdKH64EjJxbuPI=s180-rw",
   },
   {
     name: "WhatsApp",
