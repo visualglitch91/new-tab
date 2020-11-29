@@ -133,7 +133,7 @@ function renderLinks() {
     const li = document.createElement("li");
 
     li.innerHTML = `
-    <a href="${link.url}">
+    <a href="${link.url}" target="_parent">
       <img src="${link.icon}" />
       <span>${link.name}</span>
     </a>
