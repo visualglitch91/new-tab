@@ -11,11 +11,11 @@ css(`
   .component__stack--horizontal > * { flex: 1; }
   `);
 
-export default function Stack({ class: className, type, children }) {
+export default function Stack({ class: className, horizontal, children }) {
   return h`
     <div class=${clsx(
       "component__stack",
-      `component__stack--${type}`,
+      `component__stack--${horizontal ? "horizontal" : "vertical"}`,
       className
     )}>
       ${children}

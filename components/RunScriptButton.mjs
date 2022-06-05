@@ -13,7 +13,11 @@ css(`
   }
 `);
 
-export default function RunScriptButton({ class: className, entityId }) {
+export default function RunScriptButton({
+  class: className,
+  label = "Executar",
+  entityId,
+}) {
   const hass = useHass();
 
   function onClick() {
@@ -22,7 +26,7 @@ export default function RunScriptButton({ class: className, entityId }) {
 
   return h`
     <${Button} class=${className} onClick=${onClick}>
-      Executar
+      ${label}
     </${Button}>
   `;
 }
