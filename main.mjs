@@ -9,7 +9,7 @@ css(`
 
   body {
     margin: 0;
-    padding: 24px;
+    padding: 16px;
     background-image: url('/local/themes/visualglitch91/background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -20,21 +20,30 @@ css(`
   }
 `);
 
+let prevHass = null;
+
 const app = document.getElementById("app");
 
-function update() {
-  const { user, states } = getHass();
-  const isAdmin = user.is_admin;
+function update(force) {
+  const hass = getHass();
 
-  render(
-    h`<${HassProvider} value=${{ user, states, isAdmin }}>
-        <${App} />
-      </${HassProvider}>`,
-    app
-  );
+  if (hass && (force || prevHass !== hass)) {
+    const { user, states } = hass;
+    const isAdmin = user.is_admin;
+
+    prevHass = hass;
+
+    render(
+      h`<${HassProvider} value=${{ user, states, isAdmin }}>
+          <${App} />
+        </${HassProvider}>`,
+      app
+    );
+  }
 
   setTimeout(update, 100);
 }
 
+window.addEventListener("resize", () => update(true));
 hideAppHeader();
 update();

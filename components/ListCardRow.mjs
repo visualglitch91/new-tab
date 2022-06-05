@@ -32,6 +32,8 @@ css(`
 
   .component__list-card-row__label {
     margin-right: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .component__list-card-row__divider {

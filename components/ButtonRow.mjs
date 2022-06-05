@@ -6,9 +6,13 @@ css(`
     width: 100%;
     display: flex;
     grid-gap: 8px;
+    overflow: hidden;
   }
 
-  .module__tv__button-row > * { flex: 1; }
+  .module__tv__button-row > * {
+    flex: 1;
+    overflow: hidden;
+  }
 `);
 
 export default function ButtonRow({ children, height }) {

@@ -1,10 +1,11 @@
 import { h } from "../utils/preact.mjs";
 import { css } from "../utils/general.mjs";
-import { useHass } from "../utils/hass.mjs";
+import { makeServiceCall, useHass } from "../utils/hass.mjs";
 import ListCard from "../components/ListCard.mjs";
 import PillButton from "../components/PillButton.mjs";
 import ListCardRow from "../components/ListCardRow.mjs";
 import RunScriptButton from "../components/RunScriptButton.mjs";
+import Button from "../components/Button.mjs";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -18,47 +19,62 @@ css(`
 
 const statusLabels = {
   cleaning: "Limpando",
-  docked: "Estacionado",
+  docked: "Na Base",
   paused: "Pausado",
   idle: "Parado",
   returning: "Voltando",
   error: "Erro",
 };
 
+function makeVacuumCall(action) {
+  return makeServiceCall("vacuum", action, { entity_id: vacuumId });
+}
+
 function VacuumActionsRow() {
   const { states } = useHass();
   const vacuum = states[vacuumId];
 
   if (["docked", "idle"].includes(vacuum.state)) {
-    return h`
+    const clean = h`
       <${ListCardRow} icon="mdi:robot-vacuum" label="Aspirar áreas selecionadas">
         <${RunScriptButton} label="Aspirar" entityId="script.vacuum_clean_selected_zones" />
       </${ListCardRow}>`;
-  }
 
-  const serviceData = { entity_id: vacuumId };
+    if (vacuum.state === "docked") {
+      return clean;
+    }
+
+    return h`
+      ${clean}
+      <${ListCardRow} icon="mdi:robot-vacuum" label="Retornar para a base">
+        <${Button} onClick=${makeVacuumCall("return_to_base")}>
+          Retornar
+        </${Button}>
+      </${ListCardRow}>
+    `;
+  }
 
   return h`
     <div class="module__vacuum__pills">
       <${PillButton}
         icon="mdi:play"
         label="Continuar"
-        onClick=${makeServiceCall("vacuum", "start", serviceData)}
+        onClick=${makeVacuumCall("start")}
       />
       <${PillButton}
         icon="mdi:pause"
         label="Pausar"
-        onClick=${makeServiceCall("vacuum", "pause", serviceData)}
+        onClick=${makeVacuumCall("pause")}
       />
       <${PillButton}
         icon="mdi:stop"
         label="Parar"
-        onClick=${makeServiceCall("vacuum", "stop", serviceData)}
+        onClick=${makeVacuumCall("stop")}
       />
       <${PillButton}
         icon="mdi:home"
         label="Retornar"
-        onClick=${makeServiceCall("vacuum", "return_to_base", serviceData)}
+        onClick=${makeVacuumCall("return_to_base")}
       />
     </div>`;
 }
@@ -67,7 +83,8 @@ const rows = [
   {
     label: "Status",
     entityId: vacuumId,
-    renderContent: (entity) => statusLabels[entity.attributes.status],
+    renderContent: (entity) =>
+      statusLabels[entity.attributes.status]?.toUpperCase(),
   },
   {
     type: "custom",

@@ -1,15 +1,8 @@
+import { h } from "../utils/preact.mjs";
 import { makeWebOSCall } from "../utils/hass.mjs";
-
-export const rgbEntity = {
-  label: "RGB",
-  entityId: "light.sala_luz_ambiente",
-};
-
-export const homeTheaterEntity = {
-  entityId: "switch.sala_receiver",
-  label: "Surround",
-  icon: "mdi:surround-sound",
-};
+import ListCard from "../components/ListCard.mjs";
+import ButtonCard from "../components/ButtonCard.mjs";
+import MaterialIcon from "../components/MaterialIcon.mjs";
 
 export function makeTVButtonCall(button) {
   return makeWebOSCall("button", "media_player.sala_tv", { button });
@@ -29,13 +22,26 @@ export function makeTVLaunchAppCall(appId) {
   });
 }
 
-export const svgStyle = {
-  height: "23px",
-  maxWidth: "80%",
-};
+export function IconButtonCard({ icon, size, onClick }) {
+  return h`
+    <${ButtonCard} onClick=${onClick}>
+      <${MaterialIcon} icon=${icon} size=${size} />
+    </${ButtonCard}>`;
+}
 
-export const imgStyle = {
+const imgStyle = {
   objectFit: "contain",
   height: "70%",
   width: "80%",
 };
+
+export function ImageButtonCard({ asset, onClick }) {
+  return h`
+    <${ButtonCard} onClick=${onClick}>
+      <img src=${`assets/${asset}.png`} style=${imgStyle} />
+    </${ButtonCard}>`;
+}
+
+export function EntityCard({ label, icon, entityId }) {
+  return h`<${ListCard} rows=${[{ label, icon, entityId }]} />`;
+}

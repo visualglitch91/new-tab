@@ -1,6 +1,5 @@
-import { h, useRef, useEffect } from "../utils/preact.mjs";
+import { h, useEffect, useRef, useState } from "../utils/preact.mjs";
 import { css, clsx, clamp } from "../utils/general.mjs";
-import { useRerender } from "../utils/hooks.mjs";
 
 const gutter = 16;
 const minColumnWidth = 420;
@@ -21,20 +20,10 @@ css(`
   }
 `);
 
-export default function ColumnarLayout({ class: className, children }) {
+export default function DesktopLayout({ class: className, children }) {
   const nodeRef = useRef();
-  const rerender = useRerender();
+  const [, setReady] = useState(false);
   const items = [...children].flat().filter(Boolean);
-
-  useEffect(() => {
-    rerender();
-    window.addEventListener("resize", rerender);
-
-    return () => {
-      window.removeEventListener("resize", rerender);
-    };
-  }, []);
-
   const availableWidth = nodeRef.current?.offsetWidth;
 
   const columns = (() => {
@@ -73,6 +62,10 @@ export default function ColumnarLayout({ class: className, children }) {
         : null
     );
   })();
+
+  useEffect(() => {
+    setReady(true);
+  }, []);
 
   return h`
     <div ref=${nodeRef} class=${clsx("component__columnar-layout", className)}>
