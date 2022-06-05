@@ -63,6 +63,14 @@ css(`
   .component__switch input:checked + i::after {
     transform: translate3d(22px, 2px, 0);
   }
+
+  .component__switch:hover input + i::after {
+    background-color: #7ca6cc;
+  }
+
+  .component__switch:hover input:checked + i::after {
+    background-color: #f36e90;
+  }
 `);
 
 export default function Switch({ checked, onInput }) {

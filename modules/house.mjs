@@ -29,6 +29,7 @@ const groups = {
       { label: "Luz da Cozinha", entityId: "switch.cozinha_luz" },
       { label: "Luz da Lavanderia", entityId: "switch.lavanderia_luz" },
       {
+        icon: "mdi:water",
         label: "Bateria do Sensor de Vazamento",
         entityId: "sensor.water_leak_sensor_battery",
         renderContent: (entity) => `${Math.floor(Number(entity.state))}%`,
