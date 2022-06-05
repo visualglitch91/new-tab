@@ -1,8 +1,9 @@
-import { h } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import { makeTurnOnCall } from "../utils/hass.mjs";
+import Stack from "../components/Stack.mjs";
+import Switch from "../components/Switch.mjs";
 import ListCard from "../components/ListCard.mjs";
 import RunScriptButton from "../components/RunScriptButton.mjs";
-import Switch from "../components/Switch.mjs";
-import Stack from "../components/Stack.mjs";
 
 const groups = {
   living_room: {
@@ -58,11 +59,8 @@ const groups = {
             ? "Ligada"
             : h`<${Switch}
                   checked=${false}
-                  onInput=${() => {
-                    hass.callService("homeassistant", "turn_on", {
-                      entity_id: "switch.impressora_3d",
-                    });
-                  }} />`,
+                  onInput=${makeTurnOnCall("switch.impressora_3d")}
+                />`,
       },
       {
         entityId: "script.casa_apagar_todas_luzes",

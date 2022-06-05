@@ -1,9 +1,8 @@
-import { h, clsx, css } from "../utils.mjs";
+import { h,  } from "../utils/preact.mjs";
+import { clsx, css } from "../utils/general.mjs";
 
 css(`
-  .component__button {
-
-  }
+  .component__button {}
 `);
 
 export default function Button({ class: className, children, onClick }) {

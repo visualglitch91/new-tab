@@ -1,10 +1,9 @@
-import { h, clsx, css } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import {  clsx, css } from "../utils/general.mjs";
 import MaterialIcon from "./MaterialIcon.mjs";
 
 css(`
-  .component__pill-button {
-
-  }
+  .component__pill-button {}
 `);
 
 export default function PillButton({ class: className, icon, label, onClick }) {

@@ -1,4 +1,5 @@
-import { h, css } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import { css } from "../utils/general.mjs";
 
 css(`
   .component__switch {

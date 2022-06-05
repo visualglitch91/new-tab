@@ -1,12 +1,3 @@
-import htm from "./vendor/htm@3.1.1.mjs";
-
-const { render, createContext } = window.preact;
-
-const { useContext, useEffect, useState, useCallback, useRef } =
-  window.preactHooks;
-
-export const h = htm.bind(window.preact.h);
-
 export function css(value) {
   const style = document.createElement("style");
   style.innerHTML = value;
@@ -15,24 +6,6 @@ export function css(value) {
 
 export function clsx(...classes) {
   return classes.filter(Boolean).join(" ");
-}
-
-const HassContext = createContext({});
-
-export const HassProvider = HassContext.Provider;
-
-export function useHass() {
-  return useContext(HassContext);
-}
-
-export { render, useEffect, useState, useCallback, useRef };
-
-export function useRerender() {
-  const [, setCounter] = useState(() => Date.now());
-
-  return useCallback(() => {
-    setCounter(Date.now());
-  });
 }
 
 export function clamp(value, min, max) {
@@ -74,26 +47,4 @@ export function $$$(selector, rootNode = document.body) {
   traverser(rootNode);
 
   return arr;
-}
-
-export function getIcon(entity) {
-  if (entity) {
-    const { state, entity_id } = entity;
-    const [domain] = entity_id.split(".");
-
-    switch (domain) {
-      case "input_boolean":
-        if (state === "on") {
-          return "mdi:check-circle-outline";
-        } else if (state === "off") {
-          return "mdi:close-circle-outline";
-        }
-      case "vacuum":
-        return "mdi:robot-vacuum";
-      case "script":
-        return "mdi:code-braces";
-    }
-  }
-
-  return "mdi:ghost";
 }

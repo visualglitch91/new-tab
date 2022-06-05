@@ -1,9 +1,12 @@
-import { h, clsx } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import { clsx } from "../utils/general.mjs";
 
-export default function MaterialIcon({ class: className, icon }) {
+export default function MaterialIcon({ class: className, icon, size }) {
   const [, name] = icon.split(":");
 
   return h`
-    <i class=${clsx("mdi", `mdi-${name}`, className)} />
-  `;
+    <i
+      style=${size ? { fontSize: `${size}px` } : undefined}
+      class=${clsx("mdi", `mdi-${name}`, className)}
+    />`;
 }

@@ -1,12 +1,6 @@
-import {
-  h,
-  css,
-  clsx,
-  clamp,
-  useRef,
-  useEffect,
-  useRerender,
-} from "../utils.mjs";
+import { h, useRef, useEffect } from "../utils/preact.mjs";
+import { css, clsx, clamp } from "../utils/general.mjs";
+import { useRerender } from "../utils/hooks.mjs";
 
 const gutter = 16;
 const minColumnWidth = 420;
@@ -30,7 +24,7 @@ css(`
 export default function ColumnarLayout({ class: className, children }) {
   const nodeRef = useRef();
   const rerender = useRerender();
-  const items = [...children].flat().filter(Boolean)
+  const items = [...children].flat().filter(Boolean);
 
   useEffect(() => {
     rerender();

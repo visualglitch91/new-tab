@@ -1,4 +1,6 @@
-import { h, css, render, $$$, HassProvider } from "./utils.mjs";
+import { css } from "./utils/general.mjs";
+import { h, render } from "./utils/preact.mjs";
+import { getHass, HassProvider, hideAppHeader } from "./utils/hass.mjs";
 import App from "./App.mjs";
 
 css(`
@@ -18,57 +20,14 @@ css(`
   }
 `);
 
-let _toggleSidebar = null;
 const app = document.getElementById("app");
-
-function getHass() {
-  const element = window.parent.document.querySelector("home-assistant");
-  return element.__hass;
-}
-
-function callService(domain, service, data) {
-  return getHass().callService(domain, service, data);
-}
-
-function hideAppHeader() {
-  const iframePanel = $$$(
-    "ha-panel-iframe",
-    window.parent.document.querySelector("home-assistant")
-  )[0];
-
-  const subpage = $$$("hass-subpage", iframePanel)[0];
-  const [toolbar, content] = Array.from(subpage.shadowRoot.children);
-
-  toolbar.style.display = "none";
-  content.style.height = "100%";
-
-  const sidebarToggle = $$$('button[aria-label="Sidebar Toggle"]', toolbar)[0];
-
-  _toggleSidebar = () => {
-    sidebarToggle.click();
-  };
-}
-
-function toggleSidebar() {
-  if (_toggleSidebar) {
-    _toggleSidebar();
-  }
-}
 
 function update() {
   const { user, states } = getHass();
   const isAdmin = user.is_admin;
 
   render(
-    h`<${HassProvider}
-        value=${{
-          user,
-          isAdmin,
-          states,
-          toggleSidebar,
-          callService,
-        }}
-      >
+    h`<${HassProvider} value=${{ user, states, isAdmin }}>
         <${App} />
       </${HassProvider}>`,
     app

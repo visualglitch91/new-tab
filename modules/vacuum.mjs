@@ -1,4 +1,6 @@
-import { css, h, useHass } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import { css } from "../utils/general.mjs";
+import { useHass } from "../utils/hass.mjs";
 import ListCard from "../components/ListCard.mjs";
 import PillButton from "../components/PillButton.mjs";
 import ListCardRow from "../components/ListCardRow.mjs";
@@ -24,7 +26,7 @@ const statusLabels = {
 };
 
 function VacuumActionsRow() {
-  const { states, callService } = useHass();
+  const { states } = useHass();
   const vacuum = states[vacuumId];
 
   if (["docked", "idle"].includes(vacuum.state)) {
@@ -41,22 +43,22 @@ function VacuumActionsRow() {
       <${PillButton}
         icon="mdi:play"
         label="Continuar"
-        onClick=${() => callService("vacuum", "start", serviceData)}
+        onClick=${makeServiceCall("vacuum", "start", serviceData)}
       />
       <${PillButton}
         icon="mdi:pause"
         label="Pausar"
-        onClick=${() => callService("vacuum", "pause", serviceData)}
+        onClick=${makeServiceCall("vacuum", "pause", serviceData)}
       />
       <${PillButton}
         icon="mdi:stop"
         label="Parar"
-        onClick=${() => callService("vacuum", "stop", serviceData)}
+        onClick=${makeServiceCall("vacuum", "stop", serviceData)}
       />
       <${PillButton}
         icon="mdi:home"
         label="Retornar"
-        onClick=${() => callService("vacuum", "return_to_base", serviceData)}
+        onClick=${makeServiceCall("vacuum", "return_to_base", serviceData)}
       />
     </div>`;
 }

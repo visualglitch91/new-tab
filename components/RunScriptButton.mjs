@@ -1,5 +1,7 @@
-import { h, css, useHass } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import { css } from "../utils/general.mjs";
 import Button from "./Button.mjs";
+import { makeTurnOnCall } from "../utils/hass.mjs";
 
 css(`
   .component__paper {
@@ -18,14 +20,8 @@ export default function RunScriptButton({
   label = "Executar",
   entityId,
 }) {
-  const hass = useHass();
-
-  function onClick() {
-    hass.callService("script", "turn_on", { entity_id: entityId });
-  }
-
   return h`
-    <${Button} class=${className} onClick=${onClick}>
+    <${Button} class=${className} onClick=${makeTurnOnCall(entityId)}>
       ${label}
     </${Button}>
   `;

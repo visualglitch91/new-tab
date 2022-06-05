@@ -1,4 +1,5 @@
-import { h, clsx, css } from "../utils.mjs";
+import { h } from "../utils/preact.mjs";
+import { clsx, css } from "../utils/general.mjs";
 import EntityRow from "./EntityRow.mjs";
 import Paper from "./Paper.mjs";
 
