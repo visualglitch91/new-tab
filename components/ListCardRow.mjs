@@ -1,5 +1,5 @@
 import { h } from "../utils/preact.mjs";
-import { css } from "../utils/general.mjs";
+import { clsx, css } from "../utils/general.mjs";
 import MaterialIcon from "./MaterialIcon.mjs";
 
 css(`
@@ -13,7 +13,21 @@ css(`
 
   .component__list-card-row__icon-wrapper {
     font-size: 24px;
-    padding: 6px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .component__list-card-row__icon-wrapper--has-click {
+    cursor: pointer;
+    border-radius: 100%;
+    transition: background 100ms linear;
+  }
+
+  .component__list-card-row__icon-wrapper--has-click:hover {
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .component__list-card-row__label {
@@ -26,12 +40,20 @@ css(`
   }
 `);
 
-export default function ListCardRow({ icon, label, children }) {
+export default function ListCardRow({ icon, label, children, onIconClick }) {
   return h`
     <div class="component__list-card-row">
       ${
         Boolean(icon) &&
-        h`<div class="component__list-card-row__icon-wrapper"><${MaterialIcon} icon=${icon} /></div>`
+        h`<div
+            class=${clsx(
+              "component__list-card-row__icon-wrapper",
+              onIconClick && "component__list-card-row__icon-wrapper--has-click"
+            )}
+            onClick=${onIconClick}
+          >
+          <${MaterialIcon} icon=${icon} />
+        </div>`
       }
       <div class="component__list-card-row__label">${label}</div>
       <div>${children}</div>

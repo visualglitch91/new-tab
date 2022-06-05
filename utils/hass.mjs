@@ -2,6 +2,7 @@ import { $$$ } from "./general.mjs";
 import { useContext, createContext } from "./preact.mjs";
 
 let _toggleSidebar = null;
+const parentDocument = window.parent.document;
 
 const HassContext = createContext({});
 
@@ -12,7 +13,7 @@ export function useHass() {
 }
 
 export function getHass() {
-  const element = window.parent.document.querySelector("home-assistant");
+  const element = parentDocument.querySelector("home-assistant");
   return element.__hass;
 }
 
@@ -80,4 +81,18 @@ export function makeWebOSCall(service, entityId, data) {
     entity_id: entityId,
     ...data,
   });
+}
+
+export function showMoreInfo(entityId) {
+  console.log("showMoreInfo", entityId);
+  const element = parentDocument.createElement("ha-more-info-dialog");
+
+  element.hass = getHass();
+  element._entityId = entityId;
+
+  element.addEventListener("dialog-closed", () => {
+    element.remove();
+  });
+
+  parentDocument.body.appendChild(element);
 }

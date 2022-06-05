@@ -1,5 +1,10 @@
 import { h } from "../utils/preact.mjs";
-import { useHass, getIcon, makeServiceCall } from "../utils/hass.mjs";
+import {
+  useHass,
+  getIcon,
+  showMoreInfo,
+  makeServiceCall,
+} from "../utils/hass.mjs";
 import ListCardRow from "./ListCardRow.mjs";
 import Switch from "./Switch.mjs";
 
@@ -21,13 +26,19 @@ export default function EntityRow({
       </${ListCardRow}>`;
   }
 
+  function onIconClick() {
+    showMoreInfo(entityId);
+  }
+
   const { state, attributes } = entity;
   const { friendly_name: friendlyName } = attributes;
   const [domain] = entityId.split(".");
   const checked = state === "on";
 
   return h`
-    <${ListCardRow} icon=${icon} label=${label || friendlyName}>
+    <${ListCardRow} icon=${icon} label=${
+    label || friendlyName
+  } onIconClick=${onIconClick}>
       ${
         renderContent
           ? renderContent(entity)

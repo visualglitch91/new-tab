@@ -4,6 +4,7 @@ import Stack from "../components/Stack.mjs";
 import Switch from "../components/Switch.mjs";
 import ListCard from "../components/ListCard.mjs";
 import RunScriptButton from "../components/RunScriptButton.mjs";
+import SidebarToggleRow from "../components/SidebarToggleRow.mjs";
 
 const groups = {
   living_room: {
@@ -81,6 +82,10 @@ const groups = {
         renderContent: (entity) =>
           h`<${RunScriptButton} entityId=${entity.entity_id} />`,
       },
+      {
+        type: "custom",
+        render:()=> h`<${SidebarToggleRow} />`
+      }
     ],
   },
 };
