@@ -15,18 +15,27 @@ export default function App() {
     return h`
       <${MobileLayout}
         tabs=${[
-          { title: "TV", content: tvModule },
-          { title: "Casa", content: houseModule },
-          ...(isAdmin
-            ? [
-                { title: "Aspirador", content: vacuumModule },
-                {
-                  title: "Câmeras",
-                  content: camerasModule,
-                },
-              ]
-            : []),
-        ]}
+          {
+            title: "TV",
+            icon: "mdi:television-classic",
+            content: tvModule,
+          },
+          {
+            title: "Casa",
+            icon: "mdi:home",
+            content: houseModule,
+          },
+          isAdmin && {
+            title: "Aspirador",
+            icon: "mdi:robot-vacuum",
+            content: vacuumModule,
+          },
+          isAdmin && {
+            title: "Câmeras",
+            icon: "mdi:cctv",
+            content: camerasModule,
+          },
+        ].filter(Boolean)}
       />`;
   }
 

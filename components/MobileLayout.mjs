@@ -1,8 +1,9 @@
 import { h, useState } from "../utils/preact.mjs";
 import { clsx, css } from "../utils/general.mjs";
 import Stack from "./Stack.mjs";
+import MaterialIcon from "./MaterialIcon.mjs";
 
-const tabHeight = 55;
+const tabHeight = 60;
 
 css(`
   .components__mobile-layout__header {
@@ -18,25 +19,32 @@ css(`
     color: white;
     padding: 0 14px;
     z-index: 2;
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .components__mobile-layout__tab {
     height: 100%;
     margin: 0;
-    padding: 6px 14px 4px 14px;
+    padding: 0 8px 0 8px;
     border: none;
     border-top: 2px solid transparent;
     outline: none;
     background: transparent;
-    font-size: 14px;
+    font-size: 9px;
     color:inherit;
     display: flex;
+    flex-direction: column;
+    row-gap: 3px;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: background 100ms linear;
     text-transform: uppercase;
+    flex:1;
+  }
+
+  .components__mobile-layout__tab > i {
+    font-size: 20px;
   }
 
   .components__mobile-layout__tab:hover {
@@ -49,11 +57,11 @@ css(`
   }
 
   .components__mobile-layout__content {
-    margin-bottom: ${tabHeight}px;
+    margin-bottom: ${tabHeight + 4}px;
   }
 `);
 
-function Tab({ active, title, onClick }) {
+function Tab({ active, title, icon, onClick }) {
   return h`
     <button
       type="button"
@@ -63,6 +71,7 @@ function Tab({ active, title, onClick }) {
       )}
       onClick=${onClick}
     >
+        <${MaterialIcon} icon=${icon} />
       ${title}
     </button>`;
 }
@@ -78,6 +87,7 @@ export default function MobileLayout({ tabs }) {
           h`
           <${Tab}
             active=${active === index}
+            icon=${tab.icon}
             title=${tab.title}
             onClick=${() => setActive(index)}
           />`

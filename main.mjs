@@ -31,26 +31,8 @@ const isTouchDevice =
   navigator.msMaxTouchPoints > 0;
 
 if (!isTouchDevice) {
-  css(`
-    body::-webkit-scrollbar {
-      width: 8px;
-    }
-  
-    body {
-      scrollbar-width: thin;
-      scrollbar-color: var(--thumbBG) var(--scrollbarBG);
-    }
-  
-    body::-webkit-scrollbar-track {
-      background: var(--scrollbarBG);
-      padding: 2px;
-    }
-  
-    body::-webkit-scrollbar-thumb {
-      background-color: var(--thumbBG) ;
-      border-radius: 6px;
-    }
-  `);
+  css(`body { height: 100vh }`);
+  new SimpleBar(document.body);
 }
 
 let prevHass = null;
