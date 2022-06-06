@@ -2,13 +2,15 @@ import { h, useState } from "../utils/preact.mjs";
 import { clsx, css } from "../utils/general.mjs";
 import Stack from "./Stack.mjs";
 
+const tabHeight = 55;
+
 css(`
   .components__mobile-layout__header {
-    height: 50px;
+    height: ${tabHeight}px;
     backdrop-filter: blur(10px);
-    background: rgb(37 51 82 / 75%);
+    background: rgb(37 51 82 / 83%);
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
     display: flex;
@@ -24,7 +26,7 @@ css(`
     margin: 0;
     padding: 6px 14px 4px 14px;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-top: 2px solid transparent;
     outline: none;
     background: transparent;
     font-size: 14px;
@@ -47,7 +49,7 @@ css(`
   }
 
   .components__mobile-layout__content {
-    margin-top: 50px;
+    margin-bottom: ${tabHeight}px;
   }
 `);
 

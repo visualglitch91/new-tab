@@ -28,11 +28,7 @@ css(`
   }
 `);
 
-export default function ButtonCard({
-  class: className,
-  children,
-  onClick,
-}) {
+export default function ButtonCard({ class: className, children, onClick }) {
   return h`
     <${Paper} class=${clsx("component__button-card", className)}>
       <button type="button" onClick=${onClick}>

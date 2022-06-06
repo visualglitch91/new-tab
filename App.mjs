@@ -20,7 +20,10 @@ export default function App() {
           ...(isAdmin
             ? [
                 { title: "Aspirador", content: vacuumModule },
-                { title: "Câmeras", content: camerasModule },
+                {
+                  title: "Câmeras",
+                  content: camerasModule,
+                },
               ]
             : []),
         ]}

@@ -1,5 +1,5 @@
 import { h } from "../utils/preact.mjs";
-import { clsx, css } from "../utils/general.mjs";
+import { css } from "../utils/general.mjs";
 import Paper from "./Paper.mjs";
 import EntityRow from "./EntityRow.mjs";
 import EntitiesSwitch from "./EntitiesSwitch.mjs";
@@ -15,8 +15,8 @@ css(`
 
   .component__list-card__header h2 {
     margin: 0;
-    font-size: 24px;
-    line-height: 48px;
+    font-size: 18px;
+    line-height: 32px;
   }
 
   .component__list-card__content {
@@ -61,7 +61,7 @@ export default function ListCard({
     .map((it) => it.entityId);
 
   return h`
-    <${Paper} class=${clsx("component__paper", className)}>
+    <${Paper} class=${className}>
       ${
         Boolean(title) &&
         h`

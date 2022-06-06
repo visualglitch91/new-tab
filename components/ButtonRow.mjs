@@ -6,7 +6,6 @@ css(`
     width: 100%;
     display: flex;
     grid-gap: 8px;
-    overflow: hidden;
   }
 
   .module__tv__button-row > * {

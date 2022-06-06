@@ -1,8 +1,9 @@
 import { h, useEffect, useState } from "../utils/preact.mjs";
-import { css } from "../utils/general.mjs";
+import { css, clsx } from "../utils/general.mjs";
 import { showMoreInfo, useHass } from "../utils/hass.mjs";
 import Stack from "../components/Stack.mjs";
 import Paper from "../components/Paper.mjs";
+import TitleCard from "../components/TitleCard.mjs";
 
 css(`
   .module__cameras__camera {
@@ -31,15 +32,20 @@ css(`
   }
 
   .module__cameras__camera__overlay:not(:empty) {
-    background: #666;
+    backdrop-filter: blur(5px);
+    background: rgba(60, 60, 60, 0.3);
   }
 
   .module__cameras__camera__overlay:not(:empty):hover {
-    background: #888;
+    background: rgba(40, 40, 40, 0.3);
   }
 
   .module__cameras__camera__overlay:empty:hover {
     background: rgba(0, 0, 0, 0.3);
+  }
+
+  .module__cameras__image--broken {
+    opacity: 0;
   }
 `);
 
@@ -48,6 +54,10 @@ function Camera({ entityId }) {
   const [imageURL, setImageURL] = useState();
   const [error, setError] = useState(false);
   const loading = !imageURL;
+  const cameraName = entityId.split(".")[1];
+
+  const isOnline =
+    states[`binary_sensor.camera_${cameraName}_online`].state === "on";
 
   useEffect(() => {
     let counter = 0;
@@ -71,10 +81,19 @@ function Camera({ entityId }) {
         class="module__cameras__camera__overlay"
         onClick=${() => showMoreInfo(entityId)}
       >
-        ${loading ? "Carregando..." : error ? "Câmera Indisponível" : undefined}
+        ${
+          !isOnline
+            ? "Câmera Indisponível"
+            : loading
+            ? "Carregando..."
+            : error
+            ? "Câmera Indisponível"
+            : undefined
+        }
       </div>
       <img
         src=${imageURL}
+        class=${clsx(error || (loading && "module__cameras__image--hidden"))}
         onLoad=${() => setError(false)}
         onError=${() => setError(true)}
       />
@@ -83,6 +102,7 @@ function Camera({ entityId }) {
 
 const camerasModule = h`
   <${Stack}>
+    <${TitleCard} title="Câmeras" />
     <${Camera} entityId="camera.192_168_0_44" />
     <${Camera} entityId="camera.192_168_0_45" />
   </${Stack}>

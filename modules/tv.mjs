@@ -2,7 +2,9 @@ import { h } from "../utils/preact.mjs";
 import { makeTurnOnCall } from "../utils/hass.mjs";
 import Stack from "../components/Stack.mjs";
 import ButtonRow from "../components/ButtonRow.mjs";
+import TitleCard from "../components/TitleCard.mjs";
 import {
+  TVSwitch,
   EntityCard,
   IconButtonCard,
   ImageButtonCard,
@@ -11,13 +13,21 @@ import {
   makeTVLaunchAppCall,
 } from "./tv.utils.mjs";
 
+function spacer(height) {
+  return h`<div style=${{ height: height && `${height}px` }}/>`;
+}
+
 export default h`
   <${Stack} smallGap>
+    <${TitleCard} title="TV" action=${h`<${TVSwitch} />`} />
+
+    ${spacer()}
+
     <${ButtonRow} height=${70}>
       <${IconButtonCard}
-        icon="mdi:power"
+        icon="mdi:image-outline"
         size=${28}
-        onClick=${makeTurnOnCall("scene.tv_ligar")}
+        onClick=${makeTurnOnCall("script.sala_tv_ligar_tela")}
       />
       <${IconButtonCard}
         icon="mdi:chevron-up"
@@ -26,7 +36,7 @@ export default h`
         />
       <${IconButtonCard}
         icon="mdi:image-off-outline"
-        size=${25}
+        size=${28}
         onClick=${makeTurnOnCall("script.sala_tv_desligar_tela")}
         />
     </${ButtonRow}>
@@ -65,7 +75,7 @@ export default h`
       />
     </${ButtonRow}>
 
-    <br />
+    ${spacer(8)}
 
     <${ButtonRow} height=${55}>
       <${IconButtonCard}
@@ -107,7 +117,7 @@ export default h`
       />
     </${ButtonRow}>
 
-    <br />
+    ${spacer(8)}
     
     <${ButtonRow}>
       <${EntityCard}
@@ -121,7 +131,7 @@ export default h`
       />
     </${ButtonRow}>
 
-    <br />
+    ${spacer(8)}
 
     <${ButtonRow} height=${75}>
       <${ImageButtonCard}
