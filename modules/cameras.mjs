@@ -1,4 +1,4 @@
-import { h, useEffect, useState } from "../utils/preact.mjs";
+import { h, useEffect, useRef, useState } from "../utils/preact.mjs";
 import { css, clsx } from "../utils/general.mjs";
 import { showMoreInfo, useHass } from "../utils/hass.mjs";
 import Stack from "../components/Stack.mjs";
@@ -59,12 +59,17 @@ function Camera({ entityId }) {
   const isOnline =
     states[`binary_sensor.camera_${cameraName}_online`].state === "on";
 
+  const isOnlineRef = useRef(isOnline);
+  isOnlineRef.current = isOnline;
+
   useEffect(() => {
     let counter = 0;
 
     function updateImage() {
-      const url = states[entityId].attributes.entity_picture;
-      setImageURL(`${url}&counter=${counter++}`);
+      if (isOnlineRef.current) {
+        const url = states[entityId].attributes.entity_picture;
+        setImageURL(`${url}&counter=${counter++}`);
+      }
     }
 
     const interval = setInterval(updateImage, 5000);
@@ -93,7 +98,7 @@ function Camera({ entityId }) {
       </div>
       <img
         src=${imageURL}
-        class=${clsx(error || (loading && "module__cameras__image--hidden"))}
+        class=${clsx((error || loading) && "module__cameras__image--hidden")}
         onLoad=${() => setError(false)}
         onError=${() => setError(true)}
       />

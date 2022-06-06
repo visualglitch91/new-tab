@@ -77,6 +77,7 @@ function update(force) {
   setTimeout(update, 100);
 }
 
+window.addEventListener("focus", () => update(true));
 window.addEventListener("resize", () => update(true));
 hideAppHeader();
 update();

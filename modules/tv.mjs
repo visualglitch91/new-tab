@@ -6,6 +6,7 @@ import TitleCard from "../components/TitleCard.mjs";
 import {
   TVSwitch,
   EntityCard,
+  SurroundSwitch,
   IconButtonCard,
   ImageButtonCard,
   makeTVButtonCall,
@@ -128,6 +129,7 @@ export default h`
         label="Surround"
         icon="mdi:surround-sound"
         entityId="switch.sala_receiver"
+        renderContent=${() => h`<${SurroundSwitch} />`}
       />
     </${ButtonRow}>
 

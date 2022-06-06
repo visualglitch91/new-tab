@@ -17,6 +17,8 @@ export function getHass() {
   return element.__hass;
 }
 
+window.getHass = getHass;
+
 export function hideAppHeader() {
   const iframePanel = $$$(
     "ha-panel-iframe",
@@ -65,6 +67,7 @@ export function getIcon(entity) {
 }
 
 export function callService(domain, service, data) {
+  console.log({ domain, service, data });
   return getHass().callService(domain, service, data);
 }
 

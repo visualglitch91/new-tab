@@ -4,7 +4,6 @@ import { css } from "../utils/general.mjs";
 css(`
   .component__switch {
     display: inline-block;
-    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -64,20 +63,37 @@ css(`
     transform: translate3d(22px, 2px, 0);
   }
 
-  .component__switch:hover input + i::after {
+  .component__switch:hover input:not(:disabled) + i::after {
     background-color: #7ca6cc;
   }
 
-  .component__switch:hover input:checked + i::after {
+  .component__switch:hover input:not(:disabled):checked + i::after {
     background-color: #f36e90;
+  }
+
+
+  .component__switch input:not(:disabled) + i::before,
+  .component__switch input:not(:disabled) + i::after {
+    cursor: pointer;
+  }
+
+
+  .component__switch input:disabled + i::before {
+    background-color: #60687a;
+    opacity: 0.6;
+  }
+
+  .component__switch input:disabled + i::after {
+    background-color: #414a52;
   }
 `);
 
-export default function Switch({ checked, onInput }) {
+export default function Switch({ checked, disabled, onInput }) {
   return h`
     <label class="component__switch">
       <input
         type="checkbox"
+        disabled=${disabled}
         checked=${checked}
         onInput=${(e) => {
           /*
