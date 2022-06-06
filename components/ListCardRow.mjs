@@ -13,7 +13,8 @@ css(`
 
   .component__list-card-row__icon-wrapper {
     font-size: 24px;
-    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     height: 40px;
     display: flex;
     align-items: center;
@@ -34,6 +35,7 @@ css(`
     margin-right: auto;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .component__list-card-row__divider {

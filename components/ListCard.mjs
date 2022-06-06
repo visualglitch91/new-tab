@@ -1,13 +1,16 @@
 import { h } from "../utils/preact.mjs";
 import { clsx, css } from "../utils/general.mjs";
-import EntityRow from "./EntityRow.mjs";
 import Paper from "./Paper.mjs";
+import EntityRow from "./EntityRow.mjs";
+import EntitiesSwitch from "./EntitiesSwitch.mjs";
 
 css(`
   .component__list-card__header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 12px 16px 0;
+    column-gap: 8px;
   }
 
   .component__list-card__header h2 {
@@ -29,7 +32,12 @@ css(`
   }
 `);
 
-export default function ListCard({ class: className, title, rows }) {
+export default function ListCard({
+  class: className,
+  title,
+  rows,
+  showGroupSwitch,
+}) {
   function renderRow(row) {
     switch (row.type) {
       case undefined:
@@ -44,6 +52,14 @@ export default function ListCard({ class: className, title, rows }) {
     }
   }
 
+  const groupedEntityIds = rows
+    .filter((it) => {
+      return ["light", "switch", "input_boolean"].includes(
+        it.entityId?.split(".")[0]
+      );
+    })
+    .map((it) => it.entityId);
+
   return h`
     <${Paper} class=${clsx("component__paper", className)}>
       ${
@@ -51,6 +67,11 @@ export default function ListCard({ class: className, title, rows }) {
         h`
           <div class="component__list-card__header">
             <h2>${title}</h2>
+            ${
+              showGroupSwitch &&
+              Boolean(groupedEntityIds.length) &&
+              h`<${EntitiesSwitch} entityIds=${groupedEntityIds} />`
+            }
           </div>
         `
       }

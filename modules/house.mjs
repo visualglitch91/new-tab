@@ -72,7 +72,7 @@ const groups = {
       },
       {
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
-        label: "Apagar todas as luzes, menos da sala",
+        label: "Apagar luzes, menos da sala",
         renderContent: (entity) =>
           h`<${RunScriptButton} entityId=${entity.entity_id} />`,
       },
@@ -84,20 +84,20 @@ const groups = {
       },
       {
         type: "custom",
-        render:()=> h`<${SidebarToggleRow} />`
-      }
+        render: () => h`<${SidebarToggleRow} />`,
+      },
     ],
   },
 };
 
 const houseModule = h`
   <${Stack}>
-    <${ListCard} ...${groups.living_room} />
-    <${ListCard} ...${groups.office} />
-    <${ListCard} ...${groups.kitchen} />
+    <${ListCard} showGroupSwitch ...${groups.living_room} />
+    <${ListCard} showGroupSwitch ...${groups.office} />
+    <${ListCard} showGroupSwitch ...${groups.kitchen} />
   </${Stack}>
   <${Stack}>
-    <${ListCard} ...${groups.bedroom} />
+    <${ListCard} showGroupSwitch ...${groups.bedroom} />
     <${ListCard} ...${groups.shortcuts} />
   </${Stack}>
 `;

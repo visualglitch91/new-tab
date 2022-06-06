@@ -6,6 +6,7 @@ import PillButton from "../components/PillButton.mjs";
 import ListCardRow from "../components/ListCardRow.mjs";
 import RunScriptButton from "../components/RunScriptButton.mjs";
 import Button from "../components/Button.mjs";
+import EntitiesSwitch from "../components/EntitiesSwitch.mjs";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -79,6 +80,15 @@ function VacuumActionsRow() {
     </div>`;
 }
 
+const booleanInputs = [
+  { label: "Cozinha", entityId: "input_boolean.vacuum_cozinha" },
+  { label: "Sala Jantar", entityId: "input_boolean.vacuum_sala_jantar" },
+  { label: "Sala Estar", entityId: "input_boolean.vacuum_sala_estar" },
+  { label: "Escritório", entityId: "input_boolean.vacuum_escritorio" },
+  { label: "Banheiro", entityId: "input_boolean.vacuum_banheiro" },
+  { label: "Quarto", entityId: "input_boolean.vacuum_quarto" },
+];
+
 const rows = [
   {
     label: "Status",
@@ -91,12 +101,16 @@ const rows = [
     render: () => h`<${VacuumActionsRow} />`,
   },
   { type: "divider" },
-  { label: "Cozinha", entityId: "input_boolean.vacuum_cozinha" },
-  { label: "Sala Jantar", entityId: "input_boolean.vacuum_sala_jantar" },
-  { label: "Sala Estar", entityId: "input_boolean.vacuum_sala_estar" },
-  { label: "Escritório", entityId: "input_boolean.vacuum_escritorio" },
-  { label: "Banheiro", entityId: "input_boolean.vacuum_banheiro" },
-  { label: "Quarto", entityId: "input_boolean.vacuum_quarto" },
+  {
+    label: "Todos",
+    entityId: vacuumId,
+    renderContent: () =>
+      h`<${EntitiesSwitch}
+          condition="every"
+          entityIds=${booleanInputs.map((it) => it.entityId)}
+        />`,
+  },
+  ...booleanInputs,
 ];
 
 const vacuumModule = h`

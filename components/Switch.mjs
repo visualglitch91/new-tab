@@ -79,7 +79,15 @@ export default function Switch({ checked, onInput }) {
       <input
         type="checkbox"
         checked=${checked}
-        onInput=${onInput}
+        onInput=${(e) => {
+          /*
+           * Preact has some bug that changes
+           * the checkbox state despite the
+           * checked prop
+           */
+          e.target.checked = checked;
+          onInput(e);
+        }}
       />
       <i />
     </label>

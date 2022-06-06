@@ -27,6 +27,7 @@ css(`
     justify-content: center;
     font-size: 18px;
     cursor: pointer;
+    transition: background 70ms linear;
   }
 
   .module__cameras__camera__overlay:not(:empty) {

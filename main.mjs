@@ -18,6 +18,12 @@ css(`
     color: white;
     font-family: Raleway;
   }
+
+  br {
+    content: "";
+    height: 4px;
+    display: block;
+  }
 `);
 
 let prevHass = null;
