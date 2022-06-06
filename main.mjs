@@ -18,7 +18,40 @@ css(`
     color: white;
     font-family: Raleway;
   }
+
+  html {
+    --scrollbarBG: transparent;
+    --thumbBG: #f64270;
+  }
 `);
+
+const isTouchDevice =
+  "ontouchstart" in window ||
+  navigator.maxTouchPoints > 0 ||
+  navigator.msMaxTouchPoints > 0;
+
+if (!isTouchDevice) {
+  css(`
+    body::-webkit-scrollbar {
+      width: 8px;
+    }
+  
+    body {
+      scrollbar-width: thin;
+      scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+    }
+  
+    body::-webkit-scrollbar-track {
+      background: var(--scrollbarBG);
+      padding: 2px;
+    }
+  
+    body::-webkit-scrollbar-thumb {
+      background-color: var(--thumbBG) ;
+      border-radius: 6px;
+    }
+  `);
+}
 
 let prevHass = null;
 
