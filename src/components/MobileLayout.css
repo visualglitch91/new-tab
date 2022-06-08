@@ -33,6 +33,7 @@
   transition: background 100ms linear;
   text-transform: uppercase;
   flex: 1;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
 }
 
 .components__mobile-layout__tab > i {

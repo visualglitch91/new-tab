@@ -1,6 +1,5 @@
 import { ComponentChildren, createContext } from "preact";
 import { useContext, useEffect, useState } from "preact/hooks";
-
 import {
   getUser,
   getAuth,
@@ -9,8 +8,6 @@ import {
   getStates,
   subscribeEntities,
   HassEntity,
-} from "home-assistant-js-websocket";
-import type {
   HassEntities,
   HassUser,
   Connection,
@@ -41,7 +38,7 @@ function setupHASS({
       }
     },
   })
-    .then((auth) => createConnection({ auth: auth }))
+    .then((auth) => createConnection({ auth }))
     .then((connection) => {
       _connection = connection;
 
@@ -67,6 +64,7 @@ export function getIcon(entity: HassEntity) {
   if (entity) {
     const { state, entity_id } = entity;
     const [domain] = entity_id.split(".");
+
     switch (domain) {
       case "input_boolean":
         if (state === "on") {

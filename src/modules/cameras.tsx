@@ -10,8 +10,10 @@ function Camera({ entityId }: { entityId: string }) {
   const { states } = useHass();
   const [imageURL, setImageURL] = useState<string | undefined>();
   const [error, setError] = useState(false);
+
   const loading = !imageURL;
   const cameraName = entityId.split(".")[1];
+  const entityPicture = states[entityId].attributes.entity_picture;
 
   const isOnline =
     states[`binary_sensor.camera_${cameraName}_online`].state === "on";
@@ -24,8 +26,7 @@ function Camera({ entityId }: { entityId: string }) {
 
     function updateImage() {
       if (isOnlineRef.current) {
-        const url = states[entityId].attributes.entity_picture;
-        setImageURL(`${url}&counter=${counter++}`);
+        setImageURL(`${entityPicture}&counter=${counter++}`);
       }
     }
 
@@ -35,7 +36,7 @@ function Camera({ entityId }: { entityId: string }) {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [entityPicture]);
 
   return (
     <Paper class="module__cameras__camera">

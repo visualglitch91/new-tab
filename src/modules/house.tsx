@@ -91,12 +91,12 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
 };
 
 export default [
-  <Stack>
+  <Stack key={1}>
     <ListCard showGroupSwitch {...groups.living_room} />
     <ListCard showGroupSwitch {...groups.office} />
     <ListCard showGroupSwitch {...groups.kitchen} />
   </Stack>,
-  <Stack>
+  <Stack key={2}>
     <ListCard showGroupSwitch {...groups.bedroom} />
     <ListCard {...groups.shortcuts} />
   </Stack>,

@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { JSXInternal } from "preact/src/jsx";
 import Switch from "./Switch";
 
@@ -16,7 +16,7 @@ export default function DelayedSwitch({
   const [togglingTo, setTogglingTo] = useState<boolean | undefined>(undefined);
   const toggling = typeof togglingTo !== "undefined";
 
-  function toggle(e: InputEvent) {
+  function toggle(e: JSXInternal.TargetedEvent<HTMLInputElement, Event>) {
     if (toggling) {
       return;
     }
@@ -30,6 +30,12 @@ export default function DelayedSwitch({
       next ? checkDelay : uncheckDelay
     );
   }
+
+  useEffect(() => {
+    if (checked === togglingTo) {
+      setTogglingTo(undefined);
+    }
+  }, [checked, togglingTo]);
 
   return (
     <Switch

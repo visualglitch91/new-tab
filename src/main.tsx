@@ -6,10 +6,16 @@ import App from "./App";
 const isTouchDevice =
   "ontouchstart" in window ||
   navigator.maxTouchPoints > 0 ||
-  //@ts-expect-error
+  //@ts-expect-error Bad browser typings
   navigator.msMaxTouchPoints > 0;
 
-const root = document.getElementById("app")!;
+const app = document.getElementById("app");
+
+if (!app) {
+  throw new Error("#app node not found");
+}
+
+const root = app;
 const simplebar = !isTouchDevice ? new SimpleBar(root) : undefined;
 
 function update() {

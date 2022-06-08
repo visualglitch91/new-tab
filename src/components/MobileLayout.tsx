@@ -52,6 +52,7 @@ export default function MobileLayout({
       <div class="components__mobile-layout__header">
         {tabs.map((tab, index) => (
           <Tab
+            key={index}
             active={active === index}
             icon={tab.icon}
             title={tab.title}

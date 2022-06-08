@@ -24,22 +24,23 @@ export default function LightDialog({
   const onDoneRef = useRef(onDone);
 
   const triggerChange = useMemo(() => {
-    return debounce(function onColorChange(
-      data: { rgb_color: RGB } | { brightness: number }
-    ) {
-      console.log({ data });
+    return debounce((data: { rgb_color: RGB } | { brightness: number }) => {
       callService("light", "turn_on", {
         entity_id: entity.entity_id,
         ...data,
       });
     });
-  }, []);
+  }, [entity.entity_id]);
 
   useEffect(() => {
     onDoneRef.current = onDone;
   }, [onDone]);
 
   useEffect(() => {
+    if (!pickerRef.current) {
+      throw new Error("Color Picker node not set");
+    }
+
     window.location.hash = "light-dialog";
 
     function onHashChange() {
@@ -52,14 +53,18 @@ export default function LightDialog({
       attributes.rgb_color[2]
     );
 
-    const picker: iro.ColorPicker = new (iro as any).ColorPicker(
-      pickerRef.current!,
-      { color, sliderSize: 0 }
-    );
-
-    picker.on("color:change", ({ rgb }: any) => {
-      triggerChange({ rgb_color: [rgb.r, rgb.g, rgb.b] });
+    //@ts-expect-error Bad lib typings
+    const picker: iro.ColorPicker = new iro.ColorPicker(pickerRef.current, {
+      color,
+      sliderSize: 0,
     });
+
+    picker.on(
+      "color:change",
+      ({ rgb }: { rgb: { r: number; g: number; b: number } }) => {
+        triggerChange({ rgb_color: [rgb.r, rgb.g, rgb.b] });
+      }
+    );
 
     setTimeout(() => {
       window.addEventListener("hashchange", onHashChange);
@@ -68,6 +73,7 @@ export default function LightDialog({
     return () => {
       window.removeEventListener("hashchange", onHashChange);
     };
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
