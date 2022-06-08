@@ -1,0 +1,12 @@
+.component__columnar-layout {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.component__columnar-layout__column {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  row-gap: 16px;
+}

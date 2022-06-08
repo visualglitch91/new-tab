@@ -1,0 +1,13 @@
+.component__title-card {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  column-gap: 8px;
+}
+
+.component__title-card h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 32px;
+}

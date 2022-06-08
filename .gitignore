@@ -1,0 +1,5 @@
+.env
+.parcel-cache
+dist
+deploy.sh
+node_modules

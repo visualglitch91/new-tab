@@ -1,0 +1,45 @@
+.component__light-dialog__wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.component__light-dialog {
+  background: #2f3b52;
+  padding: 18px;
+  border-radius: 6px;
+}
+
+.component__light-dialog__range-wrapper {
+  padding: 0 9px;
+  margin-left: -3px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.component__light-dialog input[type="range"] {
+  width: 100%;
+}
+
+.component__light-dialog .IroSlider {
+  display: none !important;
+}
+
+.component__light-dialog-header {
+  padding: 12px 10px;
+  margin-bottom: 8px;
+}
+
+.component__light-dialog-footer {
+  padding: 8px 14px;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,0 +1,17 @@
+.component__stack {
+  display: flex;
+  grid-gap: 16px;
+}
+
+.component__stack--small-gap {
+  grid-gap: 8px;
+}
+.component__stack--vertical {
+  flex-direction: column;
+}
+.component__stack--horizontal {
+  flex-direction: row;
+}
+.component__stack--horizontal > * {
+  flex: 1;
+}

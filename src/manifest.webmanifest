@@ -1,0 +1,10 @@
+{
+  "theme_color": "#242e42",
+  "background_color": "#242e42",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/local/html-dashboard/index.html",
+  "name": "Home Dashboard",
+  "short_name": "Home Dashboard",
+  "icons": []
+}
