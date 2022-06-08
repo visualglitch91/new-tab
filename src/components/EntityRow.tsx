@@ -1,9 +1,10 @@
-import { ComponentChildren, render } from "preact";
+import { ComponentChildren } from "preact";
 import { HassEntity } from "home-assistant-js-websocket";
 import { useHass, getIcon, makeServiceCall } from "../utils/hass";
 import ListCardRow from "./ListCardRow";
 import LightDialog from "./LightDialog";
 import Switch from "./Switch";
+import { renderModal } from "../utils/general";
 
 export default function EntityRow({
   icon: customIcon,
@@ -30,20 +31,9 @@ export default function EntityRow({
   }
 
   function onLightClick() {
-    const dialog = document.createElement("div");
-    document.body.appendChild(dialog);
-
-    render(
-      <LightDialog
-        title={label}
-        entity={entity}
-        onDone={() => {
-          render(null, dialog);
-          dialog.remove();
-        }}
-      />,
-      dialog
-    );
+    renderModal((unmount) => (
+      <LightDialog title={label} entity={entity} onDone={unmount} />
+    ));
   }
 
   const { state, attributes } = entity;
@@ -55,7 +45,7 @@ export default function EntityRow({
     <ListCardRow
       icon={icon}
       label={label || friendlyName}
-      onIconClick={domain === "light" ? onLightClick : undefined}
+      onIconClick={domain === "light" && checked ? onLightClick : undefined}
     >
       {renderContent ? (
         renderContent(entity)

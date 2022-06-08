@@ -80,14 +80,7 @@ export function TVSwitch() {
     callService("homeassistant", "turn_on", { entity_id: "scene.tv_ligar" });
   }
 
-  return (
-    <DelayedSwitch
-      checkDelay={15_000}
-      uncheckDelay={5_000}
-      checked={checked}
-      onInput={toggle}
-    />
-  );
+  return <DelayedSwitch delay={30_000} checked={checked} onInput={toggle} />;
 }
 
 export function SurroundSwitch() {
@@ -100,12 +93,5 @@ export function SurroundSwitch() {
     });
   }
 
-  return (
-    <DelayedSwitch
-      checkDelay={20_000}
-      uncheckDelay={5_000}
-      checked={checked}
-      onInput={toggle}
-    />
-  );
+  return <DelayedSwitch delay={30_000} checked={checked} onInput={toggle} />;
 }

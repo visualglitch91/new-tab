@@ -1,16 +1,15 @@
 import { useEffect, useState } from "preact/hooks";
 import { JSXInternal } from "preact/src/jsx";
+import DotLoading from "./DotLoading";
 import Switch from "./Switch";
 
 export default function DelayedSwitch({
   checked,
-  checkDelay,
-  uncheckDelay,
+  delay,
   onInput,
 }: {
   checked: boolean;
-  checkDelay: number;
-  uncheckDelay: number;
+  delay: number;
   onInput: (e: JSXInternal.TargetedEvent<HTMLInputElement, Event>) => void;
 }) {
   const [togglingTo, setTogglingTo] = useState<boolean | undefined>(undefined);
@@ -25,10 +24,6 @@ export default function DelayedSwitch({
 
     onInput(e);
     setTogglingTo(next);
-    setTimeout(
-      () => setTogglingTo(undefined),
-      next ? checkDelay : uncheckDelay
-    );
   }
 
   useEffect(() => {
@@ -36,6 +31,17 @@ export default function DelayedSwitch({
       setTogglingTo(undefined);
     }
   }, [checked, togglingTo]);
+
+  useEffect(() => {
+    if (typeof togglingTo === "boolean") {
+      const timeout = window.setTimeout(() => setTogglingTo(undefined), delay);
+      return () => clearTimeout(timeout);
+    }
+  }, [delay, togglingTo]);
+
+  if (toggling) {
+    return <DotLoading />;
+  }
 
   return (
     <Switch

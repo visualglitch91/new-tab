@@ -1,3 +1,5 @@
+import { ComponentChildren, render } from "preact";
+
 export function clsx(...classes: (string | null | undefined | false)[]) {
   return classes.filter(Boolean).join(" ");
 }
@@ -25,4 +27,18 @@ export function debounce<T extends (...args: any[]) => void>(
 export function rgbToHex(r: number, g: number, b: number) {
   //eslint-disable-next-line
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+export function renderModal(
+  renderer: (unmount: () => void) => ComponentChildren
+) {
+  const modal = document.createElement("div");
+  document.body.appendChild(modal);
+
+  function unmount() {
+    render(null, modal);
+    modal.remove();
+  }
+
+  render(renderer(unmount), modal);
 }

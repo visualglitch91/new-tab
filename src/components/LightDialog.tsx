@@ -19,9 +19,12 @@ export default function LightDialog({
   onDone: () => void;
 }) {
   const pickerRef = useRef<HTMLDivElement>(null);
+  const onDoneRef = useRef(onDone);
+
   const { attributes } = entity;
   const { friendly_name: friendlyName } = attributes;
-  const onDoneRef = useRef(onDone);
+  const initialBrightness =
+    typeof attributes.brightness === "undefined" ? 255 : attributes.brightness;
 
   const triggerChange = useMemo(() => {
     return debounce((data: { rgb_color: RGB } | { brightness: number }) => {
@@ -47,11 +50,13 @@ export default function LightDialog({
       onDoneRef.current();
     }
 
-    const color = rgbToHex(
-      attributes.rgb_color[0],
-      attributes.rgb_color[1],
-      attributes.rgb_color[2]
-    );
+    const color = attributes.rgb_color
+      ? rgbToHex(
+          attributes.rgb_color[0],
+          attributes.rgb_color[1],
+          attributes.rgb_color[2]
+        )
+      : "#FFFFFF";
 
     //@ts-expect-error Bad lib typings
     const picker: iro.ColorPicker = new iro.ColorPicker(pickerRef.current, {
@@ -88,7 +93,7 @@ export default function LightDialog({
             type="range"
             min={0}
             max={255}
-            defaultValue={attributes.brightness}
+            defaultValue={initialBrightness}
             onInput={(e) => {
               triggerChange({ brightness: Number(e.currentTarget.value) });
             }}
