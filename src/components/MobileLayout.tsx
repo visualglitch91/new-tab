@@ -1,6 +1,6 @@
 import { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
-import { clsx } from "../utils/general";
+import { clamp, clsx, loadValue, saveValue } from "../utils/general";
 import Stack from "./Stack";
 import MaterialIcon from "./MaterialIcon";
 import "./MobileLayout.css";
@@ -40,13 +40,23 @@ export default function MobileLayout({
     content: ComponentChildren;
   }[];
 }) {
-  const [active, setActive] = useState(0);
-  const content = tabs[active].content;
+  const [active, setActive] = useState(() => {
+    const lastActive = loadValue("last_active_tab");
+
+    if (typeof lastActive !== "number" || isNaN(lastActive)) {
+      return 0;
+    }
+
+    return clamp(lastActive, 0, tabs.length - 1);
+  });
 
   function changeTab(index: number) {
     document.documentElement.scrollTop = 0;
+    saveValue("last_active_tab", index);
     setActive(index);
   }
+
+  const content = tabs[active].content;
 
   return (
     <>

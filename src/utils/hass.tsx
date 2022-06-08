@@ -12,6 +12,7 @@ import {
   HassUser,
   Connection,
 } from "home-assistant-js-websocket";
+import { loadValue, saveValue } from "./general";
 
 let _connection: Connection | undefined;
 
@@ -25,18 +26,8 @@ function setupHASS({
       process.env.NODE_ENV === "development"
         ? process.env.HASS_DEVELOPMENT_URL
         : window.location.origin,
-    saveTokens: (tokens) => {
-      window.localStorage.setItem("hass_token", JSON.stringify(tokens));
-    },
-    loadTokens: () => {
-      try {
-        return Promise.resolve(
-          JSON.parse(window.localStorage.getItem("hass_token") || "undefined")
-        );
-      } catch (_) {
-        return Promise.resolve();
-      }
-    },
+    saveTokens: (tokens) => saveValue("hass_token", tokens),
+    loadTokens: async () => loadValue("hass_token"),
   })
     .then((auth) => createConnection({ auth }))
     .then((connection) => {
