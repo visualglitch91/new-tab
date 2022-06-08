@@ -39,7 +39,8 @@
     "rules": {
       "jest/no-deprecated-functions": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "no-fallthrough": "off"
+      "no-fallthrough": "off",
+      "no-inner-declarations": "off"
     }
   }
 }
