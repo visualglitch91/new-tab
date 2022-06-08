@@ -1,5 +1,5 @@
 import { ComponentChildren } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { clsx } from "../utils/general";
 import Stack from "./Stack";
 import MaterialIcon from "./MaterialIcon";
@@ -43,9 +43,10 @@ export default function MobileLayout({
   const [active, setActive] = useState(0);
   const content = tabs[active].content;
 
-  useEffect(() => {
+  function changeTab(index: number) {
     document.documentElement.scrollTop = 0;
-  }, [active]);
+    setActive(index);
+  }
 
   return (
     <>
@@ -56,7 +57,7 @@ export default function MobileLayout({
             active={active === index}
             icon={tab.icon}
             title={tab.title}
-            onClick={() => setActive(index)}
+            onClick={() => changeTab(index)}
           />
         ))}
       </div>
