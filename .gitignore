@@ -3,3 +3,5 @@
 dist
 deploy.sh
 node_modules
+src/version.json
+*.log

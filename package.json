@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "start": "rm -rf .parcel-cache && parcel src/index.html --no-autoinstall -p 3000",
-    "build": "yarn lint && rm -rf dist && parcel build src/index.html",
+    "prerun": "rm -rf .parcel-cache dist && echo \"\\\"$(git rev-parse --short HEAD)\\\"\" > src/version.json",
+    "start": "yarn prerun && parcel src/index.html --no-autoinstall -p 3000",
+    "build": "yarn lint && yarn prerun && parcel build src/index.html",
     "lint": "eslint --max-warnings=0 --ext .tsx,.ts,.jsx,.js ./src && tsc --project ./tsconfig.json --noEmit"
   },
   "browserslist": "> 0.5%, last 2 versions, not IE 9-11, not dead",

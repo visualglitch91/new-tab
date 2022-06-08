@@ -1,4 +1,5 @@
 import { ComponentChildren, render } from "preact";
+import version from "../version.json";
 
 export function clsx(...classes: (string | null | undefined | false)[]) {
   return classes.filter(Boolean).join(" ");
@@ -54,4 +55,21 @@ export function loadValue<T>(key: string): T | undefined {
   } catch (_) {
     return undefined;
   }
+}
+
+export function autoUpdater() {
+  if (process.env.NODE_ENV === "development") {
+    return;
+  }
+
+  fetch(`./latest.json?c=${Date.now()}`)
+    .then((res) => res.json())
+    .catch(() => undefined)
+    .then((latest) => {
+      if (latest && latest !== version) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("version", latest);
+        window.location.assign(url.toString());
+      }
+    });
 }

@@ -1,7 +1,10 @@
 import { render } from "preact";
 import SimpleBar from "simplebar";
 import { HassProvider } from "./utils/hass";
+import { autoUpdater } from "./utils/general";
 import App from "./App";
+
+autoUpdater();
 
 const isTouchDevice =
   "ontouchstart" in window ||
