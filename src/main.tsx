@@ -1,16 +1,10 @@
 import { render } from "preact";
 import SimpleBar from "simplebar";
 import { HassProvider } from "./utils/hass";
-import { autoUpdater } from "./utils/general";
+import { autoUpdater, isTouchDevice, loadCordovaJS } from "./utils/general";
 import App from "./App";
 
 autoUpdater();
-
-const isTouchDevice =
-  "ontouchstart" in window ||
-  navigator.maxTouchPoints > 0 ||
-  //@ts-expect-error Bad browser typings
-  navigator.msMaxTouchPoints > 0;
 
 const app = document.getElementById("app");
 
@@ -21,7 +15,7 @@ if (!app) {
 const root = app;
 const simplebar = !isTouchDevice ? new SimpleBar(root) : undefined;
 
-function update() {
+function renderApp() {
   render(
     <HassProvider>
       <App />
@@ -34,7 +28,16 @@ function update() {
   }
 }
 
-window.location.hash = "";
-window.addEventListener("focus", () => update());
-window.addEventListener("resize", () => update());
-update();
+loadCordovaJS().then(() => {
+  window.location.hash = "";
+
+  document.addEventListener("resume", autoUpdater);
+  document.addEventListener("resume", renderApp);
+
+  window.addEventListener("focus", autoUpdater);
+  window.addEventListener("focus", renderApp);
+
+  window.addEventListener("resize", renderApp);
+
+  renderApp();
+});

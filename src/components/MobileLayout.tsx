@@ -1,6 +1,7 @@
 import { ComponentChildren } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { clamp, clsx, loadValue, saveValue } from "../utils/general";
+import managedScroll, { ManagedScroll } from "../utils/managedScroll";
 import Stack from "./Stack";
 import MaterialIcon from "./MaterialIcon";
 import "./MobileLayout.css";
@@ -38,8 +39,11 @@ export default function MobileLayout({
     title: string;
     icon: string;
     content: ComponentChildren;
+    managedScroll?: boolean;
   }[];
 }) {
+  const managedScrollRef = useRef<ManagedScroll>();
+
   const [active, setActive] = useState(() => {
     const lastActive = loadValue("last_active_tab");
 
@@ -50,28 +54,60 @@ export default function MobileLayout({
     return clamp(lastActive, 0, tabs.length - 1);
   });
 
-  function changeTab(index: number) {
-    document.documentElement.scrollTop = 0;
-    saveValue("last_active_tab", index);
-    setActive(index);
-  }
-
   const content = tabs[active].content;
+
+  useEffect(() => {
+    const wrapper = document.querySelector<HTMLElement>(
+      ".components__mobile-layout__wrapper"
+    );
+
+    if (!wrapper) {
+      return;
+    }
+
+    const scroll = managedScroll(wrapper);
+
+    managedScrollRef.current = scroll;
+
+    return () => {
+      scroll.disable();
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    managedScrollRef.current?.scrollTo(0);
+  }, [active]);
+
+  useEffect(() => {
+    saveValue("last_active_tab", active);
+
+    if (tabs[active].managedScroll) {
+      managedScrollRef.current?.enable();
+
+      return () => {
+        managedScrollRef.current?.disable();
+      };
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
 
   return (
     <>
-      <div class="components__mobile-layout__header">
+      <div class="components__mobile-layout__wrapper">
+        <Stack class="components__mobile-layout__content">{content}</Stack>
+      </div>
+      <div class="components__mobile-layout__status-bar" />
+      <div class="components__mobile-layout__tabs">
         {tabs.map((tab, index) => (
           <Tab
             key={index}
             active={active === index}
             icon={tab.icon}
             title={tab.title}
-            onClick={() => changeTab(index)}
+            onClick={() => setActive(index)}
           />
         ))}
       </div>
-      <Stack class="components__mobile-layout__content">{content}</Stack>
     </>
   );
 }

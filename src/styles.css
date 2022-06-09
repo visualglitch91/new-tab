@@ -17,21 +17,34 @@
 html {
   box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
   box-sizing: inherit;
+  overscroll-behavior: none;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  overflow: auto;
 }
 
 body {
   margin: 0;
-  padding: 16px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
-  color: white;
+  background-color: #24324b;
   font-family: Raleway;
+  color: white;
 }
 
 @media only screen and (max-width: 600px) {

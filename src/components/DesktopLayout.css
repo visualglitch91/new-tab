@@ -1,3 +1,7 @@
+.component__columnar-layout__wrapper {
+  padding: 16px;
+}
+
 .component__columnar-layout {
   width: 100%;
   display: flex;

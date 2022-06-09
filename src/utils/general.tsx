@@ -62,14 +62,46 @@ export function autoUpdater() {
     return;
   }
 
+  console.log("Looking for a new version...");
   fetch(`./latest.json?c=${Date.now()}`)
     .then((res) => res.json())
     .catch(() => undefined)
     .then((latest) => {
       if (latest && latest !== version) {
+        console.log("Loading the new version...");
         const url = new URL(window.location.href);
         url.searchParams.set("version", latest);
         window.location.assign(url.toString());
       }
     });
 }
+
+export function loadCordovaJS() {
+  return new Promise<boolean>((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://localhost/cordova.js";
+
+    script.onload = () => {
+      document.addEventListener("deviceready", onDeviceReady, false);
+
+      function onDeviceReady() {
+        document.body.classList.add("cordova");
+        //@ts-expect-error no typings for cordova
+        NavigationBar.backgroundColorByHexString("#24324b");
+        resolve(true);
+      }
+    };
+
+    script.onerror = () => {
+      resolve(false);
+    };
+
+    document.body.appendChild(script);
+  });
+}
+
+export const isTouchDevice =
+  "ontouchstart" in window ||
+  navigator.maxTouchPoints > 0 ||
+  //@ts-expect-error Bad browser typings
+  navigator.msMaxTouchPoints > 0;

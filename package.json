@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "prerun": "rm -rf .parcel-cache dist && echo \"\\\"$(git rev-parse --short HEAD)\\\"\" > src/version.json",
+    "prerun": "rm -rf .parcel-cache dist && echo \"\\\"$(date +%s)\\\"\" > src/version.json",
     "start": "yarn prerun && parcel src/index.html --no-autoinstall -p 3000",
     "build": "yarn lint && yarn prerun && parcel build src/index.html",
     "lint": "eslint --max-warnings=0 --ext .tsx,.ts,.jsx,.js ./src && tsc --project ./tsconfig.json --noEmit"
@@ -40,6 +40,8 @@
     "rules": {
       "jest/no-deprecated-functions": "off",
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
       "no-fallthrough": "off",
       "no-inner-declarations": "off"
     }

@@ -60,8 +60,10 @@ export default function DesktopLayout({
   }, []);
 
   return (
-    <div ref={nodeRef} class={clsx("component__columnar-layout", className)}>
-      {columns}
+    <div class="component__columnar-layout__wrapper">
+      <div ref={nodeRef} class={clsx("component__columnar-layout", className)}>
+        {columns}
+      </div>
     </div>
   );
 }

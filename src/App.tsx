@@ -20,6 +20,13 @@ export default function App() {
             title: "TV",
             icon: "mdi:television-classic",
             content: tvModule,
+            /*
+             * The content has just some scrolling on mobile devices
+             * and is a bit buggy because of this, this does not happen
+             * when the scroll height is larger, so we implement our
+             * own scrolling in this case to avoid this
+             */
+            managedScroll: true,
           },
           {
             title: "Casa",

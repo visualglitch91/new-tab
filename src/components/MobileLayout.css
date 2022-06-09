@@ -1,7 +1,7 @@
-.components__mobile-layout__header {
+.components__mobile-layout__tabs {
   height: 60px;
   backdrop-filter: blur(10px);
-  background: rgb(37 51 82 / 83%);
+  background: rgb(37 51 82 / 65%);
   position: fixed;
   bottom: 0;
   left: 0;
@@ -50,5 +50,25 @@
 }
 
 .components__mobile-layout__content {
-  margin-bottom: 64px;
+  padding: 16px 16px 80px;
+}
+
+.cordova .components__mobile-layout__content {
+  padding-top: 48px;
+}
+
+.cordova .components__mobile-layout__status-bar {
+  height: 32px;
+  backdrop-filter: blur(10px);
+  background: rgb(37 51 82 / 65%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.components__mobile-layout__wrapper {
+  height: 100%;
+  overflow: auto;
 }
