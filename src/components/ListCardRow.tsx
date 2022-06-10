@@ -1,6 +1,6 @@
 import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
-import MaterialIcon from "./MaterialIcon";
+import Icon from "./Icon";
 import "./ListCardRow.css";
 import { JSXInternal } from "preact/src/jsx";
 
@@ -25,7 +25,7 @@ export default function ListCardRow({
           )}
           onClick={onIconClick}
         >
-          <MaterialIcon icon={icon} />
+          <Icon icon={icon} />
         </div>
       )}
       <div class="component__list-card-row__label">{label}</div>

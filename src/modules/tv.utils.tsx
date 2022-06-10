@@ -1,6 +1,6 @@
 import { callService, makeWebOSCall, useHass } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
-import MaterialIcon from "../components/MaterialIcon";
+import Icon from "../components/Icon";
 import DelayedSwitch from "../components/DelayedSwitch";
 
 export function makeTVButtonCall(button: string) {
@@ -32,7 +32,7 @@ export function IconButtonCard({
 }) {
   return (
     <ButtonCard onClick={onClick}>
-      <MaterialIcon icon={icon} size={size} />
+      <Icon icon={icon} size={size} />
     </ButtonCard>
   );
 }

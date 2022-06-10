@@ -3,6 +3,7 @@ import Stack from "../components/Stack";
 import Switch from "../components/Switch";
 import ListCard, { Row } from "../components/ListCard";
 import RunScriptButton from "../components/RunScriptButton";
+import EntitiesSwitch from "../components/EntitiesSwitch";
 
 const groups: Record<string, { title: string; rows: Row[] }> = {
   living_room: {
@@ -45,8 +46,32 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luz", entityId: "switch.quarto_luz" },
       { label: "Abajur Esquerdo", entityId: "switch.quarto_abajur_esquerdo" },
       { label: "Abajur Direito", entityId: "switch.quarto_abajur_direito" },
-      { label: "Banheiro", entityId: "switch.banheiro_luz" },
       { label: "Sacada", entityId: "switch.sacada_luz" },
+    ],
+  },
+  bathroom: {
+    title: "Banheiro",
+    rows: [
+      {
+        label: "Luzes",
+        entityId: "switch.banheiro_luz",
+        renderContent: () => (
+          <EntitiesSwitch
+            entityIds={["switch.banheiro_luz", "light.banheiro_luz_chuveiro"]}
+          />
+        ),
+      },
+      {
+        icon: "shower-head",
+        label: "Luz do Chuveiro",
+        entityId: "light.banheiro_luz_chuveiro",
+        renderContent: () => (
+          <RunScriptButton
+            label="Luz Quente"
+            entityId="script.banheiro_luz_quente_no_chuveiro"
+          />
+        ),
+      },
     ],
   },
   shortcuts: {
@@ -98,6 +123,7 @@ export default [
   </Stack>,
   <Stack key={2}>
     <ListCard showGroupSwitch {...groups.bedroom} />
+    <ListCard {...groups.bathroom} />
     <ListCard {...groups.shortcuts} />
   </Stack>,
 ];

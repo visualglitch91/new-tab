@@ -1,5 +1,5 @@
 import { clsx } from "../utils/general";
-import MaterialIcon from "./MaterialIcon";
+import Icon from "./Icon";
 import "./PillButton.css";
 
 export default function PillButton({
@@ -19,7 +19,7 @@ export default function PillButton({
       class={clsx("component__pill-button", className)}
       onClick={onClick}
     >
-      {icon && <MaterialIcon icon={icon} />}
+      {icon && <Icon icon={icon} />}
       {label}
     </button>
   );

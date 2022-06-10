@@ -2,7 +2,7 @@ import { ComponentChildren } from "preact";
 import { HassEntity } from "home-assistant-js-websocket";
 import { useHass, getIcon, makeServiceCall } from "../utils/hass";
 import ListCardRow from "./ListCardRow";
-import LightDialog from "./LightDialog";
+import LightEntityDialog from "./LightEntityDialog";
 import Switch from "./Switch";
 import { renderModal } from "../utils/general";
 
@@ -32,7 +32,7 @@ export default function EntityRow({
 
   function onLightClick() {
     renderModal((unmount) => (
-      <LightDialog title={label} entity={entity} onDone={unmount} />
+      <LightEntityDialog title={label} entity={entity} onDone={unmount} />
     ));
   }
 

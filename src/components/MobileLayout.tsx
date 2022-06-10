@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { clamp, clsx, loadValue, saveValue } from "../utils/general";
 import managedScroll, { ManagedScroll } from "../utils/managedScroll";
 import Stack from "./Stack";
-import MaterialIcon from "./MaterialIcon";
+import Icon from "./Icon";
 import "./MobileLayout.css";
 
 function Tab({
@@ -26,7 +26,7 @@ function Tab({
       )}
       onClick={onClick}
     >
-      <MaterialIcon icon={icon} />
+      <Icon icon={icon} />
       {title}
     </button>
   );

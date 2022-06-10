@@ -12,6 +12,7 @@ import {
   makeTVLaunchAppCall,
 } from "./tv.utils";
 import ListCard from "../components/ListCard";
+import RGBLightGroupRow from "../components/RGBLightGroupRow";
 
 function spacer(height?: number) {
   return <div style={{ height: height && `${height}px` }} />;
@@ -185,6 +186,16 @@ export default (
           icon: "mdi:surround-sound",
           entityId: "switch.sala_receiver",
           renderContent: () => <SurroundSwitch />,
+        },
+        {
+          type: "custom",
+          render: () => (
+            <RGBLightGroupRow
+              label="RGB"
+              icon="television-ambient-light"
+              entityIds={["light.sala_rgb_tv", "light.sala_rgb_rack"]}
+            />
+          ),
         },
         { label: "RGB TV", entityId: "light.sala_rgb_tv" },
         { label: "RGB Rack", entityId: "light.sala_rgb_rack" },

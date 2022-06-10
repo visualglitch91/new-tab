@@ -1,4 +1,5 @@
 import { ComponentChildren, render } from "preact";
+import { useMemo, useRef } from "preact/hooks";
 import version from "../version.json";
 
 export function clsx(...classes: (string | null | undefined | false)[]) {
@@ -98,6 +99,18 @@ export function loadCordovaJS() {
 
     document.body.appendChild(script);
   });
+}
+
+export function useDebouncedCallback<T extends (...args: any[]) => void>(
+  callback: T
+) {
+  const callbackRef = useRef(callback);
+
+  return useMemo(() => {
+    return debounce((...args) => {
+      callbackRef.current(...args);
+    });
+  }, []) as T;
 }
 
 export const isTouchDevice =
