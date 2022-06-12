@@ -163,13 +163,15 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
   },
 };
 
+let key = 0;
+
 export default [
-  <ListCard key={1} showGroupSwitch {...groups.living_room} />,
-  <ListCard key={2} showGroupSwitch {...groups.office} />,
-  <ListCard key={3} showGroupSwitch {...groups.kitchen} />,
-  <ListCard key={4} showGroupSwitch {...groups.bedroom} />,
-  <ListCard key={5} {...groups.bathroom} />,
-  <ListCard key={6} {...groups.mobilePhones} />,
-  <ListCard key={7} {...groups.shortcuts} />,
-  <ListCard key={6} {...groups.systemMonitor} />,
+  <ListCard key={key++} showGroupSwitch {...groups.living_room} />,
+  <ListCard key={key++} showGroupSwitch {...groups.office} />,
+  <ListCard key={key++} showGroupSwitch {...groups.kitchen} />,
+  <ListCard key={key++} showGroupSwitch {...groups.bedroom} />,
+  <ListCard key={key++} {...groups.bathroom} />,
+  <ListCard key={key++} {...groups.mobilePhones} />,
+  <ListCard key={key++} {...groups.shortcuts} />,
+  <ListCard key={key++} {...groups.systemMonitor} />,
 ];

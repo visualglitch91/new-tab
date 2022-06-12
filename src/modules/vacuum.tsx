@@ -5,7 +5,7 @@ import ListCardRow from "../components/ListCardRow";
 import RunScriptButton from "../components/RunScriptButton";
 import Button from "../components/Button";
 import EntitiesSwitch from "../components/EntitiesSwitch";
-import "./vacuum.css";
+import FlexRow from "../components/FlexRow";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -51,7 +51,7 @@ function VacuumActionsRow() {
   }
 
   return (
-    <div class="module__vacuum__pills">
+    <FlexRow>
       <PillButton
         icon="mdi:play"
         label="Continuar"
@@ -72,7 +72,7 @@ function VacuumActionsRow() {
         label="Retornar"
         onClick={makeVacuumCall("return_to_base")}
       />
-    </div>
+    </FlexRow>
   );
 }
 

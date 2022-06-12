@@ -36,6 +36,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
 }
 
 .component__list-card-row__divider {

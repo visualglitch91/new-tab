@@ -1,6 +1,6 @@
-import { renderModal } from "../utils/general";
+import { renderModal, RGB } from "../utils/general";
 import { callService, useHass } from "../utils/hass";
-import LightDialog, { RGB } from "./LightDialog";
+import LightDialog from "./LightDialog";
 import EntitiesSwitch from "./EntitiesSwitch";
 import ListCardRow from "./ListCardRow";
 

@@ -1,3 +1,4 @@
+import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
 import Icon from "./Icon";
 import "./PillButton.css";
@@ -10,7 +11,7 @@ export default function PillButton({
 }: {
   class?: string;
   icon?: string;
-  label: string;
+  label: ComponentChildren;
   onClick: () => void;
 }) {
   return (

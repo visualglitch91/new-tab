@@ -1,0 +1,13 @@
+.component__flex-row {
+  display: flex;
+  column-gap: 8px;
+  justify-content: center;
+}
+
+.component__flex-row--left {
+  justify-content: flex-start;
+}
+
+.component__flex-row--right {
+  justify-content: flex-end;
+}

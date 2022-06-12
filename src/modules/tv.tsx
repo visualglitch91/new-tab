@@ -13,6 +13,7 @@ import {
 } from "./tv.utils";
 import ListCard from "../components/ListCard";
 import RGBLightGroupRow from "../components/RGBLightGroupRow";
+import RGBLightGroupButtons from "../components/RGBLightGroupButtons";
 
 function spacer(height?: number) {
   return <div style={{ height: height && `${height}px` }} />;
@@ -197,8 +198,17 @@ export default (
             />
           ),
         },
-        { label: "RGB TV", entityId: "light.sala_rgb_tv" },
-        { label: "RGB Rack", entityId: "light.sala_rgb_rack" },
+        {
+          type: "custom",
+          render: () => (
+            <RGBLightGroupButtons
+              entities={[
+                { label: "TV", entityId: "light.sala_rgb_tv" },
+                { label: "Rack", entityId: "light.sala_rgb_rack" },
+              ]}
+            />
+          ),
+        },
       ]}
     />
   </Stack>

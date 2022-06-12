@@ -1,11 +1,9 @@
 import { useEffect, useRef } from "preact/hooks";
 import iro from "@jaames/iro";
-import { useDebouncedCallback, rgbToHex } from "../utils/general";
+import { useDebouncedCallback, rgbToHex, RGB } from "../utils/general";
 import Icon from "./Icon";
 import Button from "./Button";
 import "./LightDialog.css";
-
-export type RGB = [number, number, number];
 
 export interface LightDialogFeatures {
   brightness: {
@@ -98,7 +96,17 @@ export default function LightDialog({
   }, []);
 
   return (
-    <div class="component__light-dialog__wrapper">
+    <div
+      class="component__light-dialog__wrapper"
+      onClick={(e) => {
+        if (
+          (e.target as HTMLElement)?.className ===
+          "component__light-dialog__wrapper"
+        ) {
+          onDone();
+        }
+      }}
+    >
       <div class="component__light-dialog">
         <div class="component__light-dialog-header">{title}</div>
         {features.temperature ? (

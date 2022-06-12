@@ -13,7 +13,7 @@ export default function ListCardRow({
 }: {
   icon?: string;
   children: ComponentChildren;
-  label?: string;
+  label?: ComponentChildren;
   disabled?: boolean;
   onIconClick?: (e: JSXInternal.TargetedMouseEvent<HTMLDivElement>) => void;
 }) {

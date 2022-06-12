@@ -125,3 +125,12 @@ export function formatNumericValue(value: string | number, suffix: string) {
   const formatted = (Math.round(Number(value) * 10) / 10).toFixed(1);
   return `${formatted}${suffix}`;
 }
+
+export type RGB = [number, number, number];
+
+export function getContrastColor(color: RGB) {
+  // https://stackoverflow.com/a/3943023/112731
+  return color[0] * 0.299 + color[1] * 0.587 + color[2] * 0.114 > 186
+    ? "#000000"
+    : "#FFFFFF";
+}

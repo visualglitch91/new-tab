@@ -6,6 +6,7 @@ import LightEntityDialog from "./LightEntityDialog";
 import Switch from "./Switch";
 import { renderModal } from "../utils/general";
 import Icon from "./Icon";
+import ColorBadge from "./ColorBadge";
 
 export default function EntityRow({
   icon: customIcon,
@@ -47,7 +48,14 @@ export default function EntityRow({
     <ListCardRow
       disabled={unavailable}
       icon={icon}
-      label={label || friendlyName}
+      label={
+        <>
+          {label || friendlyName}
+          {checked && attributes.rgb_color && (
+            <ColorBadge size={12} color={attributes.rgb_color} />
+          )}
+        </>
+      }
       onIconClick={domain === "light" && checked ? onLightClick : undefined}
     >
       {renderContent ? (
