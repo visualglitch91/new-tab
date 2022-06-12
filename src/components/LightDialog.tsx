@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "preact/hooks";
-import iro from "@jaames/iro";
-import { useDebouncedCallback, rgbToHex, RGB } from "../utils/general";
+import { useDebouncedCallback, RGB } from "../utils/general";
 import Icon from "./Icon";
 import Button from "./Button";
+import ColorWheel from "./ColorWheel";
 import "./LightDialog.css";
 
 export interface LightDialogFeatures {
@@ -31,7 +31,6 @@ export default function LightDialog({
   features: Partial<LightDialogFeatures>;
   onDone: () => void;
 }) {
-  const pickerRef = useRef<HTMLDivElement>(null);
   const onDoneRef = useRef(onDone);
   const featuresRef = useRef(features);
 
@@ -58,31 +57,6 @@ export default function LightDialog({
 
     function onHashChange() {
       onDoneRef.current();
-    }
-
-    if (features.color) {
-      if (!pickerRef.current) {
-        throw new Error("Color Picker node not set");
-      }
-
-      const color = rgbToHex(
-        features.color.initialValue[0],
-        features.color.initialValue[1],
-        features.color.initialValue[2]
-      );
-
-      //@ts-expect-error Bad lib typings
-      const picker: iro.ColorPicker = new iro.ColorPicker(pickerRef.current, {
-        color,
-        sliderSize: 0,
-      });
-
-      picker.on(
-        "color:change",
-        ({ rgb }: { rgb: { r: number; g: number; b: number } }) => {
-          onChange("color", [rgb.r, rgb.g, rgb.b]);
-        }
-      );
     }
 
     setTimeout(() => {
@@ -137,7 +111,14 @@ export default function LightDialog({
             />
           </div>
         ) : null}
-        {Boolean(features.color) && <div ref={pickerRef} />}
+        {features.color && (
+          <ColorWheel
+            initialColor={features.color.initialValue}
+            onChange={(color) => {
+              onChange("color", color);
+            }}
+          />
+        )}
         <div class="component__light-dialog-footer">
           <Button onClick={onDone}>Ok</Button>
         </div>
