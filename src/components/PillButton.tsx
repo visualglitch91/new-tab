@@ -20,7 +20,7 @@ export default function PillButton({
       class={clsx("component__pill-button", className)}
       onClick={onClick}
     >
-      {icon && <Icon icon={icon} />}
+      {icon && <Icon size={14} icon={icon} />}
       {label}
     </button>
   );

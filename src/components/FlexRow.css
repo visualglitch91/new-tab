@@ -1,7 +1,8 @@
 .component__flex-row {
   display: flex;
-  column-gap: 8px;
+  grid-gap: 8px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .component__flex-row--left {
