@@ -1,0 +1,29 @@
+.component__dialog-base__wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.component__dialog-base {
+  background: #2f3b52;
+  padding: 18px;
+  min-width: 300px;
+  border-radius: 6px;
+}
+
+.component__dialog-base-header {
+  padding: 12px 10px;
+  margin-bottom: 8px;
+}
+
+.component__dialog-base-footer {
+  padding: 8px 14px;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -36,6 +36,6 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
-.module__cameras__image--broken {
+.module__cameras__image--hidden {
   opacity: 0;
 }

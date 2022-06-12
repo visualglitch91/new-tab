@@ -81,7 +81,7 @@ export default function RGBLightGroupButtons({
             onChange: (value) => onBrightnessChange(entities, value),
           },
         }}
-        onDone={unmount}
+        onClose={unmount}
       />
     ));
   }

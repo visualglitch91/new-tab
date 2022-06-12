@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { clsx } from "../utils/general";
-import { useHass } from "../utils/hass";
+import { clsx, renderModal } from "../utils/general";
+import { fetchStreamUrl, hassUrl, useHass } from "../utils/hass";
 import Stack from "../components/Stack";
 import Paper from "../components/Paper";
 import TitleCard from "../components/TitleCard";
+import CameraDialog from "../components/CameraDialog";
 import "./cameras.css";
 
 function Camera({ entityId }: { entityId: string }) {
@@ -38,8 +39,17 @@ function Camera({ entityId }: { entityId: string }) {
     };
   }, [entityPicture]);
 
+  function onCameraClick() {
+    renderModal((unmount) => (
+      <CameraDialog entityId={entityId} onClose={unmount} />
+    ));
+  }
+
   return (
-    <Paper class="module__cameras__camera">
+    <Paper
+      class="module__cameras__camera"
+      onClick={isOnline ? onCameraClick : undefined}
+    >
       <div class="module__cameras__camera__overlay">
         {!isOnline
           ? "Câmera Indisponível"
@@ -50,8 +60,10 @@ function Camera({ entityId }: { entityId: string }) {
           : undefined}
       </div>
       <img
-        src={imageURL}
-        class={clsx((error || loading) && "module__cameras__image--hidden")}
+        src={`${hassUrl}${imageURL}`}
+        class={clsx(
+          (error || loading || !isOnline) && "module__cameras__image--hidden"
+        )}
         onLoad={() => setError(false)}
         onError={() => setError(true)}
       />

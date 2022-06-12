@@ -16,16 +16,18 @@ import { loadValue, saveValue } from "./general";
 
 let _connection: Connection | undefined;
 
+export const hassUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.HASS_DEVELOPMENT_URL
+    : window.location.origin;
+
 function setupHASS({
   onStatesChange,
 }: {
   onStatesChange: (states: HassEntities) => void;
 }) {
   return getAuth({
-    hassUrl:
-      process.env.NODE_ENV === "development"
-        ? process.env.HASS_DEVELOPMENT_URL
-        : window.location.origin,
+    hassUrl,
     saveTokens: (tokens) => saveValue("hass_token", tokens),
     loadTokens: async () => loadValue("hass_token"),
   })
@@ -137,4 +139,13 @@ export function useHass() {
   }
 
   return context;
+}
+
+export function fetchStreamUrl(entityId: string): Promise<string> {
+  return _connection!
+    .sendMessagePromise({
+      type: "camera/stream",
+      entity_id: entityId,
+    })
+    .then((res: any) => res.url);
 }

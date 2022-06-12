@@ -62,7 +62,7 @@ export default function RGBLightGroupRow({
             onChange: onBrightnessChange,
           },
         }}
-        onDone={unmount}
+        onClose={unmount}
       />
     ));
   }

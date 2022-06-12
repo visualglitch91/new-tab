@@ -34,7 +34,7 @@ export default function EntityRow({
 
   function onLightClick() {
     renderModal((unmount) => (
-      <LightEntityDialog title={label} entity={entity} onDone={unmount} />
+      <LightEntityDialog title={label} entity={entity} onClose={unmount} />
     ));
   }
 

@@ -5,11 +5,11 @@ import LightDialog, { LightDialogFeatures } from "./LightDialog";
 export default function LightEntityDialog({
   title,
   entity,
-  onDone,
+  onClose,
 }: {
   title?: string;
   entity: HassEntity;
-  onDone: () => void;
+  onClose: () => void;
 }) {
   const {
     friendly_name: friendlyName,
@@ -55,7 +55,7 @@ export default function LightEntityDialog({
     <LightDialog
       title={title || friendlyName}
       features={features}
-      onDone={onDone}
+      onClose={onClose}
     />
   );
 }

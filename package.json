@@ -8,6 +8,7 @@
   "browserslist": "> 0.5%, last 2 versions, not IE 9-11, not dead",
   "dependencies": {
     "@jaames/iro": "^5.5.2",
+    "hls.js": "^1.1.5",
     "home-assistant-js-websocket": "^7.1.0",
     "macy": "^2.5.1",
     "preact": "^10.7.3",
