@@ -103,7 +103,7 @@ export default function LightDialog({
         <div class="component__light-dialog-header">{title}</div>
         {features.temperature ? (
           <div class="component__light-dialog__range-wrapper">
-            <Icon icon="fa-thermometer-three-quarters" />
+            <Icon icon="icofont-thermometer" />
             <input
               type="range"
               min={features.temperature.min}

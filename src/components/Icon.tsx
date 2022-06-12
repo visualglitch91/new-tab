@@ -20,10 +20,8 @@ export default function Icon({
     maxWeight: size,
   };
 
-  if (icon.startsWith("fa:") || icon.startsWith("fa-")) {
-    return (
-      <i style={style} class={clsx("far", `fa-${icon.slice(3)}`, className)} />
-    );
+  if (icon.startsWith("icofont-")) {
+    return <i style={style} class={clsx("icofont", icon, className)} />;
   }
 
   const name =

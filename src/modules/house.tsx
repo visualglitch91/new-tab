@@ -117,7 +117,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     title: "Sistema",
     rows: [
       {
-        icon: "fa-thermometer-three-quarters",
+        icon: "icofont-thermometer",
         label: "Temperatura",
         entityId: "sensor.processor_temperature",
         renderContent: (entity) => formatNumericValue(entity.state, "°C"),
