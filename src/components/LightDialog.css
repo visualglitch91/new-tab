@@ -30,8 +30,9 @@
   width: 100%;
 }
 
-.component__light-dialog .IroSlider {
-  display: none !important;
+.component__light-dialog__color-presets {
+  width: 230px;
+  margin: 0 auto;
 }
 
 .component__light-dialog-header {

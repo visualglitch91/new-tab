@@ -1,13 +1,16 @@
+import { JSXInternal } from "preact/src/jsx";
 import { clsx } from "../utils/general";
 
 export default function Icon({
   class: className,
   icon,
   size = 24,
+  style: extraStyles,
 }: {
   class?: string;
   icon: string;
   size?: number;
+  style?: JSXInternal.CSSProperties;
 }) {
   const style = {
     display: "inline-flex",
@@ -18,6 +21,7 @@ export default function Icon({
     minWeight: size,
     maxWidth: size,
     maxWeight: size,
+    ...extraStyles,
   };
 
   if (icon.startsWith("icofont-")) {

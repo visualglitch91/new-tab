@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { useDebouncedCallback, RGB } from "../utils/general";
 import Icon from "./Icon";
 import Button from "./Button";
-import ColorWheel from "./ColorWheel";
+import ColorPresets from "./ColorPresets";
 import "./LightDialog.css";
 
 export interface LightDialogFeatures {
@@ -33,6 +33,10 @@ export default function LightDialog({
 }) {
   const onDoneRef = useRef(onDone);
   const featuresRef = useRef(features);
+
+  const [selectedColor, setSelectedColor] = useState(
+    features.color?.initialValue
+  );
 
   const onChange = useDebouncedCallback(
     <K extends keyof LightDialogFeatures, F extends LightDialogFeatures[K]>(
@@ -112,9 +116,11 @@ export default function LightDialog({
           </div>
         ) : null}
         {features.color && (
-          <ColorWheel
-            initialColor={features.color.initialValue}
+          <ColorPresets
+            class="component__light-dialog__color-presets"
+            selected={selectedColor}
             onChange={(color) => {
+              setSelectedColor(color);
               onChange("color", color);
             }}
           />
