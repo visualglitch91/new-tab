@@ -5,6 +5,7 @@ import ListCardRow from "./ListCardRow";
 import LightEntityDialog from "./LightEntityDialog";
 import Switch from "./Switch";
 import { renderModal } from "../utils/general";
+import Icon from "./Icon";
 
 export default function EntityRow({
   icon: customIcon,
@@ -40,9 +41,11 @@ export default function EntityRow({
   const { friendly_name: friendlyName } = attributes;
   const [domain] = entityId.split(".");
   const checked = state === "on";
+  const unavailable = state === "unavailable";
 
   return (
     <ListCardRow
+      disabled={unavailable}
       icon={icon}
       label={label || friendlyName}
       onIconClick={domain === "light" && checked ? onLightClick : undefined}
@@ -50,14 +53,18 @@ export default function EntityRow({
       {renderContent ? (
         renderContent(entity)
       ) : ["light", "switch", "input_boolean"].includes(domain) ? (
-        <Switch
-          checked={checked}
-          onInput={makeServiceCall(
-            "homeassistant",
-            checked ? "turn_off" : "turn_on",
-            { entity_id: entityId }
-          )}
-        />
+        unavailable ? (
+          <Icon icon="cancel" />
+        ) : (
+          <Switch
+            checked={checked}
+            onInput={makeServiceCall(
+              "homeassistant",
+              checked ? "turn_off" : "turn_on",
+              { entity_id: entityId }
+            )}
+          />
+        )
       ) : (
         entity.state
       )}

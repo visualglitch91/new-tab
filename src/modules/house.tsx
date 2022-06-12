@@ -5,6 +5,20 @@ import RunScriptButton from "../components/RunScriptButton";
 import EntitiesSwitch from "../components/EntitiesSwitch";
 import { formatNumericValue } from "../utils/general";
 
+function scriptRow(it: {
+  entityId: string;
+  label?: string;
+  buttonLabel?: string;
+  icon?: string;
+}) {
+  return {
+    ...it,
+    renderContent: () => (
+      <RunScriptButton label={it.buttonLabel} entityId={it.entityId} />
+    ),
+  };
+}
+
 const groups: Record<string, { title: string; rows: Row[] }> = {
   living_room: {
     title: "Sala",
@@ -90,28 +104,41 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
             />
           ),
       },
-      {
-        entityId: "script.casa_apagar_todas_luzes",
-        label: "Apagar todas as luzes",
-        renderContent: (entity) => (
-          <RunScriptButton entityId={entity.entity_id} />
-        ),
-      },
-      {
-        entityId: "script.casa_apagar_todas_luzes_menos_sala",
-        label: "Apagar luzes, menos da sala",
-        renderContent: (entity) => (
-          <RunScriptButton entityId={entity.entity_id} />
-        ),
-      },
-      {
-        entityId: "script.quarto_iluminacao_abajures",
-        label: "Iluminação abajures",
-        renderContent: (entity) => (
-          <RunScriptButton entityId={entity.entity_id} />
-        ),
-      },
+      ...[
+        {
+          label: "Apagar todas as luzes",
+          entityId: "script.casa_apagar_todas_luzes",
+        },
+        {
+          label: "Apagar luzes, menos da sala",
+          entityId: "script.casa_apagar_todas_luzes_menos_sala",
+        },
+        {
+          label: "Iluminação abajures",
+          entityId: "script.quarto_iluminacao_abajures",
+        },
+      ].map(scriptRow),
     ],
+  },
+  mobilePhones: {
+    title: "Celulares",
+    rows: [
+      {
+        label: "Lais",
+        buttonLabel: "Encontrar",
+        entityId: "script.encontrar_celular_lais",
+      },
+      {
+        label: "Erica",
+        buttonLabel: "Encontrar",
+        entityId: "script.encontrar_celular_erica_1",
+      },
+      {
+        label: "Erica 2",
+        buttonLabel: "Encontrar",
+        entityId: "script.encontrar_celular_erica_2",
+      },
+    ].map(scriptRow),
   },
   systemMonitor: {
     title: "Sistema",
@@ -142,6 +169,7 @@ export default [
   <ListCard key={3} showGroupSwitch {...groups.kitchen} />,
   <ListCard key={4} showGroupSwitch {...groups.bedroom} />,
   <ListCard key={5} {...groups.bathroom} />,
-  <ListCard key={6} {...groups.systemMonitor} />,
+  <ListCard key={6} {...groups.mobilePhones} />,
   <ListCard key={7} {...groups.shortcuts} />,
+  <ListCard key={6} {...groups.systemMonitor} />,
 ];

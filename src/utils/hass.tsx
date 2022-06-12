@@ -105,6 +105,8 @@ export function HassProvider({ children }: { children: ComponentChildren }) {
   const [user, setUser] = useState<HassUser>();
   const [states, setStates] = useState<HassEntities>();
 
+  (window as any).states = states;
+
   useEffect(() => {
     setupHASS({
       onStatesChange: (states) => {

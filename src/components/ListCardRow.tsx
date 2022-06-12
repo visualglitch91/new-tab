@@ -8,15 +8,22 @@ export default function ListCardRow({
   icon,
   label,
   children,
+  disabled,
   onIconClick,
 }: {
   icon?: string;
-  label?: string;
   children: ComponentChildren;
+  label?: string;
+  disabled?: boolean;
   onIconClick?: (e: JSXInternal.TargetedMouseEvent<HTMLDivElement>) => void;
 }) {
   return (
-    <div class="component__list-card-row">
+    <div
+      class={clsx(
+        "component__list-card-row",
+        disabled && "component__list-card-row--disabled"
+      )}
+    >
       {icon && (
         <div
           class={clsx(
