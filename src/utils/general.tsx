@@ -88,6 +88,8 @@ export function loadCordovaJS() {
       function onDeviceReady() {
         document.body.classList.add("cordova");
         //@ts-expect-error no typings for cordova
+        NavigationBar.show();
+        //@ts-expect-error no typings for cordova
         NavigationBar.backgroundColorByHexString("#24324b");
         resolve(true);
       }
@@ -118,3 +120,8 @@ export const isTouchDevice =
   navigator.maxTouchPoints > 0 ||
   //@ts-expect-error Bad browser typings
   navigator.msMaxTouchPoints > 0;
+
+export function formatNumericValue(value: string | number, suffix: string) {
+  const formatted = (Math.round(Number(value) * 10) / 10).toFixed(1);
+  return `${formatted}${suffix}`;
+}

@@ -1,6 +1,6 @@
 import { useHass } from "./utils/hass";
 import { compact } from "./utils/general";
-import DesktopLayout from "./components/DesktopLayout";
+import MasonryLayout from "./components/MasonryLayout";
 import MobileLayout from "./components/MobileLayout";
 import tvModule from "./modules/tv";
 import houseModule from "./modules/house";
@@ -49,11 +49,11 @@ export default function App() {
   }
 
   return (
-    <DesktopLayout>
+    <MasonryLayout>
       {tvModule}
       {houseModule}
       {isAdmin && vacuumModule}
       {isAdmin && camerasModule}
-    </DesktopLayout>
+    </MasonryLayout>
   );
 }

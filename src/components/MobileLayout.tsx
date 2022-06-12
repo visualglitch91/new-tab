@@ -1,5 +1,5 @@
 import { ComponentChildren } from "preact";
-import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { clamp, clsx, loadValue, saveValue } from "../utils/general";
 import managedScroll, { ManagedScroll } from "../utils/managedScroll";
 import Stack from "./Stack";
@@ -74,10 +74,6 @@ export default function MobileLayout({
     };
   }, []);
 
-  useLayoutEffect(() => {
-    managedScrollRef.current?.scrollTo(0);
-  }, [active]);
-
   useEffect(() => {
     saveValue("last_active_tab", active);
 
@@ -104,7 +100,10 @@ export default function MobileLayout({
             active={active === index}
             icon={tab.icon}
             title={tab.title}
-            onClick={() => setActive(index)}
+            onClick={() => {
+              managedScrollRef.current?.scrollTo(0);
+              setActive(index);
+            }}
           />
         ))}
       </div>

@@ -1,9 +1,9 @@
 import { makeTurnOnCall } from "../utils/hass";
-import Stack from "../components/Stack";
 import Switch from "../components/Switch";
 import ListCard, { Row } from "../components/ListCard";
 import RunScriptButton from "../components/RunScriptButton";
 import EntitiesSwitch from "../components/EntitiesSwitch";
+import { formatNumericValue } from "../utils/general";
 
 const groups: Record<string, { title: string; rows: Row[] }> = {
   living_room: {
@@ -33,7 +33,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
         icon: "mdi:water",
         label: "Bateria do Sensor de Vazamento",
         entityId: "sensor.water_leak_sensor_battery",
-        renderContent: (entity) => `${Math.floor(Number(entity.state))}%`,
+        renderContent: (entity) => formatNumericValue(entity.state, "%"),
       },
     ],
   },
@@ -113,17 +113,35 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       },
     ],
   },
+  systemMonitor: {
+    title: "Sistema",
+    rows: [
+      {
+        icon: "fa-thermometer-three-quarters",
+        label: "Temperatura",
+        entityId: "sensor.processor_temperature",
+        renderContent: (entity) => formatNumericValue(entity.state, "°C"),
+      },
+      {
+        label: "Processador",
+        entityId: "sensor.processor_use",
+        renderContent: (entity) => formatNumericValue(entity.state, "%"),
+      },
+      {
+        label: "Memória",
+        entityId: "sensor.memory_use_percent",
+        renderContent: (entity) => formatNumericValue(entity.state, "%"),
+      },
+    ],
+  },
 };
 
 export default [
-  <Stack key={1}>
-    <ListCard showGroupSwitch {...groups.living_room} />
-    <ListCard showGroupSwitch {...groups.office} />
-    <ListCard showGroupSwitch {...groups.kitchen} />
-  </Stack>,
-  <Stack key={2}>
-    <ListCard showGroupSwitch {...groups.bedroom} />
-    <ListCard {...groups.bathroom} />
-    <ListCard {...groups.shortcuts} />
-  </Stack>,
+  <ListCard key={1} showGroupSwitch {...groups.living_room} />,
+  <ListCard key={2} showGroupSwitch {...groups.office} />,
+  <ListCard key={3} showGroupSwitch {...groups.kitchen} />,
+  <ListCard key={4} showGroupSwitch {...groups.bedroom} />,
+  <ListCard key={5} {...groups.bathroom} />,
+  <ListCard key={6} {...groups.systemMonitor} />,
+  <ListCard key={7} {...groups.shortcuts} />,
 ];

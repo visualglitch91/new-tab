@@ -19,6 +19,8 @@ export default function DesktopLayout({
   const items = [...toChildArray(children)].flat().filter(Boolean);
   const availableWidth = nodeRef.current?.offsetWidth;
 
+  console.log({ items });
+
   const columns = (() => {
     if (!availableWidth) {
       return;
