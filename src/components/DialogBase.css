@@ -12,18 +12,20 @@
 
 .component__dialog-base {
   background: #2f3b52;
-  padding: 18px;
+  padding: 18px 18px 28px;
   min-width: 300px;
   border-radius: 6px;
 }
 
 .component__dialog-base-header {
-  padding: 12px 10px;
-  margin-bottom: 8px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 8px;
 }
 
-.component__dialog-base-footer {
-  padding: 8px 14px;
+.component__dialog-base__content {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
 }

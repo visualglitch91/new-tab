@@ -29,7 +29,7 @@ export default function ColorPresets({
               style={{ color: getContrastColor(color) }}
             />
           )}
-          <ColorBadge size={42} color={color} />
+          <ColorBadge radius={4} size={42} color={color} />
         </button>
       ))}
     </FlexRow>

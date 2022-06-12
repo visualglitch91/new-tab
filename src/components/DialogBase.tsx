@@ -1,6 +1,7 @@
 import { ComponentChildren } from "preact";
 import { JSXInternal } from "preact/src/jsx";
 import Button from "./Button";
+import Icon from "./Icon";
 import "./DialogBase.css";
 
 export default function DialogBase({
@@ -23,11 +24,13 @@ export default function DialogBase({
   return (
     <div class="component__dialog-base__wrapper" onClick={onOverlayClick}>
       <div class="component__dialog-base">
-        <div class="component__dialog-base-header">{title}</div>
-        {children}
-        <div class="component__dialog-base-footer">
-          <Button onClick={onClose}>Fechar</Button>
+        <div class="component__dialog-base-header">
+          {title}
+          <Button onClick={onClose}>
+            <Icon icon="close" />
+          </Button>
         </div>
+        <div class="component__dialog-base__content">{children}</div>
       </div>
     </div>
   );
