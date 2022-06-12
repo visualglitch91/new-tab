@@ -1,5 +1,5 @@
 import Hls from "hls.js";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { JSXInternal } from "preact/src/jsx";
 import { fetchStreamUrl, hassUrl } from "../utils/hass";
 
@@ -12,28 +12,65 @@ export default function CameraStream({
   class?: string;
   style?: JSXInternal.CSSProperties;
 }) {
-  const hlsRef = useRef<Hls>();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [visible, setVisible] = useState(!document.hidden);
 
   useEffect(() => {
-    const hls = new Hls();
-    hlsRef.current = hls;
+    function onHidden() {
+      setVisible(false);
+    }
+
+    function onVisible() {
+      setVisible(true);
+    }
+
+    function onVisibilityChange() {
+      if (document.hidden) {
+        onHidden();
+      } else {
+        onVisible();
+      }
+    }
+
+    document.addEventListener("pause", onHidden);
+    document.addEventListener("resume", onVisible);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
-      hls.destroy();
+      document.removeEventListener("pause", onHidden);
+      document.removeEventListener("resume", onVisible);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
   useEffect(() => {
+    if (!visible) {
+      return;
+    }
+
+    const hls = new Hls();
+
     fetchStreamUrl(entityId).then((url) => {
-      if (!hlsRef.current || !videoRef.current) {
+      if (!videoRef.current) {
         return;
       }
 
-      hlsRef.current.loadSource(`${hassUrl}${url}`);
-      hlsRef.current.attachMedia(videoRef.current);
+      hls.loadSource(`${hassUrl}${url}`);
+      hls.attachMedia(videoRef.current);
     });
-  }, [entityId]);
 
-  return <video style={style} class={className} ref={videoRef} autoPlay />;
+    return () => {
+      hls.destroy();
+    };
+  }, [visible, entityId]);
+
+  return visible ? (
+    <video
+      style={{ ...style, pointerEvents: "none" }}
+      class={className}
+      ref={videoRef}
+      autoPlay
+      controls
+    />
+  ) : null;
 }
