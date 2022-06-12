@@ -66,11 +66,11 @@ export default function CameraStream({
 
   return visible ? (
     <video
-      style={{ ...style, pointerEvents: "none" }}
-      class={className}
-      ref={videoRef}
       autoPlay
       controls
+      style={{ ...style }}
+      class={className}
+      ref={videoRef}
     />
   ) : null;
 }

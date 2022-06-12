@@ -11,7 +11,7 @@ export default function PillButton({
 }: {
   class?: string;
   icon?: string;
-  label: ComponentChildren;
+  label?: ComponentChildren;
   onClick: () => void;
 }) {
   return (

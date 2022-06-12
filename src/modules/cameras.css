@@ -1,10 +1,15 @@
-.module__cameras__camera {
+.module__camera {
   position: relative;
   min-height: 200px;
   overflow: hidden;
 }
 
-.module__cameras__camera__overlay {
+.module__camera img,
+.module__camera video {
+  width: 100%;
+}
+
+.module__camera__overlay {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -16,4 +21,8 @@
   justify-content: center;
   font-size: 18px;
   transition: background 70ms linear;
+}
+
+.module__camera__buttons {
+  padding: 8px 0;
 }
