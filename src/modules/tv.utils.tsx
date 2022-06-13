@@ -77,7 +77,9 @@ export function TVSwitch() {
   const checked = states["media_player.sala_tv"].state === "on";
 
   function toggle() {
-    callService("homeassistant", "turn_on", { entity_id: "scene.tv_ligar" });
+    callService("homeassistant", "turn_on", {
+      entity_id: "script.ir_bridge_tv_energia",
+    });
   }
 
   return <DelayedSwitch delay={30_000} checked={checked} onInput={toggle} />;
