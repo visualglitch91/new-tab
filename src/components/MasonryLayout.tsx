@@ -8,6 +8,45 @@ import "./MasonryLayout.css";
 const gutter = 16;
 const columnWidth = 400;
 
+function MasonryLayoutItem({
+  children,
+  onSizeChange,
+}: {
+  children: ComponentChildren;
+  onSizeChange: () => void;
+}) {
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const onSizeChangeRef = useRef<() => void>(onSizeChange);
+
+  useEffect(() => {
+    onSizeChangeRef.current = onSizeChange;
+  }, [onSizeChange]);
+
+  useEffect(() => {
+    const node = nodeRef.current;
+
+    if (!node) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      onSizeChangeRef.current();
+    });
+
+    resizeObserver.observe(node);
+
+    return () => {
+      resizeObserver.observe(node);
+    };
+  }, []);
+
+  return (
+    <div ref={nodeRef} class="components__masonry-layout__item">
+      {children}
+    </div>
+  );
+}
+
 export default function MasonryLayout({
   class: className,
   children,
@@ -31,10 +70,12 @@ export default function MasonryLayout({
     return columnCount;
   }, []);
 
-  const onResizeCallback = useDebouncedCallback(() => {
+  const recalculateMacy = useCallback(() => {
     macyRef.current.options.columns = getColumnCount();
     macyRef.current.recalculate(true);
-  });
+  }, [getColumnCount]);
+
+  const onResize = useDebouncedCallback(recalculateMacy);
 
   useEffect(() => {
     macyRef.current = Macy({
@@ -44,11 +85,11 @@ export default function MasonryLayout({
 
     const readyTimeout = window.setTimeout(setReady, 100, true);
 
-    window.addEventListener("resize", onResizeCallback);
+    window.addEventListener("resize", onResize);
 
     return () => {
       window.clearTimeout(readyTimeout);
-      window.removeEventListener("resize", onResizeCallback);
+      window.removeEventListener("resize", onResize);
     };
     //eslint-disable-next-line
   }, []);
@@ -60,9 +101,9 @@ export default function MasonryLayout({
     >
       <div ref={nodeRef}>
         {items.map((item, index) => (
-          <div key={index} class="components__masonry-layout__item">
+          <MasonryLayoutItem key={index} onSizeChange={recalculateMacy}>
             {item}
-          </div>
+          </MasonryLayoutItem>
         ))}
       </div>
     </div>

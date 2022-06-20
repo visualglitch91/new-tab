@@ -21,6 +21,8 @@ export const hassUrl =
     ? process.env.HASS_DEVELOPMENT_URL
     : window.location.origin;
 
+console.log({ hassUrl });
+
 function setupHASS({
   onStatesChange,
 }: {

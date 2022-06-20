@@ -9,7 +9,7 @@ export default function EntitiesSwitch({
   condition?: "some" | "every";
 }) {
   const { states } = useHass();
-  const checked = entityIds[condition]((id) => states[id].state === "on");
+  const checked = entityIds[condition]((id) => states[id]?.state === "on");
 
   function toggleAll() {
     entityIds.forEach((id) => {
