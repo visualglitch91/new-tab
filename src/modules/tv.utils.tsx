@@ -40,12 +40,13 @@ export function IconButtonCard({
 const imgStyle = {
   objectFit: "contain",
   height: "70%",
-  width: "80%",
+  width: "70%",
 };
 
 const assets = {
   disneyplus: require("../assets/disneyplus.png"),
   globo: require("../assets/globo.png"),
+  globoplay: require("../assets/globoplay.png"),
   hbomax: require("../assets/hbomax.png"),
   netflix: require("../assets/netflix.png"),
   plex: require("../assets/plex.png"),

@@ -77,7 +77,7 @@ export default (
       />
     </ButtonRow>
 
-    {spacer(8)}
+    {spacer(12)}
 
     <ButtonRow height={55}>
       <IconButtonCard
@@ -119,66 +119,7 @@ export default (
       />
     </ButtonRow>
 
-    {spacer(8)}
-
-    <ButtonRow height={75}>
-      <ImageButtonCard
-        asset="globo"
-        onClick={makeTurnOnCall("script.sala_tv_globo_ao_vivo")}
-      />
-      <ImageButtonCard
-        asset="netflix"
-        onClick={makeTVLaunchAppCall("netflix")}
-      />
-      <ImageButtonCard
-        asset="plex"
-        onClick={makeTVLaunchAppCall("com.itkey.plexclient")}
-      />
-      <ImageButtonCard
-        asset="youtube"
-        onClick={makeTVLaunchAppCall("youtube.leanback.v4")}
-      />
-    </ButtonRow>
-
-    <ButtonRow height={75}>
-      <ImageButtonCard
-        asset="disneyplus"
-        onClick={makeTVLaunchAppCall("com.disney.disneyplus-prod")}
-      />
-      <ImageButtonCard
-        asset="starplus"
-        onClick={makeTVLaunchAppCall("com.disney.alch.prod.lrd.app")}
-      />
-      <ImageButtonCard
-        asset="hbomax"
-        onClick={makeTVLaunchAppCall("com.hbo.hbomax")}
-      />
-      <ImageButtonCard
-        asset="prime_video"
-        onClick={makeTVLaunchAppCall("amazon")}
-      />
-    </ButtonRow>
-
-    <ButtonRow height={75}>
-      <ImageButtonCard
-        asset="spotify"
-        onClick={makeTVLaunchAppCall("spotify-beehive")}
-      />
-      <ImageButtonCard
-        asset="ps5"
-        onClick={makeTurnOnCall("script.sala_tv_hdmi1")}
-      />
-      <ImageButtonCard
-        asset="switch"
-        onClick={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
-      />
-      <ImageButtonCard
-        asset="windows"
-        onClick={makeTurnOnCall("script.sala_receiver_pc")}
-      />
-    </ButtonRow>
-
-    {spacer(8)}
+    {spacer(12)}
 
     <ListCard
       rows={[
@@ -211,5 +152,71 @@ export default (
         },
       ]}
     />
+
+    {spacer(8)}
+
+    <ButtonRow height={70}>
+      <ImageButtonCard
+        asset="globo"
+        onClick={makeTurnOnCall("script.sala_tv_globo_ao_vivo")}
+      />
+      <ImageButtonCard
+        asset="globoplay"
+        onClick={makeTVLaunchAppCall("globoplaywebos")}
+      />
+      <ImageButtonCard
+        asset="netflix"
+        onClick={makeTVLaunchAppCall("netflix")}
+      />
+    </ButtonRow>
+
+    <ButtonRow height={70}>
+      <ImageButtonCard
+        asset="plex"
+        onClick={makeTVLaunchAppCall("com.itkey.plexclient")}
+      />
+      <ImageButtonCard
+        asset="disneyplus"
+        onClick={makeTVLaunchAppCall("com.disney.disneyplus-prod")}
+      />
+      <ImageButtonCard
+        asset="hbomax"
+        onClick={makeTVLaunchAppCall("com.hbo.hbomax")}
+      />
+    </ButtonRow>
+
+    <ButtonRow height={70}>
+      <ImageButtonCard
+        asset="youtube"
+        onClick={makeTVLaunchAppCall("youtube.leanback.v4")}
+      />
+      <ImageButtonCard
+        asset="starplus"
+        onClick={makeTVLaunchAppCall("com.disney.alch.prod.lrd.app")}
+      />
+      <ImageButtonCard
+        asset="prime_video"
+        onClick={makeTVLaunchAppCall("amazon")}
+      />
+    </ButtonRow>
+
+    <ButtonRow height={70}>
+      <ImageButtonCard
+        asset="spotify"
+        onClick={makeTVLaunchAppCall("spotify-beehive")}
+      />
+      <ImageButtonCard
+        asset="ps5"
+        onClick={makeTurnOnCall("script.sala_tv_hdmi1")}
+      />
+      <ImageButtonCard
+        asset="switch"
+        onClick={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
+      />
+      <ImageButtonCard
+        asset="windows"
+        onClick={makeTurnOnCall("script.sala_receiver_pc")}
+      />
+    </ButtonRow>
   </Stack>
 );
