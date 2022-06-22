@@ -35,7 +35,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     rows: [
       { label: "Luz", entityId: "switch.escritorio_luz" },
       { label: "Ventilador", entityId: "switch.escritorio_ventilador" },
-      // { label: "Luz Ambiente", entityId: "light.escritorio_rgb" },
+      { label: "RGB", entityId: "light.escritorio_rgb" },
     ],
   },
   kitchen: {
