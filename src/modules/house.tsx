@@ -4,6 +4,8 @@ import ListCard, { Row } from "../components/ListCard";
 import RunScriptButton from "../components/RunScriptButton";
 import EntitiesSwitch from "../components/EntitiesSwitch";
 import { formatNumericValue } from "../utils/general";
+import RGBLightGroupRow from "../components/RGBLightGroupRow";
+import RGBLightGroupButtons from "../components/RGBLightGroupButtons";
 
 function scriptRow(it: {
   entityId: string;
@@ -35,7 +37,27 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     rows: [
       { label: "Luz", entityId: "switch.escritorio_luz" },
       { label: "Ventilador", entityId: "switch.escritorio_ventilador" },
-      { label: "RGB", entityId: "light.escritorio_rgb" },
+      {
+        type: "custom",
+        render: () => (
+          <RGBLightGroupRow
+            label="RGB"
+            icon="television-ambient-light"
+            entityIds={["light.escritorio_rgb", "light.escritorio_rgb_2"]}
+          />
+        ),
+      },
+      {
+        type: "custom",
+        render: () => (
+          <RGBLightGroupButtons
+            entities={[
+              { label: "Mesa", entityId: "light.escritorio_rgb" },
+              { label: "Quadro", entityId: "light.escritorio_rgb_2" },
+            ]}
+          />
+        ),
+      },
     ],
   },
   kitchen: {
