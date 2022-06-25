@@ -68,7 +68,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       {
         icon: "mdi:water",
         label: "Bateria do Sensor de Vazamento",
-        entityId: "sensor.water_leak_sensor_battery",
+        entityId: "sensor.lavanderia_sensor_vazamento_bateria",
         renderContent: (entity) => formatNumericValue(entity.state, "%"),
       },
     ],
