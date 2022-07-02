@@ -13,7 +13,7 @@ export default function LightEntityDialog({
 }) {
   const {
     friendly_name: friendlyName,
-    color_mode: colorMode,
+    supported_color_modes: colorModes,
     color_temp: colorTemp,
     min_mireds: minTemperature,
     max_mireds: maxTemperature,
@@ -28,6 +28,9 @@ export default function LightEntityDialog({
     });
   }
 
+  const hasTemp = colorModes.includes("color_temp");
+  const hasColor = colorModes.includes("rgb") || colorModes.includes("hs");
+
   const features: Partial<LightDialogFeatures> = {
     brightness: {
       initialValue: typeof brightness === "undefined" ? 255 : brightness,
@@ -35,14 +38,14 @@ export default function LightEntityDialog({
     },
   };
 
-  if (colorMode === "rgb") {
+  if (hasColor) {
     features.color = {
       initialValue: typeof color === "undefined" ? [255, 255, 255] : color,
       onChange: (value) => onChange("rgb_color", value),
     };
   }
 
-  if (colorMode === "color_temp") {
+  if (hasTemp) {
     features.temperature = {
       min: minTemperature,
       max: maxTemperature,
