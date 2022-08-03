@@ -4,8 +4,6 @@ import ListCard, { Row } from "../components/ListCard";
 import RunScriptButton from "../components/RunScriptButton";
 import EntitiesSwitch from "../components/EntitiesSwitch";
 import { formatNumericValue } from "../utils/general";
-import RGBLightGroupRow from "../components/RGBLightGroupRow";
-import RGBLightGroupButtons from "../components/RGBLightGroupButtons";
 
 function scriptRow(it: {
   entityId: string;
@@ -30,6 +28,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luminária", entityId: "switch.sala_luminaria" },
       { label: "RGB TV", entityId: "light.sala_rgb_tv" },
       { label: "RGB Rack", entityId: "light.sala_rgb_rack" },
+      { label: "RGB Sofá", entityId: "light.sala_rgb_sofa" },
     ],
   },
   office: {
@@ -38,27 +37,8 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luz", entityId: "switch.escritorio_luz" },
       { label: "Ventilador", entityId: "switch.escritorio_ventilador" },
       { label: "Luminária", entityId: "light.escritorio_luminaria" },
-      {
-        type: "custom",
-        render: () => (
-          <RGBLightGroupRow
-            label="RGB"
-            icon="television-ambient-light"
-            entityIds={["light.escritorio_rgb", "light.escritorio_rgb_2"]}
-          />
-        ),
-      },
-      {
-        type: "custom",
-        render: () => (
-          <RGBLightGroupButtons
-            entities={[
-              { label: "Mesa", entityId: "light.escritorio_rgb" },
-              { label: "Quadro", entityId: "light.escritorio_rgb_2" },
-            ]}
-          />
-        ),
-      },
+      { label: "RGB Mesa", entityId: "light.escritorio_rgb" },
+      { label: "RGB Quadro", entityId: "light.escritorio_rgb_2" },
     ],
   },
   kitchen: {

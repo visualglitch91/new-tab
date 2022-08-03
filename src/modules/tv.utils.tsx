@@ -1,14 +1,17 @@
-import { callService, makeWebOSCall, useHass } from "../utils/hass";
+import { callService, makeServiceCall, useHass } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
 import Icon from "../components/Icon";
 import DelayedSwitch from "../components/DelayedSwitch";
 
 export function makeTVButtonCall(button: string) {
-  return makeWebOSCall("button", "media_player.sala_tv", { button });
+  return makeServiceCall("shell_command", "custom_webos_button", { button });
 }
 
 function makeTVCommandCall(command: string, data?: any) {
-  return makeWebOSCall("command", "media_player.sala_tv", { command, ...data });
+  return makeServiceCall("shell_command", "custom_webos_command", {
+    command,
+    ...data,
+  });
 }
 
 export function makeTVMediaControlCall(command: string) {
@@ -57,6 +60,7 @@ const assets = {
   switch: require("../assets/switch.png"),
   windows: require("../assets/windows.png"),
   youtube: require("../assets/youtube.png"),
+  retropi: require("../assets/retropi.png"),
 };
 
 export function ImageButtonCard({
@@ -75,7 +79,7 @@ export function ImageButtonCard({
 
 export function TVSwitch() {
   const { states } = useHass();
-  const checked = states["media_player.sala_tv"].state === "on";
+  const checked = states["input_boolean.sala_tv_state"].state === "on";
 
   function toggle() {
     callService("homeassistant", "turn_on", {

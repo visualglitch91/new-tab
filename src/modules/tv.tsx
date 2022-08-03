@@ -214,7 +214,7 @@ export default (
         onClick={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
       />
       <ImageButtonCard
-        asset="windows"
+        asset="retropi"
         onClick={makeTurnOnCall("script.sala_receiver_pc")}
       />
     </ButtonRow>
