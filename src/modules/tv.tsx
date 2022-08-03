@@ -135,7 +135,11 @@ export default (
             <RGBLightGroupRow
               label="RGB"
               icon="television-ambient-light"
-              entityIds={["light.sala_rgb_tv", "light.sala_rgb_rack"]}
+              entityIds={[
+                "light.sala_rgb_tv",
+                "light.sala_rgb_rack",
+                "light.sala_rgb_sofa",
+              ]}
             />
           ),
         },
@@ -146,6 +150,7 @@ export default (
               entities={[
                 { label: "TV", entityId: "light.sala_rgb_tv" },
                 { label: "Rack", entityId: "light.sala_rgb_rack" },
+                { label: "Sofá", entityId: "light.sala_rgb_sofa" },
               ]}
             />
           ),

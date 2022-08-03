@@ -1,7 +1,7 @@
 {
   "scripts": {
     "prerun": "rm -rf .parcel-cache dist && echo \"\\\"$(date +%s)\\\"\" > src/version.json",
-    "start": "yarn prerun && parcel src/index.html --no-autoinstall -p 3001",
+    "start": "yarn prerun && parcel src/index.html --no-autoinstall -p 3000",
     "build": "yarn lint && yarn prerun && parcel build src/index.html",
     "lint": "eslint --max-warnings=0 --ext .tsx,.ts,.jsx,.js ./src && tsc --project ./tsconfig.json --noEmit"
   },
