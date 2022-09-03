@@ -178,7 +178,8 @@ export default (
     <ButtonRow height={70}>
       <ImageButtonCard
         asset="plex"
-        onClick={makeTVLaunchAppCall("com.itkey.plexclient")}
+        onClick={makeTVLaunchAppCall("cdp-30")}
+        // onClick={makeTVLaunchAppCall("com.itkey.plexclient")}
       />
       <ImageButtonCard
         asset="disneyplus"
@@ -210,6 +211,17 @@ export default (
         asset="spotify"
         onClick={makeTVLaunchAppCall("spotify-beehive")}
       />
+      <ImageButtonCard
+        asset="discovery_plus"
+        onClick={makeTVLaunchAppCall("com.discovery.dplus")}
+      />
+      <ImageButtonCard
+        asset="fire_tv"
+        onClick={makeTurnOnCall("script.sala_receiver_firetv")}
+      />
+    </ButtonRow>
+
+    <ButtonRow height={70}>
       <ImageButtonCard
         asset="ps5"
         onClick={makeTurnOnCall("script.sala_tv_hdmi1")}

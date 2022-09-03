@@ -54,6 +54,8 @@ const assets = {
   netflix: require("../assets/netflix.png"),
   plex: require("../assets/plex.png"),
   prime_video: require("../assets/prime_video.png"),
+  discovery_plus: require("../assets/discovery_plus.png"),
+  fire_tv: require("../assets/fire_tv.png"),
   ps5: require("../assets/ps5.png"),
   spotify: require("../assets/spotify.png"),
   starplus: require("../assets/starplus.png"),

@@ -46,12 +46,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     rows: [
       { label: "Luz da Cozinha", entityId: "switch.cozinha_luz" },
       { label: "Luz da Lavanderia", entityId: "switch.lavanderia_luz" },
-      {
-        icon: "mdi:water",
-        label: "Bateria do Sensor de Vazamento",
-        entityId: "sensor.lavanderia_sensor_vazamento_bateria",
-        renderContent: (entity) => formatNumericValue(entity.state, "%"),
-      },
+      { label: "Luz do Banheiro", entityId: "switch.lavanderia_banheiro" },
     ],
   },
   bedroom: {
