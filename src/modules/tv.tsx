@@ -2,18 +2,15 @@ import { makeTurnOnCall } from "../utils/hass";
 import Stack from "../components/Stack";
 import ButtonRow from "../components/ButtonRow";
 import TitleCard from "../components/TitleCard";
+import EntityButton from "../components/EntityButton";
+import { TVEntitySwitch } from "../components/TVEntitySwitch";
 import {
-  TVSwitch,
-  SurroundSwitch,
   IconButtonCard,
   ImageButtonCard,
   makeTVButtonCall,
   makeTVMediaControlCall,
   makeTVLaunchAppCall,
 } from "./tv.utils";
-import ListCard from "../components/ListCard";
-import RGBLightGroupRow from "../components/RGBLightGroupRow";
-import RGBLightGroupButtons from "../components/RGBLightGroupButtons";
 
 function spacer(height?: number) {
   return <div style={{ height: height && `${height}px` }} />;
@@ -21,7 +18,7 @@ function spacer(height?: number) {
 
 export default (
   <Stack smallGap>
-    <TitleCard title="TV" action={<TVSwitch />} />
+    <TitleCard title="TV" action={<TVEntitySwitch />} />
 
     {spacer()}
 
@@ -121,44 +118,18 @@ export default (
 
     {spacer(12)}
 
-    <ListCard
-      rows={[
-        {
-          label: "Surround",
-          icon: "mdi:surround-sound",
-          entityId: "switch.sala_receiver",
-          renderContent: () => <SurroundSwitch />,
-        },
-        {
-          type: "custom",
-          render: () => (
-            <RGBLightGroupRow
-              label="RGB"
-              icon="television-ambient-light"
-              entityIds={[
-                "light.sala_rgb_tv",
-                "light.sala_rgb_rack",
-                "light.sala_rgb_sofa",
-              ]}
-            />
-          ),
-        },
-        {
-          type: "custom",
-          render: () => (
-            <RGBLightGroupButtons
-              entities={[
-                { label: "TV", entityId: "light.sala_rgb_tv" },
-                { label: "Rack", entityId: "light.sala_rgb_rack" },
-                { label: "Sofá", entityId: "light.sala_rgb_sofa" },
-              ]}
-            />
-          ),
-        },
-      ]}
-    />
+    <ButtonRow>
+      <EntityButton
+        label="Surround"
+        icon="mdi:surround-sound"
+        changeTimeout={30_000}
+        entityId="switch.sala_receiver"
+      />
+      <EntityButton label="RGB TV" entityId="light.sala_rgb_tv" />
+      <EntityButton label="RGB Rack" entityId="light.sala_rgb_rack" />
+    </ButtonRow>
 
-    {spacer(8)}
+    {spacer(12)}
 
     <ButtonRow height={70}>
       <ImageButtonCard
@@ -176,11 +147,7 @@ export default (
     </ButtonRow>
 
     <ButtonRow height={70}>
-      <ImageButtonCard
-        asset="plex"
-        onClick={makeTVLaunchAppCall("cdp-30")}
-        // onClick={makeTVLaunchAppCall("com.itkey.plexclient")}
-      />
+      <ImageButtonCard asset="plex" onClick={makeTVLaunchAppCall("cdp-30")} />
       <ImageButtonCard
         asset="disneyplus"
         onClick={makeTVLaunchAppCall("com.disney.disneyplus-prod")}

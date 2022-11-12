@@ -1,9 +1,15 @@
 import { makeTurnOnCall } from "../utils/hass";
 import Switch from "../components/Switch";
 import ListCard, { Row } from "../components/ListCard";
+import EntityGrid from "../components/EntityGrid";
 import RunScriptButton from "../components/RunScriptButton";
 import EntitiesSwitch from "../components/EntitiesSwitch";
-import { formatNumericValue } from "../utils/general";
+import { formatNumericValue, isDesktop } from "../utils/general";
+import ListCardRow from "../components/ListCardRow";
+import { TVEntitySwitch } from "../components/TVEntitySwitch";
+import { TVEntityButton } from "../components/TVEntityButton";
+
+const GroupComponent = isDesktop ? ListCard : EntityGrid;
 
 function scriptRow(it: {
   entityId: string;
@@ -28,7 +34,33 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luminária", entityId: "switch.sala_luminaria" },
       { label: "RGB TV", entityId: "light.sala_rgb_tv" },
       { label: "RGB Rack", entityId: "light.sala_rgb_rack" },
-      { label: "RGB Sofá", entityId: "light.sala_rgb_sofa" },
+
+      { type: "divider", hidden: isDesktop },
+      {
+        type: "custom",
+        hidden: isDesktop,
+        render: () => {
+          const icon = "mdi:television-classic";
+          const label = "TV";
+
+          if (isDesktop) {
+            return (
+              <ListCardRow icon={icon} label={label}>
+                <TVEntitySwitch />
+              </ListCardRow>
+            );
+          }
+
+          return <TVEntityButton icon={icon} label={label} />;
+        },
+      },
+      {
+        label: "Surround",
+        icon: "mdi:surround-sound",
+        changeTimeout: 30_000,
+        entityId: "switch.sala_receiver",
+        ignoreOnGroupSwitch: true,
+      },
     ],
   },
   office: {
@@ -83,6 +115,12 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
             entityId="script.banheiro_luz_quente_no_chuveiro"
           />
         ),
+      },
+      {
+        icon: "shower-head",
+        hidden: isDesktop,
+        label: "Luz Quente no Chuveiro",
+        entityId: "script.banheiro_luz_quente_no_chuveiro",
       },
     ],
   },
@@ -164,11 +202,11 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
 let key = 0;
 
 export default [
-  <ListCard key={key++} showGroupSwitch {...groups.living_room} />,
-  <ListCard key={key++} showGroupSwitch {...groups.office} />,
-  <ListCard key={key++} showGroupSwitch {...groups.kitchen} />,
-  <ListCard key={key++} showGroupSwitch {...groups.bedroom} />,
-  <ListCard key={key++} {...groups.bathroom} />,
+  <GroupComponent key={key++} showGroupSwitch {...groups.living_room} />,
+  <GroupComponent key={key++} showGroupSwitch {...groups.office} />,
+  <GroupComponent key={key++} showGroupSwitch {...groups.kitchen} />,
+  <GroupComponent key={key++} showGroupSwitch {...groups.bedroom} />,
+  <GroupComponent key={key++} {...groups.bathroom} />,
   <ListCard key={key++} {...groups.mobilePhones} />,
   <ListCard key={key++} {...groups.shortcuts} />,
   <ListCard key={key++} {...groups.systemMonitor} />,

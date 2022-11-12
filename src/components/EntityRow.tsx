@@ -1,36 +1,32 @@
 import { ComponentChildren } from "preact";
 import { HassEntity } from "home-assistant-js-websocket";
-import { useHass, getIcon, makeServiceCall } from "../utils/hass";
+import { useHass, getIcon, callService } from "../utils/hass";
 import ListCardRow from "./ListCardRow";
 import LightEntityDialog from "./LightEntityDialog";
 import Switch from "./Switch";
 import { renderModal } from "../utils/general";
 import Icon from "./Icon";
 import ColorBadge from "./ColorBadge";
+import useAsyncChange from "../utils/useAsyncChange";
+import DotLoading from "./DotLoading";
 
-export default function EntityRow({
-  icon: customIcon,
-  label,
-  entityId,
-  renderContent,
-}: {
+interface Props {
   icon?: string;
   label?: string;
+  changeTimeout?: number;
   entityId: string;
   renderContent?: (entity: HassEntity) => ComponentChildren;
-}) {
-  const hass = useHass();
+}
 
-  const entity = hass.states[entityId];
+function BaseEntityRow({
+  icon: customIcon,
+  label,
+  changeTimeout = 0,
+  entity,
+  entityId,
+  renderContent,
+}: Props & { entity: HassEntity }) {
   const icon = customIcon || entity?.attributes?.icon || getIcon(entity);
-
-  if (!entity) {
-    return (
-      <ListCardRow icon={icon} label={entityId}>
-        unavailable
-      </ListCardRow>
-    );
-  }
 
   function onLightClick() {
     renderModal((unmount) => (
@@ -43,6 +39,11 @@ export default function EntityRow({
   const [domain] = entityId.split(".");
   const checked = state === "on";
   const unavailable = state === "unavailable";
+
+  const { changing, change } = useAsyncChange({
+    flag: checked || false,
+    timeout: changeTimeout,
+  });
 
   return (
     <ListCardRow
@@ -63,14 +64,18 @@ export default function EntityRow({
       ) : ["light", "switch", "input_boolean"].includes(domain) ? (
         unavailable ? (
           <Icon icon="cancel" />
+        ) : changing ? (
+          <DotLoading />
         ) : (
           <Switch
             checked={checked}
-            onInput={makeServiceCall(
-              "homeassistant",
-              checked ? "turn_off" : "turn_on",
-              { entity_id: entityId }
-            )}
+            onInput={() => {
+              if (change()) {
+                callService("homeassistant", checked ? "turn_off" : "turn_on", {
+                  entity_id: entityId,
+                });
+              }
+            }}
           />
         )
       ) : (
@@ -78,4 +83,20 @@ export default function EntityRow({
       )}
     </ListCardRow>
   );
+}
+
+export default function EntityRow(props: Props) {
+  const { entityId, label } = props;
+  const hass = useHass();
+  const entity = hass.states[entityId];
+
+  if (!entity) {
+    return (
+      <ListCardRow icon="cancel" label={entityId}>
+        {label || entityId}
+      </ListCardRow>
+    );
+  }
+
+  return <BaseEntityRow {...props} entity={entity} />;
 }

@@ -1,0 +1,38 @@
+.component__circular-loading {
+  margin: 0px auto;
+  width: 30px;
+  height: 30px;
+}
+
+.component__circular-loading > svg {
+  animation: rotate 2s linear infinite;
+}
+
+.component__circular-loading > svg > circle {
+  fill: none;
+  stroke-width: 3px;
+  animation: animate-stroke 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke: #f64270;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate-stroke {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}

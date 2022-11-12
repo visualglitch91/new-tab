@@ -8,6 +8,7 @@
   "browserslist": "> 0.5%, last 2 versions, not IE 9-11, not dead",
   "dependencies": {
     "@jaames/iro": "^5.5.2",
+    "contactjs": "^2.1.4",
     "hls.js": "^1.1.5",
     "home-assistant-js-websocket": "^7.1.0",
     "macy": "^2.5.1",
@@ -44,6 +45,7 @@
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
       "no-fallthrough": "off",
       "no-inner-declarations": "off"
     }

@@ -1,5 +1,5 @@
 import { useHass } from "./utils/hass";
-import { compact } from "./utils/general";
+import { compact, isMobile } from "./utils/general";
 import MasonryLayout from "./components/MasonryLayout";
 import MobileLayout from "./components/MobileLayout";
 import tvModule from "./modules/tv";
@@ -10,7 +10,6 @@ import camerasModule from "./modules/cameras";
 export default function App() {
   const { user } = useHass();
   const isAdmin = user.is_admin;
-  const isMobile = window.innerWidth < 935;
 
   if (isMobile) {
     return (
@@ -26,12 +25,13 @@ export default function App() {
              * when the scroll height is larger, so we implement our
              * own scrolling in this case to avoid this
              */
-            managedScroll: true,
+            managedScroll: false,
           },
           {
             title: "Casa",
             icon: "mdi:home",
             content: houseModule,
+            managedScroll: false,
           },
           isAdmin && {
             title: "Aspirador",

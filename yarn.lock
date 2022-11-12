@@ -1391,6 +1391,11 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
+contactjs@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/contactjs/-/contactjs-2.1.4.tgz#3a4c0a08f33554caccc11e0b8b965e0a8cd7b015"
+  integrity sha512-gltkVJfoOn4rzekQN4b17grz3Pjk3FwN/ThufbsTgh3LjceYxdL5tJb/idHxxwLGm2ZjrD2hvBeJ/lxvAVX3pQ==
+
 convert-source-map@^1.7.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.8.0.tgz#f3373c32d21b4d780dd8004514684fb791ca4369"
@@ -2044,6 +2049,11 @@ ignore@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
+
+impetus@^0.8.8:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/impetus/-/impetus-0.8.8.tgz#8848c56ac8ccdd375fa541bfe62533c3cc472050"
+  integrity sha512-7ejVjFxRAiBlnZQbdNGzUGgxMvLjVke/QNP2TFN/VK8baASsuRiE8YuSbD0qyiU8Pae+w95De4ZYz+rxSo5FJw==
 
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"

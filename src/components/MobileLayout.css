@@ -76,4 +76,5 @@
 .components__mobile-layout__wrapper {
   height: 100%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }

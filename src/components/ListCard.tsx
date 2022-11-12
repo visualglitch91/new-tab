@@ -8,15 +8,23 @@ import "./ListCard.css";
 export type Row =
   | {
       type?: "entity" | undefined;
+      hidden?: boolean;
       entityId: string;
       icon?: string;
       label?: string;
+      ignoreOnGroupSwitch?: boolean;
+      changeTimeout?: number;
       renderContent?: (entity: HassEntity) => ComponentChildren;
     }
   | {
       type: "divider";
+      hidden?: boolean;
     }
-  | { type: "custom"; render: () => ComponentChildren };
+  | {
+      type: "custom";
+      hidden?: boolean;
+      render: () => ComponentChildren;
+    };
 
 export default function ListCard({
   class: className,
@@ -30,6 +38,10 @@ export default function ListCard({
   showGroupSwitch?: boolean;
 }) {
   function renderRow(row: Row) {
+    if (row.hidden) {
+      return null;
+    }
+
     switch (row.type) {
       case undefined:
       case "entity":
@@ -47,6 +59,7 @@ export default function ListCard({
     .filter((it) => {
       return (
         "entityId" in it &&
+        !it.ignoreOnGroupSwitch &&
         ["light", "switch", "input_boolean"].includes(
           it.entityId?.split(".")[0]
         )

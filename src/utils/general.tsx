@@ -121,6 +121,10 @@ export const isTouchDevice =
   //@ts-expect-error Bad browser typings
   navigator.msMaxTouchPoints > 0;
 
+export const isMobile = window.innerWidth < 935;
+
+export const isDesktop = !isMobile;
+
 export function formatNumericValue(value: string | number, suffix: string) {
   const formatted = (Math.round(Number(value) * 10) / 10).toFixed(1);
   return `${formatted}${suffix}`;

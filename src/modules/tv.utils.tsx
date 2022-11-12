@@ -1,7 +1,6 @@
-import { callService, makeServiceCall, useHass } from "../utils/hass";
+import { makeServiceCall } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
 import Icon from "../components/Icon";
-import DelayedSwitch from "../components/DelayedSwitch";
 
 export function makeTVButtonCall(button: string) {
   return makeServiceCall("shell_command", "custom_webos_button", { button });
@@ -77,30 +76,4 @@ export function ImageButtonCard({
       <img src={assets[asset]} style={imgStyle} />
     </ButtonCard>
   );
-}
-
-export function TVSwitch() {
-  const { states } = useHass();
-  const checked = states["input_boolean.sala_tv_state"].state === "on";
-
-  function toggle() {
-    callService("homeassistant", "turn_on", {
-      entity_id: "script.ir_bridge_tv_energia",
-    });
-  }
-
-  return <DelayedSwitch delay={30_000} checked={checked} onInput={toggle} />;
-}
-
-export function SurroundSwitch() {
-  const { states } = useHass();
-  const checked = states["switch.sala_receiver"].state === "on";
-
-  function toggle() {
-    callService("homeassistant", checked ? "turn_off" : "turn_on", {
-      entity_id: "switch.sala_receiver",
-    });
-  }
-
-  return <DelayedSwitch delay={30_000} checked={checked} onInput={toggle} />;
 }
