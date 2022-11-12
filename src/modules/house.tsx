@@ -74,10 +74,10 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     title: "Escritório",
     rows: [
       { label: "Luz", entityId: "switch.escritorio_luz" },
-      { label: "Ventilador", entityId: "switch.escritorio_ventilador" },
       { label: "Luminária", entityId: "light.escritorio_luminaria" },
       { label: "RGB Mesa", entityId: "light.escritorio_rgb" },
       { label: "RGB Quadro", entityId: "light.escritorio_rgb_2" },
+      { label: "Ventilador", entityId: "switch.escritorio_ventilador" },
     ],
   },
   kitchen: {
@@ -91,13 +91,13 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
   bedroom: {
     title: "Quarto",
     rows: [
-      { label: "Aquecedor", entityId: "switch.quarto_aquecedor" },
-      { label: "Umidificador", entityId: "switch.quarto_umidificador" },
-      { label: "Ventilador", entityId: "switch.quarto_ventilador" },
       { label: "Luz", entityId: "switch.quarto_luz" },
+      { label: "Ventilador", entityId: "switch.quarto_ventilador" },
       { label: "Abajur Esquerdo", entityId: "switch.quarto_abajur_esquerdo" },
       { label: "Abajur Direito", entityId: "switch.quarto_abajur_direito" },
       { label: "Sacada", entityId: "switch.sacada_luz" },
+      { label: "Umidificador", entityId: "switch.quarto_umidificador" },
+      { label: "Aquecedor", entityId: "switch.quarto_aquecedor" },
     ],
   },
   bathroom: {

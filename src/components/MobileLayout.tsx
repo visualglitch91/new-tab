@@ -39,7 +39,6 @@ export default function MobileLayout({
     title: string;
     icon: string;
     content: ComponentChildren;
-    managedScroll?: boolean;
   }[];
 }) {
   const managedScrollRef = useRef<ManagedScroll>();
@@ -77,13 +76,11 @@ export default function MobileLayout({
   useEffect(() => {
     saveValue("last_active_tab", active);
 
-    if (tabs[active].managedScroll) {
-      managedScrollRef.current?.enable();
+    managedScrollRef.current?.enable();
 
-      return () => {
-        managedScrollRef.current?.disable();
-      };
-    }
+    return () => {
+      managedScrollRef.current?.disable();
+    };
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 

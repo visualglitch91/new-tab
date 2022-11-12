@@ -28,7 +28,6 @@ html {
 html,
 body {
   height: 100%;
-  overflow: hidden;
 }
 
 #app {
@@ -45,6 +44,7 @@ body {
   background-color: #24324b;
   font-family: Raleway;
   color: white;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: 600px) {

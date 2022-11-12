@@ -18,7 +18,7 @@
   display: grid;
   justify-content: center;
   grid-gap: 8px;
-  grid-template-columns: repeat(auto-fill, minmax(min(70px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(80px, 100%), 1fr));
 }
 
 .component__entity-grid-row__divider {
