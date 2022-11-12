@@ -41,7 +41,7 @@ export default function EntityGrid({
     .map((it) => "entityId" in it && it.entityId) as string[];
 
   return (
-    <>
+    <div>
       {Boolean(title) && (
         <Paper class="component__entity-grid__header">
           <h2>{title}</h2>
@@ -51,6 +51,6 @@ export default function EntityGrid({
         </Paper>
       )}
       <div class="component__entity-grid__content">{rows.map(renderRow)}</div>
-    </>
+    </div>
   );
 }

@@ -7,6 +7,12 @@ import houseModule from "./modules/house";
 import vacuumModule from "./modules/vacuum";
 import camerasModule from "./modules/cameras";
 
+const columnStyle = {
+  display: "flex",
+  flexDirection: "column",
+  rowGap: 16,
+};
+
 export default function App() {
   const { user } = useHass();
   const isAdmin = user.is_admin;
@@ -51,8 +57,9 @@ export default function App() {
   return (
     <MasonryLayout>
       {tvModule}
-      {houseModule}
+      <div style={columnStyle}>{houseModule.slice(0, -3)}</div>
       {isAdmin && vacuumModule}
+      {houseModule.slice(-3)}
       {isAdmin && camerasModule}
     </MasonryLayout>
   );

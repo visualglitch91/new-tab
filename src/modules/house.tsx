@@ -9,8 +9,6 @@ import ListCardRow from "../components/ListCardRow";
 import { TVEntitySwitch } from "../components/TVEntitySwitch";
 import { TVEntityButton } from "../components/TVEntityButton";
 
-const GroupComponent = isDesktop ? ListCard : EntityGrid;
-
 function scriptRow(it: {
   entityId: string;
   label?: string;
@@ -32,8 +30,16 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luz da Mesa", entityId: "switch.sala_luz_mesa" },
       { label: "Luz da Sala", entityId: "switch.sala_luz" },
       { label: "Luminária", entityId: "switch.sala_luminaria" },
-      { label: "RGB TV", entityId: "light.sala_rgb_tv" },
-      { label: "RGB Rack", entityId: "light.sala_rgb_rack" },
+      {
+        label: "RGB TV",
+        hidden: isDesktop,
+        entityId: "light.sala_rgb_tv",
+      },
+      {
+        label: "RGB Rack",
+        hidden: isDesktop,
+        entityId: "light.sala_rgb_rack",
+      },
 
       { type: "divider", hidden: isDesktop },
       {
@@ -57,6 +63,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       {
         label: "Surround",
         icon: "mdi:surround-sound",
+        hidden: isDesktop,
         changeTimeout: 30_000,
         entityId: "switch.sala_receiver",
         ignoreOnGroupSwitch: true,
@@ -202,11 +209,11 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
 let key = 0;
 
 export default [
-  <GroupComponent key={key++} showGroupSwitch {...groups.living_room} />,
-  <GroupComponent key={key++} showGroupSwitch {...groups.office} />,
-  <GroupComponent key={key++} showGroupSwitch {...groups.kitchen} />,
-  <GroupComponent key={key++} showGroupSwitch {...groups.bedroom} />,
-  <GroupComponent key={key++} {...groups.bathroom} />,
+  <EntityGrid key={key++} showGroupSwitch {...groups.living_room} />,
+  <EntityGrid key={key++} showGroupSwitch {...groups.office} />,
+  <EntityGrid key={key++} showGroupSwitch {...groups.kitchen} />,
+  <EntityGrid key={key++} showGroupSwitch {...groups.bedroom} />,
+  <EntityGrid key={key++} {...groups.bathroom} />,
   <ListCard key={key++} {...groups.mobilePhones} />,
   <ListCard key={key++} {...groups.shortcuts} />,
   <ListCard key={key++} {...groups.systemMonitor} />,
