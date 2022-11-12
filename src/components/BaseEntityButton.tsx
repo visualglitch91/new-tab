@@ -70,7 +70,11 @@ export default function BaseEntityButton({
         "component__base-entity-button",
         checked && !changing && "component__base-entity-button--on"
       )}
-      style={backgroundColor && !changing ? { backgroundColor } : undefined}
+      style={
+        backgroundColor && !changing
+          ? { backgroundColor, borderColor: "transparent" }
+          : undefined
+      }
       buttonRef={buttonRef}
     >
       {changing ? (

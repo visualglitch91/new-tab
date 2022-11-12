@@ -26,7 +26,7 @@ function BaseEntityRow({
   entityId,
   renderContent,
 }: Props & { entity: HassEntity }) {
-  const icon = customIcon || entity?.attributes?.icon || getIcon(entity);
+  const icon = customIcon || getIcon(entity);
 
   function onLightClick() {
     renderModal((unmount) => (

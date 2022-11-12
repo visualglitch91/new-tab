@@ -1,6 +1,8 @@
 .component__base-entity-button {
   height: 75px;
   user-select: none;
+  box-sizing: border-box;
+  border: 1px solid transparent;
 }
 
 .component__base-entity-button > button {
@@ -8,16 +10,17 @@
   flex-direction: column;
   row-gap: 6px;
   box-sizing: border-box;
-  padding: 6px;
+  padding: 6px 8px;
   overflow: hidden;
 }
 
 .component__base-entity-button--on {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.component__base-entity-button--on > button:hover {
-  background: rgba(255, 255, 255, 0.1);
+.component__base-entity-button--on > button:hover:not(:focus) {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .component__base-entity-button__label {

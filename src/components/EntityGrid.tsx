@@ -33,6 +33,7 @@ export default function EntityGrid({
     .filter((it) => {
       return (
         "entityId" in it &&
+        !it.ignoreOnGroupSwitch &&
         ["light", "switch", "input_boolean"].includes(
           it.entityId?.split(".")[0]
         )

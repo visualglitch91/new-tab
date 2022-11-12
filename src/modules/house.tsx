@@ -136,6 +136,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     rows: [
       {
         label: "Impressora 3D",
+        icon: "mdi-printer-3d-nozzle",
         entityId: "switch.impressora_3d",
         renderContent: (entity) =>
           entity.state === "on" ? (

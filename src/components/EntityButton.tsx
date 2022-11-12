@@ -29,7 +29,7 @@ export default function EntityButton({
     );
   }
 
-  const icon = customIcon || entity.attributes?.icon || getIcon(entity);
+  const icon = customIcon || getIcon(entity);
   const { state, attributes } = entity;
   const { friendly_name: friendlyName } = attributes;
   const [domain] = entityId.split(".");

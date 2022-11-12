@@ -57,6 +57,11 @@ export function getIcon(entity: HassEntity) {
   if (entity) {
     const { state, entity_id } = entity;
     const [domain] = entity_id.split(".");
+    const icon = entity.attributes?.icon;
+
+    if (icon) {
+      return icon;
+    }
 
     switch (domain) {
       case "input_boolean":
@@ -106,8 +111,6 @@ const HassContext = createContext<{
 export function HassProvider({ children }: { children: ComponentChildren }) {
   const [user, setUser] = useState<HassUser>();
   const [states, setStates] = useState<HassEntities>();
-
-  (window as any).states = states;
 
   useEffect(() => {
     setupHASS({
