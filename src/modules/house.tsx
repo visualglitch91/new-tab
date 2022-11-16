@@ -93,8 +93,8 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     rows: [
       { label: "Luz", entityId: "switch.quarto_luz" },
       { label: "Ventilador", entityId: "switch.quarto_ventilador" },
-      { label: "Abajur Esquerdo", entityId: "switch.quarto_abajur_esquerdo" },
       { label: "Abajur Direito", entityId: "switch.quarto_abajur_direito" },
+      { label: "Abajur Esquerdo", entityId: "switch.quarto_abajur_esquerdo" },
       { label: "Sacada", entityId: "switch.sacada_luz" },
       { label: "Umidificador", entityId: "switch.quarto_umidificador" },
       { label: "Aquecedor", entityId: "switch.quarto_aquecedor" },

@@ -24,9 +24,9 @@ export default function managedScroll(wrapper: HTMLElement) {
     bscroll = new BScroll(wrapper, {
       click: true,
       scrollY: true,
-      flickLimitDistance: 0,
-      deceleration: 0.005,
-      bounce: false,
+      momentumLimitTime: 100,
+      swipeTime: 1000,
+      swipeBounceTime: 200,
     });
   }
 

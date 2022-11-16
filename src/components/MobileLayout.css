@@ -60,6 +60,7 @@
 
 .cordova .components__mobile-layout__content {
   padding-top: 48px;
+  will-change: transform;
 }
 
 .cordova .components__mobile-layout__status-bar {
@@ -76,5 +77,6 @@
 .components__mobile-layout__wrapper {
   height: 100%;
   overflow: auto;
-  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: manipulation;
 }

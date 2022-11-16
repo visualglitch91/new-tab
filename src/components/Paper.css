@@ -8,3 +8,7 @@
   border-radius: 16px;
   color: white;
 }
+
+body.touch-device .component__paper {
+  backdrop-filter: none;
+}
