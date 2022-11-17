@@ -1,5 +1,6 @@
 import { ComponentChildren } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
+import { CSSTransition, TransitionGroup } from "preact-transitioning";
 import { clamp, clsx, loadValue, saveValue } from "../utils/general";
 import managedScroll, { ManagedScroll } from "../utils/managedScroll";
 import Stack from "./Stack";
@@ -68,6 +69,8 @@ export default function MobileLayout({
 
     managedScrollRef.current = scroll;
 
+    scroll.enable();
+
     return () => {
       scroll.disable();
     };
@@ -75,19 +78,25 @@ export default function MobileLayout({
 
   useEffect(() => {
     saveValue("last_active_tab", active);
-
-    managedScrollRef.current?.enable();
-
-    return () => {
-      managedScrollRef.current?.disable();
-    };
-    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
   return (
     <>
       <div class="components__mobile-layout__wrapper">
-        <Stack class="components__mobile-layout__content">{content}</Stack>
+        <div className="components__mobile-layout__content">
+          <TransitionGroup duration={250}>
+            <CSSTransition
+              key={active}
+              classNames="components__mobile-layout__fade"
+              onExited={() => managedScrollRef.current?.scrollTo(0)}
+              onEntered={() => managedScrollRef.current?.update()}
+            >
+              <Stack className="components__mobile-layout__fade">
+                {content}
+              </Stack>
+            </CSSTransition>
+          </TransitionGroup>
+        </div>
       </div>
       <div class="components__mobile-layout__status-bar" />
       <div class="components__mobile-layout__tabs">
@@ -97,10 +106,7 @@ export default function MobileLayout({
             active={active === index}
             icon={tab.icon}
             title={tab.title}
-            onClick={() => {
-              managedScrollRef.current?.scrollTo(0);
-              setActive(index);
-            }}
+            onClick={() => setActive(index)}
           />
         ))}
       </div>

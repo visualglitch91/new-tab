@@ -27,6 +27,7 @@ export default function managedScroll(wrapper: HTMLElement) {
       momentumLimitTime: 100,
       swipeTime: 1000,
       swipeBounceTime: 200,
+      flickLimitDistance: 0,
     });
   }
 
@@ -41,9 +42,16 @@ export default function managedScroll(wrapper: HTMLElement) {
     wrapper.style.overflow = "auto";
   }
 
+  function update() {
+    if (bscroll) {
+      bscroll.refresh();
+    }
+  }
+
   return {
     enable,
     disable,
+    update,
     scrollTo,
   };
 }

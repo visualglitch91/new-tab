@@ -39,13 +39,14 @@
   text-transform: uppercase;
   flex: 1;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  transition: all 250ms cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 .components__mobile-layout__tab > i {
   font-size: 20px;
 }
 
-.components__mobile-layout__tab:hover {
+.components__mobile-layout__tab:hover:not(:focus) {
   background: rgba(0, 0, 0, 0.1);
 }
 
@@ -79,4 +80,45 @@
   overflow: auto;
   overscroll-behavior: contain;
   touch-action: manipulation;
+}
+
+.components__mobile-layout__fade {
+  opacity: 0;
+  transition: opacity 250ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.components__mobile-layout__fade-appear {
+  opacity: 0;
+}
+
+.components__mobile-layout__fade-appear-active {
+  opacity: 0;
+}
+
+.components__mobile-layout__fade-appear-done {
+  opacity: 1;
+}
+
+.components__mobile-layout__fade-enter {
+  opacity: 0;
+}
+
+.components__mobile-layout__fade-enter-active {
+  opacity: 0;
+}
+
+.components__mobile-layout__fade-enter-done {
+  opacity: 1;
+}
+
+.components__mobile-layout__fade-exit {
+  opacity: 1;
+}
+
+.components__mobile-layout__fade-exit-active {
+  opacity: 0;
+}
+
+.components__mobile-layout__fade-exit-done {
+  opacity: 0;
 }
