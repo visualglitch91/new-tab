@@ -1,7 +1,11 @@
 import { useHass, getIcon, makeServiceCall } from "../utils/hass";
 import LightEntityDialog from "./LightEntityDialog";
 import { renderModal } from "../utils/general";
-import { getDisplayColor } from "../utils/colorPresets";
+import {
+  isColorEqual,
+  getDisplayColor,
+  getDisplayColorString,
+} from "../utils/colorPresets";
 import Icon from "./Icon";
 import ButtonCard from "./ButtonCard";
 import BaseEntityButton from "./BaseEntityButton";
@@ -41,7 +45,9 @@ export default function EntityButton({
       ? getDisplayColor(attributes.rgb_color)
       : undefined;
 
-  const isWhite = displayColor?.every((it) => it >= 250) || false;
+  const isWhite = displayColor
+    ? isColorEqual(displayColor, [255, 255, 255])
+    : false;
 
   return (
     <BaseEntityButton
@@ -52,7 +58,7 @@ export default function EntityButton({
       changeTimeout={changeTimeout}
       backgroundColor={
         displayColor && !isWhite
-          ? `rgba(${displayColor[0]}, ${displayColor[1]}, ${displayColor[2]}, 0.6)`
+          ? getDisplayColorString(displayColor, 0.6)
           : undefined
       }
       onTap={makeServiceCall(

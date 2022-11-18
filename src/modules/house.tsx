@@ -8,6 +8,7 @@ import { formatNumericValue, isDesktop } from "../utils/general";
 import ListCardRow from "../components/ListCardRow";
 import { TVEntitySwitch } from "../components/TVEntitySwitch";
 import { TVEntityButton } from "../components/TVEntityButton";
+import MultiLightButton from "../components/MultiLightButton";
 
 function scriptRow(it: {
   entityId: string;
@@ -31,6 +32,17 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luz da Sala", entityId: "switch.sala_luz" },
       { label: "Luminária", entityId: "switch.sala_luminaria" },
       {
+        type: "custom",
+        hidden: isDesktop,
+        render: () => (
+          <MultiLightButton
+            icon="mdi-television-ambient-light"
+            label="RGB Geral"
+            entityIds={["light.sala_rgb_tv", "light.sala_rgb_rack"]}
+          />
+        ),
+      },
+      {
         label: "RGB TV",
         hidden: isDesktop,
         entityId: "light.sala_rgb_tv",
@@ -40,7 +52,6 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
         hidden: isDesktop,
         entityId: "light.sala_rgb_rack",
       },
-
       { type: "divider", hidden: isDesktop },
       {
         type: "custom",
@@ -83,9 +94,9 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
   kitchen: {
     title: "Cozinha e Lavanderia",
     rows: [
-      { label: "Luz da Cozinha", entityId: "switch.cozinha_luz" },
-      { label: "Luz da Lavanderia", entityId: "switch.lavanderia_luz" },
-      { label: "Luz do Banheiro", entityId: "switch.lavanderia_banheiro" },
+      { label: "Luz da\nCozinha", entityId: "switch.cozinha_luz" },
+      { label: "Luz da\nLavanderia", entityId: "switch.lavanderia_luz" },
+      { label: "Luz do\nBanheiro", entityId: "switch.lavanderia_banheiro" },
     ],
   },
   bedroom: {
@@ -93,8 +104,8 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
     rows: [
       { label: "Luz", entityId: "switch.quarto_luz" },
       { label: "Ventilador", entityId: "switch.quarto_ventilador" },
-      { label: "Abajur Direito", entityId: "switch.quarto_abajur_direito" },
-      { label: "Abajur Esquerdo", entityId: "switch.quarto_abajur_esquerdo" },
+      { label: "Abajur\nDireito", entityId: "switch.quarto_abajur_direito" },
+      { label: "Abajur\nEsquerdo", entityId: "switch.quarto_abajur_esquerdo" },
       { label: "Sacada", entityId: "switch.sacada_luz" },
       { label: "Umidificador", entityId: "switch.quarto_umidificador" },
       { label: "Aquecedor", entityId: "switch.quarto_aquecedor" },
@@ -114,7 +125,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       },
       {
         icon: "shower-head",
-        label: "Luz do Chuveiro",
+        label: "Luz do\nChuveiro",
         entityId: "light.banheiro_luz_chuveiro",
         renderContent: () => (
           <RunScriptButton
@@ -125,8 +136,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       },
       {
         icon: "shower-head",
-        hidden: isDesktop,
-        label: "Luz Quente no Chuveiro",
+        label: "Luz Quente\nno Chuveiro",
         entityId: "script.banheiro_luz_quente_no_chuveiro",
       },
     ],

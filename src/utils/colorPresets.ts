@@ -13,17 +13,19 @@ const colorPresetMap: Record<string, { real: RGB; display?: RGB }> = {
 
 export const colorPresets = Object.values(colorPresetMap).map((it) => it.real);
 
-const displayColorMap = Object.values(colorPresetMap).reduce(
-  (acc, { real, display }) =>
-    display
-      ? {
-          ...acc,
-          [real.join(",")]: display,
-        }
-      : acc,
-  {} as Record<string, RGB>
-);
-
 export function getDisplayColor(color: RGB) {
-  return displayColorMap[color.join(",")] || color;
+  const mappedColor = Object.values(colorPresetMap).find((it) =>
+    isColorEqual(color, it.real)
+  );
+
+  return mappedColor?.display || color;
+}
+
+export function getDisplayColorString(color: RGB, alpha = 1) {
+  const rgb = getDisplayColor(color);
+  return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha})`;
+}
+
+export function isColorEqual(a: RGB, b: RGB) {
+  return a.every((value, index) => Math.abs(value - b[index]) < 3);
 }

@@ -26,4 +26,5 @@
 .component__base-entity-button__label {
   font-size: 9px;
   font-weight: 700;
+  white-space: pre-wrap;
 }
