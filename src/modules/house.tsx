@@ -3,10 +3,7 @@ import Switch from "../components/Switch";
 import ListCard, { Row } from "../components/ListCard";
 import EntityGrid from "../components/EntityGrid";
 import RunScriptButton from "../components/RunScriptButton";
-import EntitiesSwitch from "../components/EntitiesSwitch";
 import { formatNumericValue, isDesktop } from "../utils/general";
-import ListCardRow from "../components/ListCardRow";
-import { TVEntitySwitch } from "../components/TVEntitySwitch";
 import { TVEntityButton } from "../components/TVEntityButton";
 import MultiLightButton from "../components/MultiLightButton";
 
@@ -52,24 +49,12 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
         hidden: isDesktop,
         entityId: "light.sala_rgb_rack",
       },
-      { type: "divider", hidden: isDesktop },
       {
         type: "custom",
         hidden: isDesktop,
-        render: () => {
-          const icon = "mdi:television-classic";
-          const label = "TV";
-
-          if (isDesktop) {
-            return (
-              <ListCardRow icon={icon} label={label}>
-                <TVEntitySwitch />
-              </ListCardRow>
-            );
-          }
-
-          return <TVEntityButton icon={icon} label={label} />;
-        },
+        render: () => (
+          <TVEntityButton icon="mdi:television-classic" label="TV" />
+        ),
       },
       {
         label: "Surround",
@@ -117,22 +102,11 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       {
         label: "Luzes",
         entityId: "switch.banheiro_luz",
-        renderContent: () => (
-          <EntitiesSwitch
-            entityIds={["switch.banheiro_luz", "light.banheiro_luz_chuveiro"]}
-          />
-        ),
       },
       {
         icon: "shower-head",
         label: "Luz do\nChuveiro",
         entityId: "light.banheiro_luz_chuveiro",
-        renderContent: () => (
-          <RunScriptButton
-            label="Luz Quente"
-            entityId="script.banheiro_luz_quente_no_chuveiro"
-          />
-        ),
       },
       {
         icon: "shower-head",
