@@ -1,5 +1,5 @@
 import { getContrastColor, RGB } from "../utils/general";
-import { colorPresets } from "../utils/colorPresets";
+import { colorPresets, isColorEqual } from "../utils/colorPresets";
 import Icon from "./Icon";
 import FlexRow from "./FlexRow";
 import ColorBadge from "./ColorBadge";
@@ -26,7 +26,7 @@ export default function ColorPresets({
           class="component__color-presets__button"
           onClick={() => onChange(color)}
         >
-          {selected && selected.join(",") === color.join(",") && (
+          {selected && isColorEqual(selected, color) && (
             <Icon
               size={24}
               icon="check"
