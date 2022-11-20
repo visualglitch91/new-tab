@@ -17,7 +17,7 @@ export function TVEntityButton({
       label={label}
       changeTimeout={30_000}
       checked={checked}
-      onTap={makeServiceCall("homeassistant", "turn_on", {
+      onPrimaryAction={makeServiceCall("homeassistant", "turn_on", {
         entity_id: "script.ir_bridge_tv_energia",
       })}
     />

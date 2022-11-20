@@ -61,12 +61,12 @@ export default function EntityButton({
           ? getDisplayColorString(displayColor, 0.6)
           : undefined
       }
-      onTap={makeServiceCall(
+      onPrimaryAction={makeServiceCall(
         "homeassistant",
         checked ? "turn_off" : "turn_on",
         { entity_id: entityId }
       )}
-      onPress={() => {
+      onSecondaryAction={() => {
         if (domain === "light" && checked) {
           renderModal((unmount) => (
             <LightEntityDialog

@@ -14,8 +14,8 @@ export default function BaseEntityButton({
   checked,
   backgroundColor,
   changeTimeout = 0,
-  onTap = () => {},
-  onPress = () => {},
+  onPrimaryAction = () => {},
+  onSecondaryAction = () => {},
 }: {
   icon?: string;
   label?: string;
@@ -23,8 +23,8 @@ export default function BaseEntityButton({
   checked?: boolean;
   backgroundColor?: string;
   changeTimeout?: number;
-  onTap?: () => void;
-  onPress?: () => void;
+  onPrimaryAction?: () => void;
+  onSecondaryAction?: () => void;
 }) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const onTapRef = useRef(() => {});
@@ -39,11 +39,27 @@ export default function BaseEntityButton({
 
     new PointerListener(button, { handleTouchEvents: false });
 
+    let doubleTapTimeout = 0;
+
+    function clearDoubleTapTimeout() {
+      window.clearTimeout(doubleTapTimeout);
+      doubleTapTimeout = 0;
+    }
+
     button.addEventListener("tap", () => {
-      onTapRef.current();
+      if (doubleTapTimeout) {
+        clearDoubleTapTimeout();
+        onPressRef.current();
+      } else {
+        doubleTapTimeout = window.setTimeout(() => {
+          clearDoubleTapTimeout();
+          onTapRef.current();
+        }, 200);
+      }
     });
 
     button.addEventListener("press", () => {
+      clearDoubleTapTimeout();
       onPressRef.current();
     });
   }, []);
@@ -55,12 +71,12 @@ export default function BaseEntityButton({
 
   onTapRef.current = () => {
     if (change()) {
-      onTap();
+      onPrimaryAction();
     }
   };
 
   onPressRef.current = () => {
-    onPress();
+    onSecondaryAction();
   };
 
   return (

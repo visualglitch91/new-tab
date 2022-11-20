@@ -51,7 +51,7 @@ export default function MultiLightButton({
     });
   }
 
-  function onPress() {
+  function openLightDialog() {
     const firstOnEntity = entityIds
       .map((id) => states[id])
       .find((entity) => entity.state === "on");
@@ -81,7 +81,7 @@ export default function MultiLightButton({
     ));
   }
 
-  function onTap() {
+  function toggleState() {
     entityIds.forEach((entityId) => {
       callService("light", checked ? "turn_off" : "turn_on", {
         entity_id: entityId,
@@ -95,8 +95,8 @@ export default function MultiLightButton({
       label={label}
       checked={checked}
       backgroundColor={uniqueColor && getDisplayColorString(uniqueColor, 0.6)}
-      onTap={onTap}
-      onPress={checked ? onPress : undefined}
+      onPrimaryAction={toggleState}
+      onSecondaryAction={checked ? openLightDialog : undefined}
     />
   );
 }
