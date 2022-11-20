@@ -15,9 +15,10 @@
   border-radius: 3px;
   font-weight: bolder;
   text-transform: uppercase;
+  padding: 6px 8px;
+  border-radius: 4px;
 }
 
 .component__button.highlight {
-  box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.1);
   background: rgba(0, 0, 0, 0.1);
 }

@@ -1,6 +1,6 @@
 import { useHass, getIcon, makeServiceCall } from "../utils/hass";
 import LightEntityDialog from "./LightEntityDialog";
-import { renderModal } from "../utils/general";
+import { renderModal, RGB } from "../utils/general";
 import {
   isColorEqual,
   getDisplayColor,
@@ -40,9 +40,18 @@ export default function EntityButton({
   const checked = state === "on";
   const unavailable = state === "unavailable";
 
+  if (domain === "light") {
+    console.log(attributes.color_mode);
+  }
+
   const displayColor =
-    domain === "light" && attributes.rgb_color
+    domain === "light" && ["hs", "rgb"].includes(attributes.color_mode)
       ? getDisplayColor(attributes.rgb_color)
+      : attributes.color_mode === "color_temp"
+      ? attributes.color_temp >
+        (attributes.max_mireds + attributes.min_mireds) / 2
+        ? ([255, 168, 66] as RGB)
+        : ([255, 255, 255] as RGB)
       : undefined;
 
   const isWhite = displayColor
