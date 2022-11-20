@@ -52,6 +52,7 @@ export default function RGBLightGroupRow({
     renderModal((unmount) => (
       <LightDialog
         title={label}
+        initialMode="color"
         features={{
           color: {
             initialValue: initialColor,

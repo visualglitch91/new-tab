@@ -1,5 +1,6 @@
 import { ComponentChildren, render } from "preact";
-import { useMemo, useRef } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { CSSTransition } from "preact-transitioning";
 import version from "../version.json";
 
 export function clsx(...classes: (string | null | undefined | false)[]) {
@@ -34,15 +35,42 @@ export function rgbToHex(r: number, g: number, b: number) {
 export function renderModal(
   renderer: (unmount: () => void) => ComponentChildren
 ) {
+  const duration = isMobile ? 400 : 180;
   const modal = document.createElement("div");
+  let shouldRemove = false;
   document.body.appendChild(modal);
 
-  function unmount() {
-    render(null, modal);
-    modal.remove();
+  function Modal() {
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+      setOpen(true);
+    }, []);
+
+    return (
+      <div>
+        <CSSTransition
+          in={open}
+          duration={duration}
+          classNames="modal-transition"
+          onExited={() => {
+            if (shouldRemove) {
+              modal.remove();
+            }
+          }}
+        >
+          <div className="modal-transition">
+            {renderer(() => {
+              shouldRemove = true;
+              setOpen(false);
+            })}
+          </div>
+        </CSSTransition>
+      </div>
+    );
   }
 
-  render(renderer(unmount), modal);
+  render(<Modal />, modal);
 }
 
 export function saveValue(key: string, value: any) {

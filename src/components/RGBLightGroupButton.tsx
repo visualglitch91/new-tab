@@ -5,7 +5,7 @@ import PillButton from "./PillButton";
 import LightDialog from "./LightDialog";
 import ColorBadge from "./ColorBadge";
 
-export default function RGBLightGroupButtons({
+export default function RGBLightGroupButton({
   entities: config,
 }: {
   entities: { label: string; entityId: string }[];
@@ -71,6 +71,7 @@ export default function RGBLightGroupButtons({
     renderModal((unmount) => (
       <LightDialog
         title={label || entities[0].label}
+        initialMode="color"
         features={{
           color: {
             initialValue: initialColor,

@@ -7,11 +7,15 @@ import "./ColorPresets.css";
 
 export default function ColorPresets({
   class: className,
+  radius = 4,
+  size = 42,
   selected,
   onChange,
 }: {
   class?: string;
   selected?: RGB;
+  radius?: number;
+  size?: number;
   onChange: (color: RGB) => void;
 }) {
   return (
@@ -29,7 +33,7 @@ export default function ColorPresets({
               style={{ color: getContrastColor(color) }}
             />
           )}
-          <ColorBadge radius={4} size={42} color={color} />
+          <ColorBadge radius={radius} size={size} color={color} />
         </button>
       ))}
     </FlexRow>

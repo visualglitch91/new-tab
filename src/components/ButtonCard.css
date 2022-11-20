@@ -1,6 +1,10 @@
 .component__button-card {
   overflow: hidden;
 }
+.component__button-card,
+.component__button-card > button {
+  transition: all 80ms cubic-bezier(0.76, 0, 0.24, 1);
+}
 
 .component__button-card > button {
   height: 100%;

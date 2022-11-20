@@ -1,38 +1,53 @@
-import { useEffect, useRef } from "preact/hooks";
 import iro from "@jaames/iro";
+import { useEffect, useRef } from "preact/hooks";
 import { useDebouncedCallback, rgbToHex, RGB } from "../utils/general";
+import "./ColorWheel.css";
 
 export default function ColorWheel({
-  initialColor,
-  onChange,
+  width,
+  selected = [255, 255, 255],
+  onChangeEnd,
 }: {
-  initialColor: RGB;
-  onChange: (color: RGB) => void;
+  width: number;
+  selected?: RGB;
+  onChangeEnd: (color: RGB) => void;
 }) {
-  const pickerRef = useRef<HTMLDivElement>(null);
-  const debouncedOnChange = useDebouncedCallback(onChange);
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const pickerRef = useRef<iro.ColorPicker>();
+  const debouncedOnChangeEnd = useDebouncedCallback(onChangeEnd);
+  const color = rgbToHex(selected[0], selected[1], selected[2]);
 
   useEffect(() => {
-    if (!pickerRef.current) {
+    if (!nodeRef.current) {
       throw new Error("Color Picker node not set");
     }
 
-    const color = rgbToHex(initialColor[0], initialColor[1], initialColor[2]);
-
-    //@ts-expect-error Bad lib typings
-    const picker: iro.ColorPicker = new iro.ColorPicker(pickerRef.current, {
+    //@ts-expect-error
+    const picker: iro.ColorPicker = new iro.ColorPicker(nodeRef.current, {
+      width,
       color,
-      sliderSize: 0,
     });
 
     picker.on(
       "color:change",
       ({ rgb }: { rgb: { r: number; g: number; b: number } }) => {
-        debouncedOnChange([rgb.r, rgb.g, rgb.b]);
+        debouncedOnChangeEnd([rgb.r, rgb.g, rgb.b]);
       }
     );
+
+    pickerRef.current = picker;
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <div ref={pickerRef} />;
+  useEffect(() => {
+    const picker = pickerRef.current;
+
+    if (!picker) {
+      throw new Error("Color Picker instance not set");
+    }
+
+    picker.setColors([color]);
+  }, [color]);
+
+  return <div ref={nodeRef} class="color-wheel" />;
 }

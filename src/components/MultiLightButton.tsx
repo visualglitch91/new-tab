@@ -64,6 +64,7 @@ export default function MultiLightButton({
 
     renderModal((unmount) => (
       <LightDialog
+        initialMode="color"
         title={label}
         features={{
           color: {

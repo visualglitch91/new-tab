@@ -7,7 +7,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 180ms cubic-bezier(0.76, 0, 0.24, 1);
   backdrop-filter: blur(10px);
+  will-change: opacity;
+  opacity: 0;
+  z-index: 2;
 }
 
 .component__dialog-base {
@@ -18,14 +22,78 @@
 }
 
 .component__dialog-base-header {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   column-gap: 8px;
+  font-size: 18px;
 }
 
 .component__dialog-base__content {
   display: flex;
   flex-direction: column;
+}
+
+.modal-transition-enter .component__dialog-base__wrapper {
+  opacity: 0;
+}
+
+.modal-transition-enter-active .component__dialog-base__wrapper {
+  opacity: 1;
+}
+
+.modal-transition-enter-done .component__dialog-base__wrapper {
+  opacity: 1;
+}
+
+.modal-transition-exit .component__dialog-base__wrapper {
+  opacity: 1;
+}
+
+.modal-transition-exit-active .component__dialog-base__wrapper {
+  opacity: 0;
+}
+
+.modal-transition-exit-done .component__dialog-base__wrapper {
+  opacity: 0;
+}
+
+body.mobile .component__dialog-base__wrapper {
+  align-items: flex-end;
+  transition: opacity 400ms cubic-bezier(0.76, 0, 0.24, 1);
+  transform: translate3d(0, 0, 0);
+}
+
+body.mobile .component__dialog-base {
+  width: 100%;
+  position: relative;
+  transform: translate3d(0, 100%, 0);
+  transition: transform 400ms cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+  border-radius: 16px;
+}
+
+body.mobile .modal-transition-enter .component__dialog-base {
+  transform: translate3d(0, 100%, 0);
+}
+
+body.mobile .modal-transition-enter-active .component__dialog-base {
+  transform: translate3d(0, 0, 0);
+}
+
+body.mobile .modal-transition-enter-done .component__dialog-base {
+  transform: translate3d(0, 0, 0);
+}
+
+body.mobile .modal-transition-exit .component__dialog-base {
+  transform: translate3d(0, 0, 0);
+}
+
+body.mobile .modal-transition-exit-active .component__dialog-base {
+  transform: translate3d(0, 100%, 0);
+}
+
+body.mobile .modal-transition-exit-done .component__dialog-base {
+  transform: translate3d(0, 100%, 0);
 }

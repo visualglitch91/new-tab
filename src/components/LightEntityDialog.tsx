@@ -1,4 +1,5 @@
 import { HassEntity } from "home-assistant-js-websocket";
+import { useRef } from "preact/hooks";
 import { callService } from "../utils/hass";
 import LightDialog, { LightDialogFeatures } from "./LightDialog";
 
@@ -11,15 +12,19 @@ export default function LightEntityDialog({
   entity: HassEntity;
   onClose: () => void;
 }) {
+  const attrs = entity.attributes;
   const {
     friendly_name: friendlyName,
     supported_color_modes: colorModes,
-    color_temp: colorTemp,
     min_mireds: minTemperature,
     max_mireds: maxTemperature,
     brightness,
-    rgb_color: color,
-  } = entity.attributes;
+  } = attrs;
+
+  const color = attrs.rgb_color || [255, 255, 255];
+  const temperature = attrs.color_temp || maxTemperature;
+  const colorMode = attrs.color_mode === "color_temp" ? "temperature" : "color";
+  const stateRef = useRef({ temperature, color });
 
   function onChange(key: string, value: any) {
     callService("light", "turn_on", {
@@ -41,7 +46,10 @@ export default function LightEntityDialog({
   if (hasColor) {
     features.color = {
       initialValue: typeof color === "undefined" ? [255, 255, 255] : color,
-      onChange: (value) => onChange("rgb_color", value),
+      onChange: (value) => {
+        stateRef.current.color = value;
+        onChange("rgb_color", value);
+      },
     };
   }
 
@@ -49,15 +57,29 @@ export default function LightEntityDialog({
     features.temperature = {
       min: minTemperature,
       max: maxTemperature,
-      initialValue: colorTemp || minTemperature,
-      onChange: (value) => onChange("color_temp", value),
+      initialValue: temperature || minTemperature,
+      onChange: (value) => {
+        stateRef.current.temperature = value;
+        onChange("color_temp", value);
+      },
     };
   }
+
+  console.log(attrs, stateRef.current);
 
   return (
     <LightDialog
       title={title || friendlyName}
+      initialMode={colorMode}
       features={features}
+      onModeChange={(mode) => {
+        console.log(stateRef.current);
+        if (mode === "temperature") {
+          onChange("color_temp", stateRef.current.temperature);
+        } else {
+          onChange("rgb_color", stateRef.current.color);
+        }
+      }}
       onClose={onClose}
     />
   );
