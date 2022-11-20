@@ -18,10 +18,10 @@
     "simplebar": "^5.3.8"
   },
   "devDependencies": {
-    "@parcel/packager-raw-url": "2.6.0",
-    "@parcel/transformer-typescript-tsc": "^2.6.0",
-    "@parcel/transformer-webmanifest": "2.6.0",
-    "@parcel/validator-typescript": "^2.6.0",
+    "@parcel/packager-raw-url": "^2.8.0",
+    "@parcel/transformer-typescript-tsc": "^2.8.0",
+    "@parcel/transformer-webmanifest": "^2.8.0",
+    "@parcel/validator-typescript": "^2.8.0",
     "@types/node": "^17.0.41",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",

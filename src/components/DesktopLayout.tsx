@@ -46,9 +46,13 @@ export default function DesktopLayout({
       maxWidth: `${maxColumnWidth}px`,
     };
 
-    return columnsContent.map((content) =>
+    return columnsContent.map((content, index) =>
       content.length ? (
-        <div style={columnStyle} class="component__columnar-layout__column">
+        <div
+          key={index}
+          style={columnStyle}
+          class="component__columnar-layout__column"
+        >
           {content}
         </div>
       ) : null

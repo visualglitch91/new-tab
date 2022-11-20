@@ -1,4 +1,4 @@
-.component__title-card {
+.component__paper.component__title-card {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;

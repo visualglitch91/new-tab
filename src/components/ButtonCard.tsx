@@ -1,6 +1,5 @@
 import { clsx } from "../utils/general";
 import TouchButton, { TouchButtonProps } from "./TouchButton";
-import "./Paper.css";
 import "./ButtonCard.css";
 
 export type ButtonCardProps = TouchButtonProps;
