@@ -5,31 +5,29 @@ import { clamp, clsx, loadValue, saveValue } from "../utils/general";
 import managedScroll, { ManagedScroll } from "../utils/managedScroll";
 import Stack from "./Stack";
 import Icon from "./Icon";
+import TouchButton from "./TouchButton";
 import "./MobileLayout.css";
 
 function Tab({
   active,
   title,
   icon,
-  onClick,
+  onTap,
 }: {
   active: boolean;
   title: string;
   icon: string;
-  onClick: () => void;
+  onTap: () => void;
 }) {
   return (
-    <button
+    <TouchButton
       type="button"
-      class={clsx(
-        "components__mobile-layout__tab",
-        active && "components__mobile-layout__tab--active"
-      )}
-      onClick={onClick}
+      class={clsx("components__mobile-layout__tab", active && "active")}
+      onTap={onTap}
     >
       <Icon icon={icon} />
       {title}
-    </button>
+    </TouchButton>
   );
 }
 
@@ -106,7 +104,7 @@ export default function MobileLayout({
             active={active === index}
             icon={tab.icon}
             title={tab.title}
-            onClick={() => setActive(index)}
+            onTap={() => setActive(index)}
           />
         ))}
       </div>

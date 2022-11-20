@@ -27,51 +27,55 @@ export default (
       <IconButtonCard
         icon="mdi:image-outline"
         size={28}
-        onClick={makeTurnOnCall("script.sala_tv_ligar_tela")}
+        action={makeTurnOnCall("script.sala_tv_ligar_tela")}
       />
       <IconButtonCard
+        repeatOnHold
         icon="mdi:chevron-up"
         size={32}
-        onClick={makeTVButtonCall("UP")}
+        action={makeTVButtonCall("UP")}
       />
       <IconButtonCard
         icon="mdi:image-off-outline"
         size={28}
-        onClick={makeTurnOnCall("script.sala_tv_desligar_tela")}
+        action={makeTurnOnCall("script.sala_tv_desligar_tela")}
       />
     </ButtonRow>
     <ButtonRow height={70}>
       <IconButtonCard
+        repeatOnHold
         icon="mdi:chevron-left"
         size={32}
-        onClick={makeTVButtonCall("LEFT")}
+        action={makeTVButtonCall("LEFT")}
       />
       <IconButtonCard
         icon="mdi:record-circle-outline"
         size={25}
-        onClick={makeTVButtonCall("ENTER")}
+        action={makeTVButtonCall("ENTER")}
       />
       <IconButtonCard
+        repeatOnHold
         icon="mdi:chevron-right"
         size={32}
-        onClick={makeTVButtonCall("RIGHT")}
+        action={makeTVButtonCall("RIGHT")}
       />
     </ButtonRow>
     <ButtonRow height={70}>
       <IconButtonCard
         icon="mdi:undo"
         size={30}
-        onClick={makeTVButtonCall("BACK")}
+        action={makeTVButtonCall("BACK")}
       />
       <IconButtonCard
+        repeatOnHold
         icon="mdi:chevron-down"
         size={32}
-        onClick={makeTVButtonCall("DOWN")}
+        action={makeTVButtonCall("DOWN")}
       />
       <IconButtonCard
         icon="mdi:cog"
         size={25}
-        onClick={makeTVButtonCall("MENU")}
+        action={makeTVButtonCall("MENU")}
       />
     </ButtonRow>
 
@@ -79,41 +83,45 @@ export default (
 
     <ButtonRow height={55}>
       <IconButtonCard
+        repeatOnHold
         icon="mdi:volume-minus"
         size={25}
-        onClick={makeTurnOnCall("script.sala_volume_menos")}
+        action={makeTurnOnCall("script.sala_volume_menos")}
       />
       <IconButtonCard
         icon="mdi:volume-off"
         size={25}
-        onClick={makeTurnOnCall("script.sala_volume_mute")}
+        action={makeTurnOnCall("script.sala_volume_mute")}
       />
       <IconButtonCard
+        repeatOnHold
         icon="mdi:volume-plus"
         size={25}
-        onClick={makeTurnOnCall("script.sala_volume_mais")}
+        action={makeTurnOnCall("script.sala_volume_mais")}
       />
     </ButtonRow>
     <ButtonRow height={55}>
       <IconButtonCard
+        repeatOnHold
         icon="mdi:rewind"
         size={25}
-        onClick={makeTVMediaControlCall("rewind")}
+        action={makeTVMediaControlCall("rewind")}
       />
       <IconButtonCard
         icon="mdi:play"
         size={25}
-        onClick={makeTVMediaControlCall("play")}
+        action={makeTVMediaControlCall("play")}
       />
       <IconButtonCard
         icon="mdi:pause"
         size={25}
-        onClick={makeTVMediaControlCall("pause")}
+        action={makeTVMediaControlCall("pause")}
       />
       <IconButtonCard
+        repeatOnHold
         icon="mdi:fast-forward"
         size={25}
-        onClick={makeTVMediaControlCall("fastForward")}
+        action={makeTVMediaControlCall("fastForward")}
       />
     </ButtonRow>
 
@@ -140,72 +148,72 @@ export default (
     <ButtonRow height={70}>
       <ImageButtonCard
         asset="globo"
-        onClick={makeTurnOnCall("script.sala_tv_globo_ao_vivo")}
+        action={makeTurnOnCall("script.sala_tv_globo_ao_vivo")}
       />
       <ImageButtonCard
         asset="globoplay"
-        onClick={makeTVLaunchAppCall("globoplaywebos")}
+        action={makeTVLaunchAppCall("globoplaywebos")}
       />
       <ImageButtonCard
         asset="netflix"
-        onClick={makeTVLaunchAppCall("netflix")}
+        action={makeTVLaunchAppCall("netflix")}
       />
     </ButtonRow>
 
     <ButtonRow height={70}>
-      <ImageButtonCard asset="plex" onClick={makeTVLaunchAppCall("cdp-30")} />
+      <ImageButtonCard asset="plex" action={makeTVLaunchAppCall("cdp-30")} />
       <ImageButtonCard
         asset="disneyplus"
-        onClick={makeTVLaunchAppCall("com.disney.disneyplus-prod")}
+        action={makeTVLaunchAppCall("com.disney.disneyplus-prod")}
       />
       <ImageButtonCard
         asset="hbomax"
-        onClick={makeTVLaunchAppCall("com.hbo.hbomax")}
+        action={makeTVLaunchAppCall("com.hbo.hbomax")}
       />
     </ButtonRow>
 
     <ButtonRow height={70}>
       <ImageButtonCard
         asset="youtube"
-        onClick={makeTVLaunchAppCall("youtube.leanback.v4")}
+        action={makeTVLaunchAppCall("youtube.leanback.v4")}
       />
       <ImageButtonCard
         asset="starplus"
-        onClick={makeTVLaunchAppCall("com.disney.alch.prod.lrd.app")}
+        action={makeTVLaunchAppCall("com.disney.alch.prod.lrd.app")}
       />
       <ImageButtonCard
         asset="prime_video"
-        onClick={makeTVLaunchAppCall("amazon")}
+        action={makeTVLaunchAppCall("amazon")}
       />
     </ButtonRow>
 
     <ButtonRow height={70}>
       <ImageButtonCard
         asset="spotify"
-        onClick={makeTVLaunchAppCall("spotify-beehive")}
+        action={makeTVLaunchAppCall("spotify-beehive")}
       />
       <ImageButtonCard
         asset="discovery_plus"
-        onClick={makeTVLaunchAppCall("com.discovery.dplus")}
+        action={makeTVLaunchAppCall("com.discovery.dplus")}
       />
       <ImageButtonCard
         asset="fire_tv"
-        onClick={makeTurnOnCall("script.sala_receiver_firetv")}
+        action={makeTurnOnCall("script.sala_receiver_firetv")}
       />
     </ButtonRow>
 
     <ButtonRow height={70}>
       <ImageButtonCard
         asset="ps5"
-        onClick={makeTurnOnCall("script.sala_tv_hdmi1")}
+        action={makeTurnOnCall("script.sala_tv_hdmi1")}
       />
       <ImageButtonCard
         asset="switch"
-        onClick={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
+        action={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
       />
       <ImageButtonCard
         asset="retropi"
-        onClick={makeTurnOnCall("script.sala_receiver_pc")}
+        action={makeTurnOnCall("script.sala_receiver_pc")}
       />
     </ButtonRow>
   </Stack>

@@ -16,12 +16,14 @@
 
 html {
   box-sizing: border-box;
+  user-select: none;
 }
 
 *,
 *:before,
 *:after {
   box-sizing: inherit;
+  user-select: inherit;
   overscroll-behavior: none;
 }
 

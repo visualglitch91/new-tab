@@ -17,7 +17,7 @@
   text-transform: uppercase;
 }
 
-.component__button:hover:not(:focus) {
+.component__button.highlight {
   box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.1);
   background: rgba(0, 0, 0, 0.1);
 }

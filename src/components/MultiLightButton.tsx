@@ -52,6 +52,10 @@ export default function MultiLightButton({
   }
 
   function openLightDialog() {
+    if (!checked) {
+      return;
+    }
+
     const firstOnEntity = entityIds
       .map((id) => states[id])
       .find((entity) => entity.state === "on");
@@ -95,8 +99,9 @@ export default function MultiLightButton({
       label={label}
       checked={checked}
       backgroundColor={uniqueColor && getDisplayColorString(uniqueColor, 0.6)}
-      onPrimaryAction={toggleState}
-      onSecondaryAction={checked ? openLightDialog : undefined}
+      onTap={toggleState}
+      onPress={openLightDialog}
+      onDoubleTap={openLightDialog}
     />
   );
 }

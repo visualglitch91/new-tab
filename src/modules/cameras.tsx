@@ -72,11 +72,11 @@ function Cameras() {
         title="Câmeras"
         action={
           stream ? (
-            <Button onClick={() => setStream(false)}>
+            <Button onTap={() => setStream(false)}>
               <Icon icon="stop" />
             </Button>
           ) : (
-            <Button onClick={() => setStream(true)}>
+            <Button onTap={() => setStream(true)}>
               <Icon icon="play" />
             </Button>
           )

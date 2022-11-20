@@ -2,11 +2,10 @@ import { render } from "preact";
 import SimpleBar from "simplebar";
 import { HassProvider } from "./utils/hass";
 import {
-  isTouchDevice,
-  autoUpdater,
-  loadCordovaJS,
   isMobile,
-  clsx,
+  autoUpdater,
+  isTouchDevice,
+  loadCordovaJS,
 } from "./utils/general";
 import App from "./App";
 
@@ -21,12 +20,12 @@ if (!app) {
 const root = app;
 const simplebar = !isTouchDevice ? new SimpleBar(root) : undefined;
 
-document.body.classList.add(
-  ...clsx(
-    isTouchDevice && "touch-device",
-    isMobile ? "mobile" : "desktop"
-  ).split(" ")
-);
+if (isTouchDevice) {
+  window.oncontextmenu = () => false;
+  document.body.classList.add("touch-device");
+}
+
+document.body.classList.add(isMobile ? "mobile" : "desktop");
 
 function renderApp() {
   render(

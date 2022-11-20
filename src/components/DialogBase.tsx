@@ -26,7 +26,7 @@ export default function DialogBase({
       <div class="component__dialog-base">
         <div class="component__dialog-base-header">
           {title}
-          <Button onClick={onClose}>
+          <Button onTap={onClose}>
             <Icon icon="close" />
           </Button>
         </div>

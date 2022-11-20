@@ -1,23 +1,12 @@
-import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
+import TouchButton, { TouchButtonProps } from "./TouchButton";
 import "./Button.css";
 
 export default function Button({
   class: className,
-  children,
-  onClick,
-}: {
-  class?: string;
-  children: ComponentChildren;
-  onClick: () => void;
-}) {
+  ...props
+}: TouchButtonProps) {
   return (
-    <button
-      type="button"
-      class={clsx("component__button", className)}
-      onClick={onClick}
-    >
-      {children}
-    </button>
+    <TouchButton {...props} class={clsx("component__button", className)} />
   );
 }

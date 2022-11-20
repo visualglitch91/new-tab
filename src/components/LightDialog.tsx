@@ -99,7 +99,7 @@ export default function LightDialog({
                   mode === it.key &&
                     "component__light-dialog__tabs__tab--active"
                 )}
-                onClick={() => {
+                onTap={() => {
                   setMode(it.key);
                   onModeChange(it.key);
                 }}

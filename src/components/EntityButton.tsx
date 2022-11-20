@@ -49,6 +49,14 @@ export default function EntityButton({
     ? isColorEqual(displayColor, [255, 255, 255])
     : false;
 
+  function onLightDetails() {
+    if (domain === "light" && checked) {
+      renderModal((unmount) => (
+        <LightEntityDialog title={label} entity={entity} onClose={unmount} />
+      ));
+    }
+  }
+
   return (
     <BaseEntityButton
       checked={checked}
@@ -61,22 +69,13 @@ export default function EntityButton({
           ? getDisplayColorString(displayColor, 0.6)
           : undefined
       }
-      onPrimaryAction={makeServiceCall(
+      onTap={makeServiceCall(
         "homeassistant",
         checked ? "turn_off" : "turn_on",
         { entity_id: entityId }
       )}
-      onSecondaryAction={() => {
-        if (domain === "light" && checked) {
-          renderModal((unmount) => (
-            <LightEntityDialog
-              title={label}
-              entity={entity}
-              onClose={unmount}
-            />
-          ));
-        }
-      }}
+      onPress={onLightDetails}
+      onDoubleTap={onLightDetails}
     />
   );
 }

@@ -26,14 +26,18 @@ export function makeTVLaunchAppCall(appId: string) {
 export function IconButtonCard({
   icon,
   size,
-  onClick,
+  action,
+  repeatOnHold,
 }: {
   icon: string;
   size: number;
-  onClick: () => void;
+  action: () => void;
+  repeatOnHold?: boolean;
 }) {
+  const onHold = repeatOnHold ? action : undefined;
+
   return (
-    <ButtonCard onClick={onClick}>
+    <ButtonCard onTap={action} onPress={onHold} onHold={onHold}>
       <Icon icon={icon} size={size} />
     </ButtonCard>
   );
@@ -66,13 +70,17 @@ const assets = {
 
 export function ImageButtonCard({
   asset,
-  onClick,
+  action,
+  repeatOnHold,
 }: {
   asset: keyof typeof assets;
-  onClick: () => void;
+  action: () => void;
+  repeatOnHold?: boolean;
 }) {
+  const onHold = repeatOnHold ? action : undefined;
+
   return (
-    <ButtonCard onClick={onClick}>
+    <ButtonCard onTap={action} onPress={onHold} onHold={onHold}>
       <img src={assets[asset]} style={imgStyle} />
     </ButtonCard>
   );

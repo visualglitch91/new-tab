@@ -1,11 +1,5 @@
-.component__base-entity-button {
+.component__button-card.component__base-entity-button {
   height: 75px;
-  user-select: none;
-  box-sizing: border-box;
-  border: 1px solid transparent;
-}
-
-.component__base-entity-button > button {
   display: flex;
   flex-direction: column;
   row-gap: 6px;
@@ -14,13 +8,19 @@
   overflow: hidden;
 }
 
-.component__base-entity-button--on {
+.component__base-entity-button--on:not(.component__base-entity-button--custom-bg) {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.component__base-entity-button--on > button:hover:not(:focus) {
-  background: rgba(255, 255, 255, 0.03);
+.component__base-entity-button--on.highlight {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.component__base-entity-button--on.component__base-entity-button--custom-bg.highlight {
+  background: unset;
+  filter: brightness(1.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .component__base-entity-button__label {

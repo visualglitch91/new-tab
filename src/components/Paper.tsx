@@ -7,19 +7,13 @@ export default function Paper({
   class: className,
   children,
   style,
-  onClick,
 }: {
   class?: string;
   children: ComponentChildren;
   style?: JSXInternal.CSSProperties;
-  onClick?: () => void;
 }) {
   return (
-    <div
-      style={style}
-      class={clsx("component__paper", className)}
-      onClick={onClick}
-    >
+    <div style={style} class={clsx("component__paper", className)}>
       {children}
     </div>
   );

@@ -65,15 +65,12 @@ export default function LightEntityDialog({
     };
   }
 
-  console.log(attrs, stateRef.current);
-
   return (
     <LightDialog
       title={title || friendlyName}
       initialMode={colorMode}
       features={features}
       onModeChange={(mode) => {
-        console.log(stateRef.current);
         if (mode === "temperature") {
           onChange("color_temp", stateRef.current.temperature);
         } else {

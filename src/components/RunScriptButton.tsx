@@ -11,7 +11,7 @@ export default function RunScriptButton({
   entityId: string;
 }) {
   return (
-    <Button class={className} onClick={makeTurnOnCall(entityId)}>
+    <Button class={className} onTap={makeTurnOnCall(entityId)}>
       {label}
     </Button>
   );
