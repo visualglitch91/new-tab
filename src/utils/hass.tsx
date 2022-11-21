@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import EventEmitter from "events";
 import {
   getUser,
   getAuth,
@@ -103,47 +104,6 @@ export function makeWebOSCall(service: string, entityId: string, data: any) {
   });
 }
 
-const HassContext = createContext<{
-  user: HassUser;
-  states: HassEntities;
-} | null>(null);
-
-export function HassProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<HassUser>();
-  const [states, setStates] = useState<HassEntities>();
-
-  useEffect(() => {
-    setupHASS({
-      onStatesChange: (states) => {
-        setStates(states);
-      },
-    }).then(({ user, states }) => {
-      setUser(user);
-      setStates(states);
-    });
-  }, []);
-
-  if (!user || !states) {
-    return null;
-  }
-
-  return (
-    <HassContext.Provider value={{ user, states }}>
-      {children}
-    </HassContext.Provider>
-  );
-}
-
-export function useHass() {
-  const context = useContext(HassContext);
-
-  if (!context) {
-    throw new Error("Must be called inside a HassProvider");
-  }
-
-  return context;
-}
-
 export function fetchStreamUrl(entityId: string): Promise<string> {
   return _connection!
     .sendMessagePromise({
@@ -151,4 +111,99 @@ export function fetchStreamUrl(entityId: string): Promise<string> {
       entity_id: entityId,
     })
     .then((res: any) => res.url);
+}
+
+class HassStore {
+  private emitter = new EventEmitter();
+  private user: HassUser | undefined;
+  private states: HassEntities = {};
+
+  setup() {
+    return setupHASS({
+      onStatesChange: (states) => {
+        this.updateStates(states);
+      },
+    }).then(({ user, states }) => {
+      this.updateStates(states);
+      this.updateUser(user);
+    });
+  }
+
+  private updateStates(states: HassEntities) {
+    this.states = states;
+    this.emitter.emit("state", this.getState());
+  }
+
+  private updateUser(user: HassUser) {
+    this.user = user;
+    this.emitter.emit("state", this.getState());
+  }
+
+  getState() {
+    return {
+      user: this.user,
+      states: this.states,
+    };
+  }
+
+  subscribeToState(
+    callback: (state: { user: HassUser; states: HassEntities }) => void
+  ) {
+    this.emitter.on("state", callback);
+
+    return () => {
+      this.emitter.off("state", callback);
+    };
+  }
+
+  subscribeToUser(callback: (user: HassUser) => void) {}
+
+  subscribeToEntity(
+    entityId: string,
+    callback: (states: HassEntities) => void
+  ) {}
+}
+
+const HassContext = createContext<HassStore | undefined>(undefined);
+
+export function HassProvider({ children }: { children: React.ReactNode }) {
+  const [store, setStore] = useState<HassStore>();
+
+  useEffect(() => {
+    const store = new HassStore();
+    store.setup().then(() => {
+      setStore(store);
+    });
+  }, []);
+
+  if (!store) {
+    return null;
+  }
+
+  return <HassContext.Provider value={store}>{children}</HassContext.Provider>;
+}
+
+export function useHassStore() {
+  const store = useContext(HassContext);
+
+  if (!store) {
+    throw new Error("Must be called inside a HassProvider");
+  }
+
+  return store;
+}
+
+export function useHass() {
+  const store = useHassStore();
+  const [state, setState] = useState(store.getState());
+
+  useEffect(() => {
+    return store.subscribeToState(setState);
+  }, [store]);
+
+  if (!state.user) {
+    throw new Error("HassStore not ready");
+  }
+
+  return state as { user: HassUser; states: HassEntities };
 }
