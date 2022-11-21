@@ -1,6 +1,10 @@
 import { forwardRef } from "react";
 import Ripples from "react-ripples";
 
+const spanStyle = {
+  position: "absolute" as const,
+};
+
 const RippleButton = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
@@ -10,6 +14,7 @@ const RippleButton = forwardRef<
     <Ripples {...props} role="button">
       {props.children}
       <span
+        style={spanStyle}
         ref={(spanRef) => {
           if (ref && "current" in ref) {
             //@ts-expect-error
