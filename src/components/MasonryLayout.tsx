@@ -73,8 +73,10 @@ export default function MasonryLayout({
   }, []);
 
   const recalculateMacy = useCallback(() => {
-    macyRef.current.options.columns = getColumnCount();
-    macyRef.current.recalculate(true);
+    if (macyRef.current) {
+      macyRef.current.options.columns = getColumnCount();
+      macyRef.current.recalculate(true);
+    }
   }, [getColumnCount]);
 
   const onResize = useDebouncedCallback(recalculateMacy);
