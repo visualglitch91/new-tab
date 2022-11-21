@@ -1,8 +1,8 @@
 import { PointerListener } from "contactjs";
 import { useEffect, useRef, useState } from "react";
-import ButtonBase from "@mui/material/ButtonBase";
 import useLatestRef from "../utils/useLatestRef";
 import { clsx, isTouchDevice } from "../utils/general";
+import RippleButton from "./RippleButton";
 
 function noop() {}
 
@@ -109,7 +109,7 @@ export default function TouchButton({
   }, [handlerRefs]);
 
   return (
-    <ButtonBase
+    <RippleButton
       {...props}
       className={clsx(
         className,
@@ -119,6 +119,6 @@ export default function TouchButton({
       ref={buttonRef}
     >
       {children}
-    </ButtonBase>
+    </RippleButton>
   );
 }

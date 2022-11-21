@@ -1,8 +1,9 @@
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
+import { styled, css } from "../../utils/styling";
 import ButtonCard from "../ButtonCard";
 
-export const Wrapper = styled(ButtonCard)<{
+export const Wrapper = styled(
+  (props: React.ComponentProps<typeof ButtonCard>) => <ButtonCard {...props} />
+)<{
   on: boolean;
   backgroundColor?: string;
 }>`

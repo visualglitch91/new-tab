@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 import Paper from "./Paper";
 
 const Wrapper = styled(Paper)`

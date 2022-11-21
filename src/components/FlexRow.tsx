@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 
 const FlexRow = styled("div")<{
   align?: "left" | "center" | "right";
@@ -14,9 +14,13 @@ const FlexRow = styled("div")<{
       ? "center"
       : p.align === "right"
       ? "flex-end"
-      : "unset"}
+      : "unset"};
   flex-wrap: ${(p) => (p.wrap ? "wrap" : "unset")};
   width: ${(p) => (p.full ? "100%" : "unset")};
 `;
+
+FlexRow.defaultProps = {
+  align: "center",
+};
 
 export default FlexRow;

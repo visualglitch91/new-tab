@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 import { makeServiceCall, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import FlexRow from "./FlexRow";

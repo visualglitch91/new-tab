@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 import TouchButton from "./TouchButton";
 
 const Button = styled(TouchButton)`

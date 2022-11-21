@@ -1,7 +1,7 @@
 //@ts-expect-error no typings for macy
 import Macy from "macy";
 import { Children, useCallback, useEffect, useRef, useState } from "react";
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 import { useDebouncedCallback } from "../utils/general";
 
 const gutter = 16;

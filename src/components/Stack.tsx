@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 
 const Stack = styled("div")<{
   horizontal?: boolean;

@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../../utils/styling";
 import TouchButton from "../TouchButton";
 import { clsx } from "../../utils/general";
 import Icon from "../Icon";

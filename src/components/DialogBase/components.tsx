@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../../utils/styling";
 
 export const Wrapper = styled("div")`
   position: fixed;

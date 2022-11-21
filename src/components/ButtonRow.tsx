@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 
 const ButtonRow = styled("div")<{ height?: number }>`
   width: 100%;

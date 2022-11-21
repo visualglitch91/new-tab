@@ -1,12 +1,12 @@
-import ButtonBase from "@mui/material/ButtonBase";
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 import { getContrastColor, RGB } from "../utils/general";
 import { colorPresets, isColorEqual } from "../utils/colorPresets";
 import Icon from "./Icon";
 import FlexRow from "./FlexRow";
 import ColorBadge from "./ColorBadge";
+import RippleButton from "./RippleButton";
 
-const ColorPresetButton = styled(ButtonBase)`
+const ColorPresetButton = styled(RippleButton)`
   padding: 0;
   outline: none;
   border: 0;
@@ -14,6 +14,9 @@ const ColorPresetButton = styled(ButtonBase)`
   background: transparent;
   cursor: pointer;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   & > i {
     position: absolute;
@@ -36,7 +39,7 @@ export default function ColorPresets({
   onChange: (color: RGB) => void;
 }) {
   return (
-    <FlexRow className={className}>
+    <FlexRow wrap className={className}>
       {colorPresets.map((color, index) => (
         <ColorPresetButton key={index} onClick={() => onChange(color)}>
           {selected && isColorEqual(selected, color) && (

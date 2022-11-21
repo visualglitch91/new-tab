@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import { styled } from "../utils/styling";
 import TouchButton, { TouchButtonProps } from "./TouchButton";
 import Paper from "./Paper";
 
 export type ButtonCardProps = TouchButtonProps;
 
-const ButtonCard = styled(Paper)`
+const ButtonCard = styled(Paper.withComponent(TouchButton))`
   overflow: hidden;
   transition: all 100ms cubic-bezier(0.76, 0, 0.24, 1);
   height: 100%;
@@ -31,6 +31,6 @@ const ButtonCard = styled(Paper)`
     opacity: 0.6;
     pointer-events: none;
   }
-`.withComponent(TouchButton) as React.FunctionComponent<ButtonCardProps>;
+`;
 
 export default ButtonCard;
