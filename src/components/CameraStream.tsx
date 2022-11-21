@@ -1,4 +1,4 @@
-import Hls from "hls.js";
+import type Hls from "hls.js";
 import { useEffect, useRef, useState } from "react";
 import { fetchStreamUrl, hassUrl } from "../utils/hass";
 
@@ -47,19 +47,27 @@ export default function CameraStream({
       return;
     }
 
-    const hls = new Hls();
+    let hls: Hls;
 
-    fetchStreamUrl(entityId).then((url) => {
-      if (!videoRef.current) {
-        return;
-      }
+    import("hls.js")
+      .then(({ default: Hls }) => {
+        hls = new Hls();
+      })
+      .then(() => {
+        fetchStreamUrl(entityId).then((url) => {
+          if (!videoRef.current) {
+            return;
+          }
 
-      hls.loadSource(`${hassUrl}${url}`);
-      hls.attachMedia(videoRef.current);
-    });
+          hls.loadSource(`${hassUrl}${url}`);
+          hls.attachMedia(videoRef.current);
+        });
+      });
 
     return () => {
-      hls.destroy();
+      if (hls) {
+        hls.destroy();
+      }
     };
   }, [visible, entityId]);
 
