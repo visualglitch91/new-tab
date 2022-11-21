@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { TinyEmitter } from "tiny-emitter";
 import {
   getUser,
   getAuth,
@@ -11,6 +10,7 @@ import {
   HassUser,
   Connection,
 } from "home-assistant-js-websocket";
+import EventEmitter from "./EventEmitter";
 import { loadValue, saveValue } from "./general";
 
 let _connection: Connection | undefined;
@@ -114,7 +114,7 @@ export function fetchStreamUrl(entityId: string): Promise<string> {
 }
 
 class HassStore {
-  private emitter = new TinyEmitter();
+  private emitter = new EventEmitter();
   public user: HassUser | undefined;
   public states: HassEntity[] = [];
 
@@ -165,24 +165,14 @@ class HassStore {
   }
 
   subscribeToUser(callback: (user: HassUser) => void) {
-    this.emitter.on("user", callback);
-
-    return () => {
-      this.emitter.off("user", callback);
-    };
+    return this.emitter.on("user", callback);
   }
 
   subscribeToEntity(
     entityId: string,
     callback: (state: HassEntity | undefined) => void
   ) {
-    const eventName = `entity:${entityId}`;
-
-    this.emitter.on(eventName, callback);
-
-    return () => {
-      this.emitter.off(eventName, callback);
-    };
+    return this.emitter.on(`entity:${entityId}`, callback);
   }
 }
 
