@@ -1,4 +1,4 @@
-import { callService, useHass } from "../utils/hass";
+import { callService, useEntities } from "../utils/hass";
 import Switch from "./Switch";
 
 export default function EntitiesSwitch({
@@ -8,7 +8,7 @@ export default function EntitiesSwitch({
   entityIds: string[];
   condition?: "some" | "every";
 }) {
-  const { states } = useHass();
+  const states = useEntities(...entityIds);
   const checked = entityIds[condition]((id) => states[id]?.state === "on");
 
   function toggleAll() {

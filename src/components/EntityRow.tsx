@@ -1,5 +1,5 @@
 import { HassEntity } from "home-assistant-js-websocket";
-import { useHass, getIcon, callService } from "../utils/hass";
+import { useEntity, getIcon, callService } from "../utils/hass";
 import ListCardRow from "./ListCardRow";
 import LightEntityDialog from "./LightEntityDialog";
 import Switch from "./Switch";
@@ -86,8 +86,7 @@ function BaseEntityRow({
 
 export default function EntityRow(props: Props) {
   const { entityId, label } = props;
-  const hass = useHass();
-  const entity = hass.states[entityId];
+  const entity = useEntity(entityId);
 
   if (!entity) {
     return (

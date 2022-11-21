@@ -1,4 +1,4 @@
-import { makeServiceCall, useHass } from "../utils/hass";
+import { makeServiceCall, useEntity } from "../utils/hass";
 import BaseEntityButton from "./BaseEntityButton";
 
 export function TVEntityButton({
@@ -8,8 +8,8 @@ export function TVEntityButton({
   icon: string;
   label: string;
 }) {
-  const { states } = useHass();
-  const checked = states["input_boolean.sala_tv_state"].state === "on";
+  const entity = useEntity("input_boolean.sala_tv_state");
+  const checked = entity?.state === "on";
 
   return (
     <BaseEntityButton

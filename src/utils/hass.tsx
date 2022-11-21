@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import EventEmitter from "events";
+//@ts-expect-error
+import diff from "diff-arrays-of-objects";
 import {
   getUser,
   getAuth,
@@ -8,13 +10,14 @@ import {
   getStates,
   subscribeEntities,
   HassEntity,
-  HassEntities,
   HassUser,
   Connection,
 } from "home-assistant-js-websocket";
 import { loadValue, saveValue } from "./general";
 
 let _connection: Connection | undefined;
+
+export type EntityMap = Record<string, HassEntity | undefined>;
 
 export const hassUrl =
   process.env.NODE_ENV === "development"
@@ -24,7 +27,7 @@ export const hassUrl =
 function setupHASS({
   onStatesChange,
 }: {
-  onStatesChange: (states: HassEntities) => void;
+  onStatesChange: (states: HassEntity[]) => void;
 }) {
   return getAuth({
     hassUrl,
@@ -40,16 +43,15 @@ function setupHASS({
       url.search = "";
       window.history.replaceState(null, "", url.toString());
 
-      subscribeEntities(connection, onStatesChange);
+      subscribeEntities(connection, (stateMap) => {
+        onStatesChange(Object.values(stateMap));
+      });
 
       return Promise.all([getUser(connection), getStates(connection)]);
     })
     .then(([user, states]) => ({
       user,
-      states: states.reduce(
-        (acc, it) => ({ ...acc, [it.entity_id]: it }),
-        {} as HassEntities
-      ),
+      states,
     }));
 }
 
@@ -115,10 +117,12 @@ export function fetchStreamUrl(entityId: string): Promise<string> {
 
 class HassStore {
   private emitter = new EventEmitter();
-  private user: HassUser | undefined;
-  private states: HassEntities = {};
+  public user: HassUser | undefined;
+  public states: HassEntity[] = [];
 
   setup() {
+    this.emitter.setMaxListeners(Infinity);
+
     return setupHASS({
       onStatesChange: (states) => {
         this.updateStates(states);
@@ -129,39 +133,49 @@ class HassStore {
     });
   }
 
-  private updateStates(states: HassEntities) {
+  private updateStates(states: HassEntity[]) {
+    const changes: {
+      added: HassEntity[];
+      updated: HassEntity[];
+      removed: HassEntity[];
+    } = diff(this.states, states, "entity_id");
+
     this.states = states;
-    this.emitter.emit("state", this.getState());
+
+    [...changes.added, ...changes.updated].forEach((it) => {
+      this.emitter.emit(`entity:${it.entity_id}`, it);
+    });
+
+    changes.removed.forEach((it) => {
+      this.emitter.emit(`entity:${it.entity_id}`, undefined);
+    });
   }
 
   private updateUser(user: HassUser) {
     this.user = user;
-    this.emitter.emit("state", this.getState());
+    this.emitter.emit("user", user);
   }
 
-  getState() {
-    return {
-      user: this.user,
-      states: this.states,
-    };
-  }
-
-  subscribeToState(
-    callback: (state: { user: HassUser; states: HassEntities }) => void
-  ) {
-    this.emitter.on("state", callback);
+  subscribeToUser(callback: (user: HassUser) => void) {
+    this.emitter.on("user", callback);
 
     return () => {
-      this.emitter.off("state", callback);
+      this.emitter.off("user", callback);
     };
   }
-
-  subscribeToUser(callback: (user: HassUser) => void) {}
 
   subscribeToEntity(
     entityId: string,
-    callback: (states: HassEntities) => void
-  ) {}
+    callback: (state: HassEntity | undefined) => void
+  ) {
+    const eventName = `entity:${entityId}`;
+
+    this.emitter.on(eventName, callback);
+
+    return () => {
+      this.emitter.off(eventName, callback);
+    };
+  }
 }
 
 const HassContext = createContext<HassStore | undefined>(undefined);
@@ -193,17 +207,52 @@ export function useHassStore() {
   return store;
 }
 
-export function useHass() {
+export function useUser() {
   const store = useHassStore();
-  const [state, setState] = useState(store.getState());
+  const [user, setUser] = useState<HassUser | undefined>(store.user);
 
   useEffect(() => {
-    return store.subscribeToState(setState);
+    return store.subscribeToUser(setUser);
   }, [store]);
 
-  if (!state.user) {
+  if (!user) {
     throw new Error("HassStore not ready");
   }
 
-  return state as { user: HassUser; states: HassEntities };
+  return user;
+}
+
+export function useEntities(...entityIds: string[]) {
+  const store = useHassStore();
+  const stringifiedEntityIds = JSON.stringify(entityIds);
+
+  const [states, setStates] = useState(() => {
+    return store.states.reduce((acc, entity) => {
+      if (!entityIds.includes(entity.entity_id)) {
+        return acc;
+      }
+
+      return { ...acc, [entity.entity_id]: entity };
+    }, {} as EntityMap);
+  });
+
+  useEffect(() => {
+    const unsubscribers = entityIds.map((entityId) => {
+      return store.subscribeToEntity(entityId, (state) => {
+        setStates((prev) => ({ ...prev, [entityId]: state }));
+      });
+    });
+
+    return () => {
+      unsubscribers.map((it) => it());
+    };
+    //eslint-disable-next-line
+  }, [store, stringifiedEntityIds]);
+
+  return states;
+}
+
+export function useEntity(entityId: string) {
+  const states = useEntities(entityId);
+  return states[entityId];
 }

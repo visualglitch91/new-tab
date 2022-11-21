@@ -1,4 +1,4 @@
-import { makeServiceCall, useHass } from "../utils/hass";
+import { makeServiceCall, useEntity } from "../utils/hass";
 import ListCard from "../components/ListCard";
 import PillButton from "../components/PillButton";
 import ListCardRow from "../components/ListCardRow";
@@ -23,10 +23,10 @@ function makeVacuumCall(action: string) {
 }
 
 function VacuumActionsRow() {
-  const { states } = useHass();
-  const vacuum = states[vacuumId];
+  const vacuum = useEntity(vacuumId);
+  const state = vacuum?.state;
 
-  if (["docked", "idle"].includes(vacuum.state)) {
+  if (state && ["docked", "idle"].includes(state)) {
     const clean = (
       <ListCardRow icon="mdi:robot-vacuum" label="Aspirar áreas selecionadas">
         <RunScriptButton
@@ -36,7 +36,7 @@ function VacuumActionsRow() {
       </ListCardRow>
     );
 
-    if (vacuum.state === "docked") {
+    if (state === "docked") {
       return clean;
     }
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { makeServiceCall, useHass } from "../utils/hass";
+import { makeServiceCall, useEntity } from "../utils/hass";
 import Stack from "../components/Stack";
 import Paper from "../components/Paper";
 import FlexRow from "../components/FlexRow";
@@ -18,11 +18,11 @@ function Camera({
   stream: boolean;
   cameraName: string;
 }) {
-  const { states } = useHass();
-
-  const online = states[`binary_sensor.${cameraName}_online`].state === "on";
   const streamEntityId = `camera.${cameraName}_stream`;
   const onvifEntityId = `camera.${cameraName}_onvif`;
+
+  const sensorEntity = useEntity(`binary_sensor.${cameraName}_online`);
+  const online = sensorEntity?.state === "on";
 
   function pan(direction: "LEFT" | "RIGHT") {
     return makeServiceCall("onvif", "ptz", {

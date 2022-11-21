@@ -1,5 +1,5 @@
 import { renderModal, RGB } from "../utils/general";
-import { callService, useHass } from "../utils/hass";
+import { callService, useEntities } from "../utils/hass";
 import LightDialog from "./LightDialog";
 import BaseEntityButton from "./BaseEntityButton";
 import { getDisplayColorString, isColorEqual } from "../utils/colorPresets";
@@ -13,13 +13,18 @@ export default function MultiLightButton({
   label: string;
   entityIds: string[];
 }) {
-  const { states } = useHass();
+  const states = useEntities(...entityIds);
 
   let checked = false;
   let uniqueColor: RGB | undefined;
 
   entityIds.forEach((entityId, index) => {
     const state = states[entityId];
+
+    if (!state) {
+      return;
+    }
+
     const color: RGB | undefined = state.attributes.rgb_color;
 
     if (state.state === "on") {
@@ -58,7 +63,7 @@ export default function MultiLightButton({
 
     const firstOnEntity = entityIds
       .map((id) => states[id])
-      .find((entity) => entity.state === "on");
+      .find((entity) => entity?.state === "on");
 
     const initialColor = firstOnEntity?.attributes?.rgb_color || [
       255, 255, 255,

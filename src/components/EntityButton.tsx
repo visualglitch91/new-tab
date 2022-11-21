@@ -1,4 +1,4 @@
-import { useHass, getIcon, makeServiceCall } from "../utils/hass";
+import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
 import LightEntityDialog from "./LightEntityDialog";
 import { renderModal, RGB } from "../utils/general";
 import {
@@ -21,14 +21,13 @@ export default function EntityButton({
   changeTimeout?: number;
   entityId: string;
 }) {
-  const hass = useHass();
-  const entity = hass.states[entityId];
+  const entity = useEntity(entityId);
 
   if (!entity) {
     return (
-      <ButtonCard disabled className="component__entity-button">
+      <ButtonCard disabled className="component__base-entity-button">
         <Icon icon="cancel" />
-        <div className="component__entity-button__label">
+        <div className="component__base-entity-button__label">
           {label || entityId}
         </div>
       </ButtonCard>
@@ -59,7 +58,7 @@ export default function EntityButton({
   function onLightDetails() {
     if (domain === "light" && checked) {
       renderModal((unmount) => (
-        <LightEntityDialog title={label} entity={entity} onClose={unmount} />
+        <LightEntityDialog title={label} entity={entity!} onClose={unmount} />
       ));
     }
   }

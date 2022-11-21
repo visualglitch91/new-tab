@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { hassUrl, useHass } from "../utils/hass";
+import { hassUrl, useEntity } from "../utils/hass";
 
 export default function CameraSnapshot({
   entityId,
@@ -12,9 +12,9 @@ export default function CameraSnapshot({
   onLoad?: () => void;
   onError?: () => void;
 }) {
-  const { states } = useHass();
+  const state = useEntity(entityId);
   const [imageURL, setImageURL] = useState<string | undefined>();
-  const entityPicture = states[entityId].attributes.entity_picture;
+  const entityPicture = state?.attributes.entity_picture;
 
   useEffect(() => {
     let counter = 0;

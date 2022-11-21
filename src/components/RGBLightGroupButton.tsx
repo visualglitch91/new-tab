@@ -1,5 +1,5 @@
 import { renderModal, RGB } from "../utils/general";
-import { callService, useHass } from "../utils/hass";
+import { callService, useEntities } from "../utils/hass";
 import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
 import LightDialog from "./LightDialog";
@@ -10,23 +10,41 @@ export default function RGBLightGroupButton({
 }: {
   entities: { label: string; entityId: string }[];
 }) {
-  const { states } = useHass();
+  const states = useEntities(...config.map((it) => it.entityId));
 
-  const entities = config.map((it) => {
-    const { state, attributes: attrs } = states[it.entityId];
-    const on = state === "on";
+  const entities = config.reduce(
+    (acc, it) => {
+      const entity = states[it.entityId];
 
-    return {
-      ...it,
-      on,
-      brightness: (typeof attrs?.brightness === "undefined"
-        ? 100
-        : attrs?.brightness) as number,
-      color: (typeof attrs?.rgb_color === "undefined"
-        ? [255, 255, 255]
-        : attrs?.rgb_color) as RGB,
-    };
-  });
+      if (!entity) {
+        return acc;
+      }
+
+      const { state, attributes: attrs } = entity;
+      const on = state === "on";
+
+      return [
+        ...acc,
+        {
+          ...it,
+          on,
+          brightness: (typeof attrs?.brightness === "undefined"
+            ? 100
+            : attrs?.brightness) as number,
+          color: (typeof attrs?.rgb_color === "undefined"
+            ? [255, 255, 255]
+            : attrs?.rgb_color) as RGB,
+        },
+      ];
+    },
+    [] as {
+      label: string;
+      entityId: string;
+      on: boolean;
+      brightness: number;
+      color: RGB;
+    }[]
+  );
 
   if (!entities.some((it) => it.on)) {
     return null;

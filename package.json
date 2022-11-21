@@ -15,6 +15,7 @@
     "@uiw/react-color-wheel": "^1.1.1",
     "better-scroll": "^2.5.0",
     "contactjs": "^2.1.4",
+    "diff-arrays-of-objects": "^1.1.9",
     "hls.js": "^1.2.7",
     "home-assistant-js-websocket": "^8.0.0",
     "macy": "^2.5.1",

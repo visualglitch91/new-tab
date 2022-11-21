@@ -1,4 +1,4 @@
-import { useHass } from "./utils/hass";
+import { useUser } from "./utils/hass";
 import { compact, isMobile } from "./utils/general";
 import MasonryLayout from "./components/MasonryLayout";
 import MobileLayout from "./components/MobileLayout";
@@ -14,7 +14,7 @@ const columnStyle = {
 } as const;
 
 export default function App() {
-  const { user } = useHass();
+  const user = useUser();
   const isAdmin = user.is_admin;
 
   if (isMobile) {
