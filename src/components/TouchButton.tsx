@@ -5,8 +5,6 @@ import { isTouchDevice } from "../utils/general";
 import RippleButton from "./RippleButton";
 import { cx } from "../utils/styling";
 
-function noop() {}
-
 export interface TouchButtonProps {
   className?: string;
   disabled?: boolean;
@@ -23,14 +21,15 @@ export interface TouchButtonProps {
 export default function TouchButton({
   children,
   className,
-  onTap = noop,
-  onPress = noop,
-  onHold = noop,
+  onTap,
+  onPress,
+  onHold,
   onDoubleTap,
   ...props
 }: TouchButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [hover, setHover] = useState(false);
+  const tapOnly = !onPress && !onHold && onDoubleTap;
 
   const handlerRefs = useLatestRef({
     onTap,
@@ -46,7 +45,23 @@ export default function TouchButton({
       return;
     }
 
-    new PointerListener(button, { handleTouchEvents: false });
+    if (!isTouchDevice) {
+      button.addEventListener("mouseenter", () => {
+        setHover(true);
+      });
+
+      button.addEventListener("mouseleave", () => {
+        setHover(false);
+      });
+    }
+
+    if (tapOnly) {
+      button.addEventListener("click", () => {
+        handlerRefs.current.onTap?.();
+      });
+    }
+
+    const p = new PointerListener(button, { handleTouchEvents: false });
 
     let doubleTapTimeout = 0;
     let holdInterval = 0;
@@ -59,16 +74,6 @@ export default function TouchButton({
       holdInterval = 0;
     }
 
-    if (!isTouchDevice) {
-      button.addEventListener("mouseenter", () => {
-        setHover(true);
-      });
-
-      button.addEventListener("mouseleave", () => {
-        setHover(false);
-      });
-    }
-
     button.addEventListener("tap", () => {
       const { onTap, onDoubleTap } = handlerRefs.current;
 
@@ -77,14 +82,14 @@ export default function TouchButton({
         onDoubleTap();
       } else {
         if (!onDoubleTap) {
-          onTap();
+          onTap?.();
         }
 
         doubleTapTimeout = window.setTimeout(() => {
           clearIntervals();
 
           if (onDoubleTap) {
-            onTap();
+            onTap?.();
           }
         }, 200);
       }
@@ -92,10 +97,10 @@ export default function TouchButton({
 
     button.addEventListener("press", () => {
       clearIntervals();
-      handlerRefs.current.onPress();
+      handlerRefs.current.onPress?.();
 
       holdInterval = window.setInterval(() => {
-        handlerRefs.current.onHold();
+        handlerRefs.current.onHold?.();
       }, 500);
     });
 
@@ -104,10 +109,11 @@ export default function TouchButton({
     });
 
     return () => {
+      p.destroy();
       window.clearTimeout(doubleTapTimeout);
       window.clearInterval(holdInterval);
     };
-  }, [handlerRefs]);
+  }, [tapOnly, handlerRefs]);
 
   return (
     <RippleButton
