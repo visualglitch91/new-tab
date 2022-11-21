@@ -4,7 +4,7 @@ import ButtonCard from "../ButtonCard";
 export const Wrapper = styled(
   (props: React.ComponentProps<typeof ButtonCard>) => <ButtonCard {...props} />
 )<{
-  on: boolean;
+  active: boolean;
   backgroundColor?: string;
 }>`
   height: 75px;
@@ -16,7 +16,7 @@ export const Wrapper = styled(
   overflow: hidden;
 
   ${(p) =>
-    p.on
+    p.active
       ? css`
           &.hover {
             background: rgba(255, 255, 255, 0.25);
@@ -32,7 +32,7 @@ export const Wrapper = styled(
       : ""}
 
       ${(p) =>
-    p.on && p.backgroundColor
+    p.active && p.backgroundColor
       ? css`
           &.hover {
             background-color: ${p.backgroundColor};
@@ -43,7 +43,7 @@ export const Wrapper = styled(
       : ""}
 
       ${(p) =>
-    p.on && !p.backgroundColor
+    p.active && !p.backgroundColor
       ? css`
           background: rgba(255, 255, 255, 0.12);
           border-color: rgba(255, 255, 255, 0.1);

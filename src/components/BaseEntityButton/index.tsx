@@ -30,7 +30,7 @@ export default function BaseEntityButton({
     <Wrapper
       {...props}
       disabled={unavailable}
-      on={Boolean(checked && !changing)}
+      active={Boolean(checked && !changing)}
       backgroundColor={
         backgroundColor && !changing ? backgroundColor : undefined
       }

@@ -1,5 +1,5 @@
-import { createRoot } from "react-dom/client";
-import type SimpleBar from "simplebar";
+import { render } from "preact";
+import { useEffect, useState } from "react";
 import { HassProvider } from "./utils/hass";
 import {
   autoUpdater,
@@ -10,45 +10,50 @@ import {
 import App from "./App";
 import "./styles.css";
 
-autoUpdater();
-
 const app = document.getElementById("app")!;
-const root = createRoot(app);
-let simplebar: SimpleBar;
 
-if (isTouchDevice) {
-  window.oncontextmenu = () => false;
-  document.body.classList.add("touch-device");
-} else {
-  import("simplebar").then(({ default: SimpleBar }) => {
-    simplebar = new SimpleBar(app);
-  });
+async function setup() {
+  await loadCordovaJS();
+
+  autoUpdater();
+
+  window.location.hash = "";
+  document.addEventListener("resume", autoUpdater);
+  window.addEventListener("focus", autoUpdater);
+
+  if (isTouchDevice) {
+    window.oncontextmenu = () => false;
+    document.body.classList.add("touch-device");
+  } else {
+    const SimpleBar = await import("simplebar").then((res) => res.default);
+    const simplebar = new SimpleBar(app);
+    const recalculate = () => simplebar.recalculate();
+
+    document.addEventListener("resume", recalculate);
+    window.addEventListener("focus", recalculate);
+    window.addEventListener("resize", recalculate);
+  }
 }
 
-function renderApp() {
-  root.render(
+function Main() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (ready) {
+      return;
+    }
+
+    setup().then(() => setReady(true));
+    //eslint-disable-next-line
+  }, []);
+
+  return ready ? (
     <ResponsiveProvider>
       <HassProvider>
         <App />
       </HassProvider>
     </ResponsiveProvider>
-  );
-
-  if (simplebar) {
-    simplebar.recalculate();
-  }
+  ) : null;
 }
 
-loadCordovaJS().then(() => {
-  window.location.hash = "";
-
-  document.addEventListener("resume", autoUpdater);
-  document.addEventListener("resume", renderApp);
-
-  window.addEventListener("focus", autoUpdater);
-  window.addEventListener("focus", renderApp);
-
-  window.addEventListener("resize", renderApp);
-
-  renderApp();
-});
+render(<Main />, app);
