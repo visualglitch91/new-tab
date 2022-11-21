@@ -1,9 +1,12 @@
-import { PointerListener } from "contactjs";
 import { useEffect, useRef, useState } from "react";
 import useLatestRef from "../utils/useLatestRef";
 import { isTouchDevice } from "../utils/general";
 import RippleButton from "./RippleButton";
 import { cx } from "../utils/styling";
+import Timer from "../utils/Timer";
+import ListenerGroup from "../utils/ListenerGroup";
+
+type Point = [number, number];
 
 export interface TouchButtonProps {
   className?: string;
@@ -16,6 +19,14 @@ export interface TouchButtonProps {
   onPress?: () => void;
   onHold?: () => void;
   onDoubleTap?: () => void;
+}
+
+function getPointFromEvent(e: any): Point {
+  return "touches" in e && e.touches.length > 0
+    ? [e.touches[0].pageX, e.touches[0].pageY]
+    : "changedTouches" in e && e.changedTouches.length > 0
+    ? [e.changedTouches[0].pageX, e.changedTouches[0].pageY]
+    : [e.pageX, e.pageY];
 }
 
 export default function TouchButton({
@@ -40,80 +51,136 @@ export default function TouchButton({
 
   useEffect(() => {
     const button = buttonRef.current;
+    const listenerGroup = new ListenerGroup();
+    let doubleTapTimeout = new Timer("timeout");
+    let pressTimeout = new Timer("timeout");
+    let holdInterval = new Timer("interval");
 
     if (!button) {
       return;
     }
 
     if (!isTouchDevice) {
-      button.addEventListener("mouseenter", () => {
+      listenerGroup.subscribe(button, "mouseenter", () => {
         setHover(true);
       });
 
-      button.addEventListener("mouseleave", () => {
+      listenerGroup.subscribe(button, "mouseleave", () => {
         setHover(false);
       });
     }
 
     if (tapOnly) {
-      button.addEventListener("click", () => {
+      listenerGroup.subscribe(button, "click", () => {
         handlerRefs.current.onTap?.();
       });
 
       return;
-    }
+    } else {
+      let initialPosition: Point = [0, 0];
+      let touchStartAt = 0;
+      let aborted = false;
 
-    const p = new PointerListener(button, { handleTouchEvents: false });
+      const onTap = () => {
+        const { onTap, onDoubleTap } = handlerRefs.current;
 
-    let doubleTapTimeout = 0;
-    let holdInterval = 0;
-
-    function clearIntervals() {
-      window.clearTimeout(doubleTapTimeout);
-      doubleTapTimeout = 0;
-
-      window.clearInterval(holdInterval);
-      holdInterval = 0;
-    }
-
-    button.addEventListener("tap", () => {
-      const { onTap, onDoubleTap } = handlerRefs.current;
-
-      if (doubleTapTimeout && onDoubleTap) {
-        clearIntervals();
-        onDoubleTap();
-      } else {
         if (!onDoubleTap) {
           onTap?.();
+          return;
         }
 
-        doubleTapTimeout = window.setTimeout(() => {
-          clearIntervals();
+        if (doubleTapTimeout.isRunning()) {
+          doubleTapTimeout.stop();
+          onDoubleTap?.();
+          return;
+        }
 
-          if (onDoubleTap) {
-            onTap?.();
-          }
-        }, 200);
-      }
-    });
+        doubleTapTimeout.start(() => {
+          onTap?.();
+        }, 150);
+      };
 
-    button.addEventListener("press", () => {
-      clearIntervals();
-      handlerRefs.current.onPress?.();
+      const onTouchStart = (e: any) => {
+        touchStartAt = Date.now();
+        aborted = false;
 
-      holdInterval = window.setInterval(() => {
-        handlerRefs.current.onHold?.();
-      }, 500);
-    });
+        initialPosition = getPointFromEvent(e);
 
-    button.addEventListener("pressend", () => {
-      clearIntervals();
-    });
+        pressTimeout.start(onPressStart, 400);
+      };
+
+      const onTouchEnd = (e: any) => {
+        if (aborted) {
+          return;
+        }
+
+        pressTimeout.stop();
+        holdInterval.stop();
+
+        const timeDelta = Date.now() - touchStartAt;
+
+        if (timeDelta < 100) {
+          onTap();
+        }
+      };
+
+      const onPressStart = () => {
+        if (aborted) {
+          return;
+        }
+
+        handlerRefs.current.onPress?.();
+
+        holdInterval.start(() => {
+          handlerRefs.current.onHold?.();
+        }, 500);
+      };
+
+      const abort = () => {
+        aborted = true;
+        doubleTapTimeout.stop();
+        pressTimeout.stop();
+        holdInterval.stop();
+      };
+
+      const onTouchMove = (e: any) => {
+        const currentPosition = getPointFromEvent(e);
+        const deltaX = Math.abs(currentPosition[0] - initialPosition[0]);
+        const deltaY = Math.abs(currentPosition[1] - initialPosition[1]);
+
+        if (deltaX > 20 || deltaY > 20) {
+          abort();
+        }
+      };
+
+      listenerGroup.subscribe(
+        button,
+        isTouchDevice ? "touchstart" : "mousedown",
+        onTouchStart
+      );
+
+      listenerGroup.subscribe(
+        button,
+        isTouchDevice ? "touchmove" : "mousemove",
+        onTouchMove
+      );
+
+      listenerGroup.subscribe(
+        button,
+        isTouchDevice ? "touchend" : "mouseup",
+        onTouchEnd
+      );
+
+      //@ts-expect-error
+      listenerGroup.subscribe(window, "bscroll:scrollStart", abort);
+      listenerGroup.subscribe(document.body, "mouseleave", abort);
+    }
 
     return () => {
-      p.destroy();
-      window.clearTimeout(doubleTapTimeout);
-      window.clearInterval(holdInterval);
+      doubleTapTimeout.stop();
+      pressTimeout.stop();
+      holdInterval.stop();
+      listenerGroup.unsubscribeAll();
     };
   }, [tapOnly, handlerRefs]);
 

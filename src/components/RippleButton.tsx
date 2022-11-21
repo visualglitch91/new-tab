@@ -1,6 +1,8 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { isTouchDevice } from "../utils/general";
+import ListenerGroup from "../utils/ListenerGroup";
 import { styled } from "../utils/styling";
+import Timer from "../utils/Timer";
 
 const StyledButton = styled("button")`
   position: relative;
@@ -38,8 +40,7 @@ function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
   const [style, setStyle] = useState(initialRippleStyle);
 
   useEffect(() => {
-    let timer1 = 0;
-    let timer2 = 0;
+    const timer = new Timer("timeout");
 
     setStyle({
       ...initialRippleStyle,
@@ -51,7 +52,7 @@ function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
       backgroundColor: config.color,
     });
 
-    timer1 = window.setTimeout(() => {
+    timer.start(() => {
       setStyle((prev) => ({
         ...prev,
         opacity: 0,
@@ -59,12 +60,11 @@ function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
         transition: `all ${config.during}ms`,
       }));
 
-      timer2 = window.setTimeout(onDone, config.during);
+      timer.start(onDone, config.during);
     }, 25);
 
     return () => {
-      window.clearTimeout(timer1);
-      window.clearTimeout(timer2);
+      timer.stop();
     };
     //eslint-disable-next-line
   }, []);
@@ -82,15 +82,12 @@ const RippleButton = forwardRef<
   const [ripples, setRipples] = useState<(RippleProps & { key: string })[]>([]);
 
   useEffect(() => {
-    let timer = 0;
+    const listenerGroup = new ListenerGroup();
     const button =
       (buttonRef && "current" in buttonRef && buttonRef.current) || null;
 
     function createRipple(pageX: number, pageY: number) {
-      window.clearTimeout(timer);
-
       const rect = button!.getBoundingClientRect();
-
       const key = (++counterRef.current).toString();
       const left = pageX - (rect.left + window.scrollX);
       const top = pageY - (rect.top + window.scrollY);
@@ -113,19 +110,17 @@ const RippleButton = forwardRef<
 
     if (button) {
       if (isTouchDevice) {
-        button.addEventListener("touchstart", (e) => {
+        listenerGroup.subscribe(button, "touchstart", (e) => {
           createRipple(e.touches[0].pageX, e.touches[0].pageY);
         });
       } else {
-        button.addEventListener("mousedown", (e) => {
+        listenerGroup.subscribe(button, "mousedown", (e) => {
           createRipple(e.pageX, e.pageY);
         });
       }
-
-      return () => {
-        window.clearTimeout(timer);
-      };
     }
+
+    return () => listenerGroup.unsubscribeAll();
   }, [buttonRef]);
 
   return (

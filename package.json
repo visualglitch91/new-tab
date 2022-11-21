@@ -14,7 +14,6 @@
     "@emotion/styled": "^11.10.5",
     "@uiw/react-color-wheel": "^1.1.1",
     "better-scroll": "^2.5.0",
-    "contactjs": "^2.1.4",
     "hls.js": "^1.2.7",
     "home-assistant-js-websocket": "^8.0.0",
     "macy": "^2.5.1",

@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Timer from "../../utils/Timer";
 import Button from "../Button";
 import Icon from "../Icon";
 import { Wrapper, Root, Header, Content } from "./components";
@@ -12,30 +13,27 @@ export default function DialogBase({
   children: React.ReactNode;
   onClose: () => void;
 }) {
-  const keepOpenRef = useRef(false);
-  const keepOpenTimerRef = useRef(0);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  function preventUnwantedClose() {
-    keepOpenRef.current = true;
-    window.clearTimeout(keepOpenTimerRef.current);
-    keepOpenTimerRef.current = window.setTimeout(() => {
-      keepOpenRef.current = false;
-    }, 10);
+  const [keepOpenTimer] = useState(() => {
+    const timer = new Timer("timeout");
+    timer.start(() => {}, 100);
+    return timer;
+  });
+
+  function keepOpen() {
+    keepOpenTimer.start(() => {}, 10);
   }
 
   function onOverlayClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (e.target === overlayRef.current && !keepOpenRef.current) {
+    if (e.target === overlayRef.current && !keepOpenTimer.isRunning()) {
       onClose();
     }
   }
 
   return (
     <Wrapper ref={overlayRef} onClick={onOverlayClick}>
-      <Root
-        onMouseDown={preventUnwantedClose}
-        onTouchStart={preventUnwantedClose}
-      >
+      <Root onMouseDown={keepOpen} onTouchStart={keepOpen}>
         <Header>
           {title}
           <Button onTap={onClose}>

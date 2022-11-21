@@ -1892,11 +1892,6 @@ confusing-browser-globals@^1.0.11:
   resolved "https://registry.yarnpkg.com/confusing-browser-globals/-/confusing-browser-globals-1.0.11.tgz#ae40e9b57cdd3915408a2805ebd3a5585608dc81"
   integrity sha512-JsPKdmh8ZkmnHxDk55FZ1TqVLvEQTvoByJZRN9jzI0UjxK/QgAmsphz7PGtqgPieQZ/CQcHWXCR7ATDNhGe+YA==
 
-contactjs@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/contactjs/-/contactjs-2.1.4.tgz#3a4c0a08f33554caccc11e0b8b965e0a8cd7b015"
-  integrity sha512-gltkVJfoOn4rzekQN4b17grz3Pjk3FwN/ThufbsTgh3LjceYxdL5tJb/idHxxwLGm2ZjrD2hvBeJ/lxvAVX3pQ==
-
 convert-source-map@^1.5.0, convert-source-map@^1.7.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.9.0.tgz#7faae62353fb4213366d0ca98358d22e8368b05f"
