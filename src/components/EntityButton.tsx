@@ -26,9 +26,11 @@ export default function EntityButton({
 
   if (!entity) {
     return (
-      <ButtonCard disabled class="component__entity-button">
+      <ButtonCard disabled className="component__entity-button">
         <Icon icon="cancel" />
-        <div class="component__entity-button__label">{label || entityId}</div>
+        <div className="component__entity-button__label">
+          {label || entityId}
+        </div>
       </ButtonCard>
     );
   }
@@ -39,10 +41,6 @@ export default function EntityButton({
   const [domain] = entityId.split(".");
   const checked = state === "on";
   const unavailable = state === "unavailable";
-
-  if (domain === "light") {
-    console.log(attributes.color_mode);
-  }
 
   const displayColor =
     domain === "light" && ["hs", "rgb"].includes(attributes.color_mode)

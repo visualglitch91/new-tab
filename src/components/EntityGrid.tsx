@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Paper from "./Paper";
 import EntityButton from "./EntityButton";
 import EntitiesSwitch from "./EntitiesSwitch";
@@ -44,14 +45,18 @@ export default function EntityGrid({
   return (
     <div>
       {Boolean(title) && (
-        <Paper class="component__entity-grid__header">
+        <Paper className="component__entity-grid__header">
           <h2>{title}</h2>
           {showGroupSwitch && Boolean(groupedEntityIds.length) && (
             <EntitiesSwitch entityIds={groupedEntityIds} />
           )}
         </Paper>
       )}
-      <div class="component__entity-grid__content">{rows.map(renderRow)}</div>
+      <div className="component__entity-grid__content">
+        {rows.map((row, index) => (
+          <Fragment key={index}>{renderRow(row)}</Fragment>
+        ))}
+      </div>
     </div>
   );
 }

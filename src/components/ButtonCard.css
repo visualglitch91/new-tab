@@ -17,7 +17,7 @@
   border: 1px solid transparent;
 }
 
-.component__button-card.highlight {
+.component__button-card.hover {
   background-color: rgba(29, 41, 56, 0.7);
   box-shadow: rgb(27, 55, 80) 3px 3px 13px -6px;
 }

@@ -1,4 +1,4 @@
-import { ComponentChildren } from "preact";
+import { Fragment } from "react";
 import { HassEntity } from "home-assistant-js-websocket";
 import Paper from "./Paper";
 import EntityRow from "./EntityRow";
@@ -14,7 +14,7 @@ export type Row =
       label?: string;
       ignoreOnGroupSwitch?: boolean;
       changeTimeout?: number;
-      renderContent?: (entity: HassEntity) => ComponentChildren;
+      renderContent?: (entity: HassEntity) => React.ReactNode;
     }
   | {
       type: "divider";
@@ -23,16 +23,16 @@ export type Row =
   | {
       type: "custom";
       hidden?: boolean;
-      render: () => ComponentChildren;
+      render: () => React.ReactNode;
     };
 
 export default function ListCard({
-  class: className,
+  className,
   title,
   rows,
   showGroupSwitch,
 }: {
-  class?: string;
+  className?: string;
   title?: string;
   rows: Row[];
   showGroupSwitch?: boolean;
@@ -47,7 +47,7 @@ export default function ListCard({
       case "entity":
         return <EntityRow {...row} />;
       case "divider":
-        return <div class="component__list-card-row__divider" />;
+        return <div className="component__list-card-row__divider" />;
       case "custom":
         return row.render();
       default:
@@ -68,16 +68,20 @@ export default function ListCard({
     .map((it) => "entityId" in it && it.entityId) as string[];
 
   return (
-    <Paper class={className}>
+    <Paper className={className}>
       {Boolean(title) && (
-        <div class="component__list-card__header">
+        <div className="component__list-card__header">
           <h2>{title}</h2>
           {showGroupSwitch && Boolean(groupedEntityIds.length) && (
             <EntitiesSwitch entityIds={groupedEntityIds} />
           )}
         </div>
       )}
-      <div class="component__list-card__content">{rows.map(renderRow)}</div>
+      <div className="component__list-card__content">
+        {rows.map((row, index) => (
+          <Fragment key={index}>{renderRow(row)}</Fragment>
+        ))}
+      </div>
     </Paper>
   );
 }

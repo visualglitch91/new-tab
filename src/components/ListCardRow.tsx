@@ -1,8 +1,6 @@
-import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
 import Icon from "./Icon";
 import "./ListCardRow.css";
-import { JSXInternal } from "preact/src/jsx";
 
 export default function ListCardRow({
   icon,
@@ -12,21 +10,21 @@ export default function ListCardRow({
   onIconClick,
 }: {
   icon?: string;
-  children: ComponentChildren;
-  label?: ComponentChildren;
+  children: React.ReactNode;
+  label?: React.ReactNode;
   disabled?: boolean;
-  onIconClick?: (e: JSXInternal.TargetedMouseEvent<HTMLDivElement>) => void;
+  onIconClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }) {
   return (
     <div
-      class={clsx(
+      className={clsx(
         "component__list-card-row",
         disabled && "component__list-card-row--disabled"
       )}
     >
       {icon && (
         <div
-          class={clsx(
+          className={clsx(
             "component__list-card-row__icon-wrapper",
             onIconClick && "component__list-card-row__icon-wrapper--has-click"
           )}
@@ -35,7 +33,7 @@ export default function ListCardRow({
           <Icon icon={icon} />
         </div>
       )}
-      <div class="component__list-card-row__label">{label}</div>
+      <div className="component__list-card-row__label">{label}</div>
       <div>{children}</div>
     </div>
   );

@@ -1,17 +1,15 @@
 import { clsx } from "../utils/general";
 import TouchButton, { TouchButtonProps } from "./TouchButton";
+import "./Paper.css";
 import "./ButtonCard.css";
 
 export type ButtonCardProps = TouchButtonProps;
 
-export default function ButtonCard({
-  class: className,
-  ...props
-}: ButtonCardProps) {
+export default function ButtonCard({ className, ...props }: ButtonCardProps) {
   return (
     <TouchButton
       {...props}
-      class={clsx("component__paper", "component__button-card", className)}
+      className={clsx("component__paper", "component__button-card", className)}
     />
   );
 }

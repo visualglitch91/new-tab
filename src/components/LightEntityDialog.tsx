@@ -1,5 +1,5 @@
+import { useRef } from "react";
 import { HassEntity } from "home-assistant-js-websocket";
-import { useRef } from "preact/hooks";
 import { callService } from "../utils/hass";
 import LightDialog, { LightDialogFeatures } from "./LightDialog";
 

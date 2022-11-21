@@ -1,7 +1,6 @@
 //@ts-expect-error no typings for macy
 import Macy from "macy";
-import { ComponentChildren, toChildArray } from "preact";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { Children, useCallback, useEffect, useRef, useState } from "react";
 import { clsx, useDebouncedCallback } from "../utils/general";
 import "./MasonryLayout.css";
 
@@ -12,7 +11,7 @@ function MasonryLayoutItem({
   children,
   onSizeChange,
 }: {
-  children: ComponentChildren;
+  children: React.ReactNode;
   onSizeChange: () => void;
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -41,23 +40,23 @@ function MasonryLayoutItem({
   }, []);
 
   return (
-    <div ref={nodeRef} class="components__masonry-layout__item">
+    <div ref={nodeRef} className="components__masonry-layout__item">
       {children}
     </div>
   );
 }
 
 export default function MasonryLayout({
-  class: className,
+  className,
   children,
 }: {
-  class?: string;
-  children: ComponentChildren;
+  className?: string;
+  children: React.ReactNode;
 }) {
   const macyRef = useRef<any>();
   const nodeRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
-  const items = [...toChildArray(children)].flat().filter(Boolean);
+  const items = [...Children.toArray(children)].flat().filter(Boolean);
 
   const getColumnCount = useCallback(() => {
     const availableWidth = nodeRef.current?.offsetWidth || 0;
@@ -97,7 +96,7 @@ export default function MasonryLayout({
   return (
     <div
       style={{ opacity: ready ? 1 : 0 }}
-      class={clsx("components__masonry-layout", className)}
+      className={clsx("components__masonry-layout", className)}
     >
       <div ref={nodeRef}>
         {items.map((item, index) => (

@@ -19,7 +19,7 @@
   justify-content: space-between;
 }
 
-.components__mobile-layout__tab {
+.MuiButtonBase-root.components__mobile-layout__tab {
   height: 100%;
   margin: 0;
   padding: 0 8px 0 8px;
@@ -38,7 +38,6 @@
   transition: background 100ms linear;
   text-transform: uppercase;
   flex: 1;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
   transition: all 80ms cubic-bezier(0.76, 0, 0.24, 1);
 }
 
@@ -46,7 +45,7 @@
   font-size: 20px;
 }
 
-.components__mobile-layout__tab.highlight {
+.components__mobile-layout__tab.hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
@@ -83,8 +82,8 @@
 }
 
 .components__mobile-layout__fade {
-  opacity: 0;
-  transition: opacity 250ms cubic-bezier(0.76, 0, 0.24, 1);
+  /* opacity: 0; */
+  transition: opacity 120ms cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 .components__mobile-layout__fade-appear {

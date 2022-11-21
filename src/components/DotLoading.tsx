@@ -2,8 +2,8 @@ import "./DotLoading.css";
 
 export default function DotLoading() {
   return (
-    <div class="component__dot-loading__wrapper">
-      <div class="component__dot-loading" />
+    <div className="component__dot-loading__wrapper">
+      <div className="component__dot-loading" />
     </div>
   );
 }

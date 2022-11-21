@@ -1,19 +1,18 @@
-import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
 import Paper from "./Paper";
 import "./TitleCard.css";
 
 export default function TitleCard({
-  class: className,
+  className,
   title,
   action,
 }: {
-  class?: string;
+  className?: string;
   title: string;
-  action?: ComponentChildren;
+  action?: React.ReactNode;
 }) {
   return (
-    <Paper class={clsx("component__title-card", className)}>
+    <Paper className={clsx("component__title-card", className)}>
       <h2>{title}</h2>
       {action}
     </Paper>

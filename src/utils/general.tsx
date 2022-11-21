@@ -1,6 +1,6 @@
-import { ComponentChildren, render } from "preact";
-import { useEffect, useMemo, useRef, useState } from "preact/hooks";
-import { CSSTransition } from "preact-transitioning";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
+import { CSSTransition } from "react-transition-group";
 import version from "../version.json";
 
 export function clsx(...classes: (string | null | undefined | false)[]) {
@@ -33,7 +33,7 @@ export function rgbToHex(r: number, g: number, b: number) {
 }
 
 export function renderModal(
-  renderer: (unmount: () => void) => ComponentChildren
+  renderer: (unmount: () => void) => React.ReactNode
 ) {
   const duration = isMobile ? 400 : 180;
   const modal = document.createElement("div");
@@ -48,29 +48,27 @@ export function renderModal(
     }, []);
 
     return (
-      <div>
-        <CSSTransition
-          in={open}
-          duration={duration}
-          classNames="modal-transition"
-          onExited={() => {
-            if (shouldRemove) {
-              modal.remove();
-            }
-          }}
-        >
-          <div className="modal-transition">
-            {renderer(() => {
-              shouldRemove = true;
-              setOpen(false);
-            })}
-          </div>
-        </CSSTransition>
-      </div>
+      <CSSTransition
+        in={open}
+        timeout={duration}
+        classNames="modal-transition"
+        onExited={() => {
+          if (shouldRemove) {
+            modal.remove();
+          }
+        }}
+      >
+        <div className="modal-transition">
+          {renderer(() => {
+            shouldRemove = true;
+            setOpen(false);
+          })}
+        </div>
+      </CSSTransition>
     );
   }
 
-  render(<Modal />, modal);
+  createRoot(modal).render(<Modal />);
 }
 
 export function saveValue(key: string, value: any) {

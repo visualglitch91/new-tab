@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef } from "react";
 
 export default function useLatestRef<T>(callback: T) {
   const ref = useRef(callback);

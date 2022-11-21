@@ -1,5 +1,4 @@
-import { ComponentChildren, createContext } from "preact";
-import { useContext, useEffect, useState } from "preact/hooks";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   getUser,
   getAuth,
@@ -18,7 +17,7 @@ let _connection: Connection | undefined;
 
 export const hassUrl =
   process.env.NODE_ENV === "development"
-    ? process.env.HASS_DEVELOPMENT_URL
+    ? process.env.REACT_APP_HASS_DEVELOPMENT_URL
     : window.location.origin;
 
 function setupHASS({
@@ -70,6 +69,7 @@ export function getIcon(entity: HassEntity) {
         } else if (state === "off") {
           return "mdi:close-circle-outline";
         }
+        break;
       case "vacuum":
         return "mdi:robot-vacuum";
       case "script":
@@ -108,7 +108,7 @@ const HassContext = createContext<{
   states: HassEntities;
 } | null>(null);
 
-export function HassProvider({ children }: { children: ComponentChildren }) {
+export function HassProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<HassUser>();
   const [states, setStates] = useState<HassEntities>();
 

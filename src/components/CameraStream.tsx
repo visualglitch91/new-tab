@@ -1,16 +1,15 @@
 import Hls from "hls.js";
-import { useEffect, useRef, useState } from "preact/hooks";
-import { JSXInternal } from "preact/src/jsx";
+import { useEffect, useRef, useState } from "react";
 import { fetchStreamUrl, hassUrl } from "../utils/hass";
 
 export default function CameraStream({
   entityId,
   style,
-  class: className,
+  className,
 }: {
   entityId: string;
-  class?: string;
-  style?: JSXInternal.CSSProperties;
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [visible, setVisible] = useState(!document.hidden);
@@ -69,7 +68,7 @@ export default function CameraStream({
       autoPlay
       controls
       style={{ ...style }}
-      class={className}
+      className={className}
       ref={videoRef}
     />
   ) : null;

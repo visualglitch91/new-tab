@@ -1,4 +1,3 @@
-import { ComponentChildren } from "preact";
 import { HassEntity } from "home-assistant-js-websocket";
 import { useHass, getIcon, callService } from "../utils/hass";
 import ListCardRow from "./ListCardRow";
@@ -15,7 +14,7 @@ interface Props {
   label?: string;
   changeTimeout?: number;
   entityId: string;
-  renderContent?: (entity: HassEntity) => ComponentChildren;
+  renderContent?: (entity: HassEntity) => React.ReactNode;
 }
 
 function BaseEntityRow({

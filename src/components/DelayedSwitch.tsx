@@ -1,4 +1,3 @@
-import { JSXInternal } from "preact/src/jsx";
 import useAsyncChange from "../utils/useAsyncChange";
 import DotLoading from "./DotLoading";
 import Switch from "./Switch";
@@ -10,7 +9,7 @@ export default function DelayedSwitch({
 }: {
   checked: boolean;
   delay: number;
-  onInput: (e: JSXInternal.TargetedEvent<HTMLInputElement, Event>) => void;
+  onInput: (e: React.FormEvent<HTMLInputElement>) => void;
 }) {
   const { changingTo, changing, change } = useAsyncChange({
     flag: checked,

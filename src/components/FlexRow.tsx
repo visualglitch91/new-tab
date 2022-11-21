@@ -1,19 +1,18 @@
-import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
 import "./FlexRow.css";
 
 export default function FlexRow({
-  class: className,
+  className,
   align = "center",
   children,
 }: {
-  class?: string;
+  className?: string;
   align?: "left" | "center" | "right";
-  children: ComponentChildren;
+  children: React.ReactNode;
 }) {
   return (
     <div
-      class={clsx(
+      className={clsx(
         "component__flex-row",
         align === "left" && "component__flex-row--left",
         align === "right" && "component__flex-row--right",

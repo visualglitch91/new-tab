@@ -30,7 +30,7 @@ export default function Slider({
   return (
     <input
       type="range"
-      class="component__slider"
+      className="component__slider"
       {...props}
       value={cast(value)}
       defaultValue={cast(defaultValue)}

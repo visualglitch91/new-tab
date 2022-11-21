@@ -1,5 +1,4 @@
-import { ComponentChild, ComponentChildren, toChildArray } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState, Children } from "react";
 import { clsx, clamp } from "../utils/general";
 import "./DesktopLayout.css";
 
@@ -8,15 +7,15 @@ const minColumnWidth = 420;
 const maxColumnWidth = 520;
 
 export default function DesktopLayout({
-  class: className,
+  className,
   children,
 }: {
-  class?: string;
-  children: ComponentChildren;
+  className?: string;
+  children: React.ReactNode;
 }) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const [, setReady] = useState(false);
-  const items = [...toChildArray(children)].flat().filter(Boolean);
+  const items = [...Children.toArray(children)].flat().filter(Boolean);
   const availableWidth = nodeRef.current?.offsetWidth;
 
   const columns = (() => {
@@ -34,7 +33,7 @@ export default function DesktopLayout({
 
     const columnsContent = new Array(columnCount)
       .fill(null)
-      .map(() => [] as ComponentChild[]);
+      .map(() => [] as React.ReactNode[]);
 
     items.forEach((item, index) => {
       const columnIndex = index % columnCount;
@@ -46,13 +45,9 @@ export default function DesktopLayout({
       maxWidth: `${maxColumnWidth}px`,
     };
 
-    return columnsContent.map((content, index) =>
+    return columnsContent.map((content) =>
       content.length ? (
-        <div
-          key={index}
-          style={columnStyle}
-          class="component__columnar-layout__column"
-        >
+        <div style={columnStyle} className="component__columnar-layout__column">
           {content}
         </div>
       ) : null
@@ -64,8 +59,11 @@ export default function DesktopLayout({
   }, []);
 
   return (
-    <div class="component__columnar-layout__wrapper">
-      <div ref={nodeRef} class={clsx("component__columnar-layout", className)}>
+    <div className="component__columnar-layout__wrapper">
+      <div
+        ref={nodeRef}
+        className={clsx("component__columnar-layout", className)}
+      >
         {columns}
       </div>
     </div>

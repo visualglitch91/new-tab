@@ -1,14 +1,14 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { hassUrl, useHass } from "../utils/hass";
 
 export default function CameraSnapshot({
   entityId,
-  class: className,
+  className,
   onLoad,
   onError,
 }: {
   entityId: string;
-  class?: string;
+  className?: string;
   onLoad?: () => void;
   onError?: () => void;
 }) {
@@ -33,8 +33,9 @@ export default function CameraSnapshot({
 
   return (
     <img
+      alt=""
       src={`${hassUrl}${imageURL}`}
-      class={className}
+      className={className}
       onLoad={onLoad}
       onError={onError}
     />

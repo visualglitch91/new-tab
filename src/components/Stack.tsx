@@ -1,27 +1,29 @@
-import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
 import "./Stack.css";
 
 export default function Stack({
-  class: _className,
+  nodeRef,
   className,
   horizontal,
   smallGap,
   children,
+  title,
 }: {
-  class?: string;
+  nodeRef?: React.LegacyRef<HTMLDivElement>;
   className?: string;
   horizontal?: boolean;
   smallGap?: boolean;
-  children: ComponentChildren;
+  children: React.ReactNode;
+  title?: string;
 }) {
   return (
     <div
-      class={clsx(
+      title={title}
+      ref={nodeRef}
+      className={clsx(
         "component__stack",
         `component__stack--${horizontal ? "horizontal" : "vertical"}`,
         smallGap && "component__stack--small-gap",
-        _className,
         className
       )}
     >

@@ -1,4 +1,5 @@
-.component__paper {
+.component__paper,
+.MuiButtonBase-root.component__paper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;

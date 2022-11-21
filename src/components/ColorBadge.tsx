@@ -1,4 +1,3 @@
-import { JSXInternal } from "preact/src/jsx";
 import { getDisplayColor } from "../utils/colorPresets";
 import { RGB } from "../utils/general";
 
@@ -27,7 +26,7 @@ export default function ColorBadge({
   color: RGB;
   size?: number | string;
   radius?: number | string;
-  style?: JSXInternal.CSSProperties;
+  style?: React.CSSProperties;
 }) {
   return (
     <span style={{ ...getColorBadgeStyle(color, radius, size), ...style }} />

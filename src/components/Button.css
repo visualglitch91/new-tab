@@ -1,4 +1,4 @@
-.component__button {
+.MuiButtonBase-root.component__button {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -19,6 +19,6 @@
   border-radius: 4px;
 }
 
-.component__button.highlight {
+.component__button.hover {
   background: rgba(0, 0, 0, 0.1);
 }

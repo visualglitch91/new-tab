@@ -1,4 +1,4 @@
-.component__paper.component__button-card.component__base-entity-button {
+.component__button-card.component__base-entity-button {
   height: 75px;
   display: flex;
   flex-direction: column;
@@ -13,11 +13,11 @@
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.component__base-entity-button--on.highlight {
+.component__base-entity-button--on.hover {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.component__base-entity-button--on.component__base-entity-button--custom-bg.highlight {
+.component__base-entity-button--on.component__base-entity-button--custom-bg.hover {
   background: unset;
   filter: brightness(1.1);
   border-color: rgba(255, 255, 255, 0.1);

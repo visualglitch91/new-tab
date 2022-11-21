@@ -193,7 +193,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
 
 let key = 0;
 
-export default [
+const houseModule = [
   <EntityGrid key={key++} showGroupSwitch {...groups.living_room} />,
   <EntityGrid key={key++} showGroupSwitch {...groups.office} />,
   <EntityGrid key={key++} showGroupSwitch {...groups.kitchen} />,
@@ -203,3 +203,5 @@ export default [
   <ListCard key={key++} {...groups.shortcuts} />,
   <ListCard key={key++} {...groups.systemMonitor} />,
 ];
+
+export default houseModule;

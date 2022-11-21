@@ -1,5 +1,3 @@
-import { ComponentChildren } from "preact";
-import { JSXInternal } from "preact/src/jsx";
 import Button from "./Button";
 import Icon from "./Icon";
 import "./DialogBase.css";
@@ -9,11 +7,11 @@ export default function DialogBase({
   children,
   onClose,
 }: {
-  title: ComponentChildren;
-  children: ComponentChildren;
+  title: React.ReactNode;
+  children: React.ReactNode;
   onClose: () => void;
 }) {
-  function onOverlayClick(e: JSXInternal.TargetedMouseEvent<HTMLDivElement>) {
+  function onOverlayClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (
       (e.target as HTMLElement)?.className === "component__dialog-base__wrapper"
     ) {
@@ -22,15 +20,15 @@ export default function DialogBase({
   }
 
   return (
-    <div class="component__dialog-base__wrapper" onClick={onOverlayClick}>
-      <div class="component__dialog-base">
-        <div class="component__dialog-base-header">
+    <div className="component__dialog-base__wrapper" onClick={onOverlayClick}>
+      <div className="component__dialog-base">
+        <div className="component__dialog-base-header">
           {title}
           <Button onTap={onClose}>
             <Icon icon="close" />
           </Button>
         </div>
-        <div class="component__dialog-base__content">{children}</div>
+        <div className="component__dialog-base__content">{children}</div>
       </div>
     </div>
   );

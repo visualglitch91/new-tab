@@ -1,6 +1,5 @@
-import { ComponentChildren } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
-import { CSSTransition, TransitionGroup } from "preact-transitioning";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { CSSTransition } from "react-transition-group";
 import { clamp, clsx, loadValue, saveValue } from "../utils/general";
 import managedScroll, { ManagedScroll } from "../utils/managedScroll";
 import Stack from "./Stack";
@@ -22,12 +21,61 @@ function Tab({
   return (
     <TouchButton
       type="button"
-      class={clsx("components__mobile-layout__tab", active && "active")}
+      className={clsx("components__mobile-layout__tab", active && "active")}
       onTap={onTap}
     >
       <Icon icon={icon} />
       {title}
     </TouchButton>
+  );
+}
+
+function AnimatedChildChange({
+  childKey: key,
+  children: child,
+  classNames,
+  timeout,
+  onExited,
+  onEntered,
+}: {
+  childKey: string;
+  children: React.ReactNode;
+  classNames: string;
+  timeout: number;
+  onExited?: () => void;
+  onEntered?: () => void;
+}) {
+  const [current, setCurrent] = useState({ changing: false, key, child });
+
+  useEffect(() => {
+    if (current.key === key) {
+      if (!current.changing) {
+        setCurrent((p) => ({ ...p, child }));
+      }
+    } else {
+      setCurrent((p) => ({ ...p, changing: true }));
+
+      const ref = window.setTimeout(setCurrent, timeout + 2, {
+        key,
+        child,
+        changing: false,
+      });
+
+      return () => window.clearTimeout(ref);
+    }
+    //eslint-disable-next-line
+  }, [child, key]);
+
+  return (
+    <CSSTransition
+      in={!current.changing}
+      classNames={classNames}
+      timeout={timeout}
+      onExited={onExited}
+      onEntered={onEntered}
+    >
+      <Fragment key={current.key}>{current.child}</Fragment>
+    </CSSTransition>
   );
 }
 
@@ -37,7 +85,7 @@ export default function MobileLayout({
   tabs: {
     title: string;
     icon: string;
-    content: ComponentChildren;
+    content: React.ReactNode;
   }[];
 }) {
   const managedScrollRef = useRef<ManagedScroll>();
@@ -80,24 +128,21 @@ export default function MobileLayout({
 
   return (
     <>
-      <div class="components__mobile-layout__wrapper">
+      <div className="components__mobile-layout__wrapper">
         <div className="components__mobile-layout__content">
-          <TransitionGroup duration={250}>
-            <CSSTransition
-              key={active}
-              classNames="components__mobile-layout__fade"
-              onExited={() => managedScrollRef.current?.scrollTo(0)}
-              onEntered={() => managedScrollRef.current?.update()}
-            >
-              <Stack className="components__mobile-layout__fade">
-                {content}
-              </Stack>
-            </CSSTransition>
-          </TransitionGroup>
+          <AnimatedChildChange
+            timeout={120}
+            childKey={active.toString()}
+            classNames="components__mobile-layout__fade"
+            onExited={() => managedScrollRef.current?.scrollTo(0)}
+            onEntered={() => managedScrollRef.current?.update()}
+          >
+            <Stack className="components__mobile-layout__fade">{content}</Stack>
+          </AnimatedChildChange>
         </div>
       </div>
-      <div class="components__mobile-layout__status-bar" />
-      <div class="components__mobile-layout__tabs">
+      <div className="components__mobile-layout__status-bar" />
+      <div className="components__mobile-layout__tabs">
         {tabs.map((tab, index) => (
           <Tab
             key={index}

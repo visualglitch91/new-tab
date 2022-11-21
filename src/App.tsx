@@ -11,7 +11,7 @@ const columnStyle = {
   display: "flex",
   flexDirection: "column",
   rowGap: 16,
-};
+} as const;
 
 export default function App() {
   const { user } = useHass();

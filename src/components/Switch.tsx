@@ -1,4 +1,3 @@
-import { JSXInternal } from "preact/src/jsx";
 import "./Switch.css";
 
 export default function Switch({
@@ -8,15 +7,15 @@ export default function Switch({
 }: {
   checked: boolean;
   disabled?: boolean;
-  onInput: (e: JSXInternal.TargetedEvent<HTMLInputElement, Event>) => void;
+  onInput: (e: React.FormEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <label class="component__switch">
+    <label className="component__switch">
       <input
         type="checkbox"
         disabled={disabled}
         checked={checked}
-        onInput={(e) => {
+        onChange={(e) => {
           /*
            * Preact has some bug that changes
            * the checkbox state despite the

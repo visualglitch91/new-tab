@@ -47,7 +47,7 @@ const imgStyle = {
   objectFit: "contain",
   height: "70%",
   width: "70%",
-};
+} as const;
 
 const assets = {
   disneyplus: require("../assets/disneyplus.png"),
@@ -81,7 +81,7 @@ export function ImageButtonCard({
 
   return (
     <ButtonCard onTap={action} onPress={onHold} onHold={onHold}>
-      <img src={assets[asset]} style={imgStyle} />
+      <img alt="" src={assets[asset]} style={imgStyle} />
     </ButtonCard>
   );
 }

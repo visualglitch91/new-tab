@@ -31,7 +31,7 @@ export default function BaseEntityButton({
     <ButtonCard
       {...props}
       disabled={unavailable}
-      class={clsx(
+      className={clsx(
         "component__base-entity-button",
         backgroundColor &&
           !changing &&
@@ -50,7 +50,7 @@ export default function BaseEntityButton({
       ) : (
         <>
           <Icon icon={unavailable ? "cancel" : icon || "cancel"} />
-          <div class="component__base-entity-button__label">{label}</div>
+          <div className="component__base-entity-button__label">{label}</div>
         </>
       )}
     </ButtonCard>

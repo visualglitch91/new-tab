@@ -1,16 +1,15 @@
-import { JSXInternal } from "preact/src/jsx";
 import { clsx } from "../utils/general";
 
 export default function Icon({
-  class: className,
+  className,
   icon,
   size = 24,
   style: extraStyles,
 }: {
-  class?: string;
+  className?: string;
   icon: string;
   size?: number;
-  style?: JSXInternal.CSSProperties;
+  style?: React.CSSProperties;
 }) {
   const style = {
     display: "inline-flex",
@@ -25,11 +24,11 @@ export default function Icon({
   };
 
   if (icon.startsWith("icofont-")) {
-    return <i style={style} class={clsx("icofont", icon, className)} />;
+    return <i style={style} className={clsx("icofont", icon, className)} />;
   }
 
   const name =
     icon.startsWith("mdi:") || icon.startsWith("mdi-") ? icon.slice(4) : icon;
 
-  return <i style={style} class={clsx("mdi", `mdi-${name}`, className)} />;
+  return <i style={style} className={clsx("mdi", `mdi-${name}`, className)} />;
 }

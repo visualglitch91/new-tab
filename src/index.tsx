@@ -1,4 +1,4 @@
-import { render } from "preact";
+import { createRoot } from "react-dom/client";
 import SimpleBar from "simplebar";
 import { HassProvider } from "./utils/hass";
 import {
@@ -8,17 +8,13 @@ import {
   loadCordovaJS,
 } from "./utils/general";
 import App from "./App";
+import "./styles.css";
 
 autoUpdater();
 
-const app = document.getElementById("app");
-
-if (!app) {
-  throw new Error("#app node not found");
-}
-
-const root = app;
-const simplebar = !isTouchDevice ? new SimpleBar(root) : undefined;
+const app = document.getElementById("app")!;
+const root = createRoot(app);
+const simplebar = !isTouchDevice ? new SimpleBar(app) : undefined;
 
 if (isTouchDevice) {
   window.oncontextmenu = () => false;
@@ -28,11 +24,10 @@ if (isTouchDevice) {
 document.body.classList.add(isMobile ? "mobile" : "desktop");
 
 function renderApp() {
-  render(
+  root.render(
     <HassProvider>
       <App />
-    </HassProvider>,
-    root
+    </HassProvider>
   );
 
   if (simplebar) {

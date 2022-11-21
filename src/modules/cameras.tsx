@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState } from "react";
 import { makeServiceCall, useHass } from "../utils/hass";
 import Stack from "../components/Stack";
 import Paper from "../components/Paper";
@@ -41,7 +41,7 @@ function Camera({
   }
 
   return (
-    <Paper class="module__camera">
+    <Paper className="module__camera">
       {online ? (
         stream ? (
           <CameraStream entityId={streamEntityId} />
@@ -49,10 +49,10 @@ function Camera({
           <CameraSnapshot entityId={streamEntityId} />
         )
       ) : (
-        <div class="module__camera__overlay">Câmera Indisponível</div>
+        <div className="module__camera__overlay">Câmera Indisponível</div>
       )}
       {online && (
-        <FlexRow class="module__camera__buttons">
+        <FlexRow className="module__camera__buttons">
           <PillButton icon="arrow-left" onClick={pan("LEFT")} />
           <PillButton icon="arrow-down" onClick={tilt("DOWN")} />
           <PillButton icon="arrow-up" onClick={tilt("UP")} />

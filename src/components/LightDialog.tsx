@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { useDebouncedCallback, RGB, clsx } from "../utils/general";
 import Icon from "./Icon";
 import DialogBase from "./DialogBase";
@@ -83,9 +83,9 @@ export default function LightDialog({
 
   return (
     <DialogBase title={title} onClose={onClose}>
-      <div class="component__light-dialog">
+      <div className="component__light-dialog">
         {features.temperature && features.color && (
-          <div class="component__light-dialog__tabs">
+          <div className="component__light-dialog__tabs">
             {(
               [
                 { key: "color", label: "Cor" },
@@ -94,7 +94,7 @@ export default function LightDialog({
             ).map((it) => (
               <Button
                 key={it.key}
-                class={clsx(
+                className={clsx(
                   "component__light-dialog__tabs__tab",
                   mode === it.key &&
                     "component__light-dialog__tabs__tab--active"
@@ -110,7 +110,7 @@ export default function LightDialog({
           </div>
         )}
         {features.brightness ? (
-          <div class="component__light-dialog__range-wrapper">
+          <div className="component__light-dialog__range-wrapper">
             <Icon icon="mdi:brightness-5" />
             <Slider
               min={0}
@@ -121,7 +121,7 @@ export default function LightDialog({
           </div>
         ) : null}
         {mode === "temperature" && features.temperature ? (
-          <div class="component__light-dialog__range-wrapper">
+          <div className="component__light-dialog__range-wrapper">
             <Icon icon="icofont-thermometer" />
             <Slider
               min={features.temperature.min}
@@ -134,7 +134,6 @@ export default function LightDialog({
         {mode === "color" && features.color && (
           <>
             <ColorWheel
-              width={260}
               selected={selectedColor}
               onChangeEnd={(color) => {
                 setSelectedColor(color);
@@ -142,7 +141,7 @@ export default function LightDialog({
               }}
             />
             <ColorPresets
-              class="component__light-dialog__color-presets"
+              className="component__light-dialog__color-presets"
               radius={8}
               size={46}
               selected={selectedColor}

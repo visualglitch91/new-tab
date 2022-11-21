@@ -1,23 +1,22 @@
-import { ComponentChildren } from "preact";
 import { clsx } from "../utils/general";
 import Icon from "./Icon";
 import "./PillButton.css";
 
 export default function PillButton({
-  class: className,
+  className,
   icon,
   label,
   onClick,
 }: {
-  class?: string;
+  className?: string;
   icon?: string;
-  label?: ComponentChildren;
+  label?: React.ReactNode;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
-      class={clsx("component__pill-button", className)}
+      className={clsx("component__pill-button", className)}
       onClick={onClick}
     >
       {icon && <Icon size={14} icon={icon} />}
