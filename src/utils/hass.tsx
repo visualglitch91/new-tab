@@ -18,8 +18,8 @@ let _connection: Connection | undefined;
 export type HassEntityMap = Record<string, HassEntity | undefined>;
 
 export const hassUrl =
-  process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_HASS_DEVELOPMENT_URL
+  import.meta.env.MODE === "development"
+    ? import.meta.env.HASS_DEVELOPMENT_URL
     : window.location.origin;
 
 function setupHASS({

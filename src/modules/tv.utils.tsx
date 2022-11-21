@@ -49,23 +49,27 @@ const imgStyle = {
   width: "70%",
 } as const;
 
+function getImageUrl(file: string) {
+  return new URL(`../assets/${file}`, import.meta.url).href;
+}
+
 const assets = {
-  disneyplus: require("../assets/disneyplus.png"),
-  globo: require("../assets/globo.png"),
-  globoplay: require("../assets/globoplay.png"),
-  hbomax: require("../assets/hbomax.png"),
-  netflix: require("../assets/netflix.png"),
-  plex: require("../assets/plex.png"),
-  prime_video: require("../assets/prime_video.png"),
-  discovery_plus: require("../assets/discovery_plus.png"),
-  fire_tv: require("../assets/fire_tv.png"),
-  ps5: require("../assets/ps5.png"),
-  spotify: require("../assets/spotify.png"),
-  starplus: require("../assets/starplus.png"),
-  switch: require("../assets/switch.png"),
-  windows: require("../assets/windows.png"),
-  youtube: require("../assets/youtube.png"),
-  retropi: require("../assets/retropi.png"),
+  disneyplus: getImageUrl("disneyplus.png"),
+  globo: getImageUrl("globo.png"),
+  globoplay: getImageUrl("globoplay.png"),
+  hbomax: getImageUrl("hbomax.png"),
+  netflix: getImageUrl("netflix.png"),
+  plex: getImageUrl("plex.png"),
+  prime_video: getImageUrl("prime_video.png"),
+  discovery_plus: getImageUrl("discovery_plus.png"),
+  fire_tv: getImageUrl("fire_tv.png"),
+  ps5: getImageUrl("ps5.png"),
+  spotify: getImageUrl("spotify.png"),
+  starplus: getImageUrl("starplus.png"),
+  switch: getImageUrl("switch.png"),
+  windows: getImageUrl("windows.png"),
+  youtube: getImageUrl("youtube.png"),
+  retropi: getImageUrl("retropi.png"),
 };
 
 export function ImageButtonCard({
