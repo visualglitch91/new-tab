@@ -1,5 +1,3 @@
-//@ts-expect-error no typings for macy
-import Macy from "macy";
 import { Children, useCallback, useEffect, useRef, useState } from "react";
 import { styled } from "../utils/styling";
 import { useDebouncedCallback } from "../utils/general";
@@ -82,14 +80,18 @@ export default function MasonryLayout({
   const onResize = useDebouncedCallback(recalculateMacy);
 
   useEffect(() => {
-    macyRef.current = Macy({
-      container: nodeRef.current!,
-      columns: getColumnCount(),
+    let readyTimeout: number;
+    //@ts-expect-error no typings for macy
+    import("macy").then(({ default: Macy }) => {
+      macyRef.current = Macy({
+        container: nodeRef.current!,
+        columns: getColumnCount(),
+      });
+
+      readyTimeout = window.setTimeout(setReady, 100, true);
+
+      window.addEventListener("resize", onResize);
     });
-
-    const readyTimeout = window.setTimeout(setReady, 100, true);
-
-    window.addEventListener("resize", onResize);
 
     return () => {
       window.clearTimeout(readyTimeout);

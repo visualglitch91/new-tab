@@ -1,4 +1,4 @@
-import { clsx } from "../utils/general";
+import { cx } from "../utils/styling";
 
 export default function Icon({
   className,
@@ -24,11 +24,11 @@ export default function Icon({
   };
 
   if (icon.startsWith("icofont-")) {
-    return <i style={style} className={clsx("icofont", icon, className)} />;
+    return <i style={style} className={cx("icofont", icon, className)} />;
   }
 
   const name =
     icon.startsWith("mdi:") || icon.startsWith("mdi-") ? icon.slice(4) : icon;
 
-  return <i style={style} className={clsx("mdi", `mdi-${name}`, className)} />;
+  return <i style={style} className={cx("mdi", `mdi-${name}`, className)} />;
 }

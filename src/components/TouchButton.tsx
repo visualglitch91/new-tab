@@ -1,8 +1,9 @@
 import { PointerListener } from "contactjs";
 import { useEffect, useRef, useState } from "react";
 import useLatestRef from "../utils/useLatestRef";
-import { clsx, isTouchDevice } from "../utils/general";
+import { isTouchDevice } from "../utils/general";
 import RippleButton from "./RippleButton";
+import { cx } from "../utils/styling";
 
 function noop() {}
 
@@ -111,11 +112,7 @@ export default function TouchButton({
   return (
     <RippleButton
       {...props}
-      className={clsx(
-        className,
-        hover && "hover",
-        props.disabled && "disabled"
-      )}
+      className={cx(className, hover && "hover", props.disabled && "disabled")}
       ref={buttonRef}
     >
       {children}

@@ -1,6 +1,5 @@
-import { styled } from "../../utils/styling";
+import { cx, styled } from "../../utils/styling";
 import TouchButton from "../TouchButton";
-import { clsx } from "../../utils/general";
 import Icon from "../Icon";
 
 export const Wrapper = styled(TouchButton)`
@@ -50,7 +49,7 @@ export default function Tab({
   onTap: () => void;
 }) {
   return (
-    <Wrapper type="button" className={clsx(active && "active")} onTap={onTap}>
+    <Wrapper type="button" className={cx(active && "active")} onTap={onTap}>
       <Icon icon={icon} />
       {title}
     </Wrapper>
