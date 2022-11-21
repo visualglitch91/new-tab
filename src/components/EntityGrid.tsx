@@ -4,6 +4,7 @@ import Paper from "./Paper";
 import EntityButton from "./EntityButton";
 import EntitiesSwitch from "./EntitiesSwitch";
 import { Row } from "./ListCard";
+import { useResponsive } from "../utils/general";
 
 const Header = styled(Paper)`
   display: flex;
@@ -37,8 +38,10 @@ export default function EntityGrid({
   rows: Row[];
   showGroupSwitch?: boolean;
 }) {
+  const { isDesktop } = useResponsive();
+
   function renderRow(row: Row) {
-    if (row.hidden) {
+    if (row.hiddenOnDesktop && isDesktop) {
       return null;
     }
 

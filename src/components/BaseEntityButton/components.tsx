@@ -35,7 +35,7 @@ export const Wrapper = styled(
     p.on && p.backgroundColor
       ? css`
           &.hover {
-            background: unset;
+            background-color: ${p.backgroundColor};
             filter: brightness(1.1);
             border-color: rgba(255, 255, 255, 0.1);
           }

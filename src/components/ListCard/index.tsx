@@ -4,11 +4,12 @@ import Paper from "../Paper";
 import EntityRow from "../EntityRow";
 import EntitiesSwitch from "../EntitiesSwitch";
 import { Header, Heading, Content, Divider } from "./components";
+import { useResponsive } from "../../utils/general";
 
 export type Row =
   | {
       type?: "entity" | undefined;
-      hidden?: boolean;
+      hiddenOnDesktop?: boolean;
       entityId: string;
       icon?: string;
       label?: string;
@@ -18,11 +19,11 @@ export type Row =
     }
   | {
       type: "divider";
-      hidden?: boolean;
+      hiddenOnDesktop?: boolean;
     }
   | {
       type: "custom";
-      hidden?: boolean;
+      hiddenOnDesktop?: boolean;
       render: () => React.ReactNode;
     };
 
@@ -37,8 +38,10 @@ export default function ListCard({
   rows: Row[];
   showGroupSwitch?: boolean;
 }) {
+  const { isDesktop } = useResponsive();
+
   function renderRow(row: Row) {
-    if (row.hidden) {
+    if (row.hiddenOnDesktop && isDesktop) {
       return null;
     }
 

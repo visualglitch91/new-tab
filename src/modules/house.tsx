@@ -3,7 +3,7 @@ import Switch from "../components/Switch";
 import ListCard, { Row } from "../components/ListCard";
 import EntityGrid from "../components/EntityGrid";
 import RunScriptButton from "../components/RunScriptButton";
-import { formatNumericValue, isDesktop } from "../utils/general";
+import { formatNumericValue } from "../utils/general";
 import { TVEntityButton } from "../components/TVEntityButton";
 import MultiLightButton from "../components/MultiLightButton";
 
@@ -30,7 +30,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luminária", entityId: "switch.sala_luminaria" },
       {
         type: "custom",
-        hidden: isDesktop,
+        hiddenOnDesktop: true,
         render: () => (
           <MultiLightButton
             icon="mdi-television-ambient-light"
@@ -41,17 +41,17 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       },
       {
         label: "RGB TV",
-        hidden: isDesktop,
+        hiddenOnDesktop: true,
         entityId: "light.sala_rgb_tv",
       },
       {
         label: "RGB Rack",
-        hidden: isDesktop,
+        hiddenOnDesktop: true,
         entityId: "light.sala_rgb_rack",
       },
       {
         type: "custom",
-        hidden: isDesktop,
+        hiddenOnDesktop: true,
         render: () => (
           <TVEntityButton icon="mdi:television-classic" label="TV" />
         ),
@@ -59,7 +59,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       {
         label: "Surround",
         icon: "mdi:surround-sound",
-        hidden: isDesktop,
+        hiddenOnDesktop: true,
         changeTimeout: 30_000,
         entityId: "switch.sala_receiver",
         ignoreOnGroupSwitch: true,

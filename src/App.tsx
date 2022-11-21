@@ -1,5 +1,5 @@
 import { useUser } from "./utils/hass";
-import { compact, isMobile } from "./utils/general";
+import { compact, useResponsive } from "./utils/general";
 import MasonryLayout from "./components/MasonryLayout";
 import MobileLayout from "./components/MobileLayout";
 import tvModule from "./modules/tv";
@@ -15,6 +15,7 @@ const columnStyle = {
 
 export default function App() {
   const user = useUser();
+  const { isMobile } = useResponsive();
   const isAdmin = user.is_admin;
 
   if (isMobile) {

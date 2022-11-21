@@ -1,60 +1,60 @@
 import { styled } from "../../utils/styling";
 
-export const Input = styled("input")`
-  --height: 30px;
-  --track: #20293c;
-  --filled: #dc456c;
-  --thumb-color: transparent;
-  --thumb-width: 0;
+const height = "30px";
+const track = "#20293c";
+const filled = "#dc456c";
+const thumbColor = "transparent";
+const thumbWidth = "0";
 
+export const Input = styled("input")`
   margin: auto;
   appearance: none;
   -webkit-appearance: none;
   position: relative;
   overflow: hidden;
-  height: var(--height);
+  height: ${height};
   width: 100%;
   cursor: pointer;
   border-radius: 8px;
 
   &::-webkit-slider-runnable-track {
-    background: var(--track);
+    background: ${track};
   }
 
   &::-webkit-slider-thumb {
     appearance: none;
     -webkit-appearance: none;
-    width: var(--thumb-width); /* 1 */
-    height: var(--height);
-    background: var(--thumb-color);
-    box-shadow: -200px 0 0 200px var(--filled); /* 2 */
+    width: ${thumbWidth}; /* 1 */
+    height: ${height};
+    background: ${thumbColor};
+    box-shadow: -200px 0 0 200px ${filled}; /* 2 */
     border: none;
   }
 
   &::-moz-range-track {
-    height: var(--height);
-    background: var(--track);
+    height: ${height};
+    background: ${track};
   }
 
   &::-moz-range-thumb {
-    background: var(--thumb-color);
-    height: var(--height);
-    width: var(--thumb-width);
+    background: ${thumbColor};
+    height: ${height};
+    width: ${thumbWidth};
     border: none;
     border-radius: 0 !important;
-    box-shadow: -200px 0 0 200px var(--filled);
+    box-shadow: -200px 0 0 200px ${filled};
     box-sizing: border-box;
   }
 
   &::-ms-fill-lower {
-    background: var(--filled);
+    background: ${filled};
   }
 
   &::-ms-thumb {
-    background: var(--thumb-color);
+    background: ${thumbColor};
     border: none;
-    height: var(--height);
-    width: var(--thumb-width);
+    height: ${height};
+    width: ${thumbWidth};
     box-sizing: border-box;
   }
 
@@ -67,9 +67,9 @@ export const Input = styled("input")`
   }
 
   &::-ms-track {
-    background: var(--track);
+    background: ${track};
     color: transparent;
-    height: var(--height);
+    height: ${height};
     border: none;
   }
 

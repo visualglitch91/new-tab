@@ -2,10 +2,10 @@ import { createRoot } from "react-dom/client";
 import type SimpleBar from "simplebar";
 import { HassProvider } from "./utils/hass";
 import {
-  isMobile,
   autoUpdater,
   isTouchDevice,
   loadCordovaJS,
+  ResponsiveProvider,
 } from "./utils/general";
 import App from "./App";
 import "./styles.css";
@@ -25,13 +25,13 @@ if (isTouchDevice) {
   });
 }
 
-document.body.classList.add(isMobile ? "mobile" : "desktop");
-
 function renderApp() {
   root.render(
-    <HassProvider>
-      <App />
-    </HassProvider>
+    <ResponsiveProvider>
+      <HassProvider>
+        <App />
+      </HassProvider>
+    </ResponsiveProvider>
   );
 
   if (simplebar) {

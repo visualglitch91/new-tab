@@ -61,6 +61,7 @@ body {
   }
 }
 
+input,
 button,
 [role="button"] {
   -webkit-tap-highlight-color: transparent;

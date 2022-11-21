@@ -75,13 +75,16 @@ function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
 const RippleButton = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
->((props, ref) => {
+>((props, externalRef) => {
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = externalRef || internalRef;
   const counterRef = useRef(0);
   const [ripples, setRipples] = useState<(RippleProps & { key: string })[]>([]);
 
   useEffect(() => {
     let timer = 0;
-    const button = (ref && "current" in ref && ref.current) || null;
+    const button =
+      (buttonRef && "current" in buttonRef && buttonRef.current) || null;
 
     function createRipple(pageX: number, pageY: number) {
       window.clearTimeout(timer);
@@ -123,10 +126,10 @@ const RippleButton = forwardRef<
         window.clearTimeout(timer);
       };
     }
-  }, [ref]);
+  }, [buttonRef]);
 
   return (
-    <StyledButton {...props} ref={ref}>
+    <StyledButton {...props} ref={buttonRef}>
       {props.children}
       {ripples.map(({ key, ...props }) => (
         <Ripple {...props} key={key} />

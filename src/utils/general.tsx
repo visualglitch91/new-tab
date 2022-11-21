@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+  createContext,
+} from "react";
 import { createRoot } from "react-dom/client";
 import { CSSTransition } from "preact-transitioning";
 import version from "../version.json";
@@ -31,13 +38,13 @@ export function rgbToHex(r: number, g: number, b: number) {
 export function renderModal(
   renderer: (unmount: () => void) => React.ReactNode
 ) {
-  const duration = isMobile ? 400 : 180;
   const modal = document.createElement("div");
   let shouldRemove = false;
   document.body.appendChild(modal);
 
   function Modal() {
     const [open, setOpen] = useState(false);
+    const duration = isMobile() ? 400 : 180;
 
     useEffect(() => {
       setOpen(true);
@@ -143,10 +150,6 @@ export const isTouchDevice =
   //@ts-expect-error Bad browser typings
   navigator.msMaxTouchPoints > 0;
 
-export const isMobile = window.innerWidth < 935;
-
-export const isDesktop = !isMobile;
-
 export function formatNumericValue(value: string | number, suffix: string) {
   const formatted = (Math.round(Number(value) * 10) / 10).toFixed(1);
   return `${formatted}${suffix}`;
@@ -159,4 +162,55 @@ export function getContrastColor(color: RGB) {
   return color[0] * 0.299 + color[1] * 0.587 + color[2] * 0.114 > 186
     ? "#000000"
     : "#FFFFFF";
+}
+
+const ResponsiveContext = createContext<
+  { isMobile: boolean; isDesktop: boolean } | undefined
+>(undefined);
+
+function isMobile() {
+  const minWidth = 655;
+  return window.innerWidth < minWidth;
+}
+
+export function ResponsiveProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [mobile, setMobile] = useState(isMobile);
+
+  useEffect(() => {
+    const handler = debounce(() => setMobile(isMobile()));
+    window.addEventListener("resize", handler);
+
+    return () => {
+      window.removeEventListener("resize", handler);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("mobile", mobile);
+    document.body.classList.toggle("desktop", !mobile);
+  }, [mobile]);
+
+  const value = useMemo(() => {
+    return { isMobile: mobile, isDesktop: !mobile };
+  }, [mobile]);
+
+  return (
+    <ResponsiveContext.Provider value={value}>
+      {children}
+    </ResponsiveContext.Provider>
+  );
+}
+
+export function useResponsive() {
+  const result = useContext(ResponsiveContext);
+
+  if (!result) {
+    throw new Error("Must be called inside a ResponsiveProvider");
+  }
+
+  return result;
 }

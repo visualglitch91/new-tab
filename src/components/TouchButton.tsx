@@ -59,6 +59,8 @@ export default function TouchButton({
       button.addEventListener("click", () => {
         handlerRefs.current.onTap?.();
       });
+
+      return;
     }
 
     const p = new PointerListener(button, { handleTouchEvents: false });

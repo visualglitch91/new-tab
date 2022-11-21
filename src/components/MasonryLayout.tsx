@@ -3,7 +3,8 @@ import { styled } from "../utils/styling";
 import { useDebouncedCallback } from "../utils/general";
 
 const gutter = 16;
-const columnWidth = 400;
+const smallerColumnWidth = 300;
+const largerColumnWidth = 400;
 
 const Wrapper = styled("div")`
   padding: 8px;
@@ -63,6 +64,8 @@ export default function MasonryLayout({
 
   const getColumnCount = useCallback(() => {
     const availableWidth = nodeRef.current?.offsetWidth || 0;
+    const columnWidth =
+      window.innerWidth < 700 ? smallerColumnWidth : largerColumnWidth;
 
     const columnCount = Math.max(
       1,
