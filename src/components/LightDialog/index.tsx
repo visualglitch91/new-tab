@@ -116,7 +116,7 @@ export default function LightDialog({
           </FlexRow>
         ) : null}
         {mode === "temperature" && features.temperature ? (
-          <FlexRow>
+          <FlexRow full>
             <Icon icon="icofont-thermometer" />
             <Slider
               min={features.temperature.min}

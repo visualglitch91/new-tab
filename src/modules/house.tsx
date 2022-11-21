@@ -6,6 +6,7 @@ import RunScriptButton from "../components/RunScriptButton";
 import { formatNumericValue } from "../utils/general";
 import { TVEntityButton } from "../components/TVEntityButton";
 import MultiLightButton from "../components/MultiLightButton";
+import BedroomLightEntityButton from "../components/BedroomLightEntityButton";
 
 function scriptRow(it: {
   entityId: string;
@@ -87,7 +88,7 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
   bedroom: {
     title: "Quarto",
     rows: [
-      { label: "Luz", entityId: "switch.quarto_luz" },
+      { type: "custom", render: () => <BedroomLightEntityButton /> },
       { label: "Ventilador", entityId: "switch.quarto_ventilador" },
       { label: "Abajur\nDireito", entityId: "switch.quarto_abajur_direito" },
       { label: "Abajur\nEsquerdo", entityId: "switch.quarto_abajur_esquerdo" },

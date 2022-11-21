@@ -224,7 +224,7 @@ export function useEntities(...entityIds: string[]) {
   const store = useHassStore();
   const stringifiedEntityIds = JSON.stringify(entityIds);
 
-  const [states, setStates] = useState(() => {
+  function getInitialState() {
     return store.states.reduce((acc, entity) => {
       if (!entityIds.includes(entity.entity_id)) {
         return acc;
@@ -232,9 +232,13 @@ export function useEntities(...entityIds: string[]) {
 
       return { ...acc, [entity.entity_id]: entity };
     }, {} as HassEntityMap);
-  });
+  }
+
+  const [states, setStates] = useState(getInitialState);
 
   useEffect(() => {
+    setStates(getInitialState);
+
     const unsubscribers = entityIds.map((entityId) => {
       return store.subscribeToEntity(entityId, (state) => {
         setStates((prev) => ({ ...prev, [entityId]: state }));

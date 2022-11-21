@@ -6,8 +6,6 @@ import {
   getDisplayColor,
   getDisplayColorString,
 } from "../utils/colorPresets";
-import Icon from "./Icon";
-import ButtonCard from "./ButtonCard";
 import BaseEntityButton from "./BaseEntityButton";
 
 export default function EntityButton({
@@ -15,23 +13,22 @@ export default function EntityButton({
   label,
   changeTimeout,
   entityId,
+  onTap,
+  onPress,
+  onDoubleTap,
 }: {
   icon?: string;
   label?: string;
   changeTimeout?: number;
   entityId: string;
+  onTap?: () => void;
+  onPress?: () => void;
+  onDoubleTap?: () => void;
 }) {
   const entity = useEntity(entityId);
 
   if (!entity) {
-    return (
-      <ButtonCard disabled className="component__base-entity-button">
-        <Icon icon="cancel" />
-        <div className="component__base-entity-button__label">
-          {label || entityId}
-        </div>
-      </ButtonCard>
-    );
+    return <BaseEntityButton unavailable label={label || entityId} />;
   }
 
   const icon = customIcon || getIcon(entity);
@@ -75,13 +72,14 @@ export default function EntityButton({
           ? getDisplayColorString(displayColor, 0.6)
           : undefined
       }
-      onTap={makeServiceCall(
-        "homeassistant",
-        checked ? "turn_off" : "turn_on",
-        { entity_id: entityId }
-      )}
-      onPress={onLightDetails}
-      onDoubleTap={onLightDetails}
+      onTap={
+        onTap ||
+        makeServiceCall("homeassistant", checked ? "turn_off" : "turn_on", {
+          entity_id: entityId,
+        })
+      }
+      onPress={onPress || onLightDetails}
+      onDoubleTap={onDoubleTap || onLightDetails}
     />
   );
 }
