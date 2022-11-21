@@ -1,5 +1,4 @@
 import BScroll from "better-scroll";
-import { isTouchDevice } from "./general";
 
 export type ManagedScroll = ReturnType<typeof managedScroll>;
 
@@ -15,10 +14,6 @@ export default function managedScroll(wrapper: HTMLElement) {
   }
 
   function enable() {
-    if (!isTouchDevice) {
-      return;
-    }
-
     scrollTo(0);
     wrapper.style.overflow = "hidden";
     bscroll = new BScroll(wrapper, {
@@ -32,7 +27,7 @@ export default function managedScroll(wrapper: HTMLElement) {
   }
 
   function disable() {
-    if (!isTouchDevice || !bscroll) {
+    if (!bscroll) {
       return;
     }
 
