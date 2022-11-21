@@ -1,5 +1,5 @@
 import { keyframes } from "@emotion/react";
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 
 const animation = keyframes`
   0% {

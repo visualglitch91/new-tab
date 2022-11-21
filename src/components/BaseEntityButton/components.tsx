@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 import ButtonCard from "../ButtonCard";
 
 export const Wrapper = styled(ButtonCard)<{

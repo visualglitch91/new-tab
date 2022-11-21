@@ -1,4 +1,4 @@
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 import TouchButton from "./TouchButton";
 
 const Button = styled(TouchButton)`

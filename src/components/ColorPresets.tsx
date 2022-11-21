@@ -1,5 +1,5 @@
 import ButtonBase from "@mui/material/ButtonBase";
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 import { getContrastColor, RGB } from "../utils/general";
 import { colorPresets, isColorEqual } from "../utils/colorPresets";
 import Icon from "./Icon";

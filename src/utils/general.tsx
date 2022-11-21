@@ -1,11 +1,10 @@
+import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { CSSTransition } from "react-transition-group";
 import version from "../version.json";
 
-export function clsx(...classes: (string | null | undefined | false)[]) {
-  return classes.filter(Boolean).join(" ");
-}
+export { clsx };
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);

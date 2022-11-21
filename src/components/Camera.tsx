@@ -1,4 +1,4 @@
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 import { makeServiceCall, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import FlexRow from "./FlexRow";

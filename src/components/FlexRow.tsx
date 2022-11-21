@@ -1,4 +1,4 @@
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 
 const FlexRow = styled("div")<{
   align?: "left" | "center" | "right";

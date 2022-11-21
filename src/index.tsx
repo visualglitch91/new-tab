@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import SimpleBar from "simplebar";
+import type SimpleBar from "simplebar";
 import { HassProvider } from "./utils/hass";
 import {
   isMobile,
@@ -14,11 +14,15 @@ autoUpdater();
 
 const app = document.getElementById("app")!;
 const root = createRoot(app);
-const simplebar = !isTouchDevice ? new SimpleBar(app) : undefined;
+let simplebar: SimpleBar;
 
 if (isTouchDevice) {
   window.oncontextmenu = () => false;
   document.body.classList.add("touch-device");
+} else {
+  import("simplebar").then(({ default: SimpleBar }) => {
+    simplebar = new SimpleBar(app);
+  });
 }
 
 document.body.classList.add(isMobile ? "mobile" : "desktop");

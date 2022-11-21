@@ -1,4 +1,4 @@
-import styled from "@mui/material/styles/styled";
+import styled from "@emotion/styled";
 
 const Wrapper = styled("label")`
   display: inline-block;
