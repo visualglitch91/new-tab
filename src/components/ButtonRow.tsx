@@ -1,18 +1,16 @@
-import "./ButtonRow.css";
+import styled from "@mui/material/styles/styled";
 
-export default function ButtonRow({
-  children,
-  height,
-}: {
-  children: React.ReactNode;
-  height?: number;
-}) {
-  return (
-    <div
-      style={{ height: height && `${height}px` }}
-      className="module__tv__button-row"
-    >
-      {children}
-    </div>
-  );
-}
+const ButtonRow = styled("div")<{ height?: number }>`
+  width: 100%;
+  display: flex;
+  grid-gap: 8px;
+  height: ${(p) =>
+    typeof p.height === "number" ? `${p.height}px` : "undefined"};
+
+  & > * {
+    flex: 1;
+    overflow: hidden;
+  }
+`;
+
+export default ButtonRow;

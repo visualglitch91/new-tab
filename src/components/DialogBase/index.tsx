@@ -1,6 +1,6 @@
-import Button from "./Button";
-import Icon from "./Icon";
-import "./DialogBase.css";
+import Button from "../Button";
+import Icon from "../Icon";
+import { Wrapper, Root, Header, Content } from "./components";
 
 export default function DialogBase({
   title,
@@ -20,16 +20,16 @@ export default function DialogBase({
   }
 
   return (
-    <div className="component__dialog-base__wrapper" onClick={onOverlayClick}>
-      <div className="component__dialog-base">
-        <div className="component__dialog-base-header">
+    <Wrapper onClick={onOverlayClick}>
+      <Root>
+        <Header>
           {title}
           <Button onTap={onClose}>
             <Icon icon="close" />
           </Button>
-        </div>
-        <div className="component__dialog-base__content">{children}</div>
-      </div>
-    </div>
+        </Header>
+        <Content>{children}</Content>
+      </Root>
+    </Wrapper>
   );
 }

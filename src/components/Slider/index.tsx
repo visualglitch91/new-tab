@@ -1,5 +1,5 @@
-import { useDebouncedCallback } from "../utils/general";
-import "./Slider.css";
+import { useDebouncedCallback } from "../../utils/general";
+import { Input } from "./styles";
 
 function cast(value: number | undefined) {
   if (typeof value === "undefined") {
@@ -28,7 +28,7 @@ export default function Slider({
   const debouncedOnChangeEnd = useDebouncedCallback(onChangeEnd);
 
   return (
-    <input
+    <Input
       type="range"
       className="component__slider"
       {...props}

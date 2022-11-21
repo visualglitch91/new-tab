@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { useDebouncedCallback, RGB, clsx } from "../utils/general";
-import Icon from "./Icon";
-import DialogBase from "./DialogBase";
-import ColorPresets from "./ColorPresets";
-import ColorWheel from "./ColorWheel";
-import Slider from "./Slider";
-import "./LightDialog.css";
-import Button from "./Button";
+import { useDebouncedCallback, RGB } from "../../utils/general";
+import Icon from "../Icon";
+import DialogBase from "../DialogBase";
+import ColorWheel from "../ColorWheel";
+import Slider from "../Slider";
+import FlexRow from "../FlexRow";
+import { Tab, Content, StyledColorPresets, Tabs } from "./components";
 
 export interface LightDialogFeatures {
   brightness: {
@@ -83,34 +82,30 @@ export default function LightDialog({
 
   return (
     <DialogBase title={title} onClose={onClose}>
-      <div className="component__light-dialog">
+      <Content>
         {features.temperature && features.color && (
-          <div className="component__light-dialog__tabs">
+          <Tabs>
             {(
               [
                 { key: "color", label: "Cor" },
                 { key: "temperature", label: "Frio/Quente" },
               ] as const
             ).map((it) => (
-              <Button
+              <Tab
                 key={it.key}
-                className={clsx(
-                  "component__light-dialog__tabs__tab",
-                  mode === it.key &&
-                    "component__light-dialog__tabs__tab--active"
-                )}
+                active={mode === it.key}
                 onTap={() => {
                   setMode(it.key);
                   onModeChange(it.key);
                 }}
               >
                 {it.label}
-              </Button>
+              </Tab>
             ))}
-          </div>
+          </Tabs>
         )}
         {features.brightness ? (
-          <div className="component__light-dialog__range-wrapper">
+          <FlexRow full>
             <Icon icon="mdi:brightness-5" />
             <Slider
               min={0}
@@ -118,10 +113,10 @@ export default function LightDialog({
               defaultValue={features.brightness.initialValue || 0}
               onChangeEnd={(value) => onChange("brightness", value)}
             />
-          </div>
+          </FlexRow>
         ) : null}
         {mode === "temperature" && features.temperature ? (
-          <div className="component__light-dialog__range-wrapper">
+          <FlexRow>
             <Icon icon="icofont-thermometer" />
             <Slider
               min={features.temperature.min}
@@ -129,7 +124,7 @@ export default function LightDialog({
               defaultValue={features.temperature.initialValue || 0}
               onChangeEnd={(value) => onChange("temperature", value)}
             />
-          </div>
+          </FlexRow>
         ) : null}
         {mode === "color" && features.color && (
           <>
@@ -140,8 +135,7 @@ export default function LightDialog({
                 onChange("color", color);
               }}
             />
-            <ColorPresets
-              className="component__light-dialog__color-presets"
+            <StyledColorPresets
               radius={8}
               size={46}
               selected={selectedColor}
@@ -152,7 +146,7 @@ export default function LightDialog({
             />
           </>
         )}
-      </div>
+      </Content>
     </DialogBase>
   );
 }

@@ -1,9 +1,8 @@
-import { clsx } from "../utils/general";
-import Icon from "./Icon";
-import ButtonCard, { ButtonCardProps } from "./ButtonCard";
-import useAsyncChange from "../utils/useAsyncChange";
-import CircularLoading from "./CircularLoading";
-import "./BaseEntityButton.css";
+import Icon from "../Icon";
+import { ButtonCardProps } from "../ButtonCard";
+import useAsyncChange from "../../utils/useAsyncChange";
+import CircularLoading from "../CircularLoading";
+import { Label, Wrapper } from "./components";
 
 export default function BaseEntityButton({
   icon,
@@ -28,17 +27,13 @@ export default function BaseEntityButton({
   });
 
   return (
-    <ButtonCard
+    <Wrapper
       {...props}
       disabled={unavailable}
-      className={clsx(
-        "component__base-entity-button",
-        backgroundColor &&
-          !changing &&
-          "component__base-entity-button--custom-bg",
-        checked && !changing && "component__base-entity-button--on"
-      )}
-      style={backgroundColor && !changing ? { backgroundColor } : undefined}
+      on={Boolean(checked && !changing)}
+      backgroundColor={
+        backgroundColor && !changing ? backgroundColor : undefined
+      }
       onTap={() => {
         if (change() && onTap) {
           onTap();
@@ -50,9 +45,9 @@ export default function BaseEntityButton({
       ) : (
         <>
           <Icon icon={unavailable ? "cancel" : icon || "cancel"} />
-          <div className="component__base-entity-button__label">{label}</div>
+          <Label>{label}</Label>
         </>
       )}
-    </ButtonCard>
+    </Wrapper>
   );
 }

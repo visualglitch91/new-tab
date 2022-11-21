@@ -1,11 +1,20 @@
 //@ts-expect-error no typings for macy
 import Macy from "macy";
 import { Children, useCallback, useEffect, useRef, useState } from "react";
-import { clsx, useDebouncedCallback } from "../utils/general";
-import "./MasonryLayout.css";
+import styled from "@mui/material/styles/styled";
+import { useDebouncedCallback } from "../utils/general";
 
 const gutter = 16;
 const columnWidth = 400;
+
+const Wrapper = styled("div")`
+  padding: 8px;
+  transition: opacity 70ms linear;
+`;
+
+const Item = styled("div")`
+  padding: 8px;
+`;
 
 function MasonryLayoutItem({
   children,
@@ -39,11 +48,7 @@ function MasonryLayoutItem({
     };
   }, []);
 
-  return (
-    <div ref={nodeRef} className="components__masonry-layout__item">
-      {children}
-    </div>
-  );
+  return <Item ref={nodeRef}>{children}</Item>;
 }
 
 export default function MasonryLayout({
@@ -94,10 +99,7 @@ export default function MasonryLayout({
   }, []);
 
   return (
-    <div
-      style={{ opacity: ready ? 1 : 0 }}
-      className={clsx("components__masonry-layout", className)}
-    >
+    <Wrapper style={{ opacity: ready ? 1 : 0 }} className={className}>
       <div ref={nodeRef}>
         {items.map((item, index) => (
           <MasonryLayoutItem key={index} onSizeChange={recalculateMacy}>
@@ -105,6 +107,6 @@ export default function MasonryLayout({
           </MasonryLayoutItem>
         ))}
       </div>
-    </div>
+    </Wrapper>
   );
 }

@@ -1,9 +1,32 @@
 import { Fragment } from "react";
+import styled from "@mui/material/styles/styled";
 import Paper from "./Paper";
 import EntityButton from "./EntityButton";
 import EntitiesSwitch from "./EntitiesSwitch";
-import "./EntityGrid.css";
 import { Row } from "./ListCard";
+
+const Header = styled(Paper)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding: 8px 16px;
+  column-gap: 8px;
+  margin-bottom: 16px;
+`;
+
+const Heading = styled("h2")`
+  margin: 0;
+  font-size: 18px;
+  line-height: 32px;
+`;
+
+const Content = styled("div")`
+  display: grid;
+  justify-content: center;
+  grid-gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(min(80px, 100%), 1fr));
+`;
 
 export default function EntityGrid({
   title,
@@ -45,18 +68,18 @@ export default function EntityGrid({
   return (
     <div>
       {Boolean(title) && (
-        <Paper className="component__entity-grid__header">
-          <h2>{title}</h2>
+        <Header>
+          <Heading>{title}</Heading>
           {showGroupSwitch && Boolean(groupedEntityIds.length) && (
             <EntitiesSwitch entityIds={groupedEntityIds} />
           )}
-        </Paper>
+        </Header>
       )}
-      <div className="component__entity-grid__content">
+      <Content>
         {rows.map((row, index) => (
           <Fragment key={index}>{renderRow(row)}</Fragment>
         ))}
-      </div>
+      </Content>
     </div>
   );
 }

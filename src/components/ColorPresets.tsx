@@ -1,10 +1,26 @@
 import ButtonBase from "@mui/material/ButtonBase";
+import styled from "@mui/material/styles/styled";
 import { getContrastColor, RGB } from "../utils/general";
 import { colorPresets, isColorEqual } from "../utils/colorPresets";
 import Icon from "./Icon";
 import FlexRow from "./FlexRow";
 import ColorBadge from "./ColorBadge";
-import "./ColorPresets.css";
+
+const ColorPresetButton = styled(ButtonBase)`
+  padding: 0;
+  outline: none;
+  border: 0;
+  font-size: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+
+  & > i {
+    position: absolute;
+    left: calc(50%- 12px);
+    top: calc(50%- 12px);
+  }
+`;
 
 export default function ColorPresets({
   className,
@@ -22,11 +38,7 @@ export default function ColorPresets({
   return (
     <FlexRow className={className}>
       {colorPresets.map((color, index) => (
-        <ButtonBase
-          key={index}
-          className="component__color-presets__button"
-          onClick={() => onChange(color)}
-        >
+        <ColorPresetButton key={index} onClick={() => onChange(color)}>
           {selected && isColorEqual(selected, color) && (
             <Icon
               size={24}
@@ -35,7 +47,7 @@ export default function ColorPresets({
             />
           )}
           <ColorBadge radius={radius} size={size} color={color} />
-        </ButtonBase>
+        </ColorPresetButton>
       ))}
     </FlexRow>
   );

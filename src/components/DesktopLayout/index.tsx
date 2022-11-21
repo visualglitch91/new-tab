@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, Children } from "react";
-import { clsx, clamp } from "../utils/general";
-import "./DesktopLayout.css";
+import { clamp } from "../../utils/general";
+import { Wrapper, Columns, Column } from "./components";
 
 const gutter = 16;
 const minColumnWidth = 420;
@@ -46,11 +46,7 @@ export default function DesktopLayout({
     };
 
     return columnsContent.map((content) =>
-      content.length ? (
-        <div style={columnStyle} className="component__columnar-layout__column">
-          {content}
-        </div>
-      ) : null
+      content.length ? <Column style={columnStyle}>{content}</Column> : null
     );
   })();
 
@@ -59,13 +55,10 @@ export default function DesktopLayout({
   }, []);
 
   return (
-    <div className="component__columnar-layout__wrapper">
-      <div
-        ref={nodeRef}
-        className={clsx("component__columnar-layout", className)}
-      >
+    <Wrapper>
+      <Columns ref={nodeRef} className={className}>
         {columns}
-      </div>
-    </div>
+      </Columns>
+    </Wrapper>
   );
 }

@@ -51,7 +51,7 @@ function VacuumActionsRow() {
   }
 
   return (
-    <FlexRow>
+    <FlexRow wrap>
       <PillButton
         icon="mdi:play"
         label="Continuar"

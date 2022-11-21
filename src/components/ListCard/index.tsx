@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import { HassEntity } from "home-assistant-js-websocket";
-import Paper from "./Paper";
-import EntityRow from "./EntityRow";
-import EntitiesSwitch from "./EntitiesSwitch";
-import "./ListCard.css";
+import Paper from "../Paper";
+import EntityRow from "../EntityRow";
+import EntitiesSwitch from "../EntitiesSwitch";
+import { Header, Heading, Content, Divider } from "./components";
 
 export type Row =
   | {
@@ -47,7 +47,7 @@ export default function ListCard({
       case "entity":
         return <EntityRow {...row} />;
       case "divider":
-        return <div className="component__list-card-row__divider" />;
+        return <Divider />;
       case "custom":
         return row.render();
       default:
@@ -70,18 +70,18 @@ export default function ListCard({
   return (
     <Paper className={className}>
       {Boolean(title) && (
-        <div className="component__list-card__header">
-          <h2>{title}</h2>
+        <Header>
+          <Heading>{title}</Heading>
           {showGroupSwitch && Boolean(groupedEntityIds.length) && (
             <EntitiesSwitch entityIds={groupedEntityIds} />
           )}
-        </div>
+        </Header>
       )}
-      <div className="component__list-card__content">
+      <Content>
         {rows.map((row, index) => (
           <Fragment key={index}>{renderRow(row)}</Fragment>
         ))}
-      </div>
+      </Content>
     </Paper>
   );
 }

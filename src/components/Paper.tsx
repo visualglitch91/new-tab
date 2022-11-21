@@ -1,18 +1,18 @@
-import { clsx } from "../utils/general";
-import "./Paper.css";
+import styled from "@mui/material/styles/styled";
 
-export default function Paper({
-  className,
-  children,
-  style,
-}: {
-  className?: string;
-  children: React.ReactNode;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <div style={style} className={clsx("component__paper", className)}>
-      {children}
-    </div>
-  );
-}
+const Paper = styled("div")`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(47, 59, 82, 0.6);
+  backdrop-filter: blur(10px);
+  box-shadow: rgb(17, 35, 52) 3px 3px 13px -6px;
+  border-radius: 16px;
+  color: white;
+
+  body.touch-device & {
+    backdrop-filter: none;
+  }
+`;
+
+export default Paper;

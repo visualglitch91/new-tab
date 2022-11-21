@@ -1,25 +1,22 @@
-import { clsx } from "../utils/general";
-import "./FlexRow.css";
+import styled from "@mui/material/styles/styled";
 
-export default function FlexRow({
-  className,
-  align = "center",
-  children,
-}: {
-  className?: string;
+const FlexRow = styled("div")<{
   align?: "left" | "center" | "right";
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className={clsx(
-        "component__flex-row",
-        align === "left" && "component__flex-row--left",
-        align === "right" && "component__flex-row--right",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
+  full?: boolean;
+  wrap?: boolean;
+}>`
+  display: flex;
+  grid-gap: 8px;
+  justify-content: ${(p) =>
+    p.align === "left"
+      ? "flex-start"
+      : p.align === "center"
+      ? "center"
+      : p.align === "right"
+      ? "flex-end"
+      : "unset"}
+  flex-wrap: ${(p) => (p.wrap ? "wrap" : "unset")};
+  width: ${(p) => (p.full ? "100%" : "unset")};
+`;
+
+export default FlexRow;

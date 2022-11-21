@@ -1,67 +1,9 @@
 import { useState } from "react";
-import { makeServiceCall, useEntity } from "../utils/hass";
 import Stack from "../components/Stack";
-import Paper from "../components/Paper";
-import FlexRow from "../components/FlexRow";
 import TitleCard from "../components/TitleCard";
-import CameraStream from "../components/CameraStream";
-import CameraSnapshot from "../components/CameraSnapshot";
-import PillButton from "../components/PillButton";
 import Button from "../components/Button";
 import Icon from "../components/Icon";
-import "./cameras.css";
-
-function Camera({
-  stream,
-  cameraName,
-}: {
-  stream: boolean;
-  cameraName: string;
-}) {
-  const streamEntityId = `camera.${cameraName}_stream`;
-  const onvifEntityId = `camera.${cameraName}_onvif`;
-
-  const sensorEntity = useEntity(`binary_sensor.${cameraName}_online`);
-  const online = sensorEntity?.state === "on";
-
-  function pan(direction: "LEFT" | "RIGHT") {
-    return makeServiceCall("onvif", "ptz", {
-      pan: direction,
-      move_mode: "ContinuousMove",
-      entity_id: onvifEntityId,
-    });
-  }
-
-  function tilt(direction: "UP" | "DOWN") {
-    return makeServiceCall("onvif", "ptz", {
-      tilt: direction,
-      move_mode: "ContinuousMove",
-      entity_id: onvifEntityId,
-    });
-  }
-
-  return (
-    <Paper className="module__camera">
-      {online ? (
-        stream ? (
-          <CameraStream entityId={streamEntityId} />
-        ) : (
-          <CameraSnapshot entityId={streamEntityId} />
-        )
-      ) : (
-        <div className="module__camera__overlay">Câmera Indisponível</div>
-      )}
-      {online && (
-        <FlexRow className="module__camera__buttons">
-          <PillButton icon="arrow-left" onClick={pan("LEFT")} />
-          <PillButton icon="arrow-down" onClick={tilt("DOWN")} />
-          <PillButton icon="arrow-up" onClick={tilt("UP")} />
-          <PillButton icon="arrow-right" onClick={pan("RIGHT")} />
-        </FlexRow>
-      )}
-    </Paper>
-  );
-}
+import Camera from "../components/Camera";
 
 function Cameras() {
   const [stream, setStream] = useState(false);

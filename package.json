@@ -15,14 +15,14 @@
     "@uiw/react-color-wheel": "^1.1.1",
     "better-scroll": "^2.5.0",
     "contactjs": "^2.1.4",
-    "diff-arrays-of-objects": "^1.1.9",
     "hls.js": "^1.2.7",
     "home-assistant-js-websocket": "^8.0.0",
     "macy": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-transition-group": "^4.4.5",
-    "simplebar": "^5.3.9"
+    "simplebar": "^5.3.9",
+    "tiny-emitter": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^16.18.3",

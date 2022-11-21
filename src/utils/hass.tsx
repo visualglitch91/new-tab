@@ -1,7 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import EventEmitter from "events";
-//@ts-expect-error
-import diff from "diff-arrays-of-objects";
+import { TinyEmitter } from "tiny-emitter";
 import {
   getUser,
   getAuth,
@@ -17,7 +15,7 @@ import { loadValue, saveValue } from "./general";
 
 let _connection: Connection | undefined;
 
-export type EntityMap = Record<string, HassEntity | undefined>;
+export type HassEntityMap = Record<string, HassEntity | undefined>;
 
 export const hassUrl =
   process.env.NODE_ENV === "development"
@@ -116,13 +114,11 @@ export function fetchStreamUrl(entityId: string): Promise<string> {
 }
 
 class HassStore {
-  private emitter = new EventEmitter();
+  private emitter = new TinyEmitter();
   public user: HassUser | undefined;
   public states: HassEntity[] = [];
 
   setup() {
-    this.emitter.setMaxListeners(Infinity);
-
     return setupHASS({
       onStatesChange: (states) => {
         this.updateStates(states);
@@ -133,21 +129,33 @@ class HassStore {
     });
   }
 
-  private updateStates(states: HassEntity[]) {
-    const changes: {
-      added: HassEntity[];
-      updated: HassEntity[];
-      removed: HassEntity[];
-    } = diff(this.states, states, "entity_id");
+  private updateStates(newStates: HassEntity[]) {
+    const allIdsSet = new Set<string>();
+    const currentStateMap: HassEntityMap = {};
+    const nextStateMap: HassEntityMap = {};
 
-    this.states = states;
-
-    [...changes.added, ...changes.updated].forEach((it) => {
-      this.emitter.emit(`entity:${it.entity_id}`, it);
+    this.states.forEach((entity) => {
+      allIdsSet.add(entity.entity_id);
+      currentStateMap[entity.entity_id] = entity;
     });
 
-    changes.removed.forEach((it) => {
-      this.emitter.emit(`entity:${it.entity_id}`, undefined);
+    newStates.forEach((entity) => {
+      allIdsSet.add(entity.entity_id);
+      nextStateMap[entity.entity_id] = entity;
+    });
+
+    this.states = newStates;
+
+    allIdsSet.forEach((entityId) => {
+      const currentEntity = currentStateMap[entityId];
+      const nextEntity = nextStateMap[entityId];
+
+      if (
+        currentEntity?.last_updated !== nextEntity?.last_updated ||
+        currentEntity?.last_changed !== nextEntity?.last_changed
+      ) {
+        this.emitter.emit(`entity:${entityId}`, nextEntity);
+      }
     });
   }
 
@@ -233,7 +241,7 @@ export function useEntities(...entityIds: string[]) {
       }
 
       return { ...acc, [entity.entity_id]: entity };
-    }, {} as EntityMap);
+    }, {} as HassEntityMap);
   });
 
   useEffect(() => {

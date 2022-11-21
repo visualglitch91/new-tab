@@ -1,33 +1,13 @@
-import { clsx } from "../utils/general";
-import "./Stack.css";
+import styled from "@mui/material/styles/styled";
 
-export default function Stack({
-  nodeRef,
-  className,
-  horizontal,
-  smallGap,
-  children,
-  title,
-}: {
-  nodeRef?: React.LegacyRef<HTMLDivElement>;
-  className?: string;
+const Stack = styled("div")<{
   horizontal?: boolean;
   smallGap?: boolean;
-  children: React.ReactNode;
-  title?: string;
-}) {
-  return (
-    <div
-      title={title}
-      ref={nodeRef}
-      className={clsx(
-        "component__stack",
-        `component__stack--${horizontal ? "horizontal" : "vertical"}`,
-        smallGap && "component__stack--small-gap",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-}
+}>`
+  display: flex;
+  grid-gap: ${(p) => (p.smallGap ? "8px" : "16px")};
+  flex-direction: ${(p) => (p.horizontal ? "row" : "column")};
+  flex: ${(p) => (p.horizontal ? 1 : "unset")};
+`;
+
+export default Stack;

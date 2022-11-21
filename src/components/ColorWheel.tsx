@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Wheel from "@uiw/react-color-wheel";
 import { useDebouncedCallback, rgbToHex, RGB } from "../utils/general";
-import "./ColorWheel.css";
 
 export default function ColorWheel({
   selected = [255, 255, 255],
