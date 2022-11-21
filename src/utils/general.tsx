@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { CSSTransition } from "react-transition-group";
+import { CSSTransition } from "preact-transitioning";
 import version from "../version.json";
 
 export function clamp(value: number, min: number, max: number) {
@@ -46,7 +46,7 @@ export function renderModal(
     return (
       <CSSTransition
         in={open}
-        timeout={duration}
+        duration={duration}
         classNames="modal-transition"
         onExited={() => {
           if (shouldRemove) {

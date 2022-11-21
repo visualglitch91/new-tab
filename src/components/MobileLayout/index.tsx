@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { CSSTransition, TransitionGroup } from "preact-transitioning";
 import { clamp, loadValue, saveValue } from "../../utils/general";
 import managedScroll, { ManagedScroll } from "../../utils/managedScroll";
 import Stack from "../Stack";
@@ -54,7 +55,16 @@ export default function MobileLayout({
   return (
     <Wrapper ref={wrapperRef}>
       <Content>
-        <Stack>{content}</Stack>
+        <TransitionGroup duration={250}>
+          <CSSTransition
+            key={active}
+            classNames="mobile-layout__fade"
+            onExited={() => managedScrollRef.current?.scrollTo(0)}
+            onEntered={() => managedScrollRef.current?.update()}
+          >
+            <Stack className="mobile-layout__fade">{content}</Stack>
+          </CSSTransition>
+        </TransitionGroup>
       </Content>
       <StatusBar />
       <Tabs>

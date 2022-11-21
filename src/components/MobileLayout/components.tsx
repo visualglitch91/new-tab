@@ -5,6 +5,47 @@ export const Wrapper = styled("div")`
   overflow: auto;
   overscroll-behavior: contain;
   touch-action: manipulation;
+
+  .mobile-layout__fade {
+    opacity: 0;
+    transition: opacity 250ms cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  .mobile-layout__fade-appear {
+    opacity: 0;
+  }
+
+  .mobile-layout__fade-appear-active {
+    opacity: 0;
+  }
+
+  .mobile-layout__fade-appear-done {
+    opacity: 1;
+  }
+
+  .mobile-layout__fade-enter {
+    opacity: 0;
+  }
+
+  .mobile-layout__fade-enter-active {
+    opacity: 0;
+  }
+
+  .mobile-layout__fade-enter-done {
+    opacity: 1;
+  }
+
+  .mobile-layout__fade-exit {
+    opacity: 1;
+  }
+
+  .mobile-layout__fade-exit-active {
+    opacity: 0;
+  }
+
+  .mobile-layout__fade-exit-done {
+    opacity: 0;
+  }
 `;
 
 export const Tabs = styled("div")`
