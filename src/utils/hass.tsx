@@ -12,6 +12,7 @@ import {
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
 import { loadValue, saveValue } from "./general";
+import prepareStateMap from "./prepareStateMap";
 
 let _connection: Connection | undefined;
 
@@ -132,7 +133,7 @@ class HassStore {
   private updateStates(newStates: HassEntity[]) {
     const allIdsSet = new Set<string>();
     const currentStateMap: HassEntityMap = {};
-    const nextStateMap: HassEntityMap = {};
+    let nextStateMap: HassEntityMap = {};
 
     this.states.forEach((entity) => {
       allIdsSet.add(entity.entity_id);
@@ -144,7 +145,9 @@ class HassStore {
       nextStateMap[entity.entity_id] = entity;
     });
 
-    this.states = newStates;
+    nextStateMap = prepareStateMap(nextStateMap);
+
+    this.states = Object.values(nextStateMap) as HassEntity[];
 
     allIdsSet.forEach((entityId) => {
       const currentEntity = currentStateMap[entityId];
