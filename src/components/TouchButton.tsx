@@ -97,7 +97,7 @@ export default function TouchButton({
 
         doubleTapTimeout.start(() => {
           onTap?.();
-        }, 150);
+        }, 165);
       };
 
       const onTouchStart = (e: any) => {
@@ -119,7 +119,7 @@ export default function TouchButton({
 
         const timeDelta = Date.now() - touchStartAt;
 
-        if (timeDelta < 100) {
+        if (timeDelta < 140) {
           onTap();
         }
       };
