@@ -1,5 +1,4 @@
-import { uid } from "../../utils/general";
-import { styled, css } from "../../utils/styling";
+import { styled, css, uniqueClassName } from "../../styling";
 import Button from "../Button";
 import ColorPresets from "../ColorPresets";
 
@@ -31,7 +30,7 @@ export const Tabs = styled(
   `
 );
 
-export const classes = { tabActive: uid() };
+export const classes = { tabActive: uniqueClassName() };
 
 export const Tab = styled(
   Button,

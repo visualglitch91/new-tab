@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { isTouchDevice } from "../utils/general";
 import ListenerGroup from "../utils/ListenerGroup";
-import { css, styled } from "../utils/styling";
+import { css, styled } from "../styling";
 import Timer from "../utils/Timer";
 
 const StyledButton = styled(

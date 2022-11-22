@@ -1,4 +1,4 @@
-import { css } from "../../utils/styling";
+import { css } from "../../styling";
 
 const height = "30px";
 const track = "#20293c";

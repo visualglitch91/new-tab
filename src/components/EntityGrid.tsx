@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { css, styled } from "../utils/styling";
+import { css, styled } from "../styling";
 import Paper from "./Paper";
 import EntityButton from "./EntityButton";
 import EntitiesSwitch from "./EntitiesSwitch";

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useLatestRef from "../utils/useLatestRef";
 import { isTouchDevice } from "../utils/general";
 import RippleButton from "./RippleButton";
-import { cx } from "../utils/styling";
+import { cx } from "../styling";
 import Timer from "../utils/Timer";
 import ListenerGroup from "../utils/ListenerGroup";
 

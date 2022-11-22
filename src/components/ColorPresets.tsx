@@ -1,4 +1,4 @@
-import { css, styled } from "../utils/styling";
+import { css, styled } from "../styling";
 import { getContrastColor, RGB } from "../utils/general";
 import { colorPresets, isColorEqual } from "../utils/colorPresets";
 import Icon from "./Icon";

@@ -1,11 +1,14 @@
 import { forwardRef } from "react";
-import { AbstractComponent, PropsOf } from "./typings";
+import { cx } from "./utils";
 
-export { css, keyframes } from "goober";
+type AbstractComponent =
+  | keyof JSX.IntrinsicElements
+  | React.JSXElementConstructor<any>;
 
-export function cx(...classNames: (string | null | undefined | false)[]) {
-  return classNames.filter(Boolean).join(" ");
-}
+type PropsOf<C extends AbstractComponent> = JSX.LibraryManagedAttributes<
+  C,
+  React.ComponentProps<C>
+>;
 
 type ComponentWithMergedClasses<C extends AbstractComponent> =
   React.ComponentType<PropsOf<C>> & {
@@ -14,11 +17,6 @@ type ComponentWithMergedClasses<C extends AbstractComponent> =
     ) => ComponentWithMergedClasses<D>;
   };
 
-/*
- * Do not user goober's styled because
- * it adds a bunch of kb and it has some
- * css declaration order issues
- */
 export function styled<C extends AbstractComponent>(
   Component: C,
   ...classNames: string[]

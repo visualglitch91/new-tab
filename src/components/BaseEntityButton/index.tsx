@@ -1,5 +1,5 @@
 import useAsyncChange from "../../utils/useAsyncChange";
-import { cx } from "../../utils/styling";
+import { cx } from "../../styling";
 import Icon from "../Icon";
 import { ButtonCardProps } from "../ButtonCard";
 import CircularLoading from "../CircularLoading";

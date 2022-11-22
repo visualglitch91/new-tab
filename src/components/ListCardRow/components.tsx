@@ -1,9 +1,8 @@
-import { uid } from "../../utils/general";
-import { styled, css } from "../../utils/styling";
+import { styled, css, uniqueClassName } from "../../styling";
 
 export const classes = {
-  wrapperDisabled: uid(),
-  clickableIconWrapper: uid(),
+  wrapperDisabled: uniqueClassName(),
+  clickableIconWrapper: uniqueClassName(),
 };
 
 export const Wrapper = styled(

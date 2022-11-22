@@ -1,4 +1,4 @@
-import { styled, keyframes, css } from "../utils/styling";
+import { styled, keyframes, css } from "../styling";
 
 const rotate = keyframes`
   100% {

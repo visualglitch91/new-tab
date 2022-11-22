@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { css, cx } from "../utils/styling";
+import { css, cx } from "../styling";
 
 const classes = {
   wrapper: css`

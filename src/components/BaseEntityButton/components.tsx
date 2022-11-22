@@ -1,10 +1,9 @@
-import { uid } from "../../utils/general";
-import { css, styled } from "../../utils/styling";
+import { css, styled, uniqueClassName } from "../../styling";
 import ButtonCard from "../ButtonCard";
 
 export const classes = {
-  wrapperActive: uid(),
-  wrapperCustomBG: uid(),
+  wrapperActive: uniqueClassName(),
+  wrapperCustomBG: uniqueClassName(),
 };
 
 export const Wrapper = styled(

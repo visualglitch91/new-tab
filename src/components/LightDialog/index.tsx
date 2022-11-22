@@ -6,7 +6,7 @@ import ColorWheel from "../ColorWheel";
 import Slider from "../Slider";
 import FlexRow from "../FlexRow";
 import { Tab, Content, StyledColorPresets, Tabs, classes } from "./components";
-import { cx } from "../../utils/styling";
+import { cx } from "../../styling";
 
 export interface LightDialogFeatures {
   brightness: {

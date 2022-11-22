@@ -1,4 +1,4 @@
-import { cx } from "../../utils/styling";
+import { cx } from "../../styling";
 import Icon from "../Icon";
 import { IconWrapper, Label, Wrapper, classes } from "./components";
 

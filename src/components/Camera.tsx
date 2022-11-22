@@ -1,4 +1,4 @@
-import { styled, css } from "../utils/styling";
+import { styled, css } from "../styling";
 import { makeServiceCall, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import FlexRow from "./FlexRow";

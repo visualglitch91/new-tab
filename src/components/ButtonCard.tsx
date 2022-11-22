@@ -1,4 +1,4 @@
-import { styled, css } from "../utils/styling";
+import { styled, css } from "../styling";
 import TouchButton, { TouchButtonProps } from "./TouchButton";
 import Paper from "./Paper";
 

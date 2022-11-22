@@ -1,4 +1,4 @@
-import { css, styled } from "../utils/styling";
+import { css, styled } from "../styling";
 
 const Paper = styled(
   "div",

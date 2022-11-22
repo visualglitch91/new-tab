@@ -1,5 +1,5 @@
 import { Children, useCallback, useEffect, useRef, useState } from "react";
-import { css, styled } from "../utils/styling";
+import { css, styled } from "../styling";
 import { useDebouncedCallback } from "../utils/general";
 
 const gutter = 16;

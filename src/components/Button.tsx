@@ -1,4 +1,4 @@
-import { styled, css } from "../utils/styling";
+import { styled, css } from "../styling";
 import TouchButton from "./TouchButton";
 
 const Button = styled(

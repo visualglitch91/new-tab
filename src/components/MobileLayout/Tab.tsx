@@ -1,4 +1,4 @@
-import { css, cx, styled } from "../../utils/styling";
+import { css, cx, styled } from "../../styling";
 import TouchButton from "../TouchButton";
 import Icon from "../Icon";
 
