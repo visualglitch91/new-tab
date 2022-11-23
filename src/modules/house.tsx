@@ -5,7 +5,6 @@ import EntityGrid from "../components/EntityGrid";
 import RunScriptButton from "../components/RunScriptButton";
 import { formatNumericValue } from "../utils/general";
 import { TVEntityButton } from "../components/TVEntityButton";
-import MultiLightButton from "../components/MultiLightButton";
 
 function scriptRow(it: {
   entityId: string;
@@ -30,25 +29,16 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       { label: "Luminária", entityId: "switch.sala_luminaria" },
       { label: "Ventilador", entityId: "switch.sala_ventilador" },
       {
-        type: "custom",
-        hiddenOnDesktop: true,
-        render: () => (
-          <MultiLightButton
-            icon="mdi-television-ambient-light"
-            label="RGB Geral"
-            entityIds={["light.sala_rgb_tv", "light.sala_rgb_rack"]}
-          />
-        ),
-      },
-      {
         label: "RGB TV",
-        hiddenOnDesktop: true,
         entityId: "light.sala_rgb_tv",
       },
       {
         label: "RGB Rack",
-        hiddenOnDesktop: true,
         entityId: "light.sala_rgb_rack",
+      },
+      {
+        label: "RGB Sofá",
+        entityId: "light.sala_rgb_sofa",
       },
       {
         type: "custom",

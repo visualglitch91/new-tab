@@ -137,10 +137,12 @@ export default (
       <MultiLightButton
         icon="mdi-television-ambient-light"
         label="RGB Geral"
-        entityIds={["light.sala_rgb_tv", "light.sala_rgb_rack"]}
+        entityIds={[
+          "light.sala_rgb_tv",
+          "light.sala_rgb_rack",
+          "light.sala_rgb_sofa",
+        ]}
       />
-      <EntityButton label="RGB TV" entityId="light.sala_rgb_tv" />
-      <EntityButton label="RGB Rack" entityId="light.sala_rgb_rack" />
     </ButtonRow>
 
     {spacer(12)}
