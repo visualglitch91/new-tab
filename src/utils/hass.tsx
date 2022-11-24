@@ -13,8 +13,10 @@ import {
 import EventEmitter from "./EventEmitter";
 import { loadValue, saveValue } from "./general";
 import prepareStateMap from "./prepareStateMap";
+import Storage from "./storage";
 
 let _connection: Connection | undefined;
+const _cache = new Storage({ version: 1 });
 
 export type HassEntityMap = Record<string, HassEntity | undefined>;
 
@@ -120,7 +122,7 @@ class HassStore {
   public states: HassEntity[] = [];
 
   setup() {
-    return setupHASS({
+    const setupPromise = setupHASS({
       onStatesChange: (states) => {
         this.updateStates(states);
       },
@@ -128,6 +130,17 @@ class HassStore {
       this.updateStates(states);
       this.updateUser(user);
     });
+
+    const cachedUser = _cache.getItem<HassUser>("user");
+    const cachedStates = _cache.getItem<HassEntity[]>("states");
+
+    if (cachedUser && cachedStates) {
+      this.updateUser(cachedUser);
+      this.updateStates(cachedStates);
+      return Promise.resolve();
+    }
+
+    return setupPromise;
   }
 
   private updateStates(newStates: HassEntity[]) {
@@ -149,6 +162,8 @@ class HassStore {
 
     this.states = Object.values(nextStateMap) as HassEntity[];
 
+    _cache.setItem("states", this.states);
+
     allIdsSet.forEach((entityId) => {
       const currentEntity = currentStateMap[entityId];
       const nextEntity = nextStateMap[entityId];
@@ -164,6 +179,7 @@ class HassStore {
 
   private updateUser(user: HassUser) {
     this.user = user;
+    _cache.setItem("user", this.user);
     this.emitter.emit("user", user);
   }
 
