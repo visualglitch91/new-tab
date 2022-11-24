@@ -39,8 +39,10 @@ export default function EntityButton({
   const unavailable = state === "unavailable";
 
   const displayColor =
-    domain === "light" && ["hs", "rgb"].includes(attributes.color_mode)
-      ? getDisplayColor(attributes.rgb_color)
+    domain === "light" &&
+    ["hs", "rgb"].includes(attributes.color_mode) &&
+    Array.isArray(attributes.rgb_color)
+      ? getDisplayColor(attributes.rgb_color as RGB)
       : attributes.color_mode === "color_temp"
       ? attributes.color_temp >
         (attributes.max_mireds + attributes.min_mireds) / 2
