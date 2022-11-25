@@ -8,8 +8,7 @@ export function TVEntityButton({
   icon: string;
   label: string;
 }) {
-  const entity = useEntity("input_boolean.sala_tv_state");
-  const checked = entity?.state === "on";
+  const checked = useEntity("media_player.sala_tv")?.state === "on";
 
   return (
     <BaseEntityButton

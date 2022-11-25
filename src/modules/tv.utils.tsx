@@ -70,6 +70,7 @@ const assets = {
   windows: getImageUrl("windows.png"),
   youtube: getImageUrl("youtube.png"),
   retropi: getImageUrl("retropi.png"),
+  kodi: getImageUrl("kodi.png"),
 };
 
 export function ImageButtonCard({

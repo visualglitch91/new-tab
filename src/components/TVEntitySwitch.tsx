@@ -2,8 +2,7 @@ import { makeServiceCall, useEntity } from "../utils/hass";
 import DelayedSwitch from "./DelayedSwitch";
 
 export function TVEntitySwitch() {
-  const entity = useEntity("input_boolean.sala_tv_state");
-  const checked = entity?.state === "on";
+  const checked = useEntity("media_player.sala_tv")?.state === "on";
 
   return (
     <DelayedSwitch

@@ -136,6 +136,10 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
           label: "Iluminação abajures",
           entityId: "script.quarto_iluminacao_abajures",
         },
+        {
+          label: "Reiniciar FireTV",
+          entityId: "script.sala_reiniciar_firetv",
+        },
       ].map(scriptRow),
     ],
   },

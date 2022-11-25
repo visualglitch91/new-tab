@@ -177,7 +177,7 @@ export default (
     <ButtonRow height={70}>
       <ImageButtonCard
         asset="youtube"
-        action={makeTVLaunchAppCall("youtube.leanback.v4")}
+        action={makeTurnOnCall("script.sala_tv_youtube")}
       />
       <ImageButtonCard
         asset="starplus"
@@ -199,8 +199,8 @@ export default (
         action={makeTVLaunchAppCall("com.discovery.dplus")}
       />
       <ImageButtonCard
-        asset="fire_tv"
-        action={makeTurnOnCall("script.sala_receiver_firetv")}
+        asset="kodi"
+        action={makeTurnOnCall("script.sala_firetv_kodi")}
       />
     </ButtonRow>
 
