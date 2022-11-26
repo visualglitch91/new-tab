@@ -46,11 +46,14 @@ export default function MobileLayout({
     return () => scroll.disable();
   }, []);
 
-  useEffect(() => {
-    managedScrollRef.current?.update();
-    managedScrollRef.current?.scrollTo(0);
+  function changeTab(index: number) {
+    if (active === index) {
+      managedScrollRef.current?.scrollTo(0, true);
+    }
+
+    setActive(index);
     saveValue("last_active_tab", active);
-  }, [active]);
+  }
 
   return (
     <Wrapper ref={wrapperRef}>
@@ -74,7 +77,7 @@ export default function MobileLayout({
             active={active === index}
             icon={tab.icon}
             title={tab.title}
-            onTap={() => setActive(index)}
+            onTap={() => changeTab(index)}
           />
         ))}
       </Tabs>

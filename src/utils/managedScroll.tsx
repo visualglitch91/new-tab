@@ -5,9 +5,9 @@ export type ManagedScroll = ReturnType<typeof managedScroll>;
 export default function managedScroll(wrapper: HTMLElement) {
   let bscroll: BScroll | null;
 
-  function scrollTo(y: number) {
+  function scrollTo(y: number, animated = false) {
     if (bscroll) {
-      bscroll.scrollTo(0, y);
+      bscroll.scrollTo(0, y, animated ? 250 : undefined);
     }
 
     wrapper.scrollTo(0, y);
