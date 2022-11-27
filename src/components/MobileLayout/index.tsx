@@ -52,7 +52,7 @@ export default function MobileLayout({
     }
 
     setActive(index);
-    saveValue("last_active_tab", active);
+    saveValue("last_active_tab", index);
   }
 
   return (

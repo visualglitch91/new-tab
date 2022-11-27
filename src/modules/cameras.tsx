@@ -24,8 +24,8 @@ function Cameras() {
           )
         }
       />
-      <Camera stream={stream} cameraName="luatek_44" />
-      <Camera stream={stream} cameraName="ipega_45" />
+      <Camera stream={stream} entityId="camera.moto_one_hyper" />
+      <Camera stream={stream} entityId="camera.ipega" />
     </Stack>
   );
 }

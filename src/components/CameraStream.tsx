@@ -1,26 +1,24 @@
-import type Hls from "hls.js";
-import { useEffect, useRef, useState } from "react";
-import { fetchStreamUrl, hassUrl } from "../utils/hass";
+import { useEffect, useRef } from "react";
+import type RTCVideo from "../utils/RTCVideo";
 
-export default function CameraStream({
-  entityId,
-  style,
-  className,
-}: {
-  entityId: string;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [visible, setVisible] = useState(!document.hidden);
+export default function CameraStream({ entityId }: { entityId: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function onHidden() {
-      setVisible(false);
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
     }
 
+    let video: RTCVideo;
+
     function onVisible() {
-      setVisible(true);
+      video?.startStreaming();
+    }
+
+    function onHidden() {
+      video?.stopStreaming();
     }
 
     function onVisibilityChange() {
@@ -35,49 +33,22 @@ export default function CameraStream({
     document.addEventListener("resume", onVisible);
     document.addEventListener("visibilitychange", onVisibilityChange);
 
+    import("../utils/RTCVideo")
+      .then((res) => res.default)
+      .then((Video) => {
+        video = new Video(entityId);
+        video.startStreaming();
+        container.appendChild(video.getElement());
+      });
+
     return () => {
+      container.innerHTML = "";
+      video?.stopStreaming();
       document.removeEventListener("pause", onHidden);
       document.removeEventListener("resume", onVisible);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, []);
+  }, [entityId]);
 
-  useEffect(() => {
-    if (!visible) {
-      return;
-    }
-
-    let hls: Hls;
-
-    import("hls.js")
-      .then(({ default: Hls }) => {
-        hls = new Hls();
-      })
-      .then(() => {
-        fetchStreamUrl(entityId).then((url) => {
-          if (!videoRef.current) {
-            return;
-          }
-
-          hls.loadSource(`${hassUrl}${url}`);
-          hls.attachMedia(videoRef.current);
-        });
-      });
-
-    return () => {
-      if (hls) {
-        hls.destroy();
-      }
-    };
-  }, [visible, entityId]);
-
-  return visible ? (
-    <video
-      autoPlay
-      controls
-      style={{ ...style }}
-      className={className}
-      ref={videoRef}
-    />
-  ) : null;
+  return <div ref={containerRef} />;
 }

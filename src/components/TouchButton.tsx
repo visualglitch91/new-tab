@@ -61,17 +61,17 @@ export default function TouchButton({
     }
 
     if (!isTouchDevice) {
-      listenerGroup.subscribe(button, "mouseenter", () => {
+      listenerGroup.with(button).subscribe("mouseenter", () => {
         setHover(true);
       });
 
-      listenerGroup.subscribe(button, "mouseleave", () => {
+      listenerGroup.with(button).subscribe("mouseleave", () => {
         setHover(false);
       });
     }
 
     if (tapOnly) {
-      listenerGroup.subscribe(button, "click", () => {
+      listenerGroup.with(button).subscribe("click", () => {
         handlerRefs.current.onTap?.();
       });
 
@@ -109,7 +109,7 @@ export default function TouchButton({
         pressTimeout.start(onPressStart, 400);
       };
 
-      const onTouchEnd = (e: any) => {
+      const onTouchEnd = () => {
         if (aborted) {
           return;
         }
@@ -153,27 +153,20 @@ export default function TouchButton({
         }
       };
 
-      listenerGroup.subscribe(
-        button,
-        isTouchDevice ? "touchstart" : "mousedown",
-        onTouchStart
-      );
+      listenerGroup
+        .with(button)
+        .subscribe(isTouchDevice ? "touchstart" : "mousedown", onTouchStart);
 
-      listenerGroup.subscribe(
-        button,
-        isTouchDevice ? "touchmove" : "mousemove",
-        onTouchMove
-      );
+      listenerGroup
+        .with(button)
+        .subscribe(isTouchDevice ? "touchmove" : "mousemove", onTouchMove);
 
-      listenerGroup.subscribe(
-        button,
-        isTouchDevice ? "touchend" : "mouseup",
-        onTouchEnd
-      );
+      listenerGroup
+        .with(button)
+        .subscribe(isTouchDevice ? "touchend" : "mouseup", onTouchEnd);
 
-      //@ts-expect-error
-      listenerGroup.subscribe(window, "bscroll:scrollStart", abort);
-      listenerGroup.subscribe(document.body, "mouseleave", abort);
+      listenerGroup.with(window).subscribe("bscroll:scrollStart", abort);
+      listenerGroup.with(document.body).subscribe("mouseleave", abort);
     }
 
     return () => {

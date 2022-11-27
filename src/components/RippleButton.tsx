@@ -86,6 +86,7 @@ const RippleButton = forwardRef<
 
   useEffect(() => {
     const listenerGroup = new ListenerGroup();
+
     const button =
       (buttonRef && "current" in buttonRef && buttonRef.current) || null;
 
@@ -113,11 +114,11 @@ const RippleButton = forwardRef<
 
     if (button) {
       if (isTouchDevice) {
-        listenerGroup.subscribe(button, "touchstart", (e) => {
+        listenerGroup.with(button).subscribe("touchstart", (e) => {
           createRipple(e.touches[0].pageX, e.touches[0].pageY);
         });
       } else {
-        listenerGroup.subscribe(button, "mousedown", (e) => {
+        listenerGroup.with(button).subscribe("mousedown", (e) => {
           createRipple(e.pageX, e.pageY);
         });
       }

@@ -1,9 +1,9 @@
 import { styled, css } from "../styling";
 import { makeServiceCall, useEntity } from "../utils/hass";
 import Paper from "./Paper";
-import FlexRow from "./FlexRow";
 import CameraStream from "./CameraStream";
 import CameraSnapshot from "./CameraSnapshot";
+import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
 
 const Wrapper = styled(
@@ -46,30 +46,38 @@ const Buttons = styled(
 
 export default function Camera({
   stream,
-  cameraName,
+  entityId,
+  ptzEntityId,
 }: {
   stream: boolean;
-  cameraName: string;
+  entityId: string;
+  ptzEntityId?: string;
 }) {
-  const streamEntityId = `camera.${cameraName}_stream`;
-  const onvifEntityId = `camera.${cameraName}_onvif`;
-
-  const sensorEntity = useEntity(`binary_sensor.${cameraName}_online`);
-  const online = sensorEntity?.state === "on";
+  const entity = useEntity(entityId);
+  const online =
+    Boolean(entity?.state) && !["off", "unavailable"].includes(entity!.state);
 
   function pan(direction: "LEFT" | "RIGHT") {
+    if (!ptzEntityId) {
+      return;
+    }
+
     return makeServiceCall("onvif", "ptz", {
       pan: direction,
       move_mode: "ContinuousMove",
-      entity_id: onvifEntityId,
+      entity_id: ptzEntityId,
     });
   }
 
   function tilt(direction: "UP" | "DOWN") {
+    if (!ptzEntityId) {
+      return;
+    }
+
     return makeServiceCall("onvif", "ptz", {
       tilt: direction,
       move_mode: "ContinuousMove",
-      entity_id: onvifEntityId,
+      entity_id: ptzEntityId,
     });
   }
 
@@ -77,14 +85,14 @@ export default function Camera({
     <Wrapper>
       {online ? (
         stream ? (
-          <CameraStream entityId={streamEntityId} />
+          <CameraStream entityId={entityId} />
         ) : (
-          <CameraSnapshot entityId={streamEntityId} />
+          <CameraSnapshot entityId={entityId} />
         )
       ) : (
         <Overlay>Câmera Indisponível</Overlay>
       )}
-      {online && (
+      {online && ptzEntityId && (
         <Buttons wrap>
           <PillButton icon="arrow-left" onClick={pan("LEFT")} />
           <PillButton icon="arrow-down" onClick={tilt("DOWN")} />

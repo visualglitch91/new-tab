@@ -9,10 +9,10 @@ import {
   HassEntity,
   HassUser,
   Connection,
+  MessageBase,
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
 import { loadValue, saveValue } from "./general";
-import prepareStateMap from "./prepareStateMap";
 import Storage from "./storage";
 
 let _connection: Connection | undefined;
@@ -22,7 +22,7 @@ export type HassEntityMap = Record<string, HassEntity | undefined>;
 
 export const hassUrl =
   import.meta.env.MODE === "development"
-    ? import.meta.env.HASS_DEVELOPMENT_URL
+    ? import.meta.env.VITE_HASS_DEVELOPMENT_URL
     : window.location.origin;
 
 function setupHASS({
@@ -30,10 +30,11 @@ function setupHASS({
 }: {
   onStatesChange: (states: HassEntity[]) => void;
 }) {
+  console.log({ hassUrl });
   return getAuth({
     hassUrl,
-    saveTokens: (tokens) => saveValue("hass_token", tokens),
-    loadTokens: async () => loadValue("hass_token"),
+    saveTokens: (tokens) => saveValue(`hass_token_${hassUrl}`, tokens),
+    loadTokens: async () => loadValue(`hass_token_${hassUrl}`),
   })
     .then((auth) => createConnection({ auth }))
     .then((connection) => {
@@ -93,7 +94,9 @@ export function callService(domain: string, service: string, data: any) {
 }
 
 export function makeServiceCall(domain: string, service: string, data: any) {
-  return () => callService(domain, service, data);
+  return () => {
+    callService(domain, service, data);
+  };
 }
 
 export function makeTurnOnCall(entityId: string) {
@@ -157,8 +160,6 @@ class HassStore {
       allIdsSet.add(entity.entity_id);
       nextStateMap[entity.entity_id] = entity;
     });
-
-    nextStateMap = prepareStateMap(nextStateMap);
 
     this.states = Object.values(nextStateMap) as HassEntity[];
 
@@ -276,4 +277,12 @@ export function useEntities(...entityIds: string[]) {
 export function useEntity(entityId: string) {
   const states = useEntities(entityId);
   return states[entityId];
+}
+
+export function sendMessage<T>(message: MessageBase) {
+  if (!_connection) {
+    throw new Error("Hass Connection not set up");
+  }
+
+  return _connection.sendMessagePromise<T>(message);
 }

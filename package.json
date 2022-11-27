@@ -10,6 +10,8 @@
     "lint": "eslint --max-warnings=0 --ext .tsx,.ts,.jsx,.js ./src && tsc --project ./tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@cycjimmy/jsmpeg-player": "^6.0.5",
+    "@flussonic/flussonic-mse-player": "^22.6.2-9-gc07826d",
     "@uiw/react-color-wheel": "^1.1.1",
     "better-scroll": "^2.5.0",
     "hls.js": "^1.2.7",

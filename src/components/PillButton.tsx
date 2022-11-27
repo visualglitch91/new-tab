@@ -37,7 +37,7 @@ export default function PillButton({
   className?: string;
   icon?: string;
   label?: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
   return (
     <Wrapper type="button" className={className} onClick={onClick}>

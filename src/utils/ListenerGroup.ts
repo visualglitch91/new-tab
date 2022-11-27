@@ -1,16 +1,22 @@
 export default class ListenerGroup {
   private unsubscribers: Function[] = [];
 
-  subscribe<T extends HTMLElement, K extends keyof HTMLElementEventMap>(
-    element: T,
-    name: K,
-    handler: (e: HTMLElementEventMap[K]) => void
-  ) {
-    element.addEventListener(name, handler);
+  with<
+    T extends {
+      addEventListener: (...args: any[]) => void;
+      removeEventListener: (...args: any[]) => void;
+    }
+  >(obj: T): { subscribe: T["addEventListener"] } {
+    return {
+      subscribe: (name, handler) => {
+        obj.addEventListener(name, handler);
+        this.addUnsubscribe(() => obj.removeEventListener(name, handler));
+      },
+    };
+  }
 
-    this.unsubscribers.push(() => {
-      element.removeEventListener(name, handler);
-    });
+  addUnsubscribe(func: () => void) {
+    this.unsubscribers.push(func);
   }
 
   unsubscribeAll() {
