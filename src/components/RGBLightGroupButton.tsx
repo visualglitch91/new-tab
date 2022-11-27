@@ -1,4 +1,4 @@
-import { renderModal, RGB } from "../utils/general";
+import { renderModal, RGB, rgbToHex } from "../utils/general";
 import { callService, useEntities } from "../utils/hass";
 import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
@@ -113,7 +113,10 @@ export default function RGBLightGroupButton({
           label={
             <>
               {!uniqueColor && it.on && (
-                <ColorBadge color={it.color} style={{ marginTop: -2 }} />
+                <ColorBadge
+                  color={rgbToHex(it.color)}
+                  style={{ marginTop: -2 }}
+                />
               )}
               {it.label}
             </>
@@ -126,7 +129,10 @@ export default function RGBLightGroupButton({
           label={
             <>
               {uniqueColor && (
-                <ColorBadge color={uniqueColor} style={{ marginTop: -2 }} />
+                <ColorBadge
+                  color={rgbToHex(uniqueColor)}
+                  style={{ marginTop: -2 }}
+                />
               )}
               Todos
             </>

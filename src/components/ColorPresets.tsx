@@ -1,6 +1,10 @@
 import { css, styled } from "../styling";
 import { getContrastColor, RGB } from "../utils/general";
-import { colorPresets, isColorEqual } from "../utils/colorPresets";
+import {
+  colorPresets,
+  isColorEqual,
+  getDisplayColorString,
+} from "../utils/colorPresets";
 import Icon from "./Icon";
 import FlexRow from "./FlexRow";
 import ColorBadge from "./ColorBadge";
@@ -52,7 +56,11 @@ export default function ColorPresets({
               style={{ color: getContrastColor(color) }}
             />
           )}
-          <ColorBadge radius={radius} size={size} color={color} />
+          <ColorBadge
+            radius={radius}
+            size={size}
+            color={getDisplayColorString(color)}
+          />
         </ColorPresetButton>
       ))}
     </FlexRow>

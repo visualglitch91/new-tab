@@ -1,55 +1,26 @@
-import { makeTurnOnCall } from "../utils/hass";
-import Switch from "../components/Switch";
-import ListCard, { Row } from "../components/ListCard";
-import EntityGrid from "../components/EntityGrid";
-import RunScriptButton from "../components/RunScriptButton";
 import { formatNumericValue } from "../utils/general";
 import { TVEntityButton } from "../components/TVEntityButton";
+import { ComponentGroupProps } from "../utils/typings";
+import ComponentGroup from "../components/ComponentGroup";
 
-function scriptRow(it: {
-  entityId: string;
-  label?: string;
-  buttonLabel?: string;
-  icon?: string;
-}) {
-  return {
-    ...it,
-    renderContent: () => (
-      <RunScriptButton label={it.buttonLabel} entityId={it.entityId} />
-    ),
-  };
-}
-
-const groups: Record<string, { title: string; rows: Row[] }> = {
-  living_room: {
+const groups: ComponentGroupProps[] = [
+  {
     title: "Sala",
-    rows: [
-      { label: "Luz da Mesa", entityId: "switch.mesa_jantar_luz" },
-      { label: "Luz da Sala", entityId: "light.sala_luz" },
-      { label: "Luminária", entityId: "switch.sala_luminaria" },
-      { label: "Ventilador", entityId: "switch.sala_ventilador" },
+    showGroupSwitch: true,
+    layout: "grid",
+    items: [
+      { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
+      { entityId: "light.sala_luz", label: "Luz da Sala" },
+      "switch.sala_luminaria",
+      "switch.sala_ventilador",
+      "light.sala_rgb_tv",
+      "light.sala_rgb_rack",
+      "light.sala_rgb_sofa",
       {
-        label: "RGB TV",
-        entityId: "light.sala_rgb_tv",
-      },
-      {
-        label: "RGB Rack",
-        entityId: "light.sala_rgb_rack",
-      },
-      {
-        label: "RGB Sofá",
-        entityId: "light.sala_rgb_sofa",
-      },
-      {
-        type: "custom",
         hiddenOnDesktop: true,
-        render: () => (
-          <TVEntityButton icon="mdi:television-classic" label="TV" />
-        ),
+        element: <TVEntityButton icon="mdi:television-classic" label="TV" />,
       },
       {
-        label: "Surround",
-        icon: "mdi:surround-sound",
         hiddenOnDesktop: true,
         changeTimeout: 30_000,
         entityId: "switch.sala_receiver",
@@ -57,146 +28,98 @@ const groups: Record<string, { title: string; rows: Row[] }> = {
       },
     ],
   },
-  office: {
+  {
     title: "Escritório",
-    rows: [
-      { label: "Luz", entityId: "switch.escritorio_luz" },
-      { label: "Luminária", entityId: "light.escritorio_luminaria" },
-      { label: "RGB Mesa", entityId: "light.escritorio_rgb" },
-      { label: "RGB Quadro", entityId: "light.escritorio_rgb_2" },
-      { label: "Ventilador", entityId: "switch.escritorio_ventilador" },
+    showGroupSwitch: true,
+    layout: "grid",
+    items: [
+      "switch.escritorio_luz",
+      "light.escritorio_luminaria",
+      "light.escritorio_rgb",
+      "light.escritorio_rgb_2",
+      "switch.escritorio_ventilador",
     ],
   },
-  kitchen: {
+  {
     title: "Cozinha e Lavanderia",
-    rows: [
-      { label: "Luz da\nCozinha", entityId: "switch.cozinha_luz" },
-      { label: "Luz da\nLavanderia", entityId: "switch.lavanderia_luz" },
-      { label: "Luz do\nBanheiro", entityId: "switch.lavanderia_banheiro" },
+    showGroupSwitch: true,
+    layout: "grid",
+    items: [
+      { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
+      { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
+      { entityId: "switch.lavanderia_banheiro", label: "Luz do\nBanheiro" },
     ],
   },
-  bedroom: {
+  {
     title: "Quarto",
-    rows: [
-      { label: "Luz", entityId: "switch.quarto_luz" },
-      { label: "Ventilador", entityId: "switch.quarto_ventilador" },
-      { label: "Abajur\nDireito", entityId: "switch.quarto_abajur_direito" },
-      { label: "Abajur\nEsquerdo", entityId: "switch.quarto_abajur_esquerdo" },
-      { label: "Sacada", entityId: "switch.sacada_luz" },
-      { label: "Umidificador", entityId: "switch.quarto_umidificador" },
-      { label: "Aquecedor", entityId: "switch.quarto_aquecedor" },
+    showGroupSwitch: true,
+    layout: "grid",
+    items: [
+      "switch.quarto_luz",
+      "switch.quarto_ventilador",
+      { entityId: "switch.quarto_abajur_direito", label: "Abajur\nDireito" },
+      { entityId: "switch.quarto_abajur_esquerdo", label: "Abajur\nEsquerdo" },
+      { entityId: "switch.sacada_luz", label: "Sacada" },
+      "switch.quarto_umidificador",
+      "switch.quarto_aquecedor",
     ],
   },
-  bathroom: {
+  {
     title: "Banheiro",
-    rows: [
+    layout: "grid",
+    items: [
+      "switch.banheiro_luz",
+      "light.banheiro_luz_chuveiro",
       {
-        label: "Luzes",
-        entityId: "switch.banheiro_luz",
-      },
-      {
-        icon: "shower-head",
-        label: "Luz do\nChuveiro",
-        entityId: "light.banheiro_luz_chuveiro",
-      },
-      {
-        icon: "shower-head",
-        label: "Luz Quente\nno Chuveiro",
         entityId: "script.banheiro_luz_quente_no_chuveiro",
+        label: "Luz Quente\nno Chuveiro",
       },
     ],
   },
-  shortcuts: {
-    title: "Atalhos",
-    rows: [
+  {
+    title: "Casa",
+    layout: "grid",
+    items: [
+      "switch.cameras",
+      "switch.impressora_3d",
+      "script.casa_apagar_todas_luzes",
       {
-        label: "Impressora 3D",
-        icon: "mdi-printer-3d-nozzle",
-        entityId: "switch.impressora_3d",
-        renderContent: (entity) =>
-          entity.state === "on" ? (
-            "Ligada"
-          ) : (
-            <Switch
-              checked={false}
-              onInput={makeTurnOnCall("switch.impressora_3d")}
-            />
-          ),
+        entityId: "script.casa_apagar_todas_luzes_menos_sala",
+        label: "Somente Luz\nda Sala",
       },
-      ...[
-        {
-          label: "Apagar todas as luzes",
-          entityId: "script.casa_apagar_todas_luzes",
-        },
-        {
-          label: "Apagar luzes, menos da sala",
-          entityId: "script.casa_apagar_todas_luzes_menos_sala",
-        },
-        {
-          label: "Iluminação abajures",
-          entityId: "script.quarto_iluminacao_abajures",
-        },
-        {
-          label: "Reiniciar FireTV",
-          entityId: "script.sala_reiniciar_firetv",
-        },
-      ].map(scriptRow),
+      "script.quarto_iluminacao_abajures",
+      "script.sala_reiniciar_firetv",
+      "script.encontrar_celular_lais",
+      "script.encontrar_celular_erica_1",
+      "script.encontrar_celular_erica_2",
     ],
   },
-  mobilePhones: {
-    title: "Celulares",
-    rows: [
-      {
-        label: "Lais",
-        buttonLabel: "Encontrar",
-        entityId: "script.encontrar_celular_lais",
-      },
-      {
-        label: "Erica",
-        buttonLabel: "Encontrar",
-        entityId: "script.encontrar_celular_erica_1",
-      },
-      {
-        label: "Erica 2",
-        buttonLabel: "Encontrar",
-        entityId: "script.encontrar_celular_erica_2",
-      },
-    ].map(scriptRow),
-  },
-  systemMonitor: {
+  {
     title: "Sistema",
-    rows: [
+    layout: "list",
+    items: [
       {
         icon: "icofont-thermometer",
         label: "Temperatura",
         entityId: "sensor.processor_temperature",
-        renderContent: (entity) => formatNumericValue(entity.state, "°C"),
+        renderListContent: (entity) => formatNumericValue(entity.state, "°C"),
       },
       {
         label: "Processador",
         entityId: "sensor.processor_use",
-        renderContent: (entity) => formatNumericValue(entity.state, "%"),
+        renderListContent: (entity) => formatNumericValue(entity.state, "%"),
       },
       {
         label: "Memória",
         entityId: "sensor.memory_use_percent",
-        renderContent: (entity) => formatNumericValue(entity.state, "%"),
+        renderListContent: (entity) => formatNumericValue(entity.state, "%"),
       },
     ],
   },
-};
-
-let key = 0;
-
-const houseModule = [
-  <EntityGrid key={key++} showGroupSwitch {...groups.living_room} />,
-  <EntityGrid key={key++} showGroupSwitch {...groups.office} />,
-  <EntityGrid key={key++} showGroupSwitch {...groups.kitchen} />,
-  <EntityGrid key={key++} showGroupSwitch {...groups.bedroom} />,
-  <EntityGrid key={key++} {...groups.bathroom} />,
-  <ListCard key={key++} {...groups.mobilePhones} />,
-  <ListCard key={key++} {...groups.shortcuts} />,
-  <ListCard key={key++} {...groups.systemMonitor} />,
 ];
+
+const houseModule = groups.map((props, index) => (
+  <ComponentGroup key={index} {...props} />
+));
 
 export default houseModule;

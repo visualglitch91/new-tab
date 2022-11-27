@@ -103,10 +103,9 @@ export default function MultiLightButton({
       icon={icon}
       label={label}
       checked={checked}
-      backgroundColor={uniqueColor && getDisplayColorString(uniqueColor, 0.6)}
-      onTap={toggleState}
-      onPress={openLightDialog}
-      onDoubleTap={openLightDialog}
+      color={uniqueColor && getDisplayColorString(uniqueColor, 0.6)}
+      onPrimaryAction={toggleState}
+      onSecondaryAction={openLightDialog}
     />
   );
 }

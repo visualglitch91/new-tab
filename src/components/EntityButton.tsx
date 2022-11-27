@@ -10,25 +10,25 @@ import BaseEntityButton from "./BaseEntityButton";
 
 export default function EntityButton({
   icon: customIcon,
-  label,
+  label: _label,
   changeTimeout,
   entityId,
-  onTap,
+  onPrimaryAction,
+  onSecondaryAction,
   onPress,
-  onDoubleTap,
 }: {
   icon?: string;
   label?: string;
   changeTimeout?: number;
   entityId: string;
-  onTap?: () => void;
+  onPrimaryAction?: () => void;
+  onSecondaryAction?: () => void;
   onPress?: () => void;
-  onDoubleTap?: () => void;
 }) {
   const entity = useEntity(entityId);
 
   if (!entity) {
-    return <BaseEntityButton unavailable label={label || entityId} />;
+    return <BaseEntityButton disabled label={_label || entityId} />;
   }
 
   const icon = customIcon || getIcon(entity);
@@ -37,6 +37,9 @@ export default function EntityButton({
   const [domain] = entityId.split(".");
   const checked = state === "on";
   const unavailable = state === "unavailable";
+
+  const label =
+    _label || friendlyName?.replace(/\[[^()]*\]/g, "").trim() || entityId;
 
   const displayColor =
     domain === "light" &&
@@ -65,23 +68,23 @@ export default function EntityButton({
   return (
     <BaseEntityButton
       checked={checked}
-      unavailable={unavailable}
+      disabled={unavailable}
       icon={icon}
-      label={label || friendlyName}
+      label={label}
       changeTimeout={changeTimeout}
-      backgroundColor={
+      color={
         displayColor && !isWhite
           ? getDisplayColorString(displayColor, 0.6)
           : undefined
       }
-      onTap={
-        onTap ||
+      onPrimaryAction={
+        onPrimaryAction ||
         makeServiceCall("homeassistant", checked ? "turn_off" : "turn_on", {
           entity_id: entityId,
         })
       }
-      onPress={onPress || onLightDetails}
-      onDoubleTap={onDoubleTap || onLightDetails}
+      onPress={onPress}
+      onSecondaryAction={onSecondaryAction || onLightDetails}
     />
   );
 }

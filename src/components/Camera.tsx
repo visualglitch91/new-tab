@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
 import { styled, css } from "../styling";
-import { makeServiceCall, useEntity } from "../utils/hass";
+import { hassUrl, makeServiceCall, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import CameraStream from "./CameraStream";
-import CameraSnapshot from "./CameraSnapshot";
 import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
 
@@ -54,8 +54,8 @@ export default function Camera({
   ptzEntityId?: string;
 }) {
   const entity = useEntity(entityId);
-  const online =
-    Boolean(entity?.state) && !["off", "unavailable"].includes(entity!.state);
+  const entityPicture = entity?.attributes?.entity_picture;
+  const [snapshot, setSnapshot] = useState<string>();
 
   function pan(direction: "LEFT" | "RIGHT") {
     if (!ptzEntityId) {
@@ -81,18 +81,49 @@ export default function Camera({
     });
   }
 
+  useEffect(() => {
+    if (!entityPicture) {
+      setSnapshot(undefined);
+      return;
+    }
+
+    let timeout = 0;
+
+    async function updateImage() {
+      const url = `${hassUrl}${entityPicture}&counter=${Date.now()}`;
+
+      const success = await new Promise<boolean>((resolve) => {
+        const image = new Image();
+
+        image.onload = () => resolve(true);
+        image.onerror = () => resolve(false);
+
+        image.src = url;
+      });
+
+      setSnapshot(success ? url : undefined);
+      timeout = window.setTimeout(updateImage, 5000);
+    }
+
+    updateImage();
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [entityPicture]);
+
   return (
     <Wrapper>
-      {online ? (
+      {snapshot ? (
         stream ? (
           <CameraStream entityId={entityId} />
         ) : (
-          <CameraSnapshot entityId={entityId} />
+          <img alt="" src={snapshot} />
         )
       ) : (
         <Overlay>Câmera Indisponível</Overlay>
       )}
-      {online && ptzEntityId && (
+      {snapshot && ptzEntityId && (
         <Buttons wrap>
           <PillButton icon="arrow-left" onClick={pan("LEFT")} />
           <PillButton icon="arrow-down" onClick={tilt("DOWN")} />

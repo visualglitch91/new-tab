@@ -2,7 +2,7 @@ import { renderModal, RGB } from "../utils/general";
 import { callService, useEntities } from "../utils/hass";
 import LightDialog from "./LightDialog";
 import EntitiesSwitch from "./EntitiesSwitch";
-import ListCardRow from "./ListCardRow";
+import ListItem from "./ListItem";
 
 export default function RGBLightGroupRow({
   icon,
@@ -76,12 +76,12 @@ export default function RGBLightGroupRow({
   }
 
   return (
-    <ListCardRow
+    <ListItem
       icon={icon}
       label={label}
-      onIconClick={checked ? onLightClick : undefined}
+      onSecondaryAction={checked ? onLightClick : undefined}
     >
       <EntitiesSwitch entityIds={entityIds} />
-    </ListCardRow>
+    </ListItem>
   );
 }

@@ -1,11 +1,11 @@
 import { makeServiceCall, useEntity } from "../utils/hass";
-import ListCard from "../components/ListCard";
 import PillButton from "../components/PillButton";
-import ListCardRow from "../components/ListCardRow";
+import ListItem from "../components/ListItem";
 import RunScriptButton from "../components/RunScriptButton";
 import Button from "../components/Button";
 import EntitiesSwitch from "../components/EntitiesSwitch";
 import FlexRow from "../components/FlexRow";
+import ComponentGroup from "../components/ComponentGroup";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -28,12 +28,12 @@ function VacuumActionsRow() {
 
   if (state && ["docked", "idle"].includes(state)) {
     const clean = (
-      <ListCardRow icon="mdi:robot-vacuum" label="Aspirar áreas selecionadas">
+      <ListItem icon="mdi:robot-vacuum" label="Aspirar áreas selecionadas">
         <RunScriptButton
           label="Aspirar"
           entityId="script.vacuum_clean_selected_zones"
         />
-      </ListCardRow>
+      </ListItem>
     );
 
     if (state === "docked") {
@@ -43,9 +43,9 @@ function VacuumActionsRow() {
     return (
       <>
         {clean}
-        <ListCardRow icon="mdi:robot-vacuum" label="Retornar para a base">
+        <ListItem icon="mdi:robot-vacuum" label="Retornar para a base">
           <Button onTap={makeVacuumCall("return_to_base")}>Retornar</Button>
-        </ListCardRow>
+        </ListItem>
       </>
     );
   }
@@ -86,26 +86,24 @@ const booleanInputs = [
 ];
 
 export default (
-  <ListCard
+  <ComponentGroup
+    layout="list"
     title="Aspirador"
-    rows={[
+    items={[
       {
         label: "Status",
         entityId: vacuumId,
-        renderContent: (entity) => {
+        renderListContent: (entity) => {
           const status = entity.attributes.status as keyof typeof statusLabels;
           return statusLabels[status]?.toUpperCase();
         },
       },
-      {
-        type: "custom",
-        render: () => <VacuumActionsRow />,
-      },
-      { type: "divider" },
+      <VacuumActionsRow />,
+      "divider",
       {
         label: "Todos",
         entityId: vacuumId,
-        renderContent: () => (
+        renderListContent: () => (
           <EntitiesSwitch
             condition="every"
             entityIds={booleanInputs.map((it) => it.entityId)}

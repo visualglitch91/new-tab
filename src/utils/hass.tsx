@@ -68,6 +68,8 @@ export function getIcon(entity: HassEntity) {
     }
 
     switch (domain) {
+      case "light":
+        return "mdi:lightbulb";
       case "input_boolean":
         if (state === "on") {
           return "mdi:check-circle-outline";

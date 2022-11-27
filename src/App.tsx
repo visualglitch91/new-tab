@@ -1,4 +1,4 @@
-import { useUser } from "./utils/hass";
+import { useEntity, useUser } from "./utils/hass";
 import { compact, useResponsive } from "./utils/general";
 import MasonryLayout from "./components/MasonryLayout";
 import MobileLayout from "./components/MobileLayout";
@@ -15,6 +15,7 @@ const columnStyle = {
 
 export default function App() {
   const user = useUser();
+  const camerasOn = useEntity("switch.cameras")?.state === "on";
   const { isMobile } = useResponsive();
   const isAdmin = user.is_admin;
 
@@ -37,11 +38,12 @@ export default function App() {
             icon: "mdi:robot-vacuum",
             content: vacuumModule,
           },
-          isAdmin && {
-            title: "Câmeras",
-            icon: "mdi:cctv",
-            content: camerasModule,
-          },
+          isAdmin &&
+            camerasOn && {
+              title: "Câmeras",
+              icon: "mdi:cctv",
+              content: camerasModule,
+            },
         ])}
       />
     );
@@ -50,10 +52,10 @@ export default function App() {
   return (
     <MasonryLayout>
       {tvModule}
-      <div style={columnStyle}>{houseModule.slice(0, -3)}</div>
+      <div style={columnStyle}>{houseModule.slice(0, -2)}</div>
       {isAdmin && vacuumModule}
-      {houseModule.slice(-3)}
-      {isAdmin && camerasModule}
+      <div style={columnStyle}>{houseModule.slice(-2)}</div>
+      {isAdmin && camerasOn && camerasModule}
     </MasonryLayout>
   );
 }

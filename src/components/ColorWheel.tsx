@@ -11,7 +11,7 @@ export default function ColorWheel({
 }) {
   const [internal, setInternal] = useState(selected);
   const debouncedOnChangeEnd = useDebouncedCallback(onChangeEnd);
-  const color = rgbToHex(internal[0], internal[1], internal[2]);
+  const color = rgbToHex(internal);
 
   useEffect(() => {
     setInternal(selected);
