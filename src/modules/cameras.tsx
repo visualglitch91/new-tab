@@ -3,7 +3,7 @@ import Stack from "../components/Stack";
 import TitleCard from "../components/TitleCard";
 import Button from "../components/Button";
 import Icon from "../components/Icon";
-import Camera from "../components/Camera";
+import TapoCamera from "../components/TapoCamera";
 
 function Cameras() {
   const [stream, setStream] = useState(false);
@@ -24,8 +24,26 @@ function Cameras() {
           )
         }
       />
-      <Camera stream={stream} entityId="camera.moto_one_hyper" />
-      <Camera stream={stream} entityId="camera.ipega" />
+      <TapoCamera
+        stream={stream}
+        entityId="camera.quarto"
+        moveButtons={{
+          up: "button.camera_quarto_move_up",
+          down: "button.camera_quarto_move_down",
+          left: "button.camera_quarto_move_left",
+          right: "button.camera_quarto_move_right",
+        }}
+      />
+      <TapoCamera
+        stream={stream}
+        entityId="camera.sala"
+        moveButtons={{
+          up: "button.camera_sala_move_up",
+          down: "button.camera_sala_move_down",
+          left: "button.camera_sala_move_left",
+          right: "button.camera_sala_move_right",
+        }}
+      />
     </Stack>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { styled, css } from "../styling";
-import { hassUrl, makeServiceCall, useEntity } from "../utils/hass";
+import { hassUrl, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import CameraStream from "./CameraStream";
 import FlexRow from "./FlexRow";
@@ -47,39 +47,15 @@ const Buttons = styled(
 export default function Camera({
   stream,
   entityId,
-  ptzEntityId,
+  onMove,
 }: {
   stream: boolean;
   entityId: string;
-  ptzEntityId?: string;
+  onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
 }) {
   const entity = useEntity(entityId);
   const entityPicture = entity?.attributes?.entity_picture;
   const [snapshot, setSnapshot] = useState<string>();
-
-  function pan(direction: "LEFT" | "RIGHT") {
-    if (!ptzEntityId) {
-      return;
-    }
-
-    return makeServiceCall("onvif", "ptz", {
-      pan: direction,
-      move_mode: "ContinuousMove",
-      entity_id: ptzEntityId,
-    });
-  }
-
-  function tilt(direction: "UP" | "DOWN") {
-    if (!ptzEntityId) {
-      return;
-    }
-
-    return makeServiceCall("onvif", "ptz", {
-      tilt: direction,
-      move_mode: "ContinuousMove",
-      entity_id: ptzEntityId,
-    });
-  }
 
   useEffect(() => {
     if (!entityPicture) {
@@ -123,12 +99,12 @@ export default function Camera({
       ) : (
         <Overlay>Câmera Indisponível</Overlay>
       )}
-      {snapshot && ptzEntityId && (
+      {snapshot && onMove && (
         <Buttons wrap>
-          <PillButton icon="arrow-left" onClick={pan("LEFT")} />
-          <PillButton icon="arrow-down" onClick={tilt("DOWN")} />
-          <PillButton icon="arrow-up" onClick={tilt("UP")} />
-          <PillButton icon="arrow-right" onClick={pan("RIGHT")} />
+          <PillButton icon="arrow-left" onClick={() => onMove("LEFT")} />
+          <PillButton icon="arrow-down" onClick={() => onMove("DOWN")} />
+          <PillButton icon="arrow-up" onClick={() => onMove("UP")} />
+          <PillButton icon="arrow-right" onClick={() => onMove("RIGHT")} />
         </Buttons>
       )}
     </Wrapper>
