@@ -1,5 +1,6 @@
-import { renderModal, RGB, rgbToHex } from "../utils/general";
+import { RGB, rgbToHex } from "../utils/general";
 import { callService, useEntities } from "../utils/hass";
+import useModal from "../utils/useModal";
 import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
 import LightDialog from "./LightDialog";
@@ -11,6 +12,7 @@ export default function RGBLightGroupButton({
   entities: { label: string; entityId: string }[];
 }) {
   const states = useEntities(...config.map((it) => it.entityId));
+  const [mount, dialogs] = useModal();
 
   const entities = config.reduce(
     (acc, it) => {
@@ -86,7 +88,7 @@ export default function RGBLightGroupButton({
     const initialColor = entities[0].color;
     const initialBrightness = entities[0].brightness;
 
-    renderModal((unmount) => (
+    mount((unmount) => (
       <LightDialog
         title={label || entities[0].label}
         initialMode="color"
@@ -106,40 +108,43 @@ export default function RGBLightGroupButton({
   }
 
   return (
-    <FlexRow align="right">
-      {entities.map((it) => (
-        <PillButton
-          key={it.entityId}
-          label={
-            <>
-              {!uniqueColor && it.on && (
-                <ColorBadge
-                  color={rgbToHex(it.color)}
-                  style={{ marginTop: -2 }}
-                />
-              )}
-              {it.label}
-            </>
-          }
-          onClick={() => onLightClick([it])}
-        />
-      ))}
-      {multiple && (
-        <PillButton
-          label={
-            <>
-              {uniqueColor && (
-                <ColorBadge
-                  color={rgbToHex(uniqueColor)}
-                  style={{ marginTop: -2 }}
-                />
-              )}
-              Todos
-            </>
-          }
-          onClick={() => onLightClick(entities, "Todos")}
-        />
-      )}
-    </FlexRow>
+    <>
+      {dialogs}
+      <FlexRow align="right">
+        {entities.map((it) => (
+          <PillButton
+            key={it.entityId}
+            label={
+              <>
+                {!uniqueColor && it.on && (
+                  <ColorBadge
+                    color={rgbToHex(it.color)}
+                    style={{ marginTop: -2 }}
+                  />
+                )}
+                {it.label}
+              </>
+            }
+            onClick={() => onLightClick([it])}
+          />
+        ))}
+        {multiple && (
+          <PillButton
+            label={
+              <>
+                {uniqueColor && (
+                  <ColorBadge
+                    color={rgbToHex(uniqueColor)}
+                    style={{ marginTop: -2 }}
+                  />
+                )}
+                Todos
+              </>
+            }
+            onClick={() => onLightClick(entities, "Todos")}
+          />
+        )}
+      </FlexRow>
+    </>
   );
 }

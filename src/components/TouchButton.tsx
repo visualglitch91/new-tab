@@ -74,8 +74,6 @@ export default function TouchButton({
       listenerGroup.with(button).subscribe("click", () => {
         handlerRefs.current.onTap?.();
       });
-
-      return;
     } else {
       let initialPosition: Point = [0, 0];
       let touchStartAt = 0;

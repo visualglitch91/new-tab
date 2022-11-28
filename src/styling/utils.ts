@@ -7,6 +7,6 @@ export function uniqueClassName() {
   );
 }
 
-export function cx(...classNames: (string | null | undefined | false)[]) {
+export function cx(...classNames: (string | null | undefined | false | 0)[]) {
   return classNames.filter(Boolean).join(" ");
 }

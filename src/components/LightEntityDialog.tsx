@@ -8,7 +8,7 @@ export default function LightEntityDialog({
   entity,
   onClose,
 }: {
-  title?: string;
+  title?: React.ReactNode;
   entity: HassEntity;
   onClose: () => void;
 }) {

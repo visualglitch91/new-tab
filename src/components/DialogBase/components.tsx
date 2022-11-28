@@ -64,6 +64,7 @@ export const Root = styled(
       transition: transform 400ms cubic-bezier(0.76, 0, 0.24, 1);
       will-change: transform;
       border-radius: 16px;
+      background: rgba(36, 50, 75, 1);
     }
 
     body.mobile .modal-transition-enter & {

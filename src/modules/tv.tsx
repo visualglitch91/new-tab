@@ -11,7 +11,7 @@ import {
   makeTVMediaControlCall,
   makeTVLaunchAppCall,
 } from "./tv.utils";
-import MultiLightButton from "../components/MultiLightButton";
+import LightGroupEntityButton from "../components/LightGroupEntityButton";
 
 function spacer(height?: number) {
   return <div style={{ height: height && `${height}px` }} />;
@@ -134,9 +134,9 @@ export default (
         changeTimeout={30_000}
         entityId="switch.sala_receiver"
       />
-      <MultiLightButton
+      <LightGroupEntityButton
         icon="mdi-television-ambient-light"
-        label="RGB Geral"
+        label="RGB"
         entityIds={[
           "light.sala_rgb_tv",
           "light.sala_rgb_rack",

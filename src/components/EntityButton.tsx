@@ -1,12 +1,13 @@
 import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
-import LightEntityDialog from "./LightEntityDialog";
-import { renderModal, RGB } from "../utils/general";
+import { RGB } from "../utils/general";
 import {
   isColorEqual,
   getDisplayColor,
   getDisplayColorString,
 } from "../utils/colorPresets";
+import useModal from "../utils/useModal";
 import BaseEntityButton from "./BaseEntityButton";
+import LightEntityDialog from "./LightEntityDialog";
 
 export default function EntityButton({
   icon: customIcon,
@@ -18,7 +19,7 @@ export default function EntityButton({
   onPress,
 }: {
   icon?: string;
-  label?: string;
+  label?: React.ReactNode;
   changeTimeout?: number;
   entityId: string;
   onPrimaryAction?: () => void;
@@ -26,6 +27,7 @@ export default function EntityButton({
   onPress?: () => void;
 }) {
   const entity = useEntity(entityId);
+  const [mount, modals] = useModal();
 
   if (!entity) {
     return <BaseEntityButton disabled label={_label || entityId} />;
@@ -59,32 +61,35 @@ export default function EntityButton({
 
   function onLightDetails() {
     if (domain === "light" && checked) {
-      renderModal((unmount) => (
+      mount((unmount) => (
         <LightEntityDialog title={label} entity={entity!} onClose={unmount} />
       ));
     }
   }
 
   return (
-    <BaseEntityButton
-      checked={checked}
-      disabled={unavailable}
-      icon={icon}
-      label={label}
-      changeTimeout={changeTimeout}
-      color={
-        displayColor && !isWhite
-          ? getDisplayColorString(displayColor, 0.6)
-          : undefined
-      }
-      onPrimaryAction={
-        onPrimaryAction ||
-        makeServiceCall("homeassistant", checked ? "turn_off" : "turn_on", {
-          entity_id: entityId,
-        })
-      }
-      onPress={onPress}
-      onSecondaryAction={onSecondaryAction || onLightDetails}
-    />
+    <>
+      {modals}
+      <BaseEntityButton
+        checked={checked}
+        disabled={unavailable}
+        icon={icon}
+        label={label}
+        changeTimeout={changeTimeout}
+        color={
+          displayColor && !isWhite
+            ? getDisplayColorString(displayColor, 0.6)
+            : undefined
+        }
+        onPrimaryAction={
+          onPrimaryAction ||
+          makeServiceCall("homeassistant", checked ? "turn_off" : "turn_on", {
+            entity_id: entityId,
+          })
+        }
+        onPress={onPress}
+        onSecondaryAction={onSecondaryAction || onLightDetails}
+      />
+    </>
   );
 }

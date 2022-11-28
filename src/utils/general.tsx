@@ -6,8 +6,6 @@ import {
   useContext,
   createContext,
 } from "react";
-import { createRoot } from "react-dom/client";
-import { CSSTransition } from "preact-transitioning";
 import version from "../version.json";
 
 export function clamp(value: number, min: number, max: number) {
@@ -33,45 +31,6 @@ export function debounce<T extends (...args: any[]) => void>(
 export function rgbToHex([r, g, b]: RGB) {
   //eslint-disable-next-line
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-}
-
-export function renderModal(
-  renderer: (unmount: () => void) => React.ReactNode
-) {
-  const modal = document.createElement("div");
-  let shouldRemove = false;
-  document.body.appendChild(modal);
-
-  function Modal() {
-    const [open, setOpen] = useState(false);
-    const duration = isMobile() ? 400 : 180;
-
-    useEffect(() => {
-      setOpen(true);
-    }, []);
-
-    return (
-      <CSSTransition
-        in={open}
-        duration={duration}
-        classNames="modal-transition"
-        onExited={() => {
-          if (shouldRemove) {
-            modal.remove();
-          }
-        }}
-      >
-        <div className="modal-transition">
-          {renderer(() => {
-            shouldRemove = true;
-            setOpen(false);
-          })}
-        </div>
-      </CSSTransition>
-    );
-  }
-
-  createRoot(modal).render(<Modal />);
 }
 
 export function saveValue(key: string, value: any) {

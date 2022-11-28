@@ -30,7 +30,6 @@ function setupHASS({
 }: {
   onStatesChange: (states: HassEntity[]) => void;
 }) {
-  console.log({ hassUrl });
   return getAuth({
     hassUrl,
     saveTokens: (tokens) => saveValue(`hass_token_${hassUrl}`, tokens),

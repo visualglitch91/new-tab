@@ -1,6 +1,6 @@
 import { css, styled } from "../styling";
 
-const Wrapper = styled(
+const Root = styled(
   "label",
   css`
     display: inline-block;
@@ -96,7 +96,7 @@ export default function Switch({
   onInput: (e: React.FormEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <Wrapper>
+    <Root>
       <input
         type="checkbox"
         disabled={disabled}
@@ -112,6 +112,6 @@ export default function Switch({
         }}
       />
       <i />
-    </Wrapper>
+    </Root>
   );
 }

@@ -23,6 +23,7 @@ export default function ComponentGroup({
   title,
   items,
   showGroupSwitch,
+  extraGroupSwitchEntityIds = [],
 }: ComponentGroupProps) {
   const { isDesktop } = useResponsive();
 
@@ -43,7 +44,7 @@ export default function ComponentGroup({
     }
 
     return acc;
-  }, []);
+  }, extraGroupSwitchEntityIds);
 
   const groupSwitch = showGroupSwitch && groupedEntityIds.length > 0 && (
     <EntitiesSwitch entityIds={groupedEntityIds} />

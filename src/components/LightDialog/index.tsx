@@ -32,7 +32,7 @@ export default function LightDialog({
   onModeChange = () => {},
   onClose,
 }: {
-  title?: string;
+  title?: React.ReactNode;
   features: Partial<LightDialogFeatures>;
   initialMode: "temperature" | "color";
   onModeChange?: (mode: "temperature" | "color") => void;

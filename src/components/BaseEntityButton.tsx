@@ -1,8 +1,8 @@
 import useAsyncChange from "../utils/useAsyncChange";
+import { BaseComponentGroupItem } from "../utils/typings";
 import { cx, css, styled, uniqueClassName } from "../styling";
 import Icon from "./Icon";
 import CircularLoading from "./CircularLoading";
-import { BaseComponentGroupItem } from "../utils/typings";
 import ButtonCard from "./ButtonCard";
 
 const classes = {
@@ -71,7 +71,7 @@ export default function BaseEntityButton({
         color && !changing && classes.wrapperCustomBG,
         checked && !changing && classes.wrapperActive
       )}
-      style={color && !changing ? { backgroundColor: color } : undefined}
+      style={color && !changing ? { background: color } : undefined}
       onTap={() => {
         if (change() && onPrimaryAction) {
           onPrimaryAction();

@@ -2,20 +2,31 @@ import { formatNumericValue } from "../utils/general";
 import { TVEntityButton } from "../components/TVEntityButton";
 import { ComponentGroupProps } from "../utils/typings";
 import ComponentGroup from "../components/ComponentGroup";
+import LightGroupEntityButton from "../components/LightGroupEntityButton";
 
 const groups: ComponentGroupProps[] = [
   {
     title: "Sala",
     showGroupSwitch: true,
+    extraGroupSwitchEntityIds: [
+      "light.sala_rgb_tv",
+      "light.sala_rgb_rack",
+      "light.sala_rgb_sofa",
+    ],
     layout: "grid",
     items: [
       { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
       "switch.sala_luminaria",
       "switch.sala_ventilador",
-      "light.sala_rgb_tv",
-      "light.sala_rgb_rack",
-      "light.sala_rgb_sofa",
+      <LightGroupEntityButton
+        label="RGB"
+        entityIds={[
+          "light.sala_rgb_tv",
+          "light.sala_rgb_rack",
+          "light.sala_rgb_sofa",
+        ]}
+      />,
       {
         hiddenOnDesktop: true,
         element: <TVEntityButton icon="mdi:television-classic" label="TV" />,
@@ -31,12 +42,18 @@ const groups: ComponentGroupProps[] = [
   {
     title: "Escritório",
     showGroupSwitch: true,
+    extraGroupSwitchEntityIds: [
+      "light.escritorio_rgb",
+      "light.escritorio_rgb_2",
+    ],
     layout: "grid",
     items: [
       "switch.escritorio_luz",
       "light.escritorio_luminaria",
-      "light.escritorio_rgb",
-      "light.escritorio_rgb_2",
+      <LightGroupEntityButton
+        label="RGB"
+        entityIds={["light.escritorio_rgb", "light.escritorio_rgb_2"]}
+      />,
       "switch.escritorio_ventilador",
     ],
   },
@@ -53,15 +70,25 @@ const groups: ComponentGroupProps[] = [
   {
     title: "Quarto",
     showGroupSwitch: true,
+    extraGroupSwitchEntityIds: [
+      "switch.quarto_abajur_esquerdo",
+      "switch.quarto_abajur_direito",
+    ],
     layout: "grid",
     items: [
       "switch.quarto_luz",
       "switch.quarto_ventilador",
-      { entityId: "switch.quarto_abajur_direito", label: "Abajur\nDireito" },
-      { entityId: "switch.quarto_abajur_esquerdo", label: "Abajur\nEsquerdo" },
+      <LightGroupEntityButton
+        label="Abajures"
+        icon="mdi-outdoor-lamp"
+        entityIds={[
+          "switch.quarto_abajur_esquerdo",
+          "switch.quarto_abajur_direito",
+        ]}
+      />,
       { entityId: "switch.sacada_luz", label: "Sacada" },
-      "switch.quarto_umidificador",
-      "switch.quarto_aquecedor",
+      { entityId: "switch.quarto_umidificador", ignoreOnGroupSwitch: true },
+      { entityId: "switch.quarto_aquecedor", ignoreOnGroupSwitch: true },
     ],
   },
   {
@@ -87,7 +114,6 @@ const groups: ComponentGroupProps[] = [
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz\nda Sala",
       },
-      "script.quarto_iluminacao_abajures",
       "script.sala_reiniciar_firetv",
       "script.encontrar_celular_lais",
       "script.encontrar_celular_erica_1",

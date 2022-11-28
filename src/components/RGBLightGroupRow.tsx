@@ -1,8 +1,9 @@
-import { renderModal, RGB } from "../utils/general";
+import { RGB } from "../utils/general";
 import { callService, useEntities } from "../utils/hass";
+import useModal from "../utils/useModal";
+import ListItem from "./ListItem";
 import LightDialog from "./LightDialog";
 import EntitiesSwitch from "./EntitiesSwitch";
-import ListItem from "./ListItem";
 
 export default function RGBLightGroupRow({
   icon,
@@ -14,6 +15,7 @@ export default function RGBLightGroupRow({
   entityIds: string[];
 }) {
   const states = useEntities(...entityIds);
+  const [mount, modals] = useModal();
 
   const checked = entityIds.some(
     (entityId) => states[entityId]?.state === "on"
@@ -56,7 +58,7 @@ export default function RGBLightGroupRow({
 
     const initialBrightness = firstOnEntity?.attributes?.brightness || 255;
 
-    renderModal((unmount) => (
+    mount((unmount) => (
       <LightDialog
         title={label}
         initialMode="color"
@@ -76,12 +78,15 @@ export default function RGBLightGroupRow({
   }
 
   return (
-    <ListItem
-      icon={icon}
-      label={label}
-      onSecondaryAction={checked ? onLightClick : undefined}
-    >
-      <EntitiesSwitch entityIds={entityIds} />
-    </ListItem>
+    <>
+      {modals}
+      <ListItem
+        icon={icon}
+        label={label}
+        onSecondaryAction={checked ? onLightClick : undefined}
+      >
+        <EntitiesSwitch entityIds={entityIds} />
+      </ListItem>
+    </>
   );
 }

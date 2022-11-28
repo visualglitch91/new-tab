@@ -1,7 +1,7 @@
 import { HassEntity } from "home-assistant-js-websocket";
 
 export interface BaseComponentGroupItem {
-  label?: string;
+  label?: React.ReactNode;
   icon?: string;
   color?: string;
   disabled?: boolean;
@@ -41,4 +41,5 @@ export interface ComponentGroupProps {
   title?: string;
   items: ComponentGroupItem[];
   showGroupSwitch?: boolean;
+  extraGroupSwitchEntityIds?: string[];
 }
