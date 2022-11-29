@@ -176,10 +176,6 @@ export default (
 
     <ButtonRow height={70}>
       <ImageButtonCard
-        asset="youtube"
-        action={makeTurnOnCall("script.sala_tv_youtube")}
-      />
-      <ImageButtonCard
         asset="starplus"
         action={makeTVLaunchAppCall("com.disney.alch.prod.lrd.app")}
       />
@@ -187,24 +183,17 @@ export default (
         asset="prime_video"
         action={makeTVLaunchAppCall("amazon")}
       />
-    </ButtonRow>
-
-    <ButtonRow height={70}>
       <ImageButtonCard
         asset="spotify"
         action={makeTVLaunchAppCall("spotify-beehive")}
       />
-      <ImageButtonCard
-        asset="discovery_plus"
-        action={makeTVLaunchAppCall("com.discovery.dplus")}
-      />
-      <ImageButtonCard
-        asset="kodi"
-        action={makeTurnOnCall("script.sala_firetv_kodi")}
-      />
     </ButtonRow>
 
     <ButtonRow height={70}>
+      <ImageButtonCard
+        asset="fire_tv"
+        action={makeTurnOnCall("script.sala_firetv_ligar")}
+      />
       <ImageButtonCard
         asset="ps5"
         action={makeTurnOnCall("script.sala_tv_hdmi1")}
@@ -212,10 +201,6 @@ export default (
       <ImageButtonCard
         asset="switch"
         action={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
-      />
-      <ImageButtonCard
-        asset="retropi"
-        action={makeTurnOnCall("script.sala_receiver_pc")}
       />
     </ButtonRow>
   </Stack>
