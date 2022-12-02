@@ -9,7 +9,7 @@ export function TVEntitySwitch() {
       delay={30_000}
       checked={checked}
       onInput={makeServiceCall("homeassistant", "turn_on", {
-        entity_id: "script.ir_bridge_tv_energia",
+        entity_id: "script.sala_ligar_tv",
       })}
     />
   );

@@ -1,25 +1,10 @@
 import { RGB } from "../utils/general";
 import { callService, useEntities } from "../utils/hass";
 import useModal from "../utils/useModal";
-import { css, styled } from "../styling";
 import LightDialog from "./LightDialog";
 import { getDisplayColorString } from "../utils/colorPresets";
 import BaseEntityButton from "./BaseEntityButton";
 import LightGroupDialog from "./LightGroupDialog";
-import ColorBadge from "./ColorBadge";
-
-const Colors = styled(
-  "div",
-  css`
-    margin: -2px 0 -9px;
-    display: flex;
-    column-gap: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    padding: 3px 6px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  `
-);
 
 export default function LightGroupEntityButton({
   icon = "mdi:television-ambient-light",
@@ -121,19 +106,9 @@ export default function LightGroupEntityButton({
       {modals}
       <BaseEntityButton
         icon={icon}
-        label={
-          colors.length > 1 ? (
-            <Colors>
-              {colors.map((color, index) => (
-                <ColorBadge key={index} border color={color} size={9} />
-              ))}
-            </Colors>
-          ) : (
-            label
-          )
-        }
+        label={label}
         checked={checked}
-        color={colors.length === 1 ? colors[0] : undefined}
+        color={colors[0]}
         onPrimaryAction={toggleState}
         onSecondaryAction={openLightDialog}
         onPress={() => {
