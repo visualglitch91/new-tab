@@ -165,9 +165,16 @@ export default (
     </ButtonRow>
 
     <ButtonRow height={70}>
-      <ScriptImageButtonCard asset="fire_tv" script="sala_tv_firetv" />
-      <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
+      <ScriptImageButtonCard asset="youtube" script="sala_tv_youtube" />
+      <ScriptImageButtonCard asset="kodi" script="sala_tv_kodi" />
+      {/* <ScriptImageButtonCard asset="fire_tv" script="sala_tv_firetv" /> */}
       <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
+    </ButtonRow>
+
+    <ButtonRow height={70}>
+      <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
+      <span />
+      <span />
     </ButtonRow>
   </Stack>
 );
