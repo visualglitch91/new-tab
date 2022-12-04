@@ -6,10 +6,9 @@ import EntityButton from "../components/EntityButton";
 import { TVEntitySwitch } from "../components/TVEntitySwitch";
 import {
   IconButtonCard,
-  ImageButtonCard,
   makeTVButtonCall,
   makeTVMediaControlCall,
-  makeTVLaunchAppCall,
+  ScriptImageButtonCard,
 } from "./tv.utils";
 import LightGroupEntityButton from "../components/LightGroupEntityButton";
 
@@ -148,60 +147,27 @@ export default (
     {spacer(12)}
 
     <ButtonRow height={70}>
-      <ImageButtonCard
-        asset="globo"
-        action={makeTurnOnCall("script.sala_tv_globo_ao_vivo")}
-      />
-      <ImageButtonCard
-        asset="globoplay"
-        action={makeTVLaunchAppCall("globoplaywebos")}
-      />
-      <ImageButtonCard
-        asset="netflix"
-        action={makeTVLaunchAppCall("netflix")}
-      />
+      <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
+      <ScriptImageButtonCard asset="globoplay" script="sala_tv_globoplay" />
+      <ScriptImageButtonCard asset="netflix" script="sala_tv_netflix" />
     </ButtonRow>
 
     <ButtonRow height={70}>
-      <ImageButtonCard asset="plex" action={makeTVLaunchAppCall("cdp-30")} />
-      <ImageButtonCard
-        asset="disneyplus"
-        action={makeTVLaunchAppCall("com.disney.disneyplus-prod")}
-      />
-      <ImageButtonCard
-        asset="hbomax"
-        action={makeTVLaunchAppCall("com.hbo.hbomax")}
-      />
+      <ScriptImageButtonCard asset="plex" script="sala_tv_plex" />
+      <ScriptImageButtonCard asset="disneyplus" script="sala_tv_disney_plus" />
+      <ScriptImageButtonCard asset="hbomax" script="sala_tv_hbo_max" />
     </ButtonRow>
 
     <ButtonRow height={70}>
-      <ImageButtonCard
-        asset="starplus"
-        action={makeTVLaunchAppCall("com.disney.alch.prod.lrd.app")}
-      />
-      <ImageButtonCard
-        asset="prime_video"
-        action={makeTVLaunchAppCall("amazon")}
-      />
-      <ImageButtonCard
-        asset="spotify"
-        action={makeTVLaunchAppCall("spotify-beehive")}
-      />
+      <ScriptImageButtonCard asset="starplus" script="sala_tv_star_plus" />
+      <ScriptImageButtonCard asset="prime_video" script="sala_tv_prime_video" />
+      <ScriptImageButtonCard asset="spotify" script="sala_tv_spotify" />
     </ButtonRow>
 
     <ButtonRow height={70}>
-      <ImageButtonCard
-        asset="fire_tv"
-        action={makeTurnOnCall("script.sala_firetv_ligar")}
-      />
-      <ImageButtonCard
-        asset="ps5"
-        action={makeTurnOnCall("script.sala_tv_hdmi1")}
-      />
-      <ImageButtonCard
-        asset="switch"
-        action={makeTurnOnCall("script.sala_receiver_nintendo_switch")}
-      />
+      <ScriptImageButtonCard asset="fire_tv" script="sala_tv_firetv" />
+      <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
+      <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
     </ButtonRow>
   </Stack>
 );

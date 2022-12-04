@@ -1,6 +1,7 @@
-import { makeServiceCall } from "../utils/hass";
+import { makeServiceCall, makeTurnOnCall, useEntity } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
 import Icon from "../components/Icon";
+import CircularLoading from "../components/CircularLoading";
 
 export function makeTVButtonCall(button: string) {
   return makeServiceCall("shell_command", "custom_webos_button", { button });
@@ -15,12 +16,6 @@ function makeTVCommandCall(command: string, data?: any) {
 
 export function makeTVMediaControlCall(command: string) {
   return makeTVCommandCall(`media.controls/${command}`);
-}
-
-export function makeTVLaunchAppCall(appId: string) {
-  return makeTVCommandCall("com.webos.applicationManager/launch", {
-    payload: { id: appId },
-  });
 }
 
 export function IconButtonCard({
@@ -87,6 +82,27 @@ export function ImageButtonCard({
   return (
     <ButtonCard onTap={action} onPress={onHold} onHold={onHold}>
       <img alt="" src={assets[asset]} style={imgStyle} />
+    </ButtonCard>
+  );
+}
+
+export function ScriptImageButtonCard({
+  asset,
+  script,
+}: {
+  asset: keyof typeof assets;
+  script?: string;
+}) {
+  const entityId = `script.${script}`;
+  const loading = useEntity(entityId)?.state === "on";
+
+  return (
+    <ButtonCard onTap={makeTurnOnCall(entityId)}>
+      {loading ? (
+        <CircularLoading />
+      ) : (
+        <img alt="" src={assets[asset]} style={imgStyle} />
+      )}
     </ButtonCard>
   );
 }

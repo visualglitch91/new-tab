@@ -40,7 +40,7 @@ export default function TouchButton({
 }: TouchButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [hover, setHover] = useState(false);
-  const tapOnly = !onPress && !onHold && onDoubleTap;
+  const tapOnly = Boolean(!onPress && !onHold && !onDoubleTap);
 
   const handlerRefs = useLatestRef({
     onTap,

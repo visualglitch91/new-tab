@@ -52,6 +52,7 @@ export default function BaseEntityButton({
   label,
   disabled,
   checked,
+  loading,
   color,
   changeTimeout = 0,
   onPrimaryAction,
@@ -79,7 +80,7 @@ export default function BaseEntityButton({
       }}
       onDoubleTap={onSecondaryAction}
     >
-      {changing ? (
+      {loading || changing ? (
         <CircularLoading />
       ) : (
         <>

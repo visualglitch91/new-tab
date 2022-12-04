@@ -5,9 +5,11 @@ import Switch from "./Switch";
 export default function DelayedSwitch({
   checked,
   delay,
+  loading,
   onInput,
 }: {
   checked: boolean;
+  loading?: boolean;
   delay: number;
   onInput: (e: React.FormEvent<HTMLInputElement>) => void;
 }) {
@@ -16,13 +18,12 @@ export default function DelayedSwitch({
     timeout: delay,
   });
 
-  if (changing) {
+  if (loading || changing) {
     return <DotLoading />;
   }
 
   return (
     <Switch
-      disabled={changing}
       checked={
         changing && typeof changingTo !== "undefined" ? changingTo : checked
       }

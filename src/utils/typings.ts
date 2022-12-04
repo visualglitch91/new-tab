@@ -5,6 +5,7 @@ export interface BaseComponentGroupItem {
   icon?: string;
   color?: string;
   disabled?: boolean;
+  loading?: boolean;
   checked?: boolean;
   changeTimeout?: number;
   hiddenOnDesktop?: boolean;
