@@ -25,7 +25,7 @@ export function TVEntityButton({
           });
         } else {
           callService("homeassistant", "turn_on", {
-            entity_id: "script.sala_ligar_tv",
+            entity_id: "script.sala_tv_globo",
           });
         }
       }}
