@@ -1,13 +1,7 @@
 import { callService } from "../utils/hass";
 import Camera from "./Camera";
 
-export default function OnvifCamera({
-  stream,
-  entityId,
-}: {
-  stream: boolean;
-  entityId: string;
-}) {
+export default function OnvifCamera({ entityId }: { entityId: string }) {
   function onMove(direction: "LEFT" | "RIGHT" | "UP" | "DOWN") {
     if (direction === "LEFT" || direction === "RIGHT") {
       callService("onvif", "ptz", {
@@ -24,5 +18,5 @@ export default function OnvifCamera({
     }
   }
 
-  return <Camera stream={stream} entityId={entityId} onMove={onMove} />;
+  return <Camera entityId={entityId} onMove={onMove} />;
 }

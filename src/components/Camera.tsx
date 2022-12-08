@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { styled, css } from "../styling";
 import { hassUrl, useEntity } from "../utils/hass";
 import Paper from "./Paper";
-import CameraStream from "./CameraStream";
-import FlexRow from "./FlexRow";
-import PillButton from "./PillButton";
+import FullScreenCamera from "./FullScreenCamera";
+import TouchButton from "./TouchButton";
+import useModal from "../utils/useModal";
 
 const Wrapper = styled(
   Paper,
@@ -37,27 +37,32 @@ const Overlay = styled(
   `
 );
 
-const Buttons = styled(
-  FlexRow,
+const SnapshotButton = styled(
+  TouchButton,
   css`
-    padding: 8px 0;
+    background: transparent;
+    border: none;
   `
 );
 
 export default function Camera({
-  stream,
   entityId,
   onMove,
 }: {
-  stream: boolean;
   entityId: string;
   onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
 }) {
   const entity = useEntity(entityId);
+  const [mount, modals] = useModal();
   const entityPicture = entity?.attributes?.entity_picture;
   const [snapshot, setSnapshot] = useState<string>();
+  const isStreaming = modals.length < 0;
 
   useEffect(() => {
+    if (isStreaming) {
+      return;
+    }
+
     if (!entityPicture) {
       setSnapshot(undefined);
       return;
@@ -78,7 +83,8 @@ export default function Camera({
       });
 
       setSnapshot(success ? url : undefined);
-      timeout = window.setTimeout(updateImage, 5000);
+
+      timeout = window.setTimeout(updateImage, 10_000);
     }
 
     updateImage();
@@ -86,26 +92,23 @@ export default function Camera({
     return () => {
       window.clearTimeout(timeout);
     };
-  }, [entityPicture]);
+  }, [entityPicture, isStreaming]);
+
+  function showStream() {
+    mount((unmount) => (
+      <FullScreenCamera entityId={entityId} onMove={onMove} onClose={unmount} />
+    ));
+  }
 
   return (
     <Wrapper>
+      {modals}
       {snapshot ? (
-        stream ? (
-          <CameraStream entityId={entityId} />
-        ) : (
+        <SnapshotButton onDoubleTap={showStream}>
           <img alt="" src={snapshot} />
-        )
+        </SnapshotButton>
       ) : (
         <Overlay>Câmera Indisponível</Overlay>
-      )}
-      {snapshot && onMove && (
-        <Buttons wrap>
-          <PillButton icon="arrow-left" onClick={() => onMove("LEFT")} />
-          <PillButton icon="arrow-down" onClick={() => onMove("DOWN")} />
-          <PillButton icon="arrow-up" onClick={() => onMove("UP")} />
-          <PillButton icon="arrow-right" onClick={() => onMove("RIGHT")} />
-        </Buttons>
       )}
     </Wrapper>
   );

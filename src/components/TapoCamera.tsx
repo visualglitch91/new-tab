@@ -2,11 +2,9 @@ import { callService } from "../utils/hass";
 import Camera from "./Camera";
 
 export default function TapoCamera({
-  stream,
   entityId,
   moveButtons,
 }: {
-  stream: boolean;
   entityId: string;
   moveButtons?: {
     up: string;
@@ -31,10 +29,6 @@ export default function TapoCamera({
   }
 
   return (
-    <Camera
-      stream={stream}
-      entityId={entityId}
-      onMove={moveButtons ? onMove : undefined}
-    />
+    <Camera entityId={entityId} onMove={moveButtons ? onMove : undefined} />
   );
 }
