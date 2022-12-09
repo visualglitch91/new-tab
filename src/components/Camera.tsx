@@ -23,12 +23,6 @@ const Wrapper = styled(
 const Overlay = styled(
   "div",
   css`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -40,15 +34,18 @@ const Overlay = styled(
 const SnapshotButton = styled(
   TouchButton,
   css`
-    background: transparent;
     border: none;
+    padding: 0;
+    background: transparent;
   `
 );
 
 export default function Camera({
+  aspectRatio,
   entityId,
   onMove,
 }: {
+  aspectRatio: number;
   entityId: string;
   onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
 }) {
@@ -96,19 +93,26 @@ export default function Camera({
 
   function showStream() {
     mount((unmount) => (
-      <FullScreenCamera entityId={entityId} onMove={onMove} onClose={unmount} />
+      <FullScreenCamera
+        aspectRatio={aspectRatio}
+        entityId={entityId}
+        onMove={onMove}
+        onClose={unmount}
+      />
     ));
   }
+
+  const aspectRatioStyle = { aspectRatio: aspectRatio.toString() };
 
   return (
     <Wrapper>
       {modals}
       {snapshot ? (
-        <SnapshotButton onDoubleTap={showStream}>
+        <SnapshotButton style={aspectRatioStyle} onDoubleTap={showStream}>
           <img alt="" src={snapshot} />
         </SnapshotButton>
       ) : (
-        <Overlay>Câmera Indisponível</Overlay>
+        <Overlay style={aspectRatioStyle}>Câmera Indisponível</Overlay>
       )}
     </Wrapper>
   );

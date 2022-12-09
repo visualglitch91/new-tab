@@ -44,10 +44,12 @@ const MobileWrapper = styled(
 
 export default function FullScreenCamera({
   entityId,
+  aspectRatio,
   onMove,
   onClose,
 }: {
   entityId: string;
+  aspectRatio: number;
   onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
   onClose: () => void;
 }) {
@@ -56,7 +58,7 @@ export default function FullScreenCamera({
 
   return (
     <Wrapper title="Câmera" onClose={onClose}>
-      <CameraStream entityId={entityId} />
+      <CameraStream aspectRatio={aspectRatio} entityId={entityId} />
       {onMove && (
         <FlexRow wrap className={buttonsWrapper}>
           <PillButton icon="arrow-left" onClick={() => onMove("LEFT")} />

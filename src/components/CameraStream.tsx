@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react";
 import type RTCVideo from "../utils/RTCVideo";
 
-export default function CameraStream({ entityId }: { entityId: string }) {
+export default function CameraStream({
+  aspectRatio,
+  entityId,
+}: {
+  aspectRatio: number;
+  entityId: string;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,5 +56,7 @@ export default function CameraStream({ entityId }: { entityId: string }) {
     };
   }, [entityId]);
 
-  return <div ref={containerRef} />;
+  return (
+    <div style={{ aspectRatio: aspectRatio.toString() }} ref={containerRef} />
+  );
 }

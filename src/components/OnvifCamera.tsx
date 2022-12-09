@@ -1,7 +1,13 @@
 import { callService } from "../utils/hass";
 import Camera from "./Camera";
 
-export default function OnvifCamera({ entityId }: { entityId: string }) {
+export default function OnvifCamera({
+  entityId,
+  aspectRatio,
+}: {
+  entityId: string;
+  aspectRatio: number;
+}) {
   function onMove(direction: "LEFT" | "RIGHT" | "UP" | "DOWN") {
     if (direction === "LEFT" || direction === "RIGHT") {
       callService("onvif", "ptz", {
@@ -18,5 +24,7 @@ export default function OnvifCamera({ entityId }: { entityId: string }) {
     }
   }
 
-  return <Camera entityId={entityId} onMove={onMove} />;
+  return (
+    <Camera entityId={entityId} aspectRatio={aspectRatio} onMove={onMove} />
+  );
 }

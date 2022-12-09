@@ -3,9 +3,11 @@ import Camera from "./Camera";
 
 export default function TapoCamera({
   entityId,
+  aspectRatio,
   moveButtons,
 }: {
   entityId: string;
+  aspectRatio: number;
   moveButtons?: {
     up: string;
     down: string;
@@ -29,6 +31,10 @@ export default function TapoCamera({
   }
 
   return (
-    <Camera entityId={entityId} onMove={moveButtons ? onMove : undefined} />
+    <Camera
+      entityId={entityId}
+      aspectRatio={aspectRatio}
+      onMove={moveButtons ? onMove : undefined}
+    />
   );
 }
