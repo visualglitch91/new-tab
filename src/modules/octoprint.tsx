@@ -65,27 +65,33 @@ function OctoprintModule() {
               label: "Início",
               entityId: "sensor.octoprint_start_time",
               renderListContent: (entity: HassEntity) => {
-                if (entity.state === "unknown") {
-                  return "Desconhecido";
+                if (entity.state !== "unknown") {
+                  const date = new Date(entity.state);
+                  const hours = String(date.getHours()).padStart(2, "0");
+                  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+                  return `${hours}:${minutes}`;
                 }
 
-                const date = new Date(entity.state);
-                const hours = String(date.getHours()).padStart(2, "0");
-                const minutes = String(date.getMinutes()).padStart(2, "0");
-                return `${hours}:${minutes}`;
+                return "Desconhecido";
               },
             },
             {
               label: "Restante",
               entityId: "sensor.octoprint_estimated_finish_time",
               renderListContent: (entity: HassEntity) => {
-                try {
-                  //@ts-ignore
-                  const eta = new Date(entity.state) - new Date();
-                  return humanizeDuration(eta, { language: "pt", largest: 2 });
-                } catch (_) {
-                  return "Desconhecido";
+                if (entity.state !== "unknown") {
+                  try {
+                    //@ts-ignore
+                    const eta = new Date(entity.state) - new Date();
+                    return humanizeDuration(eta, {
+                      language: "pt",
+                      largest: 2,
+                    });
+                  } catch (_) {}
                 }
+
+                return "Desconhecido";
               },
             },
           ]}
