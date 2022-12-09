@@ -136,6 +136,11 @@ const groups: ComponentGroupProps[] = [
         renderListContent: (entity) => formatNumericValue(entity.state, "%"),
       },
       {
+        label: "Ventoinha",
+        entityId: "sensor.processor_fan_speed",
+        renderListContent: (entity) => `${entity.state} RPM`,
+      },
+      {
         label: "Memória",
         entityId: "sensor.memory_use_percent",
         renderListContent: (entity) => formatNumericValue(entity.state, "%"),
