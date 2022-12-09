@@ -114,7 +114,6 @@ const groups: ComponentGroupProps[] = [
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz\nda Sala",
       },
-      "script.sala_firetv_reiniciar",
       "script.encontrar_celular_lais",
       "script.encontrar_celular_erica_1",
       "script.encontrar_celular_erica_2",
