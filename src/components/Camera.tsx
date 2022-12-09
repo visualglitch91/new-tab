@@ -5,13 +5,16 @@ import Paper from "./Paper";
 import FullScreenCamera from "./FullScreenCamera";
 import TouchButton from "./TouchButton";
 import useModal from "../utils/useModal";
+import CircularLoading from "./CircularLoading";
 
 const Wrapper = styled(
   Paper,
   css`
     position: relative;
-    min-height: 200px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     & img,
     & video {
@@ -21,13 +24,9 @@ const Wrapper = styled(
 );
 
 const Overlay = styled(
-  "div",
+  "span",
   css`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 18px;
-    transition: background 70ms linear;
   `
 );
 
@@ -52,7 +51,7 @@ export default function Camera({
   const entity = useEntity(entityId);
   const [mount, modals] = useModal();
   const entityPicture = entity?.attributes?.entity_picture;
-  const [snapshot, setSnapshot] = useState<string>();
+  const [snapshot, setSnapshot] = useState<string | undefined>("LOADING");
   const isStreaming = modals.length < 0;
 
   useEffect(() => {
@@ -102,17 +101,17 @@ export default function Camera({
     ));
   }
 
-  const aspectRatioStyle = { aspectRatio: aspectRatio.toString() };
-
   return (
-    <Wrapper>
+    <Wrapper style={{ aspectRatio: aspectRatio.toString() }}>
       {modals}
-      {snapshot ? (
-        <SnapshotButton style={aspectRatioStyle} onDoubleTap={showStream}>
+      {snapshot === "LOADING" ? (
+        <CircularLoading />
+      ) : snapshot ? (
+        <SnapshotButton onDoubleTap={showStream}>
           <img alt="" src={snapshot} />
         </SnapshotButton>
       ) : (
-        <Overlay style={aspectRatioStyle}>Câmera Indisponível</Overlay>
+        <Overlay>Câmera Indisponível</Overlay>
       )}
     </Wrapper>
   );

@@ -3,6 +3,7 @@ import { HassEntity } from "home-assistant-js-websocket";
 import humanizeDuration from "humanize-duration";
 import { css, styled } from "../styling";
 import { formatNumericValue } from "../utils/general";
+import { useConfirm } from "../utils/useConfirm";
 import { makeServiceCall, useEntity } from "../utils/hass";
 import PillButton from "../components/PillButton";
 import ComponentGroup from "../components/ComponentGroup";
@@ -20,11 +21,13 @@ const CameraWrapper = styled(
 );
 
 function OctoprintModule() {
+  const [confirm, $confirm] = useConfirm();
   const isPrinting =
     useEntity("binary_sensor.octoprint_printing")?.state === "on";
 
   return (
     <Stack>
+      {$confirm}
       <TitleCard
         title="Impressora 3D"
         action={
@@ -32,17 +35,27 @@ function OctoprintModule() {
             <PillButton
               icon="mdi:stop"
               label="Parar"
-              onClick={makeServiceCall("button", "press", {
-                entity_id: "button.octoprint_stop_job",
-              })}
+              onClick={() => {
+                confirm({
+                  title: "Parar Impressão",
+                  onConfirm: makeServiceCall("button", "press", {
+                    entity_id: "button.octoprint_stop_job",
+                  }),
+                });
+              }}
             />
           ) : (
             <PillButton
               icon="mdi:power"
               label="Desligar"
-              onClick={makeServiceCall("switch", "turn_off", {
-                entity_id: "switch.impressora_3d",
-              })}
+              onClick={() => {
+                confirm({
+                  title: "Desligar Impressora",
+                  onConfirm: makeServiceCall("switch", "turn_off", {
+                    entity_id: "switch.impressora_3d",
+                  }),
+                });
+              }}
             />
           )
         }

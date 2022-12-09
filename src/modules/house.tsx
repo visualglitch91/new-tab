@@ -3,6 +3,7 @@ import { TVEntityButton } from "../components/TVEntityButton";
 import { ComponentGroupProps } from "../utils/typings";
 import ComponentGroup from "../components/ComponentGroup";
 import LightGroupEntityButton from "../components/LightGroupEntityButton";
+import Packages from "../components/Packages";
 
 const groups: ComponentGroupProps[] = [
   {
@@ -148,8 +149,9 @@ const groups: ComponentGroupProps[] = [
   },
 ];
 
-const houseModule = groups.map((props, index) => (
-  <ComponentGroup key={index} {...props} />
-));
+const houseModule = [
+  ...groups.map((props, index) => <ComponentGroup key={index} {...props} />),
+  <Packages key="correios" />,
+];
 
 export default houseModule;

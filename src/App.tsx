@@ -64,11 +64,12 @@ export default function App() {
   return (
     <MasonryLayout>
       {tvModule}
-      <div style={columnStyle}>{houseModule.slice(0, -2)}</div>
+      <div style={columnStyle}>{houseModule.slice(0, 5)}</div>
+      <div style={columnStyle}>{houseModule.slice(5, -1)}</div>
       {isAdmin && vacuumModule}
-      <div style={columnStyle}>{houseModule.slice(-2)}</div>
       {isAdmin && camerasOn && camerasModule}
       {isAdmin && octoprintOn && octoprintModule}
+      <div style={columnStyle}>{houseModule.slice(-1)}</div>
     </MasonryLayout>
   );
 }

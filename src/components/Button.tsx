@@ -17,7 +17,6 @@ const Button = styled(
     justify-content: center;
     cursor: pointer;
     transition: background 60ms linear, box-shadow 60ms linear;
-    border-radius: 3px;
     font-weight: bolder;
     text-transform: uppercase;
     padding: 6px 8px;

@@ -1,6 +1,7 @@
 import { render } from "preact";
 import { useEffect, useState } from "react";
 import { HassProvider } from "./utils/hass";
+import { PackagesProvider } from "./utils/packages";
 import {
   autoUpdater,
   isTouchDevice,
@@ -50,7 +51,9 @@ function Main() {
   return ready ? (
     <ResponsiveProvider>
       <HassProvider>
-        <App />
+        <PackagesProvider>
+          <App />
+        </PackagesProvider>
       </HassProvider>
     </ResponsiveProvider>
   ) : null;
