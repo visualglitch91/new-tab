@@ -2574,6 +2574,11 @@ home-assistant-js-websocket@^8.0.0:
   resolved "https://registry.yarnpkg.com/home-assistant-js-websocket/-/home-assistant-js-websocket-8.0.0.tgz#7111da312ac9fafb47d9bdfbcca8ee8fca4cd64d"
   integrity sha512-H/JZDnlfXW3OBZK29YhaF3U/2maFcJSvxb0jKQBiN5i4XR+7ApYKALBBh2afLeiFQfy8Ys9AzSBY0kIeBW4Kzw==
 
+humanize-duration@^3.27.3:
+  version "3.27.3"
+  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.27.3.tgz#db654e72ebf5ccfe232c7f56bc58aa3a6fe4df88"
+  integrity sha512-iimHkHPfIAQ8zCDQLgn08pRqSVioyWvnGfaQ8gond2wf7Jq2jJ+24ykmnRyiz3fIldcn4oUuQXpjqKLhSVR7lw==
+
 ignore@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"

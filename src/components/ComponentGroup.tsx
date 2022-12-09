@@ -22,6 +22,7 @@ export default function ComponentGroup({
   layout,
   title,
   items,
+  titleAction,
   showGroupSwitch,
   extraGroupSwitchEntityIds = [],
 }: ComponentGroupProps) {
@@ -67,7 +68,7 @@ export default function ComponentGroup({
   }, [layout]);
 
   return (
-    <Layout title={title} titleAction={groupSwitch}>
+    <Layout title={title} titleAction={titleAction || groupSwitch}>
       {items.map((raw) => {
         if (!raw || raw === true || typeof raw === "number") {
           return null;

@@ -95,7 +95,7 @@ export default (
         entityId: vacuumId,
         renderListContent: (entity) => {
           const status = entity.attributes.status as keyof typeof statusLabels;
-          return statusLabels[status]?.toUpperCase();
+          return statusLabels[status] || "Desconhecido";
         },
       },
       <VacuumActionsRow />,

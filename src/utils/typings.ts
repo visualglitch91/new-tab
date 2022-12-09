@@ -40,6 +40,7 @@ export type ComponentGroupItem =
 export interface ComponentGroupProps {
   layout: "list" | "grid";
   title?: string;
+  titleAction?: React.ReactNode;
   items: ComponentGroupItem[];
   showGroupSwitch?: boolean;
   extraGroupSwitchEntityIds?: string[];

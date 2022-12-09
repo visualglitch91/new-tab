@@ -13,10 +13,8 @@ import {
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
 import { loadValue, saveValue } from "./general";
-import Storage from "./storage";
 
 let _connection: Connection | undefined;
-const _cache = new Storage({ version: 1 });
 
 export type HassEntityMap = Record<string, HassEntity | undefined>;
 
@@ -61,9 +59,15 @@ export function getIcon(entity: HassEntity) {
     const { state, entity_id } = entity;
     const [domain] = entity_id.split(".");
     const icon = entity.attributes?.icon;
+    const deviceClass = entity.attributes?.device_class;
 
     if (icon) {
       return icon;
+    }
+
+    switch (deviceClass) {
+      case "timestamp":
+        return "mdi:clock";
     }
 
     switch (domain) {
@@ -135,15 +139,6 @@ class HassStore {
       this.updateUser(user);
     });
 
-    const cachedUser = _cache.getItem<HassUser>("user");
-    const cachedStates = _cache.getItem<HassEntity[]>("states");
-
-    if (cachedUser && cachedStates) {
-      this.updateUser(cachedUser);
-      this.updateStates(cachedStates);
-      return Promise.resolve();
-    }
-
     return setupPromise;
   }
 
@@ -164,8 +159,6 @@ class HassStore {
 
     this.states = Object.values(nextStateMap) as HassEntity[];
 
-    _cache.setItem("states", this.states);
-
     allIdsSet.forEach((entityId) => {
       const currentEntity = currentStateMap[entityId];
       const nextEntity = nextStateMap[entityId];
@@ -181,7 +174,6 @@ class HassStore {
 
   private updateUser(user: HassUser) {
     this.user = user;
-    _cache.setItem("user", this.user);
     this.emitter.emit("user", user);
   }
 
