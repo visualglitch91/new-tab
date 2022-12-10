@@ -8,7 +8,7 @@ class PackageStore {
   public packages: Package[] | undefined;
 
   refresh() {
-    return fetch(`${hassUrl}/local/correios.json`)
+    return fetch(`${hassUrl}/local/correios.json?timestamp=${Date.now()}`)
       .then((res) => res.json())
       .then((json) => {
         this.packages = json;
