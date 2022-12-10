@@ -18,10 +18,7 @@ let _connection: Connection | undefined;
 
 export type HassEntityMap = Record<string, HassEntity | undefined>;
 
-export const hassUrl =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_HASS_DEVELOPMENT_URL
-    : window.location.origin;
+export const hassUrl = import.meta.env.VITE_HASS_URL;
 
 function setupHASS({
   onStatesChange,

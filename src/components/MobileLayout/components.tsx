@@ -80,8 +80,11 @@ export const Content = styled(
   css`
     padding: 16px 16px 80px;
 
-    .cordova & {
+    .statusbar-overlay & {
       padding-top: 48px;
+    }
+
+    .cordova & {
       will-change: transform;
     }
   `
@@ -90,7 +93,7 @@ export const Content = styled(
 export const StatusBar = styled(
   "div",
   css`
-    .cordova & {
+    .statusbar-overlay & {
       height: 32px;
       backdrop-filter: blur(10px);
       background: rgb(37 51 82 / 65%);

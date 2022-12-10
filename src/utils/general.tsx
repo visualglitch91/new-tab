@@ -74,11 +74,24 @@ export function loadCordovaJS() {
       document.addEventListener("deviceready", onDeviceReady, false);
 
       function onDeviceReady() {
-        document.body.classList.add("cordova");
-        //@ts-expect-error no typings for cordova
+        const NavigationBar = (window as any).NavigationBar;
+        const StatusBar = (window as any).StatusBar;
+
+        document.body.classList.add("statusbar-overlay");
+
         NavigationBar.show();
-        //@ts-expect-error no typings for cordova
         NavigationBar.backgroundColorByHexString("#24324b");
+
+        window.addEventListener("keyboardWillShow", () => {
+          StatusBar.overlaysWebView(false);
+          document.body.classList.remove("statusbar-overlay");
+        });
+
+        window.addEventListener("keyboardWillHide", () => {
+          StatusBar.overlaysWebView(true);
+          document.body.classList.add("statusbar-overlay");
+        });
+
         resolve(true);
       }
     };
