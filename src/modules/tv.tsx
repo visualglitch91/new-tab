@@ -11,6 +11,7 @@ import {
   ScriptImageButtonCard,
 } from "./tv.utils";
 import LightGroupEntityButton from "../components/LightGroupEntityButton";
+import Grid from "../components/Grid";
 
 function spacer(height?: number) {
   return <div style={{ height: height && `${height}px` }} />;
@@ -146,35 +147,24 @@ export default (
 
     {spacer(12)}
 
-    <ButtonRow height={70}>
+    <Grid gap={12} columnWidth={120} rowHeight={70}>
       <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
       <ScriptImageButtonCard asset="globoplay" script="sala_tv_globoplay" />
       <ScriptImageButtonCard asset="netflix" script="sala_tv_netflix" />
-    </ButtonRow>
 
-    <ButtonRow height={70}>
       <ScriptImageButtonCard asset="plex" script="sala_tv_plex" />
       <ScriptImageButtonCard asset="disneyplus" script="sala_tv_disney_plus" />
       <ScriptImageButtonCard asset="hbomax" script="sala_tv_hbo_max" />
-    </ButtonRow>
 
-    <ButtonRow height={70}>
       <ScriptImageButtonCard asset="starplus" script="sala_tv_star_plus" />
       <ScriptImageButtonCard asset="prime_video" script="sala_tv_prime_video" />
       <ScriptImageButtonCard asset="spotify" script="sala_tv_spotify" />
-    </ButtonRow>
 
-    <ButtonRow height={70}>
       <ScriptImageButtonCard asset="youtube" script="sala_tv_youtube" />
       <ScriptImageButtonCard asset="kodi" script="sala_tv_kodi" />
-      {/* <ScriptImageButtonCard asset="fire_tv" script="sala_tv_firetv" /> */}
-      <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
-    </ButtonRow>
 
-    <ButtonRow height={70}>
+      <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
       <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
-      <span />
-      <span />
-    </ButtonRow>
+    </Grid>
   </Stack>
 );

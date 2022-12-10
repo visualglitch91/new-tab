@@ -1,15 +1,12 @@
 import { ReactNode } from "react";
 import { css, styled } from "../styling";
+import Grid from "./Grid";
 import TitleCard from "./TitleCard";
 
-const Content = styled(
-  "div",
+const Title = styled(
+  TitleCard,
   css`
-    margin-top: 16px;
-    display: grid;
-    justify-content: center;
-    grid-gap: 8px;
-    grid-template-columns: repeat(auto-fill, minmax(min(80px, 100%), 1fr));
+    margin-bottom: 16px;
   `
 );
 
@@ -24,8 +21,10 @@ export default function GridLayout({
 }) {
   return (
     <div>
-      {title && <TitleCard title={title} action={titleAction} />}
-      <Content>{children}</Content>
+      {title && <Title title={title} action={titleAction} />}
+      <Grid gap={8} columnWidth={80}>
+        {children}
+      </Grid>
     </div>
   );
 }
