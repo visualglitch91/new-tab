@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { css, styled } from "../styling";
 
 const Root = styled("div", css``);
@@ -35,16 +36,27 @@ const TextInput = styled(
 export default function TextField({
   label,
   value,
+  autoFocus,
   onChange,
 }: {
   label: string;
   value: string;
+  autoFocus?: boolean;
   onChange: (value: string) => void;
 }) {
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (autoFocus) {
+      ref.current?.focus();
+    }
+  }, [autoFocus]);
+
   return (
     <Root>
       <Label htmlFor={label}>{label}</Label>
       <TextInput
+        ref={ref}
         id={label}
         name={label}
         type="text"

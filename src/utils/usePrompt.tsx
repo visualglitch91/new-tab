@@ -24,6 +24,7 @@ function Prompt({
         {fields.map((label, index) => (
           <TextField
             key={index}
+            autoFocus={index === 0}
             label={label}
             value={values[index]}
             onChange={(value) => {
