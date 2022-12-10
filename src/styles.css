@@ -35,6 +35,12 @@ body {
 #app {
   height: 100%;
   overflow: auto;
+  opacity: 0;
+  transition: opacity 200ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+body.ready #app {
+  opacity: 1;
 }
 
 body {

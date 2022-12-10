@@ -51,16 +51,30 @@ export function autoUpdater() {
     return;
   }
 
-  console.log("Looking for a new version...");
+  console.log(`Looking for a new version, current is ${version}`);
+
   fetch(`./latest.json?c=${Date.now()}`)
     .then((res) => res.json())
     .catch(() => undefined)
-    .then((latest) => {
+    .then(async (latest) => {
       if (latest && latest !== version) {
-        console.log("Loading the new version...");
+        console.log(`Loading the new version ${latest}`);
+
+        const registration = await navigator.serviceWorker?.getRegistration();
+
+        if (registration) {
+          registration.unregister();
+        }
+
+        if (caches) {
+          await caches.keys().then((keys) => {
+            return Promise.all(keys.map((key) => caches.delete(key)));
+          });
+        }
+
         const url = new URL(window.location.href);
         url.searchParams.set("version", latest);
-        window.location.assign(url.toString());
+        window.location.assign(url);
       }
     });
 }

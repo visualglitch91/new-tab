@@ -7,6 +7,7 @@
     "prerun": "echo \"\\\"$(date +%s)\\\"\" > src/version.json",
     "start": "yarn prerun && vite",
     "build": "yarn prerun && yarn lint && vite build",
+    "postbuild": "cp src/robots.txt dist && cp -R src/assets/icons dist/icons",
     "lint": "eslint --max-warnings=0 --ext .tsx,.ts,.jsx,.js ./src && tsc --project ./tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -30,7 +31,9 @@
     "eslint": "^8.28.0",
     "eslint-config-react-app": "^7.0.1",
     "typescript": "^4.6.4",
-    "vite": "^3.2.3"
+    "vite": "^3.2.3",
+    "vite-plugin-html": "^3.2.0",
+    "vite-plugin-pwa": "^0.13.3"
   },
   "eslintConfig": {
     "extends": [

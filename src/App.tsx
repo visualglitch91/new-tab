@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useEntity, useUser } from "./utils/hass";
 import { compact, useResponsive } from "./utils/general";
 import MasonryLayout from "./components/MasonryLayout";
@@ -24,6 +25,10 @@ export default function App() {
   const octoprintOn = printerState === "on" && octoprintState !== "unavailable";
 
   const isAdmin = user.is_admin;
+
+  useEffect(() => {
+    setTimeout(() => document.body.classList.add("ready"), 120);
+  }, []);
 
   if (isMobile) {
     return (
