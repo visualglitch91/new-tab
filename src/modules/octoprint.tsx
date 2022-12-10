@@ -100,6 +100,8 @@ function OctoprintModule() {
                     return humanizeDuration(eta, {
                       language: "pt",
                       largest: 2,
+                      units: ["d", "h", "m"],
+                      round: true,
                     });
                   } catch (_) {}
                 }
