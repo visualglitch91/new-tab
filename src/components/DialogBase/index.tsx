@@ -1,15 +1,22 @@
 import { useRef, useState } from "react";
+import { css } from "../../styling";
 import Timer from "../../utils/Timer";
 import Button from "../Button";
 import Icon from "../Icon";
 import { Wrapper, Root, Header, Content } from "./components";
+
+const classes = {
+  closeButton: css`
+    margin-left: auto;
+  `,
+};
 
 export default function DialogBase({
   title,
   children,
   onClose,
 }: {
-  title: React.ReactNode;
+  title?: React.ReactNode;
   children: React.ReactNode;
   onClose: () => void;
 }) {
@@ -36,7 +43,7 @@ export default function DialogBase({
       <Root onMouseDown={keepOpen} onTouchStart={keepOpen}>
         <Header>
           {title}
-          <Button onTap={onClose}>
+          <Button className={classes.closeButton} onTap={onClose}>
             <Icon icon="close" />
           </Button>
         </Header>

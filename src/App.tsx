@@ -8,6 +8,8 @@ import houseModule from "./modules/house";
 import vacuumModule from "./modules/vacuum";
 import camerasModule from "./modules/cameras";
 import octoprintModule from "./modules/octoprint";
+import systemModule from "./modules/system";
+import packagesModule from "./modules/packages";
 
 const columnStyle = {
   display: "flex",
@@ -33,35 +35,56 @@ export default function App() {
   if (isMobile) {
     return (
       <MobileLayout
-        tabs={compact([
+        mainTabs={compact([
           {
+            key: "tv",
             title: "TV",
             icon: "mdi:television-classic",
             content: tvModule,
           },
           {
+            key: "house",
             title: "Casa",
             icon: "mdi:home",
             content: houseModule,
           },
           isAdmin && {
+            key: "vacuum",
             title: "Aspirador",
             icon: "mdi:robot-vacuum",
             content: vacuumModule,
           },
-          isAdmin &&
-            camerasOn && {
-              title: "Câmeras",
-              icon: "mdi:cctv",
-              content: camerasModule,
-            },
-          isAdmin &&
-            octoprintOn && {
-              title: "OctoPrint",
-              icon: "mdi:printer-3d-nozzle",
-              content: octoprintModule,
-            },
         ])}
+        extraTabs={
+          isAdmin
+            ? compact([
+                {
+                  key: "packages",
+                  title: "Encomendas",
+                  icon: "mdi:truck-delivery-outline",
+                  content: packagesModule,
+                },
+                camerasOn && {
+                  key: "cameras",
+                  title: "Câmeras",
+                  icon: "mdi:cctv",
+                  content: camerasModule,
+                },
+                octoprintOn && {
+                  key: "octoprint",
+                  title: "OctoPrint",
+                  icon: "mdi:printer-3d-nozzle",
+                  content: octoprintModule,
+                },
+                {
+                  key: "system",
+                  title: "Sistema",
+                  icon: "mdi:cpu-64-bit",
+                  content: systemModule,
+                },
+              ])
+            : []
+        }
       />
     );
   }
@@ -69,12 +92,12 @@ export default function App() {
   return (
     <MasonryLayout>
       {tvModule}
-      <div style={columnStyle}>{houseModule.slice(0, 5)}</div>
-      <div style={columnStyle}>{houseModule.slice(5, -1)}</div>
+      <div style={columnStyle}>{houseModule}</div>
+      {isAdmin && systemModule}
       {isAdmin && vacuumModule}
       {isAdmin && camerasOn && camerasModule}
       {isAdmin && octoprintOn && octoprintModule}
-      <div style={columnStyle}>{houseModule.slice(-1)}</div>
+      {isAdmin && packagesModule}
     </MasonryLayout>
   );
 }

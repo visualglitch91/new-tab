@@ -1,9 +1,7 @@
-import { formatNumericValue } from "../utils/general";
 import { TVEntityButton } from "../components/TVEntityButton";
 import { ComponentGroupProps } from "../utils/typings";
 import ComponentGroup from "../components/ComponentGroup";
 import LightGroupEntityButton from "../components/LightGroupEntityButton";
-import Packages from "../components/Packages";
 
 const groups: ComponentGroupProps[] = [
   {
@@ -120,38 +118,10 @@ const groups: ComponentGroupProps[] = [
       "script.encontrar_celular_erica_2",
     ],
   },
-  {
-    title: "Sistema",
-    layout: "list",
-    items: [
-      {
-        icon: "icofont-thermometer",
-        label: "Temperatura",
-        entityId: "sensor.processor_temperature",
-        renderListContent: (entity) => formatNumericValue(entity.state, "°C"),
-      },
-      {
-        label: "Processador",
-        entityId: "sensor.processor_use",
-        renderListContent: (entity) => formatNumericValue(entity.state, "%"),
-      },
-      {
-        label: "Ventoinha",
-        entityId: "sensor.processor_fan_speed",
-        renderListContent: (entity) => `${entity.state} RPM`,
-      },
-      {
-        label: "Memória",
-        entityId: "sensor.memory_use_percent",
-        renderListContent: (entity) => formatNumericValue(entity.state, "%"),
-      },
-    ],
-  },
 ];
 
-const houseModule = [
-  ...groups.map((props, index) => <ComponentGroup key={index} {...props} />),
-  <Packages key="correios" />,
-];
+const houseModule = groups.map((props, index) => (
+  <ComponentGroup key={index} {...props} />
+));
 
 export default houseModule;

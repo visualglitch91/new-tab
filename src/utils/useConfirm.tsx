@@ -18,6 +18,7 @@ export function useConfirm() {
         <Stack>
           <BorderButton onTap={unmount}>Cancelar</BorderButton>
           <BorderButton
+            primary
             onTap={() => {
               unmount();
               onConfirm();

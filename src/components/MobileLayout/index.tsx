@@ -1,34 +1,44 @@
 import { useEffect, useRef, useState } from "react";
 import { CSSTransition, TransitionGroup } from "preact-transitioning";
-import { clamp, loadValue, saveValue } from "../../utils/general";
+import { loadValue, saveValue } from "../../utils/general";
+import useModal from "../../utils/useModal";
 import managedScroll, { ManagedScroll } from "../../utils/managedScroll";
 import Stack from "../Stack";
 import Tab from "./Tab";
-import { Wrapper, Tabs, Content, StatusBar } from "./components";
+import { Wrapper, ExtraTab, Tabs, Content, StatusBar } from "./components";
+import DialogBase from "../DialogBase";
+import Icon from "../Icon";
+
+interface TabConfig {
+  key: string;
+  title: string;
+  icon: string;
+  content: React.ReactNode;
+}
 
 export default function MobileLayout({
-  tabs,
+  mainTabs,
+  extraTabs,
 }: {
-  tabs: {
-    title: string;
-    icon: string;
-    content: React.ReactNode;
-  }[];
+  mainTabs: TabConfig[];
+  extraTabs: TabConfig[];
 }) {
+  const tabs = [...mainTabs, ...extraTabs];
   const wrapperRef = useRef<HTMLDivElement>(null);
   const managedScrollRef = useRef<ManagedScroll>();
+  const [mount, modals] = useModal();
 
   const [active, setActive] = useState(() => {
-    const lastActive = loadValue("last_active_tab");
+    const lastActive = loadValue<string>("last_active_tab");
 
-    if (typeof lastActive !== "number" || isNaN(lastActive)) {
-      return 0;
+    if (tabs.some((it) => it.key === lastActive)) {
+      return lastActive;
     }
 
-    return clamp(lastActive, 0, tabs.length - 1);
+    return tabs[0].key;
   });
 
-  const content = tabs[active].content;
+  const content = tabs.find((it) => it.key === active)?.content;
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -46,17 +56,49 @@ export default function MobileLayout({
     return () => scroll.disable();
   }, []);
 
-  function changeTab(index: number) {
-    if (active === index) {
+  useEffect(() => {
+    if (tabs.length && !content) {
+      changeTab(tabs[0].key);
+    }
+    //eslint-disable-next-line
+  }, [content]);
+
+  function changeTab(key: string) {
+    if (active === key) {
       managedScrollRef.current?.scrollTo(0, true);
     }
 
-    setActive(index);
-    saveValue("last_active_tab", index);
+    setActive(key);
+    saveValue("last_active_tab", key);
   }
+
+  function showExtraTabsPrompt() {
+    mount((unmount) => (
+      <DialogBase onClose={unmount}>
+        <Stack>
+          {extraTabs.map((tab) => (
+            <ExtraTab
+              key={tab.key}
+              primary={tab.key === active}
+              onTap={() => {
+                changeTab(tab.key);
+                unmount();
+              }}
+            >
+              <Icon icon={tab.icon} />
+              {tab.title}
+            </ExtraTab>
+          ))}
+        </Stack>
+      </DialogBase>
+    ));
+  }
+
+  const extraActive = extraTabs.some((it) => it.key === active);
 
   return (
     <Wrapper ref={wrapperRef}>
+      {modals}
       <Content>
         <TransitionGroup duration={250}>
           <CSSTransition
@@ -71,15 +113,23 @@ export default function MobileLayout({
       </Content>
       <StatusBar />
       <Tabs>
-        {tabs.map((tab, index) => (
+        {mainTabs.map((tab) => (
           <Tab
-            key={index}
-            active={active === index}
+            key={tab.key}
+            active={active === tab.key}
             icon={tab.icon}
             title={tab.title}
-            onTap={() => changeTab(index)}
+            onTap={() => changeTab(tab.key)}
           />
         ))}
+        {extraTabs.length && (
+          <Tab
+            active={extraActive}
+            icon="mdi-dots-horizontal"
+            title="Mais"
+            onTap={() => showExtraTabsPrompt()}
+          />
+        )}
       </Tabs>
     </Wrapper>
   );

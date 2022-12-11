@@ -1,4 +1,5 @@
 import { styled, css } from "../../styling";
+import BorderButton from "../BorderButton";
 
 export const Wrapper = styled(
   "div",
@@ -103,5 +104,15 @@ export const StatusBar = styled(
       width: 100%;
       z-index: 2;
     }
+  `
+);
+
+export const ExtraTab = styled(
+  BorderButton,
+  css`
+    padding-left: 16px;
+    padding-right: 16px;
+    justify-content: flex-start;
+    column-gap: 16px;
   `
 );

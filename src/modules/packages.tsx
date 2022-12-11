@@ -4,10 +4,10 @@ import { usePackages } from "../utils/packages";
 import { Package } from "../utils/typings";
 import { useConfirm } from "../utils/useConfirm";
 import { usePrompt } from "../utils/usePrompt";
-import ButtonCard from "./ButtonCard";
-import PillButton from "./PillButton";
-import Stack from "./Stack";
-import TitleCard from "./TitleCard";
+import ButtonCard from "../components/ButtonCard";
+import PillButton from "../components/PillButton";
+import Stack from "../components/Stack";
+import TitleCard from "../components/TitleCard";
 
 const ItemCard = styled(
   ButtonCard,
@@ -68,7 +68,7 @@ function parseDate(date: string) {
   });
 }
 
-export default function Packages() {
+function Packages() {
   const { packages, refresh } = usePackages();
   const [prompt, $prompt] = usePrompt();
   const [confirm, $confirm] = useConfirm();
@@ -100,41 +100,41 @@ export default function Packages() {
   }
 
   return (
-    <>
+    <Stack>
       {$prompt}
       {$confirm}
-      <Stack>
-        <TitleCard
-          title="Encomendas"
-          action={
-            <PillButton icon="mdi:plus" label="Adicionar" onClick={add} />
-          }
-        />
-        {packages?.map((it) => (
-          <ItemCard key={it.code} onPress={() => remove(it)}>
-            <ItemContent>
-              <Label>{it.name}</Label>
-              {it.lastEvent ? (
-                <>
-                  <At>{parseDate(it.lastEvent.at)}</At>
-                  <Desciption>
-                    {it.lastEvent.description}
+      <TitleCard
+        title="Encomendas"
+        action={<PillButton icon="mdi:plus" label="Adicionar" onClick={add} />}
+      />
+      {packages?.map((it) => (
+        <ItemCard key={it.code} onPress={() => remove(it)}>
+          <ItemContent>
+            <Label>{it.name}</Label>
+            {it.lastEvent ? (
+              <>
+                <At>{parseDate(it.lastEvent.at)}</At>
+                <Desciption>
+                  {it.lastEvent.description}
 
-                    {it.lastEvent.location && (
-                      <>
-                        <br />
-                        {it.lastEvent.location}
-                      </>
-                    )}
-                  </Desciption>
-                </>
-              ) : (
-                <Desciption>Não Encontrado</Desciption>
-              )}
-            </ItemContent>
-          </ItemCard>
-        ))}
-      </Stack>
-    </>
+                  {it.lastEvent.location && (
+                    <>
+                      <br />
+                      {it.lastEvent.location}
+                    </>
+                  )}
+                </Desciption>
+              </>
+            ) : (
+              <Desciption>Não Encontrado</Desciption>
+            )}
+          </ItemContent>
+        </ItemCard>
+      ))}
+    </Stack>
   );
 }
+
+const packagesModule = <Packages />;
+
+export default packagesModule;
