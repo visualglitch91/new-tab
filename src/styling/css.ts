@@ -2,6 +2,12 @@ import parse from "./parse";
 import astish from "./astish";
 import { uniqueClassName } from "./utils";
 
+export function appendStyle(style: string) {
+  const tag = document.createElement("style");
+  tag.innerHTML = style;
+  document.head.appendChild(tag);
+}
+
 function compile(
   parseAST: (ast: any, className: string) => any,
   strings: any[],
@@ -19,9 +25,7 @@ function compile(
     .join("");
 
   const style = parse(parseAST(astish(evaluated), className), "." + className);
-  const tag = document.createElement("style");
-  tag.innerHTML = style;
-  document.head.appendChild(tag);
+  appendStyle(style);
 
   return className;
 }

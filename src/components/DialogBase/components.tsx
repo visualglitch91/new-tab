@@ -63,7 +63,7 @@ export const Root = styled(
       transform: translate3d(0, 100%, 0);
       transition: transform 400ms cubic-bezier(0.76, 0, 0.24, 1);
       will-change: transform;
-      border-radius: 16px;
+      border-radius: 16px 16px 0px 0px;
       background: rgba(36, 50, 75, 1);
     }
 

@@ -10,8 +10,25 @@ import {
 } from "./utils/general";
 import App from "./App";
 import "./styles.css";
+import { appendStyle, theme } from "./styling";
 
 const app = document.getElementById("app")!;
+
+appendStyle(`
+  @media only screen and (max-width: 600px) {
+    body {
+      background-size: cover;
+      background-image: url(${theme.wallpaper.mobile});
+    }
+  }
+
+  @media only screen and (min-width: 601px) {
+    body {
+      background-size: cover;
+      background-image: url(${theme.wallpaper.desktop});
+    }
+  }
+`);
 
 async function setup() {
   await loadCordovaJS();

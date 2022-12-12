@@ -55,18 +55,6 @@ body {
   overflow: hidden;
 }
 
-@media only screen and (max-width: 600px) {
-  body {
-    background-image: url("assets/background-mobile.jpg");
-  }
-}
-
-@media only screen and (min-width: 601px) {
-  body {
-    background-image: url("assets/background-desktop.jpg");
-  }
-}
-
 input,
 button,
 [role="button"] {

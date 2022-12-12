@@ -10,6 +10,7 @@ const StyledButton = styled(
     position: relative;
     display: inline-flex;
     overflow: hidden;
+    cursor: pointer;
 
     & * {
       pointer-events: none;

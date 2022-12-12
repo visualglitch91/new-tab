@@ -1,4 +1,4 @@
-import { css, styled, theme } from "../styling";
+import { css, lighten, styled, theme } from "../styling";
 
 const Root = styled(
   "label",
@@ -21,7 +21,7 @@ const Root = styled(
       left: 0;
       width: 42px;
       height: 14px;
-      background-color: ${theme.background.d10};
+      background-color: ${theme.switch.track};
       border-radius: 11px;
       transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
       transition: all 0.25s linear;
@@ -34,7 +34,7 @@ const Root = styled(
       left: 0;
       width: 22px;
       height: 22px;
-      background-color: ${theme.background.l90};
+      background-color: ${theme.switch.unchecked};
       border-radius: 11px;
       box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
       transform: translate3d(2px, 2px, 0);
@@ -55,7 +55,7 @@ const Root = styled(
     }
 
     & input:checked + i::after {
-      background-color: ${theme.accent.base};
+      background-color: ${theme.switch.checked};
     }
 
     & input:checked + i::after {
@@ -63,11 +63,11 @@ const Root = styled(
     }
 
     &:hover input:not(:disabled) + i::after {
-      background-color: ${theme.background.l120};
+      background-color: ${lighten(theme.switch.unchecked, 0.2)};
     }
 
     &:hover input:not(:disabled):checked + i::after {
-      background-color: ${theme.accent.l60};
+      background-color: ${lighten(theme.switch.checked, 0.2)};
     }
 
     & input:not(:disabled) + i::before,
@@ -76,12 +76,12 @@ const Root = styled(
     }
 
     & input:disabled + i::before {
-      background-color: ${theme.background.l60};
+      background-color: ${lighten(theme.switch.track, 0.2)};
       opacity: 0.6;
     }
 
     & input:disabled + i::after {
-      background-color: ${theme.background.l30};
+      background-color: ${lighten(theme.switch.track, 0.4)};
     }
   `
 );
