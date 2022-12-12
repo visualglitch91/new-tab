@@ -18,15 +18,11 @@ const columnStyle = {
 } as const;
 
 export default function App() {
-  const user = useUser();
+  const isAdmin = useUser().is_admin;
   const { isMobile } = useResponsive();
 
   const camerasOn = useEntity("switch.cameras")?.state === "on";
-  const octoprintState = useEntity("sensor.octoprint_current_state")?.state;
-  const printerState = useEntity("switch.impressora_3d")?.state;
-  const octoprintOn = printerState === "on" && octoprintState !== "unavailable";
-
-  const isAdmin = user.is_admin;
+  const printerOn = useEntity("switch.impressora_3d")?.state === "on";
 
   useEffect(() => {
     setTimeout(() => document.body.classList.add("ready"), 120);
@@ -70,7 +66,7 @@ export default function App() {
                   icon: "mdi:cctv",
                   content: camerasModule,
                 },
-                octoprintOn && {
+                printerOn && {
                   key: "octoprint",
                   title: "OctoPrint",
                   icon: "mdi:printer-3d-nozzle",
@@ -96,7 +92,7 @@ export default function App() {
       {isAdmin && systemModule}
       {isAdmin && vacuumModule}
       {isAdmin && camerasOn && camerasModule}
-      {isAdmin && octoprintOn && octoprintModule}
+      {isAdmin && printerOn && octoprintModule}
       {isAdmin && packagesModule}
     </MasonryLayout>
   );
