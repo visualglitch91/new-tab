@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { css } from "../../styling";
+import { useResponsive } from "../../utils/general";
 import Timer from "../../utils/Timer";
 import Button from "../Button";
 import Icon from "../Icon";
@@ -21,6 +22,7 @@ export default function DialogBase({
   onClose: () => void;
 }) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const { isDesktop } = useResponsive();
 
   const [keepOpenTimer] = useState(() => {
     const timer = new Timer("timeout");
@@ -43,9 +45,11 @@ export default function DialogBase({
       <Root onMouseDown={keepOpen} onTouchStart={keepOpen}>
         <Header>
           {title}
-          <Button className={classes.closeButton} onTap={onClose}>
-            <Icon icon="close" />
-          </Button>
+          {isDesktop && (
+            <Button className={classes.closeButton} onTap={onClose}>
+              <Icon icon="close" />
+            </Button>
+          )}
         </Header>
         <Content>{children}</Content>
       </Root>

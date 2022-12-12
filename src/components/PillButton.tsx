@@ -1,4 +1,4 @@
-import { styled, css } from "../styling";
+import { styled, css, theme } from "../styling";
 import Icon from "./Icon";
 
 const Wrapper = styled(
@@ -10,7 +10,7 @@ const Wrapper = styled(
     border: none;
     outline: none;
     font-size: 11px;
-    color: #f64270;
+    color: ${theme.accent.base};
     display: flex;
     align-items: center;
     justify-content: center;

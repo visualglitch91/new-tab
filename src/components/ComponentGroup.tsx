@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { styled, css } from "../styling";
+import { styled, css, theme } from "../styling";
 import { ComponentGroupProps } from "../utils/typings";
 import { useResponsive } from "../utils/general";
 import ListCard from "./ListCard";
@@ -14,7 +14,7 @@ const ListDivider = styled(
   "div",
   css`
     height: 1px;
-    background-color: rgb(36, 46, 66);
+    background-color: ${theme.background.d10};
   `
 );
 

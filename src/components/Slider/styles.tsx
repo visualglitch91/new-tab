@@ -1,8 +1,8 @@
-import { css } from "../../styling";
+import { css, theme } from "../../styling";
 
 const height = "30px";
-const track = "#20293c";
-const filled = "#dc456c";
+const track = theme.background.d10;
+const filled = theme.accent.base;
 const thumbColor = "transparent";
 const thumbWidth = "0";
 

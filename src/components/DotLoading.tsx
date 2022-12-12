@@ -1,12 +1,12 @@
-import { styled, keyframes, css } from "../styling";
+import { styled, keyframes, css, theme, alpha } from "../styling";
 
 const animation = keyframes`
   0% {
-    background-color: #f64270;
+    background-color: ${theme.accent.base};
   }
   50%,
   100% {
-    background-color: rgba(248, 79, 172, 0.2);
+    background-color: ${alpha(theme.accent.base, 0.2)};
   }
 `;
 
@@ -22,8 +22,8 @@ const Wrapper = styled(
       width: 10px;
       height: 10px;
       border-radius: 5px;
-      background-color: #f64270;
-      color: #f64270;
+      background-color: ${theme.accent.base};
+      color: ${theme.accent.base};
       animation: ${animation} 1s infinite linear alternate;
       animation-delay: 0.5s;
 
@@ -32,8 +32,8 @@ const Wrapper = styled(
         width: 10px;
         height: 10px;
         border-radius: 5px;
-        background-color: #f64270;
-        color: #f64270;
+        background-color: ${theme.accent.base};
+        color: ${theme.accent.base};
         animation: ${animation} 1s infinite alternate;
         animation-delay: 0s;
       }
@@ -51,8 +51,8 @@ const Wrapper = styled(
         width: 10px;
         height: 10px;
         border-radius: 5px;
-        background-color: #f64270;
-        color: #f64270;
+        background-color: ${theme.accent.base};
+        color: ${theme.accent.base};
         animation: ${animation} 1s infinite alternate;
         animation-delay: 1s;
       }

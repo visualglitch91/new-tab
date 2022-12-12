@@ -1,4 +1,4 @@
-import { styled, css } from "../styling";
+import { styled, css, theme, alpha } from "../styling";
 import TouchButton, { TouchButtonProps } from "./TouchButton";
 import Paper from "./Paper";
 
@@ -25,7 +25,7 @@ const ButtonCard = styled(
     border: 1px solid transparent;
 
     &.hover {
-      background-color: rgba(29, 41, 56, 0.7);
+      background-color: ${alpha(theme.background.d10, 0.7)};
       box-shadow: rgb(27, 55, 80) 3px 3px 13px -6px;
     }
 

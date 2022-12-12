@@ -1,4 +1,4 @@
-import { styled, keyframes, css } from "../styling";
+import { styled, keyframes, css, theme } from "../styling";
 
 const rotate = keyframes`
   100% {
@@ -37,7 +37,7 @@ const Wrapper = styled(
       stroke-width: 3px;
       animation: ${stroke} 1.5s ease-in-out infinite;
       stroke-linecap: round;
-      stroke: #f64270;
+      stroke: ${theme.accent.base};
     }
   `
 );

@@ -1,17 +1,17 @@
-import { css, cx } from "../styling";
+import { css, cx, theme } from "../styling";
 import Button from "./Button";
 
 const classes = {
   root: css`
-    border: 1px solid #f64270;
+    border: 1px solid ${theme.accent.base};
   `,
   primary: css`
-    background: #f64270;
+    background: ${theme.accent.base};
     color: white;
 
     &:hover {
-      background: #c6355a;
-      border-color: #c6355a;
+      background: ${theme.accent.d10};
+      border-color: ${theme.accent.d10};
     }
   `,
 };

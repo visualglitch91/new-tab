@@ -1,4 +1,4 @@
-import { styled, css } from "../../styling";
+import { styled, css, theme } from "../../styling";
 
 export const Wrapper = styled(
   "div",
@@ -52,7 +52,7 @@ export const Wrapper = styled(
 export const Root = styled(
   "div",
   css`
-    background: #2f3b52;
+    background: ${theme.background.base};
     padding: 18px 18px 28px;
     min-width: 300px;
     border-radius: 6px;

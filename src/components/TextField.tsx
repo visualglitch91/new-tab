@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { css, styled } from "../styling";
+import { css, styled, theme } from "../styling";
 
 const Root = styled("div", css``);
 
@@ -20,9 +20,9 @@ const TextInput = styled(
     font-size: 12px;
     padding: 6px 8px;
     border-radius: 4px;
-    border: 1px solid #f64270;
+    border: 1px solid ${theme.accent.base};
     background-color: transparent;
-    color: #f64270;
+    color: ${theme.accent.base};
     width: 100%;
     outline: none;
 

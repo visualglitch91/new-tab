@@ -1,4 +1,4 @@
-import { styled, css, uniqueClassName } from "../../styling";
+import { styled, css, uniqueClassName, theme } from "../../styling";
 import Button from "../Button";
 import ColorPresets from "../ColorPresets";
 
@@ -35,7 +35,7 @@ export const classes = { tabActive: uniqueClassName() };
 export const Tab = styled(
   Button,
   css`
-    border: 1px solid #f64270;
+    border: 1px solid ${theme.accent.base};
     border-radius: 0;
     flex: 1;
     padding: 8px;
@@ -53,7 +53,7 @@ export const Tab = styled(
     }
 
     &.${classes.tabActive} {
-      background: #f64270 !important;
+      background: ${theme.accent.base} !important;
       color: #24324b !important;
     }
   `

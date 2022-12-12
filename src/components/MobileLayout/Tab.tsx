@@ -1,4 +1,4 @@
-import { css, cx, styled } from "../../styling";
+import { css, cx, styled, theme } from "../../styling";
 import TouchButton from "../TouchButton";
 import Icon from "../Icon";
 
@@ -35,7 +35,7 @@ export const Wrapper = styled(
 
     &.active {
       font-weight: bolder;
-      border-color: #dc456c;
+      border-color: ${theme.accent.base};
     }
   `
 );

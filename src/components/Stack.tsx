@@ -8,6 +8,7 @@ const classes = {
   `,
   horizontal: css`
     flex-direction: row;
+
     & > * {
       flex: 1;
     }

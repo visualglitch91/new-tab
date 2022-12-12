@@ -1,4 +1,4 @@
-import { styled, css } from "../styling";
+import { styled, css, theme } from "../styling";
 import TouchButton from "./TouchButton";
 
 const Button = styled(
@@ -11,7 +11,7 @@ const Button = styled(
     outline: none;
     background: transparent;
     font-size: 14px;
-    color: #f64270;
+    color: ${theme.accent.base};
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,4 +1,4 @@
-import { styled, css } from "../styling";
+import { styled, css, theme, alpha } from "../styling";
 import CameraStream from "./CameraStream";
 import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
@@ -29,7 +29,7 @@ const MobileWrapper = styled(
     row-gap: 8px;
 
     & .${buttonsWrapper} {
-      background: #2f3b5240;
+      background: ${alpha(theme.background.base, 0.25)};
       border-radius: 4px;
       padding: 8px;
     }

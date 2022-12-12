@@ -1,4 +1,4 @@
-import { styled, css } from "../../styling";
+import { styled, css, theme, alpha } from "../../styling";
 import BorderButton from "../BorderButton";
 
 export const Wrapper = styled(
@@ -59,9 +59,9 @@ export const Tabs = styled(
     backdrop-filter: blur(10px);
     background: linear-gradient(
       to bottom,
-      rgba(32, 48, 77, 0.57) 0%,
-      rgba(32, 48, 77, 0.57) 34%,
-      rgba(36, 50, 75, 1) 100%
+      ${alpha(theme.background.base, 0.57)} 0%,
+      ${alpha(theme.background.base, 0.57)} 34%,
+      ${theme.background.base} 100%
     );
     position: fixed;
     bottom: 0;
@@ -97,7 +97,7 @@ export const StatusBar = styled(
     .statusbar-overlay & {
       height: 32px;
       backdrop-filter: blur(10px);
-      background: rgb(37 51 82 / 65%);
+      background: ${alpha(theme.background.base, 0.65)};
       position: fixed;
       top: 0;
       left: 0;
