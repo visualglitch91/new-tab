@@ -5,6 +5,7 @@ const classes = {
     display: flex;
     grid-gap: 8px;
     justify-content: center;
+    align-items: center;
   `,
   full: css`
     width: 100%;
