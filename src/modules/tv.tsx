@@ -138,6 +138,7 @@ export default (
           "light.sala_rgb_sofa",
         ]}
       />
+      <EntityButton entityId="switch.sala_ambilight" />
     </ButtonRow>
 
     {spacer(12)}
