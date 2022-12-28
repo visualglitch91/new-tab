@@ -4,12 +4,7 @@ import ButtonRow from "../components/ButtonRow";
 import TitleCard from "../components/TitleCard";
 import EntityButton from "../components/EntityButton";
 import { TVEntitySwitch } from "../components/TVEntitySwitch";
-import {
-  IconButtonCard,
-  makeTVButtonCall,
-  makeTVMediaControlCall,
-  ScriptImageButtonCard,
-} from "./tv.utils";
+import { IconButtonCard, ScriptImageButtonCard } from "./tv.utils";
 import LightGroupEntityButton from "../components/LightGroupEntityButton";
 import Grid from "../components/Grid";
 
@@ -33,7 +28,7 @@ export default (
         repeatOnHold
         icon="mdi:chevron-up"
         size={32}
-        action={makeTVButtonCall("UP")}
+        action={makeTurnOnCall("script.sala_tv_navegar_cima")}
       />
       <IconButtonCard
         icon="mdi:image-off-outline"
@@ -46,36 +41,36 @@ export default (
         repeatOnHold
         icon="mdi:chevron-left"
         size={32}
-        action={makeTVButtonCall("LEFT")}
+        action={makeTurnOnCall("script.sala_tv_navegar_esquerda")}
       />
       <IconButtonCard
         icon="mdi:record-circle-outline"
         size={25}
-        action={makeTVButtonCall("ENTER")}
+        action={makeTurnOnCall("script.sala_tv_selecionar")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:chevron-right"
         size={32}
-        action={makeTVButtonCall("RIGHT")}
+        action={makeTurnOnCall("script.sala_tv_navegar_direita")}
       />
     </ButtonRow>
     <ButtonRow height={70}>
       <IconButtonCard
         icon="mdi:undo"
         size={30}
-        action={makeTVButtonCall("BACK")}
+        action={makeTurnOnCall("script.sala_tv_voltar")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:chevron-down"
         size={32}
-        action={makeTVButtonCall("DOWN")}
+        action={makeTurnOnCall("script.sala_tv_navegar_baixo")}
       />
       <IconButtonCard
         icon="mdi:cog"
         size={25}
-        action={makeTVButtonCall("MENU")}
+        action={makeTurnOnCall("script.sala_tv_navegar_home")}
       />
     </ButtonRow>
 
@@ -105,23 +100,23 @@ export default (
         repeatOnHold
         icon="mdi:rewind"
         size={25}
-        action={makeTVMediaControlCall("rewind")}
+        action={makeTurnOnCall("script.sala_tv_rewind")}
       />
       <IconButtonCard
         icon="mdi:play"
         size={25}
-        action={makeTVMediaControlCall("play")}
+        action={makeTurnOnCall("script.sala_tv_play")}
       />
       <IconButtonCard
         icon="mdi:pause"
         size={25}
-        action={makeTVMediaControlCall("pause")}
+        action={makeTurnOnCall("script.sala_tv_pause")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:fast-forward"
         size={25}
-        action={makeTVMediaControlCall("fastForward")}
+        action={makeTurnOnCall("script.sala_tv_fast_forward")}
       />
     </ButtonRow>
 
