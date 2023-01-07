@@ -110,7 +110,9 @@ function Packages() {
       {packages?.map((it) => (
         <ItemCard key={it.code} onPress={() => remove(it)}>
           <ItemContent>
-            <Label>{it.name}</Label>
+            <Label>
+              {it.name} ({it.code})
+            </Label>
             {it.lastEvent ? (
               <>
                 <At>{parseDate(it.lastEvent.at)}</At>
