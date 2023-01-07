@@ -79,7 +79,7 @@ function Packages() {
       fields: ["Nome", "Código"],
       onConfirm: (values) => {
         if (values[0] && values[1]) {
-          callService("shell_command", "correios_add", {
+          callService("rest_command", "correios_add", {
             name: values[0],
             code: values[1],
           }).then(() => refresh());
@@ -92,7 +92,7 @@ function Packages() {
     confirm({
       title: `Remover "${item.name}"`,
       onConfirm: () => {
-        callService("shell_command", "correios_remove", {
+        callService("rest_command", "correios_remove", {
           code: item.code,
         }).then(() => refresh());
       },

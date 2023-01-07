@@ -1,22 +1,7 @@
-import { makeServiceCall, makeTurnOnCall, useEntity } from "../utils/hass";
+import { makeTurnOnCall, useEntity } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
 import Icon from "../components/Icon";
 import CircularLoading from "../components/CircularLoading";
-
-export function makeTVButtonCall(button: string) {
-  return makeServiceCall("shell_command", "custom_webos_button", { button });
-}
-
-function makeTVCommandCall(command: string, data?: any) {
-  return makeServiceCall("shell_command", "custom_webos_command", {
-    command,
-    ...data,
-  });
-}
-
-export function makeTVMediaControlCall(command: string) {
-  return makeTVCommandCall(`media.controls/${command}`);
-}
 
 export function IconButtonCard({
   icon,
