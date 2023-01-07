@@ -10,6 +10,7 @@ class PackageStore {
   refresh() {
     return fetch(`${hassUrl}/local/correios.json?timestamp=${Date.now()}`)
       .then((res) => res.json())
+      .catch(() => [])
       .then((json) => {
         this.packages = json;
         this.emitter.emit("update", json);
