@@ -1,5 +1,3 @@
-import BScroll from "better-scroll";
-
 export type ManagedScroll = ReturnType<typeof managedScroll>;
 
 export default function managedScroll(wrapper: HTMLElement) {
