@@ -45,13 +45,17 @@ export default function MobileLayout({
     //eslint-disable-next-line
   }, [content]);
 
-  function scrollToTop() {
-    wrapperRef.current?.scrollTo(0, 0);
+  function scrollToTop(smooth?: boolean) {
+    wrapperRef.current?.scroll({
+      top: 0,
+      left: 0,
+      behavior: smooth ? "smooth" : undefined,
+    });
   }
 
   function changeTab(key: string) {
     if (active === key) {
-      scrollToTop();
+      scrollToTop(true);
     }
 
     setActive(key);
@@ -90,7 +94,7 @@ export default function MobileLayout({
           <CSSTransition
             key={active}
             classNames="mobile-layout__fade"
-            onExited={() => scrollToTop}
+            onExited={() => scrollToTop(false)}
           >
             <Stack className="mobile-layout__fade">{content}</Stack>
           </CSSTransition>
