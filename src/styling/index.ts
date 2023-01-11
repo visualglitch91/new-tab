@@ -21,7 +21,7 @@ function createPallete(base: string) {
   };
 }
 
-const userThemeKey = window.localStorage.getItem("theme") || "one";
+const userThemeKey = window.localStorage.getItem("theme_nope") || "one";
 
 export const currentThemeKey = (
   Object.keys(themes).includes(userThemeKey) ? userThemeKey : "one"
