@@ -8,6 +8,8 @@ import {
 import useModal from "../utils/useModal";
 import BaseEntityButton from "./BaseEntityButton";
 import LightEntityDialog from "./LightEntityDialog";
+import { lightSupportsColor } from "../utils/light";
+import EntityGroupDialog from "./EntityGroupDialog";
 
 export default function EntityButton({
   icon: customIcon,
@@ -45,7 +47,7 @@ export default function EntityButton({
 
   const displayColor =
     domain === "light" &&
-    ["hs", "rgb"].includes(attributes.color_mode) &&
+    lightSupportsColor(entity) &&
     Array.isArray(attributes.rgb_color)
       ? getDisplayColor(attributes.rgb_color as RGB)
       : attributes.color_mode === "color_temp"
@@ -62,7 +64,26 @@ export default function EntityButton({
   function onLightDetails() {
     if (domain === "light" && checked) {
       mount((unmount) => (
-        <LightEntityDialog title={label} entity={entity!} onClose={unmount} />
+        <LightEntityDialog
+          title={label}
+          entityId={entity!.entity_id}
+          onClose={unmount}
+        />
+      ));
+    }
+  }
+
+  function defaultOnPress() {
+    const groupedIds: undefined | string | string[] =
+      entity?.attributes.entity_id;
+
+    if (Array.isArray(groupedIds) && groupedIds.length > 0) {
+      mount((unmount) => (
+        <EntityGroupDialog
+          title={label}
+          entityIds={groupedIds}
+          onClose={unmount}
+        />
       ));
     }
   }
@@ -87,7 +108,7 @@ export default function EntityButton({
             entity_id: entityId,
           })
         }
-        onPress={onPress}
+        onPress={onPress || defaultOnPress}
         onSecondaryAction={onSecondaryAction || onLightDetails}
       />
     </>

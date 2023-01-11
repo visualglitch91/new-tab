@@ -14,21 +14,19 @@ export default function managedScroll(wrapper: HTMLElement) {
   }
 
   function enable() {
-    scrollTo(0);
-    wrapper.style.overflow = "hidden";
-
-    bscroll = new BScroll(wrapper, {
-      click: true,
-      scrollY: true,
-      momentumLimitTime: 100,
-      swipeTime: 1000,
-      swipeBounceTime: 200,
-      flickLimitDistance: 0,
-    });
-
-    bscroll.on("scrollStart", () => {
-      window.dispatchEvent(new Event("bscroll:scrollStart"));
-    });
+    // scrollTo(0);
+    // wrapper.style.overflow = "hidden";
+    // bscroll = new BScroll(wrapper, {
+    //   click: true,
+    //   scrollY: true,
+    //   momentumLimitTime: 100,
+    //   swipeTime: 1000,
+    //   swipeBounceTime: 200,
+    //   flickLimitDistance: 0,
+    // });
+    // bscroll.on("scrollStart", () => {
+    //   window.dispatchEvent(new Event("bscroll:scrollStart"));
+    // });
   }
 
   function disable() {

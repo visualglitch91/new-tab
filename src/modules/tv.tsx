@@ -5,7 +5,6 @@ import TitleCard from "../components/TitleCard";
 import EntityButton from "../components/EntityButton";
 import { TVEntitySwitch } from "../components/TVEntitySwitch";
 import { IconButtonCard, ScriptImageButtonCard } from "./tv.utils";
-import LightGroupEntityButton from "../components/LightGroupEntityButton";
 import Grid from "../components/Grid";
 
 function spacer(height?: number) {
@@ -129,14 +128,10 @@ export default (
         changeTimeout={30_000}
         entityId="switch.sala_receiver"
       />
-      <LightGroupEntityButton
+      <EntityButton
         icon="mdi-television-ambient-light"
         label="RGB"
-        entityIds={[
-          "light.sala_rgb_tv",
-          "light.sala_rgb_rack",
-          "light.sala_rgb_sofa",
-        ]}
+        entityId="light.sala_rgb"
       />
       <EntityButton entityId="switch.sala_ambilight" />
     </ButtonRow>

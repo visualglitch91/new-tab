@@ -1,12 +1,12 @@
 import DialogBase from "./DialogBase";
 import EntityListItem from "./EntityListItem";
 
-export default function LightGroupDialog({
+export default function EntityGroupDialog({
   title,
   entityIds,
   onClose,
 }: {
-  title: string;
+  title: React.ReactNode;
   entityIds: string[];
   onClose: () => void;
 }) {

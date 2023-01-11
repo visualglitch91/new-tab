@@ -1,12 +1,6 @@
-import {
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-} from "react";
+import { useMemo, useState, useEffect, useContext, createContext } from "react";
 import version from "../version.json";
+import useLatestRef from "./useLatestRef";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -31,6 +25,83 @@ export function debounce<T extends (...args: any[]) => void>(
 export function rgbToHex([r, g, b]: RGB) {
   //eslint-disable-next-line
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+export function rgbToHS([r, g, b]: RGB) {
+  let computedH = 0;
+  let computedS = 0;
+
+  r = r / 255;
+  g = g / 255;
+  b = b / 255;
+
+  const minRGB = Math.min(r, Math.min(g, b));
+  const maxRGB = Math.max(r, Math.max(g, b));
+
+  // Black-gray-white
+  if (minRGB === maxRGB) {
+    return [0, 0];
+  }
+
+  // Colors other than black-gray-white:
+  const d = r === minRGB ? g - b : b === minRGB ? r - g : b - r;
+  const h = r === minRGB ? 3 : b === minRGB ? 1 : 5;
+
+  computedH = 60 * (h - d / (maxRGB - minRGB));
+  computedS = 100 * ((maxRGB - minRGB) / maxRGB);
+
+  return [computedH, computedS];
+}
+
+export function hsvToRGB(h: number, s: number, v: number) {
+  h /= 360;
+  s /= 100;
+  v /= 100;
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+
+  const i = Math.floor(h * 6);
+  const f = h * 6 - i;
+  const p = v * (1 - s);
+  const q = v * (1 - f * s);
+  const t = v * (1 - (1 - f) * s);
+
+  switch (i % 6) {
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    case 5:
+      r = v;
+      g = p;
+      b = q;
+      break;
+  }
+
+  return [r * 255, g * 255, b * 255].map(Math.round) as RGB;
 }
 
 export function saveValue(key: string, value: any) {
@@ -121,13 +192,13 @@ export function loadCordovaJS() {
 export function useDebouncedCallback<T extends (...args: any[]) => void>(
   callback: T
 ) {
-  const callbackRef = useRef(callback);
+  const callbackRef = useLatestRef(callback);
 
   return useMemo(() => {
     return debounce((...args) => {
       callbackRef.current(...args);
     });
-  }, []) as T;
+  }, [callbackRef]) as T;
 }
 
 export const isTouchDevice =
@@ -199,4 +270,8 @@ export function useResponsive() {
   }
 
   return result;
+}
+
+export function wait(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }

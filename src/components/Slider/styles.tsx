@@ -1,79 +1,62 @@
-import { css, theme } from "../../styling";
+import { css, theme, uniqueClassName } from "../../styling";
 
-const height = "30px";
-const track = theme.background.d10;
 const filled = theme.accent.base;
-const thumbColor = "transparent";
-const thumbWidth = "0";
+const trackColor = theme.background.d30;
 
-export const sliderClassName = css`
-  margin: auto;
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  overflow: hidden;
-  height: ${height};
-  width: 100%;
-  cursor: pointer;
-  border-radius: 8px;
+export const thumb = uniqueClassName();
 
-  &::-webkit-slider-runnable-track {
-    background: ${track};
+export const track = uniqueClassName();
+
+export const root = css`
+  &,
+  .${thumb}, .${track} {
+    height: 32px;
   }
 
-  &::-webkit-slider-thumb {
-    appearance: none;
-    -webkit-appearance: none;
-    width: ${thumbWidth}; /* 1 */
-    height: ${height};
-    background: ${thumbColor};
-    box-shadow: -200px 0 0 200px ${filled}; /* 2 */
-    border: none;
+  .${thumb}, .${track} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > span {
+      display: block;
+    }
   }
 
-  &::-moz-range-track {
-    height: ${height};
-    background: ${track};
+  .${thumb} {
+    width: 18px;
+    outline: none;
+
+    & > span {
+      width: 18px;
+      height: 18px;
+      border-radius: 100%;
+      background: ${filled};
+    }
   }
 
-  &::-moz-range-thumb {
-    background: ${thumbColor};
-    height: ${height};
-    width: ${thumbWidth};
-    border: none;
-    border-radius: 0 !important;
-    box-shadow: -200px 0 0 200px ${filled};
-    box-sizing: border-box;
+  .${thumb}:hover {
+    cursor: pointer;
+
+    & > span {
+      background: ${theme.accent.d10};
+    }
   }
 
-  &::-ms-fill-lower {
+  .${track} > span {
+    width: 100%;
+    height: 4px;
+    background: ${trackColor};
+  }
+
+  .${track}-0 > span {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
     background: ${filled};
   }
 
-  &::-ms-thumb {
-    background: ${thumbColor};
-    border: none;
-    height: ${height};
-    width: ${thumbWidth};
-    box-sizing: border-box;
-  }
-
-  &::-ms-ticks-after {
-    display: none;
-  }
-
-  &::-ms-ticks-before {
-    display: none;
-  }
-
-  &::-ms-track {
-    background: ${track};
-    color: transparent;
-    height: ${height};
-    border: none;
-  }
-
-  &::-ms-tooltip {
-    display: none;
+  .${track}-1 > span {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
   }
 `;

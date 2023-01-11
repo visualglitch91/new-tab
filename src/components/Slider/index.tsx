@@ -1,22 +1,16 @@
-import { useDebouncedCallback } from "../../utils/general";
-import { sliderClassName } from "./styles";
-
-function cast(value: number | undefined) {
-  if (typeof value === "undefined") {
-    return undefined;
-  }
-
-  return String(value);
-}
+//@ts-expect-error
+import ReactSlider from "react-slider";
+import * as classes from "./styles";
 
 function noop() {}
 
 export default function Slider({
+  min,
+  max,
   value,
   defaultValue,
   onChange = noop,
   onChangeEnd = noop,
-  ...props
 }: {
   min: number;
   max: number;
@@ -25,20 +19,28 @@ export default function Slider({
   onChange?: (value: number) => void;
   onChangeEnd?: (value: number) => void;
 }) {
-  const debouncedOnChangeEnd = useDebouncedCallback(onChangeEnd);
-
   return (
-    <input
-      {...props}
-      type="range"
-      className={sliderClassName}
-      value={cast(value)}
-      defaultValue={cast(defaultValue)}
-      onInput={(e) => {
-        const value = Number(e.currentTarget.value);
-        onChange(value);
-        debouncedOnChangeEnd(value);
-      }}
-    />
+    <div className={classes.root}>
+      <ReactSlider
+        min={min}
+        max={max}
+        thumbClassName={classes.thumb}
+        trackClassName={classes.track}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={onChange}
+        onAfterChange={onChangeEnd}
+        renderTrack={(props: any) => (
+          <div {...props}>
+            <span />
+          </div>
+        )}
+        renderThumb={(props: any) => (
+          <div {...props}>
+            <span />
+          </div>
+        )}
+      />
+    </div>
   );
 }

@@ -19,6 +19,9 @@ const classes = {
   smallGap: css`
     grid-gap: 8px;
   `,
+  largeGap: css`
+    grid-gap: 24px;
+  `,
 };
 
 const Stack = forwardRef(function Stack(
@@ -26,26 +29,26 @@ const Stack = forwardRef(function Stack(
     className,
     horizontal,
     smallGap,
+    largeGap,
     children,
-    title,
   }: {
     className?: string;
     horizontal?: boolean;
     smallGap?: boolean;
+    largeGap?: boolean;
     children: React.ReactNode;
-    title?: string;
   },
   ref: React.LegacyRef<HTMLDivElement>
 ) {
   return (
     <div
       ref={ref}
-      title={title}
       className={cx(
         classes.wrapper,
         horizontal && classes.horizontal,
         !horizontal && classes.vertical,
         smallGap && classes.smallGap,
+        largeGap && classes.largeGap,
         className
       )}
     >

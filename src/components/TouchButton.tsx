@@ -99,6 +99,10 @@ export default function TouchButton({
       };
 
       const onTouchStart = (e: any) => {
+        if (!isTouchDevice && e.which !== 1) {
+          return;
+        }
+
         touchStartAt = Date.now();
         aborted = false;
 
@@ -162,6 +166,13 @@ export default function TouchButton({
       listenerGroup
         .with(button)
         .subscribe(isTouchDevice ? "touchend" : "mouseup", onTouchEnd);
+
+      if (!isTouchDevice) {
+        listenerGroup.with(button).subscribe("contextmenu", (e) => {
+          e.preventDefault();
+          handlerRefs.current.onDoubleTap?.();
+        });
+      }
 
       listenerGroup.with(window).subscribe("bscroll:scrollStart", abort);
       listenerGroup.with(document.body).subscribe("mouseleave", abort);

@@ -27,7 +27,11 @@ function BaseEntityListItem({
 
   function onLightClick() {
     mount((unmount) => (
-      <LightEntityDialog title={label} entity={entity} onClose={unmount} />
+      <LightEntityDialog
+        title={label}
+        entityId={entity.entity_id}
+        onClose={unmount}
+      />
     ));
   }
 

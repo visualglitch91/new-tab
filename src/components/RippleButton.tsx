@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { isTouchDevice } from "../utils/general";
+// import { isTouchDevice } from "../utils/general";
 import ListenerGroup from "../utils/ListenerGroup";
 import { css, styled } from "../styling";
 import Timer from "../utils/Timer";
@@ -115,15 +115,19 @@ const RippleButton = forwardRef<
     }
 
     if (button) {
-      if (isTouchDevice) {
-        listenerGroup.with(button).subscribe("touchstart", (e) => {
-          createRipple(e.touches[0].pageX, e.touches[0].pageY);
-        });
-      } else {
-        listenerGroup.with(button).subscribe("mousedown", (e) => {
-          createRipple(e.pageX, e.pageY);
-        });
-      }
+      // if (isTouchDevice) {
+      //   listenerGroup.with(button).subscribe("touchstart", (e) => {
+      //     createRipple(e.touches[0].pageX, e.touches[0].pageY);
+      //   });
+      // } else {
+      //   listenerGroup.with(button).subscribe("mousedown", (e) => {
+      //     createRipple(e.pageX, e.pageY);
+      //   });
+      // }
+
+      listenerGroup.with(button).subscribe("click", (e) => {
+        createRipple(e.pageX, e.pageY);
+      });
     }
 
     return () => listenerGroup.unsubscribeAll();
