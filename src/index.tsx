@@ -42,14 +42,6 @@ async function setup() {
   if (isTouchDevice) {
     window.oncontextmenu = () => false;
     document.body.classList.add("touch-device");
-  } else {
-    const SimpleBar = await import("simplebar").then((res) => res.default);
-    const simplebar = new SimpleBar(app);
-    const recalculate = () => simplebar.recalculate();
-
-    document.addEventListener("resume", recalculate);
-    window.addEventListener("focus", recalculate);
-    window.addEventListener("resize", recalculate);
   }
 }
 
