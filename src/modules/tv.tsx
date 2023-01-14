@@ -125,15 +125,15 @@ export default (
       <EntityButton
         label="Surround"
         icon="mdi:surround-sound"
-        changeTimeout={30_000}
         entityId="switch.sala_receiver"
+        changeTimeout={30_000}
       />
       <EntityButton
         icon="mdi-television-ambient-light"
         label="RGB"
         entityId="light.sala_rgb"
       />
-      <EntityButton entityId="switch.sala_ambilight" />
+      <EntityButton entityId="switch.sala_ambilight" changeTimeout={30_000} />
     </ButtonRow>
 
     {spacer(12)}

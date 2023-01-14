@@ -27,6 +27,7 @@ const ColorStack = styled(
   css`
     align-items: center;
     max-width: 310px;
+    margin: 0 auto;
   `
 );
 
