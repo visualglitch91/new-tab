@@ -27,6 +27,10 @@ const systemModule = (
         entityId: "sensor.memory_use_percent",
         renderListContent: (entity) => formatNumericValue(entity.state, "%"),
       },
+      {
+        label: "Reiniciar Servidor",
+        entityId: "script.servidor_reiniciar",
+      },
     ]}
   />
 );
