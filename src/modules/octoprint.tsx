@@ -137,7 +137,7 @@ function OctoprintModule() {
         }
       />
       <CameraWrapper>
-        <CameraStream entityId="camera.impressora_3d" aspectRatio={16 / 9} />
+        <CameraStream entityId="camera.impressora_3d" aspectRatio={4 / 3} />
       </CameraWrapper>
       <ComponentGroup
         layout="list"

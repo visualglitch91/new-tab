@@ -4,6 +4,7 @@ import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
 import { useResponsive } from "../utils/general";
 import DialogBase from "./DialogBase";
+import { useEffect } from "react";
 
 const buttonsWrapper = css`
   padding: 8px 0;
@@ -55,6 +56,17 @@ export default function FullScreenCamera({
 }) {
   const { isMobile } = useResponsive();
   const Wrapper = isMobile ? MobileWrapper : DialogBase;
+
+  useEffect(() => {
+    if (isMobile) {
+      document.body.requestFullscreen();
+
+      return () => {
+        document.exitFullscreen();
+      };
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Wrapper title="Câmera" onClose={onClose}>

@@ -6,7 +6,7 @@ import MobileLayout from "./components/MobileLayout";
 import tvModule from "./modules/tv";
 import houseModule from "./modules/house";
 import vacuumModule from "./modules/vacuum";
-import camerasModule from "./modules/cameras";
+import camerasModule, { useAvailableCameras } from "./modules/cameras";
 import octoprintModule from "./modules/octoprint";
 import systemModule from "./modules/system";
 import packagesModule from "./modules/packages";
@@ -20,8 +20,9 @@ const columnStyle = {
 export default function App() {
   const isAdmin = useUser().is_admin;
   const { isMobile } = useResponsive();
+  const availableEntityIds = useAvailableCameras();
 
-  const camerasOn = useEntity("switch.cameras")?.state === "on";
+  const camerasOn = availableEntityIds.length > 0;
   const printerOn = useEntity("switch.impressora_3d")?.state === "on";
 
   useEffect(() => {
