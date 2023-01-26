@@ -1,4 +1,4 @@
-import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
+import { getIcon, useEntity, callService } from "../utils/hass";
 import { RGB } from "../utils/general";
 import {
   isColorEqual,
@@ -39,7 +39,10 @@ export default function EntityButton({
   const { state, attributes } = entity;
   const { friendly_name: friendlyName } = attributes;
   const [domain] = entityId.split(".");
-  const checked = state === "on";
+
+  const checked =
+    domain === "cover" ? attributes.raw_state === "open" : state === "on";
+
   const unavailable = state === "unavailable";
 
   const label =
@@ -88,6 +91,18 @@ export default function EntityButton({
     }
   }
 
+  function defaultPrimaryAction() {
+    if (domain === "cover") {
+      callService("cover", checked ? "close_cover" : "open_cover", {
+        entity_id: entityId,
+      });
+    } else {
+      callService("homeassistant", checked ? "turn_off" : "turn_on", {
+        entity_id: entityId,
+      });
+    }
+  }
+
   return (
     <>
       {modals}
@@ -102,12 +117,7 @@ export default function EntityButton({
             ? getDisplayColorString(displayColor, 0.6)
             : undefined
         }
-        onPrimaryAction={
-          onPrimaryAction ||
-          makeServiceCall("homeassistant", checked ? "turn_off" : "turn_on", {
-            entity_id: entityId,
-          })
-        }
+        onPrimaryAction={onPrimaryAction || defaultPrimaryAction}
         onPress={onPress || defaultOnPress}
         onSecondaryAction={onSecondaryAction || onLightDetails}
       />

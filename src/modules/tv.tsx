@@ -142,18 +142,15 @@ export default (
       <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
       <ScriptImageButtonCard asset="globoplay" script="sala_tv_globoplay" />
       <ScriptImageButtonCard asset="netflix" script="sala_tv_netflix" />
-
       <ScriptImageButtonCard asset="plex" script="sala_tv_plex" />
       <ScriptImageButtonCard asset="disneyplus" script="sala_tv_disney_plus" />
       <ScriptImageButtonCard asset="hbomax" script="sala_tv_hbo_max" />
-
       <ScriptImageButtonCard asset="starplus" script="sala_tv_star_plus" />
       <ScriptImageButtonCard asset="prime_video" script="sala_tv_prime_video" />
       <ScriptImageButtonCard asset="spotify" script="sala_tv_spotify" />
-
+      <ScriptImageButtonCard asset="crunchyroll" script="sala_tv_crunchyroll" />
       <ScriptImageButtonCard asset="youtube" script="sala_tv_youtube" />
       <ScriptImageButtonCard asset="kodi" script="sala_tv_kodi" />
-
       <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
       <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
     </Grid>

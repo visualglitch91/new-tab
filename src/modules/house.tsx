@@ -14,6 +14,7 @@ const groups: ComponentGroupProps[] = [
       "switch.sala_ventilador",
       "light.sala_rgb_tv",
       "light.sala_rgb_rack",
+      { entityId: "cover.sala_cortina", changeTimeout: 30_000 },
       {
         hiddenOnDesktop: true,
         element: <TVEntityButton icon="mdi:television-classic" label="TV" />,
@@ -32,6 +33,7 @@ const groups: ComponentGroupProps[] = [
     layout: "grid",
     items: [
       "switch.escritorio_luz",
+      { entityId: "switch.office_speakers", changeTimeout: 9_000 },
       "light.escritorio_luminaria",
       "light.escritorio_rgb_mesa",
       "light.escritorio_rgb_quadro",
@@ -83,6 +85,14 @@ const groups: ComponentGroupProps[] = [
       {
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz\nda Sala",
+      },
+      {
+        entityId: "script.computador_erica_suspender",
+        label: "Suspender Computador Erica",
+      },
+      {
+        entityId: "script.computador_erica_reiniciar",
+        label: "Reiniciar Computador Erica",
       },
       "script.encontrar_celular_lais",
       "script.encontrar_celular_erica_1",

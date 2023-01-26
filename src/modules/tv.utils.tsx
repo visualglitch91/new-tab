@@ -51,6 +51,7 @@ const assets = {
   youtube: getImageUrl("youtube.png"),
   retropi: getImageUrl("retropi.png"),
   kodi: getImageUrl("kodi.png"),
+  crunchyroll: getImageUrl("crunchyroll.png"),
 };
 
 export function ImageButtonCard({
