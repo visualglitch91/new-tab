@@ -4,6 +4,7 @@ import { cx, css, styled, uniqueClassName } from "../styling";
 import Icon from "./Icon";
 import CircularLoading from "./CircularLoading";
 import ButtonCard from "./ButtonCard";
+import { useConfirm } from "../utils/useConfirm";
 
 const classes = {
   wrapperActive: uniqueClassName(),
@@ -55,10 +56,13 @@ export default function BaseEntityButton({
   loading,
   color,
   changeTimeout = 0,
+  confirmBefore,
   onPrimaryAction,
   onSecondaryAction,
   ...props
 }: BaseComponentGroupItem) {
+  const [confirm, modals] = useConfirm();
+
   const { changing, change } = useAsyncChange({
     flag: checked || false,
     timeout: changeTimeout,
@@ -74,12 +78,21 @@ export default function BaseEntityButton({
       )}
       style={color && !changing ? { background: color } : undefined}
       onTap={() => {
-        if (change() && onPrimaryAction) {
-          onPrimaryAction();
+        function onConfirm() {
+          if (change() && onPrimaryAction) {
+            onPrimaryAction();
+          }
+        }
+
+        if (confirmBefore) {
+          confirm({ title: "Continuar?", onConfirm });
+        } else {
+          onConfirm();
         }
       }}
       onDoubleTap={onSecondaryAction}
     >
+      {modals}
       {loading || changing ? (
         <CircularLoading />
       ) : (

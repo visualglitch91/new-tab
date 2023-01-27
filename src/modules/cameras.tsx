@@ -29,8 +29,6 @@ export function useAvailableCameras() {
   const raw = useEntities(...ids);
   const entities = Object.values(raw);
 
-  console.log({ ids, raw, entities });
-
   return entities
     .filter((it) => typeof it !== "undefined" && it.state !== "unavailable")
     .map((it) => it!.entity_id);

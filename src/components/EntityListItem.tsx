@@ -5,12 +5,14 @@ import { rgbToHex } from "../utils/general";
 import Button from "./Button";
 import ListItem from "./ListItem";
 import LightEntityDialog from "./LightEntityDialog";
+import { useConfirm } from "../utils/useConfirm";
 
 interface Props {
   icon?: string;
   label?: React.ReactNode;
   changeTimeout?: number;
   entityId: string;
+  confirmBefore?: boolean;
   renderListContent?: (entity: HassEntity) => React.ReactNode;
 }
 
@@ -18,12 +20,14 @@ function BaseEntityListItem({
   icon: customIcon,
   label: _label,
   changeTimeout = 0,
+  confirmBefore,
   entity,
   entityId,
   renderListContent,
 }: Props & { entity: HassEntity }) {
   const icon = customIcon || getIcon(entity);
   const [mount, modals] = useModal();
+  const [confirm, confirmModals] = useConfirm();
 
   function onLightClick() {
     mount((unmount) => (
@@ -59,12 +63,34 @@ function BaseEntityListItem({
         onPrimaryAction,
       }
     : domain === "script"
-    ? { children: <Button onTap={onPrimaryAction}>Executar</Button> }
+    ? {
+        children: (
+          <Button
+            onTap={
+              onPrimaryAction
+                ? () => {
+                    if (confirmBefore) {
+                      confirm({
+                        title: "Continuar?",
+                        onConfirm: onPrimaryAction,
+                      });
+                    } else {
+                      onPrimaryAction();
+                    }
+                  }
+                : undefined
+            }
+          >
+            Executar
+          </Button>
+        ),
+      }
     : { children: entity.state };
 
   return (
     <>
       {modals}
+      {confirmModals}
       <ListItem
         disabled={unavailable}
         icon={icon}

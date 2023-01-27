@@ -87,11 +87,18 @@ const groups: ComponentGroupProps[] = [
         label: "Somente Luz\nda Sala",
       },
       {
+        entityId: "script.computador_erica_desligar_monitor",
+        confirmBefore: true,
+        label: "Desligar Monitor Erica",
+      },
+      {
         entityId: "script.computador_erica_suspender",
+        confirmBefore: true,
         label: "Suspender Computador Erica",
       },
       {
         entityId: "script.computador_erica_reiniciar",
+        confirmBefore: true,
         label: "Reiniciar Computador Erica",
       },
       "script.encontrar_celular_lais",

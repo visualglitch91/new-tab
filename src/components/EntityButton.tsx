@@ -16,6 +16,7 @@ export default function EntityButton({
   label: _label,
   changeTimeout,
   entityId,
+  confirmBefore,
   onPrimaryAction,
   onSecondaryAction,
   onPress,
@@ -24,6 +25,7 @@ export default function EntityButton({
   label?: React.ReactNode;
   changeTimeout?: number;
   entityId: string;
+  confirmBefore?: boolean;
   onPrimaryAction?: () => void;
   onSecondaryAction?: () => void;
   onPress?: () => void;
@@ -117,6 +119,7 @@ export default function EntityButton({
             ? getDisplayColorString(displayColor, 0.6)
             : undefined
         }
+        confirmBefore={confirmBefore}
         onPrimaryAction={onPrimaryAction || defaultPrimaryAction}
         onPress={onPress || defaultOnPress}
         onSecondaryAction={onSecondaryAction || onLightDetails}

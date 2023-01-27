@@ -113,6 +113,7 @@ export default function ListItem({
   changeTimeout = 0,
   children,
   renderListContent,
+  confirmBefore,
   onPrimaryAction = () => {},
   onSecondaryAction,
   onPress,

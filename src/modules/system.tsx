@@ -7,6 +7,11 @@ const systemModule = (
     layout="list"
     items={[
       {
+        label: "Uso do Disco de Mídia",
+        entityId: "sensor.disk_use_percent_drives_visualglitch91",
+        renderListContent: (entity) => formatNumericValue(entity.state, "%"),
+      },
+      {
         icon: "icofont-thermometer",
         label: "Temperatura",
         entityId: "sensor.processor_temperature",
@@ -29,6 +34,7 @@ const systemModule = (
       },
       {
         label: "Reiniciar Servidor",
+        confirmBefore: true,
         entityId: "script.servidor_reiniciar",
       },
     ]}

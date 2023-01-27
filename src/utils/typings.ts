@@ -9,6 +9,7 @@ export interface BaseComponentGroupItem {
   checked?: boolean;
   changeTimeout?: number;
   hiddenOnDesktop?: boolean;
+  confirmBefore?: boolean;
   onPrimaryAction?: () => void;
   onSecondaryAction?: () => void;
   onPress?: () => void;
