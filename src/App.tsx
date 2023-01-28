@@ -10,6 +10,7 @@ import camerasModule, { useAvailableCameras } from "./modules/cameras";
 import octoprintModule from "./modules/octoprint";
 import systemModule from "./modules/system";
 import packagesModule from "./modules/packages";
+import torrentsModule from "./modules/torrents";
 
 const columnStyle = {
   display: "flex",
@@ -74,6 +75,13 @@ export default function App() {
                   content: octoprintModule,
                 },
                 {
+                  key: "torrents",
+                  title: "Torrents",
+                  icon: "mdi:download",
+                  content: torrentsModule,
+                },
+
+                {
                   key: "system",
                   title: "Sistema",
                   icon: "mdi:cpu-64-bit",
@@ -95,6 +103,7 @@ export default function App() {
       {isAdmin && camerasOn && camerasModule}
       {isAdmin && printerOn && octoprintModule}
       {isAdmin && packagesModule}
+      {isAdmin && torrentsModule}
     </MasonryLayout>
   );
 }
