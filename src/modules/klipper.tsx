@@ -42,11 +42,11 @@ function TemperatureRow({
   const targetTemp = target?.state ? Number(target?.state) : 0;
 
   const actualTempStr = actualTemp
-    ? formatNumericValue(actualTemp, "°C")
+    ? formatNumericValue(actualTemp, "°C", 0)
     : null;
 
   const targetTempStr = targetTemp
-    ? formatNumericValue(targetTemp, "°C")
+    ? formatNumericValue(targetTemp, "°C", 0)
     : null;
 
   return (
@@ -78,7 +78,7 @@ function AutoShutdown({ entity }: { entity: HassEntity }) {
   }, []);
 
   return (
-    <ListItem label="Desligamento Automático" icon="power">
+    <ListItem label="Auto-Desligar" icon="power">
       <FlexRow>
         {humanizeDuration(remaningTime, { round: true })}
         <PillButton
@@ -92,10 +92,10 @@ function AutoShutdown({ entity }: { entity: HassEntity }) {
   );
 }
 
-function OctoprintModule() {
+function KlipperModule() {
   const [confirm, $confirm] = useConfirm();
   const isPrinting =
-    useEntity("binary_sensor.octoprint_printing")?.state === "on";
+    useEntity("sensor.klipper_current_print_state")?.state === "printing";
 
   const autoShutdownEntity = useEntity(
     "script.impressora_3d_desligamento_automatico"
@@ -114,8 +114,8 @@ function OctoprintModule() {
               onClick={() => {
                 confirm({
                   title: "Parar Impressão",
-                  onConfirm: makeServiceCall("button", "press", {
-                    entity_id: "button.octoprint_stop_job",
+                  onConfirm: makeServiceCall("script", "turn_on", {
+                    entity_id: "script.impressora_3d_parar_impressao",
                   }),
                 });
               }}
@@ -144,43 +144,44 @@ function OctoprintModule() {
         items={[
           <TemperatureRow
             label="Mesa"
-            actualEntityId="sensor.octoprint_actual_bed_temp"
-            targetEntityId="sensor.octoprint_target_bed_temp"
+            actualEntityId="sensor.klipper_bed_temperature"
+            targetEntityId="sensor.klipper_bed_target"
           />,
           <TemperatureRow
             label="Hotend"
-            actualEntityId="sensor.octoprint_actual_tool0_temp"
-            targetEntityId="sensor.octoprint_target_tool0_temp"
+            actualEntityId="sensor.klipper_extruder_temperature"
+            targetEntityId="sensor.klipper_extruder_target"
           />,
           autoShutdownEntity?.state === "on" ? (
             <AutoShutdown entity={autoShutdownEntity} />
           ) : (
-            "input_boolean.impressora_3d_desligamento_automatico"
+            {
+              label: "Auto-Desligar",
+              entityId: "input_boolean.impressora_3d_desligamento_automatico",
+            }
           ),
           isPrinting && {
-            label: "Início",
-            entityId: "sensor.octoprint_start_time",
-            renderListContent: (entity: HassEntity) => {
-              if (entity.state !== "unknown") {
-                const date = new Date(entity.state);
-                const hours = String(date.getHours()).padStart(2, "0");
-                const minutes = String(date.getMinutes()).padStart(2, "0");
-
-                return `${hours}:${minutes}`;
-              }
-
-              return "Desconhecido";
-            },
+            label: "Arquivo",
+            entityId: "sensor.klipper_filename",
+            icon: "file-outline",
+            renderListContent: (entity) =>
+              entity.state.endsWith(".gcode")
+                ? entity.state.slice(0, -6)
+                : entity.state,
+          },
+          isPrinting && {
+            label: "Progresso",
+            entityId: "sensor.klipper_progress",
+            renderListContent: (entity) =>
+              formatNumericValue(entity.state, "%", 0),
           },
           isPrinting && {
             label: "Restante",
-            entityId: "sensor.octoprint_estimated_finish_time",
+            entityId: "sensor.klipper_print_time_left",
             renderListContent: (entity: HassEntity) => {
               if (entity.state !== "unknown") {
                 try {
-                  //@ts-ignore
-                  const eta = new Date(entity.state) - new Date();
-                  return humanizeDuration(eta, {
+                  return humanizeDuration(Number(entity.state) * 1000, {
                     language: "pt",
                     largest: 2,
                     units: ["d", "h", "m"],
@@ -198,4 +199,4 @@ function OctoprintModule() {
   );
 }
 
-export default <OctoprintModule />;
+export default <KlipperModule />;

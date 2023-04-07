@@ -7,7 +7,7 @@ import tvModule from "./modules/tv";
 import houseModule from "./modules/house";
 import vacuumModule from "./modules/vacuum";
 import camerasModule, { useAvailableCameras } from "./modules/cameras";
-import octoprintModule from "./modules/octoprint";
+import klipperModule from "./modules/klipper";
 import systemModule from "./modules/system";
 import packagesModule from "./modules/packages";
 import torrentsModule from "./modules/torrents";
@@ -69,10 +69,10 @@ export default function App() {
                   content: camerasModule,
                 },
                 printerOn && {
-                  key: "octoprint",
-                  title: "OctoPrint",
+                  key: "klipper",
+                  title: "Impressora 3D",
                   icon: "mdi:printer-3d-nozzle",
-                  content: octoprintModule,
+                  content: klipperModule,
                 },
                 {
                   key: "torrents",
@@ -101,7 +101,7 @@ export default function App() {
       {isAdmin && systemModule}
       {isAdmin && vacuumModule}
       {isAdmin && camerasOn && camerasModule}
-      {isAdmin && printerOn && octoprintModule}
+      {isAdmin && printerOn && klipperModule}
       {isAdmin && packagesModule}
       {isAdmin && torrentsModule}
     </MasonryLayout>

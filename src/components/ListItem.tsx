@@ -101,6 +101,16 @@ const Label = styled(
     display: flex;
     align-items: center;
     column-gap: 8px;
+    flex-shrink: 0;
+  `
+);
+
+const Content = styled(
+  "div",
+  css`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   `
 );
 
@@ -113,7 +123,6 @@ export default function ListItem({
   changeTimeout = 0,
   children,
   renderListContent,
-  confirmBefore,
   onPrimaryAction = () => {},
   onSecondaryAction,
   onPress,
@@ -170,7 +179,7 @@ export default function ListItem({
           {label}
           {color && <ColorBadge size={12} color={color} />}
         </Label>
-        <div>{content}</div>
+        <Content>{content}</Content>
       </InnerWrapper>
     </Root>
   );
