@@ -98,6 +98,12 @@ export default (
           return statusLabels[status] || "Desconhecido";
         },
       },
+      {
+        label: "Bateria",
+        icon: "battery-50",
+        entityId: vacuumId,
+        renderListContent: (entity) => `${entity.attributes.battery_level}%`,
+      },
       <VacuumActionsRow />,
       "divider",
       {
