@@ -42,7 +42,7 @@ const assets = {
   plex: getImageUrl("plex.png"),
   prime_video: getImageUrl("prime_video.png"),
   discovery_plus: getImageUrl("discovery_plus.png"),
-  fire_tv: getImageUrl("fire_tv.png"),
+  twitch: getImageUrl("twitch.png"),
   ps5: getImageUrl("ps5.png"),
   spotify: getImageUrl("spotify.png"),
   starplus: getImageUrl("starplus.png"),

@@ -55,7 +55,7 @@ const groups: ComponentGroupProps[] = [
     showGroupSwitch: true,
     layout: "grid",
     items: [
-      "switch.quarto_luz",
+      "light.quarto_luz",
       "switch.quarto_ventilador",
       "switch.quarto_abajur_esquerdo",
       "switch.quarto_abajur_direito",

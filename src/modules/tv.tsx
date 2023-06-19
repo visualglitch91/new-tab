@@ -67,7 +67,7 @@ export default (
         action={makeTurnOnCall("script.sala_tv_navegar_baixo")}
       />
       <IconButtonCard
-        icon="mdi:cog"
+        icon="mdi:home"
         size={25}
         action={makeTurnOnCall("script.sala_tv_navegar_home")}
       />
@@ -141,7 +141,6 @@ export default (
     <Grid gap={12} columnWidth={120} rowHeight={70}>
       <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
       <ScriptImageButtonCard asset="globoplay" script="sala_tv_globoplay" />
-      <ScriptImageButtonCard asset="netflix" script="sala_tv_netflix" />
       <ScriptImageButtonCard asset="plex" script="sala_tv_plex" />
       <ScriptImageButtonCard asset="disneyplus" script="sala_tv_disney_plus" />
       <ScriptImageButtonCard asset="hbomax" script="sala_tv_hbo_max" />
@@ -151,6 +150,11 @@ export default (
       <ScriptImageButtonCard asset="crunchyroll" script="sala_tv_crunchyroll" />
       <ScriptImageButtonCard asset="youtube" script="sala_tv_youtube" />
       <ScriptImageButtonCard asset="kodi" script="sala_tv_kodi" />
+      <ScriptImageButtonCard
+        asset="discovery_plus"
+        script="sala_tv_discovery"
+      />
+      <ScriptImageButtonCard asset="twitch" script="sala_tv_twitch" />
       <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
       <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
     </Grid>
