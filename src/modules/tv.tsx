@@ -131,7 +131,7 @@ export default (
       <EntityButton
         icon="mdi-television-ambient-light"
         label="RGB"
-        entityId="light.sala_rgb"
+        entityId="light.sala_rgb_tv"
       />
       <EntityButton entityId="switch.sala_ambilight" changeTimeout={30_000} />
     </ButtonRow>
@@ -157,6 +157,12 @@ export default (
       <ScriptImageButtonCard asset="twitch" script="sala_tv_twitch" />
       <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
       <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
+
+      <IconButtonCard
+        icon="mdi:information-outline"
+        size={40}
+        action={makeTurnOnCall("script.ir_bridge_receiver_info")}
+      />
     </Grid>
   </Stack>
 );
