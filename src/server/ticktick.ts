@@ -18,6 +18,17 @@ function callAPI<T = any>(path: string, method: string, json?: any) {
         headers: {
           "Content-Type": "application/json",
           Origin: "https://ticktick.com",
+          "x-device": JSON.stringify({
+            platform: "web",
+            os: "Linux x86_64",
+            device: "Chrome 114.0.0.0",
+            name: "",
+            version: 4531,
+            id: "6488ceeb59aa0918a4b5fa85",
+            channel: "website",
+            campaign: "",
+            websocket: "",
+          }),
         },
         json,
       },
