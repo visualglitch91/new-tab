@@ -32,13 +32,13 @@ const Content = styled(
   `
 );
 
-export default function ListLayout({
+export default function ListCard({
   title,
   titleAction,
   children,
 }: {
   title?: string;
-  titleAction: ReactNode;
+  titleAction?: ReactNode;
   children: ReactNode;
 }) {
   return (

@@ -14,7 +14,11 @@ const groups: ComponentGroupProps[] = [
       "switch.sala_ventilador",
       "light.sala_rgb_tv",
       "light.sala_rgb_rack",
-      { entityId: "cover.sala_cortina", changeTimeout: 30_000 },
+      {
+        entityId: "cover.sala_cortina",
+        changeTimeout: 30_000,
+        icon: "curtains",
+      },
       {
         hiddenOnDesktop: true,
         element: <TVEntityButton icon="mdi:television-classic" label="TV" />,
