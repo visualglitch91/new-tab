@@ -12,7 +12,7 @@ import {
   MessageBase,
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
-import { loadValue, saveValue } from "./general";
+import { loadValue, saveValue, clearValue } from "./general";
 
 let _connection: Connection | undefined;
 
@@ -48,7 +48,15 @@ function setupHASS({
     .then(([user, states]) => ({
       user,
       states,
-    }));
+    }))
+    .catch((err) => {
+      setTimeout(() => {
+        clearValue(`hass_token_${hassUrl}`);
+        window.location.reload();
+      }, 1);
+
+      throw err;
+    });
 }
 
 export function getIcon(entity: HassEntity) {
