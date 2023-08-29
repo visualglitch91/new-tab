@@ -9,7 +9,7 @@ import vacuumModule from "./modules/vacuum";
 import camerasModule, { useAvailableCameras } from "./modules/cameras";
 import klipperModule from "./modules/klipper";
 import systemModule from "./modules/system";
-import packagesModule from "./modules/packages";
+// import packagesModule from "./modules/packages";
 import torrentsModule from "./modules/torrents";
 
 const columnStyle = {
@@ -56,12 +56,12 @@ export default function App() {
         extraTabs={
           isAdmin
             ? compact([
-                {
-                  key: "packages",
-                  title: "Encomendas",
-                  icon: "mdi:truck-delivery-outline",
-                  content: packagesModule,
-                },
+                // {
+                //   key: "packages",
+                //   title: "Encomendas",
+                //   icon: "mdi:truck-delivery-outline",
+                //   content: packagesModule,
+                // },
                 camerasOn && {
                   key: "cameras",
                   title: "Câmeras",
@@ -102,7 +102,7 @@ export default function App() {
       {isAdmin && vacuumModule}
       {isAdmin && camerasOn && camerasModule}
       {isAdmin && printerOn && klipperModule}
-      {isAdmin && packagesModule}
+      {/* {isAdmin && packagesModule} */}
       {isAdmin && torrentsModule}
     </MasonryLayout>
   );
