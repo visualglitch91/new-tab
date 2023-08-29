@@ -58,7 +58,7 @@ export default function TabGroup<T extends string>({
           <Tab
             key={it.value}
             className={cx(value === it.value && classes.tabActive)}
-            onTap={() => onChange(it.value)}
+            onClick={() => onChange(it.value)}
           >
             {it.label}
           </Tab>

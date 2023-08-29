@@ -21,7 +21,7 @@ export function useMenu() {
           {options.map((it) => (
             <BorderButton
               key={it.value}
-              onTap={() => {
+              onClick={() => {
                 unmount();
                 onSelect(it.value);
               }}
@@ -29,7 +29,7 @@ export function useMenu() {
               {it.label}
             </BorderButton>
           ))}
-          <BorderButton onTap={unmount}>Cancelar</BorderButton>
+          <BorderButton onClick={unmount}>Cancelar</BorderButton>
         </Stack>
       </DialogBase>
     ));

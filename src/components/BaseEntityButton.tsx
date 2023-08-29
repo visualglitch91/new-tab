@@ -77,7 +77,7 @@ export default function BaseEntityButton({
         checked && !changing && classes.wrapperActive
       )}
       style={color && !changing ? { background: color } : undefined}
-      onTap={() => {
+      onClick={() => {
         function onConfirm() {
           if (change() && onPrimaryAction) {
             onPrimaryAction();
@@ -90,7 +90,7 @@ export default function BaseEntityButton({
           onConfirm();
         }
       }}
-      onDoubleTap={onSecondaryAction}
+      onLongPress={onSecondaryAction}
     >
       {modals}
       {loading || changing ? (

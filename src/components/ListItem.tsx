@@ -5,7 +5,7 @@ import ColorBadge from "./ColorBadge";
 import DotLoading from "./DotLoading";
 import Icon from "./Icon";
 import Switch from "./Switch";
-import TouchButton from "./TouchButton";
+import RippleButton from "./RippleButton";
 
 const classes = {
   wrapperDisabled: uniqueClassName(),
@@ -125,13 +125,13 @@ export default function ListItem({
   renderListContent,
   onPrimaryAction = () => {},
   onSecondaryAction,
-  onPress,
+  onLongPress,
   onHold,
 }: BaseComponentGroupItem & {
   children?: React.ReactNode;
   renderListContent?: () => React.ReactNode;
 }) {
-  const hasInteraction = Boolean(onPress || onHold || onSecondaryAction);
+  const hasInteraction = Boolean(onLongPress || onHold || onSecondaryAction);
 
   const { changing, change } = useAsyncChange({
     flag: checked || false,
@@ -167,9 +167,9 @@ export default function ListItem({
       )}
     >
       <BackgroundButtonWrapper>
-        <TouchButton
-          onTap={onSecondaryAction}
-          onPress={onPress}
+        <RippleButton
+          onClick={onSecondaryAction}
+          onLongPress={onLongPress}
           onHold={onHold}
         />
       </BackgroundButtonWrapper>

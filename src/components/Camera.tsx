@@ -3,7 +3,7 @@ import { styled, css } from "../styling";
 import { hassUrl, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import FullScreenCamera from "./FullScreenCamera";
-import TouchButton from "./TouchButton";
+import RippleButton from "./RippleButton";
 import useModal from "../utils/useModal";
 import CircularLoading from "./CircularLoading";
 
@@ -31,7 +31,7 @@ const Overlay = styled(
 );
 
 const SnapshotButton = styled(
-  TouchButton,
+  RippleButton,
   css`
     border: none;
     padding: 0;
@@ -107,7 +107,7 @@ export default function Camera({
       {snapshot === "LOADING" ? (
         <CircularLoading />
       ) : snapshot ? (
-        <SnapshotButton onDoubleTap={showStream}>
+        <SnapshotButton onClick={showStream}>
           <img alt="" src={snapshot} />
         </SnapshotButton>
       ) : (

@@ -1,8 +1,11 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-// import { isTouchDevice } from "../utils/general";
 import ListenerGroup from "../utils/ListenerGroup";
 import { css, styled } from "../styling";
 import Timer from "../utils/Timer";
+import useLatestRef from "../utils/useLatestRef";
+import { isTouchDevice } from "../utils/general";
+
+const PRESS_AND_HOLD_REPEAT = 120;
 
 const StyledButton = styled(
   "button",
@@ -39,6 +42,14 @@ interface RippleProps {
   size: number;
   "data-key": string;
   onDone: () => void;
+}
+
+function getPointFromEvent(e: any): [number, number] {
+  return "touches" in e && e.touches.length > 0
+    ? [e.touches[0].pageX, e.touches[0].pageY]
+    : "changedTouches" in e && e.changedTouches.length > 0
+    ? [e.changedTouches[0].pageX, e.changedTouches[0].pageY]
+    : [e.pageX, e.pageY];
 }
 
 function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
@@ -79,12 +90,19 @@ function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
 
 const RippleButton = forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->((props, externalRef) => {
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    onHold?: () => void;
+    onLongPress?: () => void;
+  }
+>(({ onClick, onHold, onLongPress, ...props }, externalRef) => {
   const internalRef = useRef<HTMLButtonElement>(null);
   const buttonRef = externalRef || internalRef;
   const counterRef = useRef(0);
   const [ripples, setRipples] = useState<(RippleProps & { key: string })[]>([]);
+  const pressAndHoldRef = useRef(false);
+  const pressAndHoldTimeoutRef = useRef(0);
+  const onHoldRef = useLatestRef(onHold);
+  const onLongPressRef = useLatestRef(onLongPress);
 
   useEffect(() => {
     const listenerGroup = new ListenerGroup();
@@ -115,26 +133,68 @@ const RippleButton = forwardRef<
     }
 
     if (button) {
-      // if (isTouchDevice) {
-      //   listenerGroup.with(button).subscribe("touchstart", (e) => {
-      //     createRipple(e.touches[0].pageX, e.touches[0].pageY);
-      //   });
-      // } else {
-      //   listenerGroup.with(button).subscribe("mousedown", (e) => {
-      //     createRipple(e.pageX, e.pageY);
-      //   });
-      // }
+      let onLongPressCalled = false;
 
-      listenerGroup.with(button).subscribe("click", (e) => {
-        createRipple(e.pageX, e.pageY);
-      });
+      const pressAndHoldCallback = () => {
+        if (!onLongPressCalled) {
+          onLongPressCalled = true;
+          onLongPressRef.current?.();
+        }
+
+        pressAndHoldRef.current = true;
+        onHoldRef.current?.();
+
+        pressAndHoldTimeoutRef.current = window.setTimeout(
+          pressAndHoldCallback,
+          PRESS_AND_HOLD_REPEAT
+        );
+      };
+
+      listenerGroup
+        .with(button)
+        .subscribe(isTouchDevice ? "touchstart" : "mousedown", (e) => {
+          createRipple(...getPointFromEvent(e));
+
+          pressAndHoldTimeoutRef.current = window.setTimeout(
+            pressAndHoldCallback,
+            PRESS_AND_HOLD_REPEAT
+          );
+        });
+
+      listenerGroup
+        .with(button)
+        .subscribe(isTouchDevice ? "touchend" : "mouseup", () => {
+          window.clearTimeout(pressAndHoldTimeoutRef.current);
+
+          setTimeout(() => {
+            onLongPressCalled = false;
+            pressAndHoldRef.current = false;
+          }, 2);
+        });
     }
 
-    return () => listenerGroup.unsubscribeAll();
-  }, [buttonRef]);
+    return () => {
+      listenerGroup.unsubscribeAll();
+      window.clearTimeout(pressAndHoldTimeoutRef.current);
+    };
+  }, [
+    onHoldRef,
+    buttonRef,
+    onLongPressRef,
+    pressAndHoldRef,
+    pressAndHoldTimeoutRef,
+  ]);
 
   return (
-    <StyledButton {...props} ref={buttonRef}>
+    <StyledButton
+      {...props}
+      ref={buttonRef}
+      onClick={(e) => {
+        if (onClick && !pressAndHoldRef.current) {
+          onClick(e);
+        }
+      }}
+    >
       {props.children}
       {ripples.map(({ key, ...props }) => (
         <Ripple {...props} key={key} />
@@ -142,5 +202,7 @@ const RippleButton = forwardRef<
     </StyledButton>
   );
 });
+
+export type RippleButtonProps = React.ComponentProps<typeof RippleButton>;
 
 export default RippleButton;

@@ -19,7 +19,7 @@ export default function EntityButton({
   confirmBefore,
   onPrimaryAction,
   onSecondaryAction,
-  onPress,
+  onLongPress,
 }: {
   icon?: string;
   label?: React.ReactNode;
@@ -28,7 +28,7 @@ export default function EntityButton({
   confirmBefore?: boolean;
   onPrimaryAction?: () => void;
   onSecondaryAction?: () => void;
-  onPress?: () => void;
+  onLongPress?: () => void;
 }) {
   const entity = useEntity(entityId);
   const [mount, modals] = useModal();
@@ -78,7 +78,7 @@ export default function EntityButton({
     }
   }
 
-  function defaultOnPress() {
+  function defaultOnLongPress() {
     const groupedIds: undefined | string | string[] =
       entity?.attributes.entity_id;
 
@@ -121,7 +121,7 @@ export default function EntityButton({
         }
         confirmBefore={confirmBefore}
         onPrimaryAction={onPrimaryAction || defaultPrimaryAction}
-        onPress={onPress || defaultOnPress}
+        onLongPress={onLongPress || defaultOnLongPress}
         onSecondaryAction={onSecondaryAction || onLightDetails}
       />
     </>

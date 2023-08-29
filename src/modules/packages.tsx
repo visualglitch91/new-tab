@@ -108,7 +108,7 @@ function Packages() {
         action={<PillButton icon="mdi:plus" label="Adicionar" onClick={add} />}
       />
       {packages?.map((it) => (
-        <ItemCard key={it.code} onPress={() => remove(it)}>
+        <ItemCard key={it.code} onLongPress={() => remove(it)}>
           <ItemContent>
             <Label>
               {it.name} ({it.code})

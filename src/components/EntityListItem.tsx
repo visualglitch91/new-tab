@@ -66,7 +66,7 @@ function BaseEntityListItem({
     ? {
         children: (
           <Button
-            onTap={
+            onClick={
               onPrimaryAction
                 ? () => {
                     if (confirmBefore) {

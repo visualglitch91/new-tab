@@ -12,7 +12,7 @@ export interface BaseComponentGroupItem {
   confirmBefore?: boolean;
   onPrimaryAction?: () => void;
   onSecondaryAction?: () => void;
-  onPress?: () => void;
+  onLongPress?: () => void;
   onHold?: () => void;
 }
 

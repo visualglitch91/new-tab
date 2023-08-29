@@ -46,7 +46,7 @@ export default function DialogBase({
         <Header>
           {title}
           {isDesktop && (
-            <Button className={classes.closeButton} onTap={onClose}>
+            <Button className={classes.closeButton} onClick={onClose}>
               <Icon icon="close" />
             </Button>
           )}

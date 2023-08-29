@@ -16,10 +16,10 @@ export function useConfirm() {
     mount((unmount) => (
       <DialogBase title={title} onClose={unmount}>
         <Stack>
-          <BorderButton onTap={unmount}>Cancelar</BorderButton>
+          <BorderButton onClick={unmount}>Cancelar</BorderButton>
           <BorderButton
             primary
-            onTap={() => {
+            onClick={() => {
               unmount();
               onConfirm();
             }}

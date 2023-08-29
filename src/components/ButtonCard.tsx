@@ -1,11 +1,11 @@
 import { styled, css, theme, alpha } from "../styling";
-import TouchButton, { TouchButtonProps } from "./TouchButton";
+import RippleButton, { RippleButtonProps } from "./RippleButton";
 import Paper from "./Paper";
 
-export type ButtonCardProps = TouchButtonProps;
+export type ButtonCardProps = RippleButtonProps;
 
 const ButtonCard = styled(
-  Paper.withComponent(TouchButton),
+  Paper.withComponent(RippleButton),
   css`
     overflow: hidden;
     transition: all 100ms cubic-bezier(0.76, 0, 0.24, 1);

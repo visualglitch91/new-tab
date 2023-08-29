@@ -106,7 +106,7 @@ function Torrents() {
     }));
   }, [totalTorrents]);
 
-  type Torrent = typeof torrents[number];
+  type Torrent = (typeof torrents)[number];
 
   function add() {
     showMenu({
@@ -130,7 +130,7 @@ function Torrents() {
     });
   }
 
-  function onTap(torrent: Torrent) {
+  function onClick(torrent: Torrent) {
     showMenu({
       title: "Opções",
       options: [
@@ -165,7 +165,7 @@ function Torrents() {
         items={[{ entityId: "switch.transmission_turtle_mode" }]}
       />
       {torrents?.map((it) => (
-        <ItemCard key={it.id} onTap={() => onTap(it)}>
+        <ItemCard key={it.id} onClick={() => onClick(it)}>
           <ItemContent>
             <Header>
               <Icon

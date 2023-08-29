@@ -17,7 +17,7 @@ export function IconButtonCard({
   const onHold = repeatOnHold ? action : undefined;
 
   return (
-    <ButtonCard onTap={action} onPress={onHold} onHold={onHold}>
+    <ButtonCard onClick={action} onLongPress={onHold} onHold={onHold}>
       <Icon icon={icon} size={size} />
     </ButtonCard>
   );
@@ -66,7 +66,7 @@ export function ImageButtonCard({
   const onHold = repeatOnHold ? action : undefined;
 
   return (
-    <ButtonCard onTap={action} onPress={onHold} onHold={onHold}>
+    <ButtonCard onClick={action} onLongPress={onHold} onHold={onHold}>
       <img alt="" src={assets[asset]} style={imgStyle} />
     </ButtonCard>
   );
@@ -83,7 +83,7 @@ export function ScriptImageButtonCard({
   const loading = useEntity(entityId)?.state === "on";
 
   return (
-    <ButtonCard onTap={makeTurnOnCall(entityId)}>
+    <ButtonCard onClick={makeTurnOnCall(entityId)}>
       {loading ? (
         <CircularLoading />
       ) : (

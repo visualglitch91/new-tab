@@ -1,8 +1,8 @@
 import { styled, css, theme } from "../styling";
-import TouchButton from "./TouchButton";
+import RippleButton from "./RippleButton";
 
 const Button = styled(
-  TouchButton,
+  RippleButton,
   css`
     height: 100%;
     margin: 0;

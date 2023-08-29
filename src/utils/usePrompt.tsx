@@ -37,7 +37,7 @@ function Prompt({
           />
         ))}
         <br />
-        <BorderButton primary onTap={() => onConfirm(values)}>
+        <BorderButton primary onClick={() => onConfirm(values)}>
           Confirmar
         </BorderButton>
       </Stack>

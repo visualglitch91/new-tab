@@ -70,7 +70,7 @@ export default function MobileLayout({
             <ExtraTab
               key={tab.key}
               primary={tab.key === active}
-              onTap={() => {
+              onClick={() => {
                 changeTab(tab.key);
                 unmount();
               }}
@@ -108,7 +108,7 @@ export default function MobileLayout({
             active={active === tab.key}
             icon={tab.icon}
             title={tab.title}
-            onTap={() => changeTab(tab.key)}
+            onClick={() => changeTab(tab.key)}
           />
         ))}
         {extraTabs.length && (
@@ -116,7 +116,7 @@ export default function MobileLayout({
             active={extraActive}
             icon="mdi-dots-horizontal"
             title="Mais"
-            onTap={() => showExtraTabsPrompt()}
+            onClick={() => showExtraTabsPrompt()}
           />
         )}
       </Tabs>

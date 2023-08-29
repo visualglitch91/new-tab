@@ -1,9 +1,9 @@
 import { css, cx, styled, theme } from "../../styling";
-import TouchButton from "../TouchButton";
+import RippleButton from "../RippleButton";
 import Icon from "../Icon";
 
 export const Wrapper = styled(
-  TouchButton,
+  RippleButton,
   css`
     height: 100%;
     margin: 0;
@@ -44,15 +44,15 @@ export default function Tab({
   active,
   title,
   icon,
-  onTap,
+  onClick,
 }: {
   active: boolean;
   title: string;
   icon: string;
-  onTap: () => void;
+  onClick: () => void;
 }) {
   return (
-    <Wrapper type="button" className={cx(active && "active")} onTap={onTap}>
+    <Wrapper type="button" className={cx(active && "active")} onClick={onClick}>
       <Icon icon={icon} />
       {title}
     </Wrapper>
