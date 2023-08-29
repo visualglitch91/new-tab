@@ -24,7 +24,7 @@ export default function App() {
   const availableEntityIds = useAvailableCameras();
 
   const camerasOn = availableEntityIds.length > 0;
-  const printerOn = useEntity("switch.impressora_3d")?.state === "on";
+  const printerOn = useEntity("switch.impressora_3d_servidor")?.state === "on";
 
   useEffect(() => {
     setTimeout(() => document.body.classList.add("ready"), 120);

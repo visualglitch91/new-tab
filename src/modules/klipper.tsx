@@ -26,15 +26,15 @@ const CameraWrapper = styled(
 
 function TemperatureRow({
   label,
-  actualEntityId,
+  currentEntityId,
   targetEntityId,
 }: {
   label: string;
-  actualEntityId: string;
+  currentEntityId: string;
   targetEntityId: string;
 }) {
-  const { [actualEntityId]: actual, [targetEntityId]: target } = useEntities(
-    actualEntityId,
+  const { [currentEntityId]: actual, [targetEntityId]: target } = useEntities(
+    currentEntityId,
     targetEntityId
   );
 
@@ -95,7 +95,7 @@ function AutoShutdown({ entity }: { entity: HassEntity }) {
 function KlipperModule() {
   const [confirm, $confirm] = useConfirm();
   const isPrinting =
-    useEntity("sensor.klipper_current_print_state")?.state === "printing";
+    useEntity("sensor.impressora_3d_estado_atual")?.state === "printing";
 
   const autoShutdownEntity = useEntity(
     "script.impressora_3d_desligamento_automatico"
@@ -114,8 +114,8 @@ function KlipperModule() {
               onClick={() => {
                 confirm({
                   title: "Parar Impressão",
-                  onConfirm: makeServiceCall("script", "turn_on", {
-                    entity_id: "script.impressora_3d_parar_impressao",
+                  onConfirm: makeServiceCall("button", "turn_on", {
+                    entity_id: "button.impressora_3d_macro_abort_print",
                   }),
                 });
               }}
@@ -128,7 +128,7 @@ function KlipperModule() {
                 confirm({
                   title: "Desligar Impressora",
                   onConfirm: makeServiceCall("switch", "turn_off", {
-                    entity_id: "switch.impressora_3d",
+                    entity_id: "switch.impressora_3d_servidor",
                   }),
                 });
               }}
@@ -144,13 +144,13 @@ function KlipperModule() {
         items={[
           <TemperatureRow
             label="Mesa"
-            actualEntityId="sensor.klipper_bed_temperature"
-            targetEntityId="sensor.klipper_bed_target"
+            currentEntityId="sensor.impressora_3d_mesa_temperatura_atual"
+            targetEntityId="sensor.impressora_3d_mesa_temperatura_alvo"
           />,
           <TemperatureRow
             label="Hotend"
-            actualEntityId="sensor.klipper_extruder_temperature"
-            targetEntityId="sensor.klipper_extruder_target"
+            currentEntityId="sensor.impressora_3d_extrusora_temperatura_atual"
+            targetEntityId="sensor.impressora_3d_extrusora_temperatura_alvo"
           />,
           autoShutdownEntity?.state === "on" ? (
             <AutoShutdown entity={autoShutdownEntity} />
@@ -161,8 +161,7 @@ function KlipperModule() {
             }
           ),
           isPrinting && {
-            label: "Arquivo",
-            entityId: "sensor.klipper_filename",
+            entityId: "sensor.impressora_3d_arquivo",
             icon: "file-outline",
             renderListContent: (entity) =>
               entity.state.endsWith(".gcode")
@@ -170,14 +169,12 @@ function KlipperModule() {
                 : entity.state,
           },
           isPrinting && {
-            label: "Progresso",
-            entityId: "sensor.klipper_progress",
+            entityId: "sensor.impressora_3d_progresso",
             renderListContent: (entity) =>
               formatNumericValue(entity.state, "%", 0),
           },
           isPrinting && {
-            label: "Restante",
-            entityId: "sensor.klipper_print_time_left",
+            entityId: "sensor.impressora_3d_tempo_restante",
             renderListContent: (entity: HassEntity) => {
               if (entity.state !== "unknown") {
                 try {

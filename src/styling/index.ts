@@ -1,4 +1,4 @@
-import themes from "../themes";
+import rawTheme from "../theme";
 import { darken, lighten } from "./utils";
 
 export { css, appendStyle, keyframes } from "./css";
@@ -21,21 +21,8 @@ function createPallete(base: string) {
   };
 }
 
-const userThemeKey = window.localStorage.getItem("theme_nope") || "one";
-
-export const currentThemeKey = (
-  Object.keys(themes).includes(userThemeKey) ? userThemeKey : "one"
-) as keyof typeof themes;
-
-const rawTheme = themes[currentThemeKey];
-
 export const theme = {
   ...rawTheme,
   accent: createPallete(rawTheme.accent),
   background: createPallete(rawTheme.background),
 };
-
-export function changeTheme(themeKey: keyof typeof themes) {
-  window.localStorage.setItem("theme", themeKey);
-  window.location.reload();
-}

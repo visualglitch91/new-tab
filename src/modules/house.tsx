@@ -84,7 +84,7 @@ const groups: ComponentGroupProps[] = [
     title: "Casa",
     layout: "grid",
     items: [
-      { entityId: "switch.impressora_3d", changeTimeout: 40_000 },
+      { entityId: "switch.impressora_3d_servidor", changeTimeout: 40_000 },
       "script.casa_apagar_todas_luzes",
       {
         entityId: "script.casa_apagar_todas_luzes_menos_sala",

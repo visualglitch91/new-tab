@@ -45,7 +45,7 @@ export default (
       <IconButtonCard
         icon="mdi:record-circle-outline"
         size={25}
-        action={makeTurnOnCall("script.sala_mibox_selecionar")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_selecionar")}
       />
       <IconButtonCard
         repeatOnHold
@@ -58,7 +58,7 @@ export default (
       <IconButtonCard
         icon="mdi:undo"
         size={30}
-        action={makeTurnOnCall("script.sala_mibox_voltar")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_voltar")}
       />
       <IconButtonCard
         repeatOnHold
