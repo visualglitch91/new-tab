@@ -1,4 +1,4 @@
-import { makeTurnOnCall } from "../utils/hass";
+import { makeServiceCall, makeTurnOnCall } from "../utils/hass";
 import Stack from "../components/Stack";
 import ButtonRow from "../components/ButtonRow";
 import TitleCard from "../components/TitleCard";
@@ -21,13 +21,13 @@ export default (
       <IconButtonCard
         icon="mdi:image-outline"
         size={28}
-        action={makeTurnOnCall("script.sala_tv_ligar_tela")}
+        action={makeTurnOnCall("media_player.sala_tv")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:chevron-up"
         size={32}
-        action={makeTurnOnCall("script.sala_tv_navegar_cima")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_cima")}
       />
       <IconButtonCard
         icon="mdi:image-off-outline"
@@ -40,36 +40,36 @@ export default (
         repeatOnHold
         icon="mdi:chevron-left"
         size={32}
-        action={makeTurnOnCall("script.sala_tv_navegar_esquerda")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_esquerda")}
       />
       <IconButtonCard
         icon="mdi:record-circle-outline"
         size={25}
-        action={makeTurnOnCall("script.sala_tv_selecionar")}
+        action={makeTurnOnCall("script.sala_mibox_selecionar")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:chevron-right"
         size={32}
-        action={makeTurnOnCall("script.sala_tv_navegar_direita")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_direita")}
       />
     </ButtonRow>
     <ButtonRow height={70}>
       <IconButtonCard
         icon="mdi:undo"
         size={30}
-        action={makeTurnOnCall("script.sala_tv_voltar")}
+        action={makeTurnOnCall("script.sala_mibox_voltar")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:chevron-down"
         size={32}
-        action={makeTurnOnCall("script.sala_tv_navegar_baixo")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_baixo")}
       />
       <IconButtonCard
         icon="mdi:home"
         size={25}
-        action={makeTurnOnCall("script.sala_tv_navegar_home")}
+        action={makeTurnOnCall("script.sala_mibox_navegar_home")}
       />
     </ButtonRow>
 
@@ -80,7 +80,9 @@ export default (
         repeatOnHold
         icon="mdi:volume-minus"
         size={25}
-        action={makeTurnOnCall("script.sala_volume_menos")}
+        action={makeServiceCall("media_player", "volume_down", {
+          entity_id: "media_player.sala_tv",
+        })}
       />
       <IconButtonCard
         icon="mdi:volume-off"
@@ -91,7 +93,9 @@ export default (
         repeatOnHold
         icon="mdi:volume-plus"
         size={25}
-        action={makeTurnOnCall("script.sala_volume_mais")}
+        action={makeServiceCall("media_player", "volume_up", {
+          entity_id: "media_player.sala_tv",
+        })}
       />
     </ButtonRow>
     <ButtonRow height={55}>
@@ -99,23 +103,23 @@ export default (
         repeatOnHold
         icon="mdi:rewind"
         size={25}
-        action={makeTurnOnCall("script.sala_tv_rewind")}
+        action={makeTurnOnCall("script.sala_mibox_rewind")}
       />
       <IconButtonCard
         icon="mdi:play"
         size={25}
-        action={makeTurnOnCall("script.sala_tv_play")}
+        action={makeTurnOnCall("script.sala_mibox_play")}
       />
       <IconButtonCard
         icon="mdi:pause"
         size={25}
-        action={makeTurnOnCall("script.sala_tv_pause")}
+        action={makeTurnOnCall("script.sala_mibox_pause")}
       />
       <IconButtonCard
         repeatOnHold
         icon="mdi:fast-forward"
         size={25}
-        action={makeTurnOnCall("script.sala_tv_fast_forward")}
+        action={makeTurnOnCall("script.sala_mibox_fast_forward")}
       />
     </ButtonRow>
 
@@ -140,28 +144,37 @@ export default (
 
     <Grid gap={12} columnWidth={120} rowHeight={70}>
       <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
-      <ScriptImageButtonCard asset="globoplay" script="sala_tv_globoplay" />
-      <ScriptImageButtonCard asset="plex" script="sala_tv_plex" />
-      <ScriptImageButtonCard asset="disneyplus" script="sala_tv_disney_plus" />
-      <ScriptImageButtonCard asset="hbomax" script="sala_tv_hbo_max" />
-      <ScriptImageButtonCard asset="starplus" script="sala_tv_star_plus" />
-      <ScriptImageButtonCard asset="prime_video" script="sala_tv_prime_video" />
-      <ScriptImageButtonCard asset="spotify" script="sala_tv_spotify" />
-      <ScriptImageButtonCard asset="crunchyroll" script="sala_tv_crunchyroll" />
-      <ScriptImageButtonCard asset="youtube" script="sala_tv_youtube" />
-      <ScriptImageButtonCard asset="kodi" script="sala_tv_kodi" />
+      <ScriptImageButtonCard asset="globoplay" script="sala_mibox_globoplay" />
+      <ScriptImageButtonCard asset="plex" script="sala_mibox_plex" />
+      <ScriptImageButtonCard
+        asset="disneyplus"
+        script="sala_mibox_disney_plus"
+      />
+      <ScriptImageButtonCard asset="hbomax" script="sala_mibox_hbo_max" />
+      <ScriptImageButtonCard asset="starplus" script="sala_mibox_star_plus" />
+      <ScriptImageButtonCard
+        asset="prime_video"
+        script="sala_mibox_prime_video"
+      />
+      <ScriptImageButtonCard asset="spotify" script="sala_mibox_spotify" />
+      <ScriptImageButtonCard
+        asset="crunchyroll"
+        script="sala_mibox_crunchyroll"
+      />
+      <ScriptImageButtonCard asset="youtube" script="sala_mibox_youtube" />
+      <ScriptImageButtonCard asset="kodi" script="sala_mibox_kodi" />
       <ScriptImageButtonCard
         asset="discovery_plus"
-        script="sala_tv_discovery"
+        script="sala_mibox_discovery"
       />
-      <ScriptImageButtonCard asset="twitch" script="sala_tv_twitch" />
+      <ScriptImageButtonCard asset="twitch" script="sala_mibox_twitch" />
       <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
       <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
 
       <IconButtonCard
         icon="mdi:information-outline"
         size={40}
-        action={makeTurnOnCall("script.ir_bridge_receiver_info")}
+        action={makeTurnOnCall("script.sala_receiver_info")}
       />
     </Grid>
   </Stack>

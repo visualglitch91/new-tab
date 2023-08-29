@@ -103,7 +103,7 @@ export function callService(domain: string, service: string, data: any) {
   return _callService(_connection, domain, service, data);
 }
 
-export function makeServiceCall(domain: string, service: string, data: any) {
+export function makeServiceCall(domain: string, service: string, data?: any) {
   return () => {
     callService(domain, service, data);
   };

@@ -8,7 +8,7 @@ const groups: ComponentGroupProps[] = [
     showGroupSwitch: true,
     layout: "grid",
     items: [
-      { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
+      { entityId: "switch.sala_luz_da_mesa", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
       "switch.sala_luminaria",
       "switch.sala_ventilador",
@@ -37,7 +37,7 @@ const groups: ComponentGroupProps[] = [
     layout: "grid",
     items: [
       "switch.escritorio_luz",
-      { entityId: "switch.office_speakers", changeTimeout: 9_000 },
+      { entityId: "switch.escritorio_alto_falantes", changeTimeout: 9_000 },
       "light.escritorio_luminaria",
       "light.escritorio_rgb_mesa",
       "light.escritorio_rgb_quadro",
@@ -63,7 +63,7 @@ const groups: ComponentGroupProps[] = [
       "switch.quarto_ventilador",
       "switch.quarto_abajur_esquerdo",
       "switch.quarto_abajur_direito",
-      { entityId: "switch.sacada_luz", label: "Sacada" },
+      { entityId: "switch.quarto_luz_da_sacada", label: "Sacada" },
       { entityId: "switch.quarto_umidificador", ignoreOnGroupSwitch: true },
       { entityId: "switch.quarto_aquecedor", ignoreOnGroupSwitch: true },
     ],
