@@ -21,7 +21,7 @@ export default (
       <IconButtonCard
         icon="mdi:image-outline"
         size={28}
-        action={makeTurnOnCall("media_player.sala_tv")}
+        action={makeTurnOnCall("script.sala_tv_ligar_tela")}
       />
       <IconButtonCard
         repeatOnHold
@@ -126,12 +126,12 @@ export default (
     {spacer(12)}
 
     <ButtonRow>
-      <EntityButton
+      {/* <EntityButton
         label="Surround"
         icon="mdi:surround-sound"
         entityId="switch.sala_receiver"
         changeTimeout={30_000}
-      />
+      /> */}
       <EntityButton
         icon="mdi-television-ambient-light"
         label="RGB"

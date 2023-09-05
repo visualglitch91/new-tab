@@ -8,10 +8,11 @@ const groups: ComponentGroupProps[] = [
     showGroupSwitch: true,
     layout: "grid",
     items: [
-      { entityId: "switch.sala_luz_da_mesa", label: "Luz da Mesa" },
+      { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
       "switch.sala_luminaria",
       "switch.sala_ventilador",
+      "switch.sala_ambilight",
       "light.sala_rgb_tv",
       "light.sala_rgb_rack",
       {
@@ -23,12 +24,12 @@ const groups: ComponentGroupProps[] = [
         hiddenOnDesktop: true,
         element: <TVEntityButton icon="mdi:television-classic" label="TV" />,
       },
-      {
-        hiddenOnDesktop: true,
-        changeTimeout: 30_000,
-        entityId: "switch.sala_receiver",
-        ignoreOnGroupSwitch: true,
-      },
+      // {
+      //   hiddenOnDesktop: true,
+      //   changeTimeout: 30_000,
+      //   entityId: "switch.sala_receiver",
+      //   ignoreOnGroupSwitch: true,
+      // },
     ],
   },
   {
@@ -63,7 +64,7 @@ const groups: ComponentGroupProps[] = [
       "switch.quarto_ventilador",
       "switch.quarto_abajur_esquerdo",
       "switch.quarto_abajur_direito",
-      { entityId: "switch.quarto_luz_da_sacada", label: "Sacada" },
+      { entityId: "switch.sacada_luz", label: "Sacada" },
       { entityId: "switch.quarto_umidificador", ignoreOnGroupSwitch: true },
       { entityId: "switch.quarto_aquecedor", ignoreOnGroupSwitch: true },
     ],
@@ -72,7 +73,7 @@ const groups: ComponentGroupProps[] = [
     title: "Banheiro",
     layout: "grid",
     items: [
-      "switch.banheiro_luz",
+      "light.banheiro_luz",
       "light.banheiro_luz_chuveiro",
       {
         entityId: "script.banheiro_luz_quente_no_chuveiro",
@@ -84,7 +85,11 @@ const groups: ComponentGroupProps[] = [
     title: "Casa",
     layout: "grid",
     items: [
-      { entityId: "switch.impressora_3d_servidor", changeTimeout: 40_000 },
+      {
+        entityId: "switch.impressora_3d_servidor",
+        changeTimeout: 40_000,
+        label: "Impressora 3D",
+      },
       "script.casa_apagar_todas_luzes",
       {
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
