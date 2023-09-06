@@ -1,6 +1,5 @@
 //@ts-expect-error
 import ReactSlider from "react-slider";
-import { useDebouncedCallback } from "../../utils/general";
 import * as classes from "./styles";
 
 function noop() {}
@@ -20,8 +19,6 @@ export default function Slider({
   onChange?: (value: number) => void;
   onChangeEnd?: (value: number) => void;
 }) {
-  const debouncedOnChangeEnd = useDebouncedCallback(onChangeEnd);
-
   return (
     <div className={classes.root}>
       <ReactSlider
@@ -31,10 +28,8 @@ export default function Slider({
         trackClassName={classes.track}
         value={value}
         defaultValue={defaultValue}
-        onChange={(value: number) => {
-          onChange(value);
-          debouncedOnChangeEnd(value);
-        }}
+        onChange={onChange}
+        onAfterChange={onChangeEnd}
         renderTrack={(props: any) => (
           <div {...props}>
             <span />

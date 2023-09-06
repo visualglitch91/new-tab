@@ -136,6 +136,7 @@ const RippleButton = forwardRef<
       let onLongPressCalled = false;
 
       const pressAndHoldCallback = () => {
+        console.log("pressAndHoldCallback");
         if (!onLongPressCalled) {
           onLongPressCalled = true;
           onLongPressRef.current?.();
@@ -162,7 +163,7 @@ const RippleButton = forwardRef<
         });
 
       listenerGroup
-        .with(button)
+        .with(window)
         .subscribe(isTouchDevice ? "touchend" : "mouseup", () => {
           window.clearTimeout(pressAndHoldTimeoutRef.current);
 
