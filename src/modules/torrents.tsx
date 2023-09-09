@@ -109,22 +109,12 @@ function Torrents() {
   type Torrent = (typeof torrents)[number];
 
   function add() {
-    showMenu({
+    prompt({
       title: "Adicionar",
-      options: [
-        { value: "movie", label: "Filme" },
-        { value: "tvshow", label: "Série" },
-        { value: "other", label: "Outro" },
-      ],
-      onSelect: (value) => {
-        prompt({
-          title: "Adicionar",
-          fields: ["Magnet URI"],
-          onConfirm: ([uri]) => {
-            callService("script", `transmission_add_${value}`, {
-              magnet_uri: uri,
-            });
-          },
+      fields: ["Magnet URI"],
+      onConfirm: ([uri]) => {
+        callService("script", "transmission_add_other", {
+          magnet_uri: uri,
         });
       },
     });

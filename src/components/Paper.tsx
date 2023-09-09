@@ -6,8 +6,7 @@ const Paper = styled(
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: ${alpha(theme.background.base, theme.paper.opacity)};
-    backdrop-filter: blur(10px);
+    background-color: ${alpha(theme.background.base, theme.paper.opacity)}; 
     box-shadow: rgb(25, 25, 25) 3px 3px 13px -6px;
     border-radius: 16px;
     color: white;

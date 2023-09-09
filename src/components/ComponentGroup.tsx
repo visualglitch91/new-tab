@@ -10,7 +10,7 @@ import BaseEntityButton from "./BaseEntityButton";
 import EntityListItem from "./EntityListItem";
 import ListItem from "./ListItem";
 
-const ListDivider = styled(
+export const ListDivider = styled(
   "div",
   css`
     height: 1px;
