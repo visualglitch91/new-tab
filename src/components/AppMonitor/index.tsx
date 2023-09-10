@@ -5,7 +5,12 @@ import { AppItem } from "./AppItem";
 import { ListDivider } from "../ComponentGroup";
 import { css } from "../../styling";
 
-const stacks = ["home-assistant", "media-center", "matrix"];
+const stacks = ["home-assistant", "media-center", "matrix", "management"];
+
+const labels: Record<string, string | undefined> = {
+  other: "Outros",
+  management: "Administração",
+};
 
 const stackTitleClassName = css`
   text-transform: capitalize;
@@ -18,7 +23,7 @@ const stackTitleClassName = css`
 function StackTitle({ title }: { title: string }) {
   return (
     <div className={stackTitleClassName}>
-      {title === "other" ? "Outros" : title.split("-").join(" ")}
+      {labels[title] || title.split("-").join(" ")}
     </div>
   );
 }
