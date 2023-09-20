@@ -9,23 +9,21 @@ export function TVEntityButton({
   label: string;
 }) {
   const checked = useEntity("media_player.sala_tv")?.state === "on";
-  const loading = useEntity("script.sala_ligar_tv")?.state === "on";
 
   return (
     <BaseEntityButton
       icon={icon}
       label={label}
-      loading={loading}
       changeTimeout={30_000}
       checked={checked}
       onPrimaryAction={() => {
         if (checked) {
-          callService("homeassistant", "turn_on", {
-            entity_id: "script.ir_bridge_tv_energia",
+          callService("media_player", "turn_off", {
+            entity_id: "media_player.sala_tv",
           });
         } else {
-          callService("homeassistant", "turn_on", {
-            entity_id: "script.sala_tv_globo",
+          callService("media_player", "turn_on", {
+            entity_id: "media_player.sala_tv",
           });
         }
       }}
