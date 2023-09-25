@@ -51,6 +51,7 @@ function CamerasModule() {
 
         return (
           <TapoCamera
+            key={camera.stream}
             entityId={camera.stream}
             aspectRatio={camera.aspectRatio}
             moveButtons={{

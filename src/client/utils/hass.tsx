@@ -13,6 +13,7 @@ import {
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
 import { loadValue, saveValue, clearValue } from "./general";
+import api from "./api";
 
 let _connection: Connection | undefined;
 
@@ -57,6 +58,16 @@ function setupHASS({
 
       throw err;
     });
+}
+
+export function getAccessToken() {
+  const token = _connection?.options.auth?.accessToken;
+
+  if (!token) {
+    throw new Error("token not available yet");
+  }
+
+  return token;
 }
 
 export function getIcon(entity: HassEntity) {
@@ -201,8 +212,10 @@ export function HassProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const store = new HassStore();
+
     store.setup().then(() => {
       setStore(store);
+      api("/app-manager/apps", "get");
     });
   }, []);
 

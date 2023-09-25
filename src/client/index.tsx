@@ -1,4 +1,4 @@
-import { render } from "preact";
+import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
 import { HassProvider } from "./utils/hass";
 // import { PackagesProvider } from "./utils/packages";
@@ -12,7 +12,7 @@ import App from "./App";
 import "./styles.css";
 import { appendStyle, theme } from "./styling";
 
-const app = document.getElementById("app")!;
+const root = createRoot(document.getElementById("app")!);
 
 appendStyle(`
   @media only screen and (max-width: 600px) {
@@ -68,4 +68,4 @@ function Main() {
   ) : null;
 }
 
-render(<Main />, app);
+root.render(<Main />);

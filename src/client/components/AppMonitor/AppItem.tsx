@@ -32,7 +32,6 @@ export function AppItem({ app, stack }: { app: App; stack?: string }) {
   }
 
   function showActionsMenu() {
-    console.log("showActionsMenu");
     showMenu({
       title: "Opções",
       options: running

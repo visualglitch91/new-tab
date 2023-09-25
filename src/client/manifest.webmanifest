@@ -3,8 +3,8 @@
   "background_color": "#242e42",
   "display": "standalone",
   "scope": "/",
-  "start_url": "/local/html-dashboard/index.html",
-  "name": "Home Dashboard",
-  "short_name": "Home Dashboard",
+  "start_url": "/",
+  "name": "Home Control",
+  "short_name": "Home Control",
   "icons": []
 }

@@ -11,10 +11,7 @@ export const Wrapper = styled(
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 180ms cubic-bezier(0.76, 0, 0.24, 1);
     backdrop-filter: blur(10px);
-    will-change: opacity;
-    opacity: 0;
     z-index: 2;
 
     body.mobile & {

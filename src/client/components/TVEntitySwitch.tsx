@@ -8,7 +8,7 @@ export function TVEntitySwitch() {
     <DelayedSwitch
       delay={30_000}
       checked={checked}
-      onInput={() => {
+      onChange={() => {
         if (checked) {
           callService("media_player", "turn_off", {
             entity_id: "media_player.sala_tv",

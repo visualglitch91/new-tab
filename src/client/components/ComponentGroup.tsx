@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { styled, css, theme } from "../styling";
 import { ComponentGroupProps } from "../utils/typings";
 import { useResponsive } from "../utils/general";
@@ -69,13 +69,13 @@ export default function ComponentGroup({
 
   return (
     <Layout title={title} titleAction={titleAction || groupSwitch}>
-      {items.map((raw) => {
+      {items.map((raw, index) => {
         if (!raw || raw === true || typeof raw === "number") {
           return null;
         }
 
         if (raw === "divider") {
-          return divider;
+          return <Fragment key={index}>{divider}</Fragment>;
         }
 
         const item = typeof raw === "string" ? { entityId: raw } : raw;
@@ -85,18 +85,18 @@ export default function ComponentGroup({
         }
 
         if ("entityId" in item) {
-          return <EntityItem {...item} />;
+          return <EntityItem key={index} {...item} />;
         }
 
         if ("label" in item && "icon" in item) {
-          return <BaseItem {...item} />;
+          return <BaseItem key={index} {...item} />;
         }
 
         if ("element" in item) {
-          return item.element;
+          return <Fragment key={index}>{item.element}</Fragment>;
         }
 
-        return item;
+        return <Fragment key={index}>{item}</Fragment>;
       })}
     </Layout>
   );

@@ -6,12 +6,12 @@ export default function DelayedSwitch({
   checked,
   delay,
   loading,
-  onInput,
+  onChange,
 }: {
   checked: boolean;
   loading?: boolean;
   delay: number;
-  onInput: (e: React.FormEvent<HTMLInputElement>) => void;
+  onChange: (e: React.FormEvent<HTMLInputElement>) => void;
 }) {
   const { changingTo, changing, change } = useAsyncChange({
     flag: checked,
@@ -27,9 +27,9 @@ export default function DelayedSwitch({
       checked={
         changing && typeof changingTo !== "undefined" ? changingTo : checked
       }
-      onInput={(e) => {
+      onChange={(e) => {
         if (change()) {
-          onInput(e);
+          onChange(e);
         }
       }}
     />

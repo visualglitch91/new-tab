@@ -1,32 +1,26 @@
 import { loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { createHtmlPlugin } from "vite-plugin-html";
-import preact from "@preact/preset-vite";
+import react from "@vitejs/plugin-react";
 
-export default ({ mode }) => {
+export default function DefineConfig({ mode }) {
   const env = loadEnv(mode, process.cwd());
   const baseUrl = env.VITE_BASE_URL;
 
   return {
     base: env.VITE_BASE_URL || "/",
     server: {
-      port: 3000,
-    },
-    resolve: {
-      alias: {
-        react: "preact/compat",
-        "react-dom": "preact/compat",
-      },
+      host: true,
+      proxy: { "/api": "http://localhost:5700" },
     },
     plugins: [
-      preact(),
+      react(),
 
       createHtmlPlugin({
         minify: true,
-        inject: {
-          data: { baseUrl },
-        },
+        inject: { data: { baseUrl } },
       }),
+
       VitePWA({
         registerType: "autoUpdate",
         workbox: {
@@ -72,4 +66,4 @@ export default ({ mode }) => {
       }),
     ],
   };
-};
+}

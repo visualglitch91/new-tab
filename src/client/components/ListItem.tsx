@@ -150,7 +150,7 @@ export default function ListItem({
     ) : (
       <Switch
         checked={checked}
-        onInput={() => {
+        onChange={() => {
           if (change()) {
             onPrimaryAction();
           }

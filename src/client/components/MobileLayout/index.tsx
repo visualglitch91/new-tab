@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { CSSTransition, TransitionGroup } from "preact-transitioning";
 import { loadValue, saveValue } from "../../utils/general";
 import useModal from "../../utils/useModal";
 import Stack from "../Stack";
@@ -90,15 +89,7 @@ export default function MobileLayout({
     <Wrapper ref={wrapperRef}>
       {modals}
       <Content>
-        <TransitionGroup duration={250}>
-          <CSSTransition
-            key={active}
-            classNames="mobile-layout__fade"
-            onExited={() => scrollToTop(false)}
-          >
-            <Stack className="mobile-layout__fade">{content}</Stack>
-          </CSSTransition>
-        </TransitionGroup>
+        <Stack className="mobile-layout__fade">{content}</Stack>
       </Content>
       <StatusBar />
       <Tabs>

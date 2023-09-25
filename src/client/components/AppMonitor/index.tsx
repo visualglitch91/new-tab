@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useEntity } from "../../utils/hass";
 import { App } from "./types";
 import ListCard from "../ListCard";
@@ -42,12 +43,12 @@ export default function AppMonitor({ entityId }: { entityId: string }) {
         stacks.find((stack) => it.name.startsWith(stack)) || "other";
       return { ...acc, [stack]: [...(acc[stack] || []), it] };
     }, {} as Record<string, App[]>)
-  ).sort(([a], [b]) => (a === "other" ? 1 : -1));
+  ).sort(([a]) => (a === "other" ? 1 : -1));
 
   return (
     <ListCard title="Apps">
       {grouped.map(([stack, apps]) => (
-        <>
+        <Fragment key={stack}>
           <StackTitle title={stack} />
           <ListDivider />
           {apps.map((app) => (
@@ -57,7 +58,7 @@ export default function AppMonitor({ entityId }: { entityId: string }) {
               stack={stack !== "other" ? stack : undefined}
             />
           ))}
-        </>
+        </Fragment>
       ))}
     </ListCard>
   );

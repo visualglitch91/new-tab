@@ -89,11 +89,11 @@ const Root = styled(
 export default function Switch({
   checked,
   disabled,
-  onInput,
+  onChange,
 }: {
   checked: boolean;
   disabled?: boolean;
-  onInput: (e: React.FormEvent<HTMLInputElement>) => void;
+  onChange: (e: React.FormEvent<HTMLInputElement>) => void;
 }) {
   return (
     <Root>
@@ -102,13 +102,8 @@ export default function Switch({
         disabled={disabled}
         checked={checked}
         onChange={(e) => {
-          /*
-           * Preact has some bug that changes
-           * the checkbox state despite the
-           * checked prop
-           */
           e.currentTarget.checked = checked;
-          onInput(e);
+          onChange(e);
         }}
       />
       <i />

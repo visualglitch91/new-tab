@@ -19,5 +19,5 @@ export default function EntitiesSwitch({
     });
   }
 
-  return <Switch checked={checked} onInput={toggleAll} />;
+  return <Switch checked={checked} onChange={toggleAll} />;
 }
