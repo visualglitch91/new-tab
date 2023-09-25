@@ -1,4 +1,4 @@
-import { css, styled } from "../styling";
+import { styled } from "@mui/joy";
 import { callService } from "../utils/hass";
 import { usePackages } from "../utils/packages";
 import { Package } from "../utils/typings";
@@ -9,57 +9,43 @@ import PillButton from "../components/PillButton";
 import Stack from "../components/Stack";
 import TitleCard from "../components/TitleCard";
 
-const ItemCard = styled(
-  ButtonCard,
-  css`
-    padding: 12px;
-    justify-content: stretch;
-    text-align: left;
-  `
-);
+const ItemCard = styled(ButtonCard)({
+  padding: "12px",
+  justifyContent: "stretch",
+  textAlign: "left",
+});
 
-const ItemContent = styled(
-  "div",
-  css`
-    display: grid;
-    grid-template-areas:
-      "label date"
-      "description description"
-      "location location";
-    grid-template-columns: auto min-content;
-    row-gap: 4px;
-    width: 100%;
-  `
-);
+const ItemContent = styled("div")({
+  display: "grid",
+  gridTemplateAreas: `
+    "label date"
+    "description description"
+    "location location"
+  `,
+  gridTemplateColumns: "auto min-content",
+  rowGap: "4px",
+  width: "100%",
+});
 
-const Label = styled(
-  "span",
-  css`
-    grid-area: label;
-    font-size 14px;
-    font-weight: bold;
-  `
-);
+const Label = styled("span")({
+  gridArea: "label",
+  fontSize: "14px",
+  fontWeight: "bold",
+});
 
-const At = styled(
-  "span",
-  css`
-    grid-area: date;
-    white-space: nowrap;
-    font-size 12px;
-    font-weight: bold;
-  `
-);
+const At = styled("span")({
+  gridArea: "date",
+  whiteSpace: "nowrap",
+  fontSize: "12px",
+  fontWeight: "bold",
+});
 
-const Desciption = styled(
-  "span",
-  css`
-    grid-area: description;
-    opacity: 0.8;
-    font-size 12px;
-    font-weight: bold;
-  `
-);
+const Desciption = styled("span")({
+  gridArea: "description",
+  opacity: 0.8,
+  fontSize: "12px",
+  fontWeight: "bold",
+});
 
 function parseDate(date: string) {
   return new Date(date).toLocaleDateString("pt-BR", {

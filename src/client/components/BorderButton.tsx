@@ -1,30 +1,28 @@
-import { css, cx, theme } from "../styling";
+import { type Theme } from "@mui/joy/styles";
 import Button from "./Button";
+import { sxx } from "../utils/styles";
 
-const classes = {
-  root: css`
-    border: 1px solid ${theme.accent.base};
-  `,
-  primary: css`
-    background: ${theme.accent.base};
-    color: white;
-
-    &:hover {
-      background: ${theme.accent.d10};
-      border-color: ${theme.accent.d10};
-    }
-  `,
+type BorderButtonProps = React.ComponentProps<typeof Button> & {
+  primary?: boolean;
 };
 
-export default function BorderButton({
-  primary,
-  className,
-  ...props
-}: React.ComponentProps<typeof Button> & { primary?: boolean }) {
-  return (
-    <Button
-      {...props}
-      className={cx(className, classes.root, primary && classes.primary)}
-    />
-  );
+function style(props: BorderButtonProps) {
+  return (theme: Theme) => ({
+    border: `1px solid ${theme.palette.primary[400]}`,
+    ...(props.primary
+      ? {
+          background: theme.palette.primary[400],
+          color: "white",
+
+          "&:hover": {
+            background: theme.palette.primary.darkChannel,
+            borderColor: theme.palette.primary.darkChannel,
+          },
+        }
+      : {}),
+  });
+}
+
+export default function BorderButton({ sx, ...props }: BorderButtonProps) {
+  return <Button {...props} sx={sxx(style(props), sx)} />;
 }

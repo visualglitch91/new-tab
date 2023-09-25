@@ -1,51 +1,41 @@
-import { css, cx } from "../styling";
+import { sxx } from "../utils/styles";
+import BaseDiv, { type BaseDivProps } from "./BaseDiv";
 
-const classes = {
-  wrapper: css`
-    display: flex;
-    grid-gap: 8px;
-    justify-content: center;
-    align-items: center;
-  `,
-  full: css`
-    width: 100%;
-  `,
-  wrap: css`
-    flex-wrap: wrap;
-  `,
-  left: css`
-    justify-content: flex-start;
-  `,
-  right: css`
-    justify-content: flex-end;
-  `,
+const styles = {
+  wrapper: {
+    display: "flex",
+    gridGap: "8px",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  full: { width: "100%" },
+  wrap: { flexWrap: "wrap" },
+  left: { justifyContent: "flex-start" },
+  right: { justifyContent: "flex-end" },
 };
 
 export default function FlexRow({
-  className,
+  sx,
   align = "center",
   wrap,
   full,
-  children,
-}: {
-  className?: string;
+  ...props
+}: BaseDivProps & {
   align?: "left" | "center" | "right";
   wrap?: boolean;
   full?: boolean;
-  children: React.ReactNode;
 }) {
   return (
-    <div
-      className={cx(
-        classes.wrapper,
-        align === "left" && classes.left,
-        align === "right" && classes.right,
-        wrap && classes.wrap,
-        full && classes.full,
-        className
+    <BaseDiv
+      {...props}
+      sx={sxx(
+        styles.wrapper,
+        align === "left" && styles.left,
+        align === "right" && styles.right,
+        wrap && styles.wrap,
+        full && styles.full,
+        sx
       )}
-    >
-      {children}
-    </div>
+    />
   );
 }

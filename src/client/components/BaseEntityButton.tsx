@@ -1,8 +1,8 @@
+import { CircularProgress, styled } from "@mui/joy";
 import useAsyncChange from "../utils/useAsyncChange";
+import { cx, uniqueClassName } from "../utils/styles";
 import { BaseComponentGroupItem } from "../utils/typings";
-import { cx, css, styled, uniqueClassName } from "../styling";
 import Icon from "./Icon";
-import CircularLoading from "./CircularLoading";
 import ButtonCard from "./ButtonCard";
 import { useConfirm } from "../utils/useConfirm";
 
@@ -11,42 +11,36 @@ const classes = {
   wrapperCustomBG: uniqueClassName(),
 };
 
-const Wrapper = styled(
-  ButtonCard,
-  css`
-    height: 75px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 6px;
-    box-sizing: border-box;
-    padding: 6px 8px;
-    overflow: hidden;
+const Wrapper = styled(ButtonCard)({
+  height: "75px",
+  display: "flex",
+  flexDirection: "column",
+  rowGap: "6px",
+  boxSizing: "border-box",
+  padding: "6px 8px",
+  overflow: "hidden",
 
-    &.${classes.wrapperActive}:not(.${classes.wrapperCustomBG}) {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
+  [`&.${classes.wrapperActive}:not(.${classes.wrapperCustomBG})`]: {
+    background: "rgba(255, 255, 255, 0.12)",
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
 
-    &.${classes.wrapperActive}.hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
+  [`&.${classes.wrapperActive}.hover`]: {
+    background: "rgba(255, 255, 255, 0.25)",
+  },
 
-    &.${classes.wrapperActive}.${classes.wrapperCustomBG}.hover {
-      background: unset;
-      filter: brightness(1.1);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-  `
-);
+  [`&.${classes.wrapperActive}.${classes.wrapperCustomBG}.hover`]: {
+    background: "unset",
+    filter: "brightness(1.1)",
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
+});
 
-const Label = styled(
-  "div",
-  css`
-    font-size: 9px;
-    font-weight: 700;
-    white-space: pre-wrap;
-  `
-);
+const Label = styled("div")({
+  fontSize: "9px",
+  fontWeight: "700",
+  whiteSpace: "pre-wrap",
+});
 
 export default function BaseEntityButton({
   icon,
@@ -69,38 +63,40 @@ export default function BaseEntityButton({
   });
 
   return (
-    <Wrapper
-      {...props}
-      disabled={disabled}
-      className={cx(
-        color && !changing && classes.wrapperCustomBG,
-        checked && !changing && classes.wrapperActive
-      )}
-      style={color && !changing ? { background: color } : undefined}
-      onClick={() => {
-        function onConfirm() {
-          if (change() && onPrimaryAction) {
-            onPrimaryAction();
-          }
-        }
-
-        if (confirmBefore) {
-          confirm({ title: "Continuar?", onConfirm });
-        } else {
-          onConfirm();
-        }
-      }}
-      onLongPress={onSecondaryAction}
-    >
+    <>
       {modals}
-      {loading || changing ? (
-        <CircularLoading />
-      ) : (
-        <>
-          <Icon icon={disabled ? "cancel" : icon || "cancel"} />
-          <Label>{label}</Label>
-        </>
-      )}
-    </Wrapper>
+      <Wrapper
+        {...props}
+        disabled={disabled}
+        className={cx(
+          color && !changing && classes.wrapperCustomBG,
+          checked && !changing && classes.wrapperActive
+        )}
+        style={color && !changing ? { background: color } : undefined}
+        onClick={() => {
+          function onConfirm() {
+            if (change() && onPrimaryAction) {
+              onPrimaryAction();
+            }
+          }
+
+          if (confirmBefore) {
+            confirm({ title: "Continuar?", onConfirm });
+          } else {
+            onConfirm();
+          }
+        }}
+        onLongPress={onSecondaryAction}
+      >
+        {loading || changing ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <Icon icon={disabled ? "cancel" : icon || "cancel"} />
+            <Label>{label}</Label>
+          </>
+        )}
+      </Wrapper>
+    </>
   );
 }

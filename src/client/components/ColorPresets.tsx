@@ -1,4 +1,4 @@
-import { css, styled } from "../styling";
+import { styled } from "@mui/joy";
 import { getContrastColor, RGB } from "../utils/general";
 import {
   colorPresets,
@@ -10,27 +10,24 @@ import FlexRow from "./FlexRow";
 import ColorBadge from "./ColorBadge";
 import RippleButton from "./RippleButton";
 
-const ColorPresetButton = styled(
-  RippleButton,
-  css`
-    padding: 0;
-    outline: none;
-    border: 0;
-    font-size: 0;
-    background: transparent;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+const ColorPresetButton = styled(RippleButton)({
+  padding: 0,
+  outline: "none",
+  border: 0,
+  fontSize: 0,
+  background: "transparent",
+  cursor: "pointer",
+  position: "relative",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 
-    & > i {
-      position: absolute;
-      left: calc(50%- 12px);
-      top: calc(50%- 12px);
-    }
-  `
-);
+  "& > i": {
+    position: "absolute",
+    left: "calc(50%- 12px)",
+    top: "calc(50%- 12px)",
+  },
+});
 
 export default function ColorPresets({
   className,

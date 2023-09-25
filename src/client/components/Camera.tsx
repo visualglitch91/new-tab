@@ -1,43 +1,30 @@
 import { useEffect, useState } from "react";
-import { styled, css } from "../styling";
+import { CircularProgress, styled } from "@mui/joy";
 import { hassUrl, useEntity } from "../utils/hass";
 import Paper from "./Paper";
 import FullScreenCamera from "./FullScreenCamera";
 import RippleButton from "./RippleButton";
 import useModal from "../utils/useModal";
-import CircularLoading from "./CircularLoading";
+import DotLoading from "./DotLoading";
 
-const Wrapper = styled(
-  Paper,
-  css`
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+const Wrapper = styled(Paper)({
+  position: "relative",
+  overflow: "hidden",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  "& img, & video": { width: "100%" },
+});
 
-    & img,
-    & video {
-      width: 100%;
-    }
-  `
-);
+const Overlay = styled("span")({
+  fontSize: "18px",
+});
 
-const Overlay = styled(
-  "span",
-  css`
-    font-size: 18px;
-  `
-);
-
-const SnapshotButton = styled(
-  RippleButton,
-  css`
-    border: none;
-    padding: 0;
-    background: transparent;
-  `
-);
+const SnapshotButton = styled(RippleButton)({
+  border: "none",
+  padding: 0,
+  background: "transparent",
+});
 
 export default function Camera({
   aspectRatio,
@@ -105,7 +92,7 @@ export default function Camera({
     <Wrapper style={{ aspectRatio: aspectRatio.toString() }}>
       {modals}
       {snapshot === "LOADING" ? (
-        <CircularLoading />
+        <CircularProgress />
       ) : snapshot ? (
         <SnapshotButton onClick={showStream}>
           <img alt="" src={snapshot} />

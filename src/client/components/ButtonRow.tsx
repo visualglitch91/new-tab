@@ -1,31 +1,26 @@
-import { css, cx } from "../styling";
-
-const buttonRowClassName = css`
-  width: 100%;
-  display: flex;
-  grid-gap: 8px;
-
-  & > * {
-    flex: 1;
-    overflow: hidden;
-  }
-`;
+import { sxx } from "../utils/styles";
+import BaseDiv, { BaseDivProps } from "./BaseDiv";
 
 export default function ButtonRow({
-  children,
-  className,
+  sx,
   height,
-}: {
-  children: React.ReactNode;
-  className?: string;
+  ...props
+}: BaseDivProps & {
   height?: number;
 }) {
   return (
-    <div
-      style={{ height: height && `${height}px` }}
-      className={cx(className, buttonRowClassName)}
-    >
-      {children}
-    </div>
+    <BaseDiv
+      {...props}
+      sx={sxx(
+        height && { height: `${height}px` },
+        {
+          width: "100%",
+          display: "flex",
+          gridGap: "8px",
+          "& > *": { flex: 1, overflow: "hidden" },
+        },
+        sx
+      )}
+    />
   );
 }

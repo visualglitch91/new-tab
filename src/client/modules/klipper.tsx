@@ -1,7 +1,7 @@
+import { styled } from "@mui/joy";
 import { HassEntity } from "home-assistant-js-websocket";
 //@ts-expect-error
 import humanizeDuration from "humanize-duration";
-import { css, styled } from "../styling";
 import { formatNumericValue } from "../utils/general";
 import { useConfirm } from "../utils/useConfirm";
 import { makeServiceCall, useEntities, useEntity } from "../utils/hass";
@@ -16,13 +16,10 @@ import { useEffect, useState } from "react";
 import useLatestRef from "../utils/useLatestRef";
 import FlexRow from "../components/FlexRow";
 
-const CameraWrapper = styled(
-  Paper,
-  css`
-    line-height: 0;
-    overflow: hidden;
-  `
-);
+const CameraWrapper = styled(Paper)({
+  lineHeight: 0,
+  overflow: "hidden",
+});
 
 function TemperatureRow({
   label,

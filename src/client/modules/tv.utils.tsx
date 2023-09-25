@@ -1,7 +1,7 @@
+import { CircularProgress } from "@mui/joy";
 import { makeTurnOnCall, useEntity } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
 import Icon from "../components/Icon";
-import CircularLoading from "../components/CircularLoading";
 
 export function IconButtonCard({
   icon,
@@ -85,7 +85,7 @@ export function ScriptImageButtonCard({
   return (
     <ButtonCard onClick={makeTurnOnCall(entityId)}>
       {loading ? (
-        <CircularLoading />
+        <CircularProgress />
       ) : (
         <img alt="" src={assets[asset]} style={imgStyle} />
       )}

@@ -1,5 +1,6 @@
 //@ts-ignore
 import colorParse from "color-rgba";
+import { styled } from "@mui/joy";
 
 export function uniqueClassName() {
   return (
@@ -12,6 +13,18 @@ export function uniqueClassName() {
 
 export function cx(...classNames: (string | null | undefined | false | 0)[]) {
   return classNames.filter(Boolean).join(" ");
+}
+
+const temp = styled("div")({});
+type SX = NonNullable<React.ComponentProps<typeof temp>["sx"]>;
+
+export function sxx(...args: (SX | null | undefined | false | 0 | "")[]) {
+  return args
+    .reduce(
+      (acc, sx) => [...acc, ...(Array.isArray(sx) ? sx : [sx])],
+      [] as SX[]
+    )
+    .filter(Boolean) as SX;
 }
 
 export function colorToHEX(color: any): [number, number, number] {
@@ -48,4 +61,15 @@ export function darken(hex: string, percent: number) {
 export function alpha(hex: string, percent: number) {
   const [R, G, B] = colorToHEX(hex);
   return `rgba(${R}, ${G}, ${B},${percent})`;
+}
+
+export function extractMediaQuery(content: string) {
+  const regex = /\((.*?)\)/; // Regular expression to match content between parentheses
+  const match = content.match(regex);
+
+  if (match && match[1]) {
+    return `(${match[1]})`; // Extracted content between parentheses
+  }
+
+  throw new Error("Invalid media query");
 }

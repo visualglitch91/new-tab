@@ -1,37 +1,34 @@
-import { css, styled } from "../styling";
+import { styled } from "@mui/joy";
+import { SxProps } from "@mui/joy/styles/types";
 import Paper from "./Paper";
 
-const Wrapper = styled(
-  Paper,
-  css`
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
-    column-gap: 8px;
-  `
-);
+const Wrapper = styled(Paper)({
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "8px 16px",
+  columnGap: "8px",
+});
 
-const Title = styled(
-  "h2",
-  css`
-    margin: 0;
-    font-size: 18px;
-    line-height: 32px;
-  `
-);
+const Title = styled("h2")({
+  margin: 0,
+  fontSize: "18px",
+  lineHeight: "32px",
+});
 
 export default function TitleCard({
+  sx,
   className,
   title,
   action,
 }: {
+  sx?: SxProps;
   className?: string;
   title: string;
   action?: React.ReactNode;
 }) {
   return (
-    <Wrapper className={className}>
+    <Wrapper sx={sx} className={className}>
       <Title>{title}</Title>
       {action}
     </Wrapper>

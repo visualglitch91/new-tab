@@ -1,47 +1,45 @@
-import { styled, css, theme, alpha } from "../styling";
+import { useEffect } from "react";
+import { styled } from "@mui/joy";
+import { alpha } from "../utils/styles";
+import { useResponsive } from "../utils/general";
 import CameraStream from "./CameraStream";
 import FlexRow from "./FlexRow";
 import PillButton from "./PillButton";
-import { useResponsive } from "../utils/general";
 import DialogBase from "./DialogBase";
-import { useEffect } from "react";
 
-const buttonsWrapper = css`
-  padding: 8px 0;
-`;
+const ButtonsWrapper = styled(FlexRow)({
+  padding: "8px 0",
+});
 
-const MobileWrapper = styled(
-  "div",
-  css`
-    position: fixed;
-    top: 0;
-    left: 100%;
-    width: 100vh;
-    height: 100vw;
-    transform: rotate(90deg);
-    transform-origin: top left;
-    background: black;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 12px;
-    row-gap: 8px;
+const MobileWrapper = styled("div")(({ theme }) => ({
+  position: "fixed",
+  top: 0,
+  left: "100%",
+  width: "100vh",
+  height: "100vw",
+  transform: "rotate(90deg)",
+  transformOrigin: "top left",
+  background: "black",
+  zIndex: 3,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexDirection: "column",
+  padding: "12px",
+  rowGap: "8px",
 
-    & .${buttonsWrapper} {
-      background: ${alpha(theme.background.base, 0.25)};
-      border-radius: 4px;
-      padding: 8px;
-    }
+  [`& .${ButtonsWrapper}`]: {
+    background: alpha(theme.palette.background.body, 0.25),
+    borderRadius: "4px",
+    padding: "8px",
+  },
 
-    & canvas {
-      max-height: calc(100vw - 80px);
-      width: unset !important;
-      margin: 0 auto;
-    }
-  `
-);
+  "& canvas": {
+    maxHeight: "calc(100vw - 80px)",
+    width: "unset !important",
+    margin: "0 auto",
+  },
+}));
 
 export default function FullScreenCamera({
   entityId,
@@ -72,13 +70,13 @@ export default function FullScreenCamera({
     <Wrapper title="Câmera" onClose={onClose}>
       <CameraStream aspectRatio={aspectRatio} entityId={entityId} />
       {onMove && (
-        <FlexRow wrap className={buttonsWrapper}>
+        <ButtonsWrapper wrap>
           <PillButton icon="arrow-left" onClick={() => onMove("LEFT")} />
           <PillButton icon="arrow-down" onClick={() => onMove("DOWN")} />
           <PillButton icon="arrow-up" onClick={() => onMove("UP")} />
           <PillButton icon="arrow-right" onClick={() => onMove("RIGHT")} />
           {isMobile && <PillButton icon="close" onClick={onClose} />}
-        </FlexRow>
+        </ButtonsWrapper>
       )}
     </Wrapper>
   );

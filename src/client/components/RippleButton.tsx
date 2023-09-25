@@ -1,25 +1,19 @@
+import { styled } from "@mui/joy";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import ListenerGroup from "../utils/ListenerGroup";
-import { css, styled } from "../styling";
 import Timer from "../utils/Timer";
 import useLatestRef from "../utils/useLatestRef";
 import { isTouchDevice } from "../utils/general";
 
 const PRESS_AND_HOLD_REPEAT = 120;
 
-const StyledButton = styled(
-  "button",
-  css`
-    position: relative;
-    display: inline-flex;
-    overflow: hidden;
-    cursor: pointer;
-
-    & * {
-      pointer-events: none;
-    }
-  `
-);
+const StyledButton = styled("button")({
+  position: "relative",
+  display: "inline-flex",
+  overflow: "hidden",
+  cursor: "pointer",
+  "& *": { pointerEvents: "none" },
+});
 
 const initialRippleStyle: React.CSSProperties = {
   position: "absolute",
@@ -90,7 +84,7 @@ function Ripple({ top, left, size, "data-key": key, onDone }: RippleProps) {
 
 const RippleButton = forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  React.ComponentProps<typeof StyledButton> & {
     onHold?: () => void;
     onLongPress?: () => void;
   }
@@ -136,7 +130,6 @@ const RippleButton = forwardRef<
       let onLongPressCalled = false;
 
       const pressAndHoldCallback = () => {
-        console.log("pressAndHoldCallback");
         if (!onLongPressCalled) {
           onLongPressCalled = true;
           onLongPressRef.current?.();

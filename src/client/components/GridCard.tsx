@@ -1,14 +1,9 @@
 import { ReactNode } from "react";
-import { css, styled } from "../styling";
+import { styled } from "@mui/joy";
 import Grid from "./Grid";
 import TitleCard from "./TitleCard";
 
-const Title = styled(
-  TitleCard,
-  css`
-    margin-bottom: 16px;
-  `
-);
+const Title = styled(TitleCard)({ marginBottom: "16px" });
 
 export default function GridLayout({
   title,

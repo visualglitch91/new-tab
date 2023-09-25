@@ -1,4 +1,4 @@
-import { alpha } from "../styling";
+import { alpha } from "../utils/styles";
 
 export default function ColorBadge({
   color,

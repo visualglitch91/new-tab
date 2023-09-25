@@ -1,5 +1,6 @@
+import { Fragment, useState } from "react";
+import { styled } from "@mui/joy";
 import { HassEntity } from "home-assistant-js-websocket";
-import { useState } from "react";
 import { useEntity } from "../../utils/hass";
 import {
   LightColorMode,
@@ -9,7 +10,6 @@ import {
   getLightCurrentModeRgbColor,
 } from "../../utils/light";
 import { hsvToRGB, RGB, rgbToHS } from "../../utils/general";
-import { css, styled } from "../../styling";
 import ColorPicker from "../ColorPicker";
 import DialogBase from "../DialogBase";
 import LabeledSlider from "../LabeledSlider";
@@ -22,14 +22,11 @@ import { useColorBrightness } from "./useColorBrightness";
 import { useTemperature } from "./useTemperature";
 import { useWhiteValue } from "./useWhiteValue";
 
-const ColorStack = styled(
-  Stack,
-  css`
-    align-items: center;
-    max-width: 310px;
-    margin: 0 auto;
-  `
-);
+const ColorStack = styled(Stack)({
+  alignItems: "center",
+  maxWidth: "310px",
+  margin: "0 auto",
+});
 
 function Components({ entity }: { entity: HassEntity }) {
   const components = [];
@@ -157,28 +154,15 @@ function Components({ entity }: { entity: HassEntity }) {
         </>
       );
     }
-
-    // if (features.rgbww) {
-    //   components.push(
-    //     <>
-    //       <Slider
-    //         min={0}
-    //         max={100}
-    //         defaultValue={getColdWhiteValueSliderValue()}
-    //         onChangeEnd={onColdWhiteValueChange}
-    //       />
-    //       <Slider
-    //         min={0}
-    //         max={100}
-    //         defaultValue={getWarmWhiteValueSliderValue()}
-    //         onChangeEnd={onWarmWhiteValueChange}
-    //       />
-    //     </>
-    //   );
-    // }
   }
 
-  return <>{components}</>;
+  return (
+    <>
+      {components.map((component, index) => (
+        <Fragment key={index}>{component}</Fragment>
+      ))}
+    </>
+  );
 }
 
 export default function LightEntityDialog({

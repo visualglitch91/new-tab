@@ -1,10 +1,10 @@
 import { Fragment } from "react";
 import { useEntity } from "../../utils/hass";
-import { App } from "./types";
 import ListCard from "../ListCard";
-import { AppItem } from "./AppItem";
 import { ListDivider } from "../ComponentGroup";
-import { css } from "../../styling";
+import { App } from "./types";
+import { AppItem } from "./AppItem";
+import BaseDiv from "../BaseDiv";
 
 const stacks = ["home-assistant", "media-center", "matrix", "management"];
 
@@ -13,19 +13,18 @@ const labels: Record<string, string | undefined> = {
   management: "Administração",
 };
 
-const stackTitleClassName = css`
-  text-transform: capitalize;
-
-  &:not(:first-child) {
-    margin-top: 16px;
-  }
-`;
-
 function StackTitle({ title }: { title: string }) {
   return (
-    <div className={stackTitleClassName}>
+    <BaseDiv
+      sx={{
+        color: "white",
+        background: "transparent",
+        textTransform: "capitalize",
+        "&:not(:first-of-type)": { marginTop: "16px" },
+      }}
+    >
       {labels[title] || title.split("-").join(" ")}
-    </div>
+    </BaseDiv>
   );
 }
 

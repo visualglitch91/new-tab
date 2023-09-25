@@ -4,14 +4,17 @@
   "version": "0.0.0",
   "scripts": {
     "prerun": "echo \"\\\"$(date +%s)\\\"\" > src/client/version.json",
+    "dev": "run-p dev:*",
     "dev:client": "npm run prerun && vite",
     "dev:server": "PORT=5700 vite-node src/server/index.ts",
-    "dev": "run-p dev:*",
     "start": "PORT=5173 vite-node src/server/index.ts",
     "build": "npm run prerun && tsc && vite build",
-    "postbuild": "cp src/client/robots.txt dist && cp -R src/client/assets/icons dist/icons"
+    "postbuild": "cp src/client/robots.txt dist && cp -R src/client/assets/icons dist/icons && cp src/client/version.json dist/latest.json"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/joy": "^5.0.0-beta.7",
     "@uiw/react-color-wheel": "^1.4.2",
     "axios": "^1.5.0",
     "body-parser": "^1.20.2",
@@ -27,14 +30,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
-    "react-slider": "^2.0.6",
+    "react-transition-group": "^4.4.5",
     "vite-node": "^0.26.3"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.17",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
+    "@types/react": "^18.2.22",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-transition-group": "^4.4.6",
     "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.50.0",
     "eslint-config-react-app": "^7.0.1",

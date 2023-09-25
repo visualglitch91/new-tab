@@ -1,6 +1,7 @@
-import { styled, css, uniqueClassName, cx } from "../styling";
+import { styled } from "@mui/joy";
 import { BaseComponentGroupItem } from "../utils/typings";
 import useAsyncChange from "../utils/useAsyncChange";
+import { cx } from "../utils/styles";
 import ColorBadge from "./ColorBadge";
 import DotLoading from "./DotLoading";
 import Icon from "./Icon";
@@ -8,111 +9,86 @@ import Switch from "./Switch";
 import RippleButton from "./RippleButton";
 
 const classes = {
-  wrapperDisabled: uniqueClassName(),
-  clickableLabel: uniqueClassName(),
+  wrapperDisabled: "LitemItem__Root--wrapperDisabled",
+  clickableLabel: "LitemItem__Root--clickableLabel",
 };
 
-const Root = styled(
-  "div",
-  css`
-    position: relative;
-    padding: 0 8px;
-    margin: 0 -8px;
-    border-radius: 10px;
-    overflow: hidden;
+const Root = styled("div")({
+  position: "relative",
+  padding: "0 8px",
+  margin: "0 -8px",
+  borderRadius: "10px",
+  overflow: "hidden",
 
-    &.${classes.wrapperDisabled} {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+  [`&.${classes.wrapperDisabled}`]: {
+    opacity: 0.5,
+    cursor: "not-allowed",
+  },
 
-    &.${classes.clickableLabel}:not(.${classes.wrapperDisabled}) {
-      cursor: pointer;
-      transition: background 100ms linear;
+  [`&.${classes.clickableLabel}:not(.${classes.wrapperDisabled})`]: {
+    cursor: "pointer",
+    transition: "background 100ms linear",
+    "&:hover": { background: "rgba(0, 0, 0, 0.1)" },
+  },
+});
 
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
-    }
-  `
-);
+const BackgroundButtonWrapper = styled("div")({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  zIndex: 1,
 
-const BackgroundButtonWrapper = styled(
-  "div",
-  css`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+  "& > button": {
+    background: "transparent",
+    border: "none",
+    width: "100%",
+    height: "100%",
+  },
 
-    & > button {
-      background: transparent;
-      border: none;
-      width: 100%;
-      height: 100%;
-    }
+  [`.${classes.clickableLabel}:not(.${classes.wrapperDisabled}) &`]: {
+    cursor: "pointer",
+  },
+});
 
-    .${classes.clickableLabel}:not(.${classes.wrapperDisabled}) & {
-      cursor: pointer;
-    }
-  `
-);
+const InnerWrapper = styled("div")({
+  width: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  fontSize: "14px",
+  columnGap: "12px",
+  color: "white",
+  zIndex: 2,
+  position: "relative",
+  pointerEvents: "none",
+  "& button, & label": { pointerEvents: "all" },
+});
 
-const InnerWrapper = styled(
-  "div",
-  css`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 14px;
-    column-gap: 12px;
-    color: white;
-    z-index: 2;
-    position: relative;
-    pointer-events: none;
+const LabelIcon = styled(Icon)({
+  fontSize: "24px",
+  minWidth: "40px",
+  maxWidth: "40px",
+  height: "40px",
+});
 
-    & button,
-    & label {
-      pointer-events: all;
-    }
-  `
-);
+const Label = styled("div")({
+  marginRight: "auto",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  display: "flex",
+  alignItems: "center",
+  columnGap: "8px",
+  flexShrink: 0,
+});
 
-const LabelIcon = styled(
-  Icon,
-  css`
-    font-size: 24px;
-    min-width: 40px;
-    max-width: 40px;
-    height: 40px;
-  `
-);
-
-const Label = styled(
-  "div",
-  css`
-    margin-right: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    column-gap: 8px;
-    flex-shrink: 0;
-  `
-);
-
-const Content = styled(
-  "div",
-  css`
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  `
-);
+const Content = styled("div")({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+});
 
 export default function ListItem({
   label,

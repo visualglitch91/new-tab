@@ -1,4 +1,4 @@
-import { cx } from "../styling";
+import { cx } from "../utils/styles";
 
 export default function Icon({
   className,

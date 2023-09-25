@@ -1,32 +1,26 @@
-import { styled, css, theme } from "../styling";
+import { styled } from "@mui/joy";
 import Icon from "./Icon";
 
-const Wrapper = styled(
-  "button",
-  css`
-    height: 100%;
-    margin: 0;
-    padding: 6px 8px;
-    border: none;
-    outline: none;
-    font-size: 11px;
-    color: ${theme.accent.base};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 60ms linear;
-    border-radius: 5px;
-    font-weight: bolder;
-    text-transform: uppercase;
-    background: rgba(0, 0, 0, 0.1);
-    column-gap: 6px;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.3);
-    }
-  `
-);
+const Wrapper = styled("button")(({ theme }) => ({
+  height: "100%",
+  margin: 0,
+  padding: "6px 8px",
+  border: "none",
+  outline: "none",
+  fontSize: "11px",
+  color: theme.palette.primary[400],
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  transition: "background 60ms linear",
+  borderRadius: "5px",
+  fontWeight: "bolder",
+  textTransform: "uppercase",
+  background: "rgba(0, 0, 0, 0.1)",
+  columnGap: "6px",
+  "&:hover": { background: " rgba(0, 0, 0, 0.3)" },
+}));
 
 export default function PillButton({
   className,

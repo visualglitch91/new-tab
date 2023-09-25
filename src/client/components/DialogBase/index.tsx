@@ -1,16 +1,45 @@
-import { useRef, useState } from "react";
-import { css } from "../../styling";
+import { createContext, useContext, useEffect, useState } from "react";
+import { Transition } from "react-transition-group";
+import Modal from "@mui/joy/Modal";
+// import BaseDiv from "../BaseDiv";
+import {
+  DialogContent,
+  DialogTitle,
+  ModalClose,
+  ModalDialog,
+  Typography,
+} from "@mui/joy";
 import { useResponsive } from "../../utils/general";
-import Timer from "../../utils/Timer";
-import Button from "../Button";
-import Icon from "../Icon";
-import { Wrapper, Root, Header, Content } from "./components";
+import BaseDiv from "../BaseDiv";
 
-const classes = {
-  closeButton: css`
-    margin-left: auto;
-  `,
+const DialogHelperContext = createContext<{
+  open: boolean;
+  duration: number;
+  onExited: () => void;
+} | null>(null);
+
+const fallbackContext = {
+  open: true,
+  duration: 0,
+  onExited: () => {},
 };
+
+const transitionTimingFunction = "cubic-bezier(0.76, 0, 0.24, 1)";
+
+export function DialogBaseProvider({
+  children,
+  ...state
+}: {
+  open: boolean;
+  children: React.ReactNode;
+  onExited: () => void;
+}) {
+  return (
+    <DialogHelperContext.Provider value={{ ...state, duration: 180 }}>
+      {children}
+    </DialogHelperContext.Provider>
+  );
+}
 
 export default function DialogBase({
   title,
@@ -21,38 +50,95 @@ export default function DialogBase({
   children: React.ReactNode;
   onClose: () => void;
 }) {
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const { isDesktop } = useResponsive();
+  const [internalOpen, setInternalOpen] = useState(false);
+  const {
+    open,
+    duration: _duration,
+    onExited,
+  } = useContext(DialogHelperContext) || fallbackContext;
 
-  const [keepOpenTimer] = useState(() => {
-    const timer = new Timer("timeout");
-    timer.start(() => {}, 100);
-    return timer;
-  });
+  const { isMobile } = useResponsive();
+  const duration = isMobile ? _duration * 2 : _duration;
 
-  function keepOpen() {
-    keepOpenTimer.start(() => {}, 10);
-  }
-
-  function onOverlayClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (e.target === overlayRef.current && !keepOpenTimer.isRunning()) {
-      onClose();
+  useEffect(() => {
+    if (open) {
+      setTimeout(setInternalOpen, 10, true);
+    } else {
+      setInternalOpen(false);
     }
-  }
+  }, [open]);
 
   return (
-    <Wrapper ref={overlayRef} onClick={onOverlayClick}>
-      <Root onMouseDown={keepOpen} onTouchStart={keepOpen}>
-        <Header>
-          {title}
-          {isDesktop && (
-            <Button className={classes.closeButton} onClick={onClose}>
-              <Icon icon="close" />
-            </Button>
-          )}
-        </Header>
-        <Content>{children}</Content>
-      </Root>
-    </Wrapper>
+    <Transition in={internalOpen} timeout={duration} onExited={onExited}>
+      {(state: string) => (
+        <Modal
+          keepMounted
+          open={!["exited", "exiting"].includes(state)}
+          onClose={onClose}
+          slotProps={{
+            backdrop: {
+              sx: {
+                opacity: 0,
+                backdropFilter: "none",
+                transition: `opacity ${duration}ms, backdrop-filter ${duration}ms`,
+                transitionTimingFunction,
+                ...{
+                  entering: { opacity: 1, backdropFilter: "blur(8px)" },
+                  entered: { opacity: 1, backdropFilter: "blur(8px)" },
+                }[state],
+              },
+            },
+          }}
+          sx={{ visibility: state === "exited" ? "hidden" : "visible" }}
+        >
+          <ModalDialog
+            variant="plain"
+            sx={(theme) => ({
+              boxShadow: theme.shadow.xs,
+              transitionTimingFunction,
+              [theme.breakpoints.down("sm")]: {
+                top: "unset",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                maxWidth: "unset",
+                transform: "translate3d(0, 100%, 0)",
+                transition: `transform ${duration}ms`,
+                willChange: "transform",
+                ...{
+                  entering: { transform: "translate3d(0, 0, 0)" },
+                  entered: { transform: "translate3d(0, 0, 0)" },
+                }[state],
+              },
+              [theme.breakpoints.up("sm")]: {
+                opacity: 0,
+                transition: `opacity ${duration}ms`,
+                ...{
+                  entering: { opacity: 1 },
+                  entered: { opacity: 1 },
+                }[state],
+              },
+            })}
+          >
+            {title && (
+              <DialogTitle>
+                <Typography>{title}</Typography>
+              </DialogTitle>
+            )}
+            {!isMobile && <ModalClose />}
+            <BaseDiv
+              sx={{
+                margin: "calc(var(--Card-padding) * -1)",
+                padding: "var(--Card-padding)",
+              }}
+            >
+              {children}
+            </BaseDiv>
+          </ModalDialog>
+        </Modal>
+      )}
+    </Transition>
   );
 }

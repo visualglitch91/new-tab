@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { FormControl, FormLabel, Input } from "@mui/joy";
 import BorderButton from "../components/BorderButton";
 import DialogBase from "../components/DialogBase";
 import Stack from "../components/Stack";
-import TextField from "../components/TextField";
 import useModal from "./useModal";
 
 function Prompt({
@@ -18,25 +18,37 @@ function Prompt({
 }) {
   const [values, setValues] = useState(() => fields.map(() => ""));
 
+  const firstFieldOnRef = useCallback((inputElement: HTMLInputElement) => {
+    if (!inputElement) return;
+
+    setTimeout(() => {
+      inputElement.focus();
+    }, 20);
+  }, []);
+
   return (
     <DialogBase title={title} onClose={onCancel}>
       <Stack>
         {fields.map((label, index) => (
-          <TextField
-            key={index}
-            autoFocus={index === 0}
-            label={label}
-            value={values[index]}
-            onChange={(value) => {
-              setValues((prev) => {
-                const next = [...prev];
-                next[index] = value;
-                return next;
-              });
-            }}
-          />
+          <FormControl key={index}>
+            <FormLabel>{label}</FormLabel>
+            <Input
+              slotProps={
+                index === 0 ? { input: { ref: firstFieldOnRef } } : undefined
+              }
+              value={values[index]}
+              onChange={(event) => {
+                const value = event.currentTarget.value;
+
+                setValues((prev) => {
+                  const next = [...prev];
+                  next[index] = value;
+                  return next;
+                });
+              }}
+            />
+          </FormControl>
         ))}
-        <br />
         <BorderButton primary onClick={() => onConfirm(values)}>
           Confirmar
         </BorderButton>

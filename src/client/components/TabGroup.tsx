@@ -1,42 +1,37 @@
-import { css, cx, styled, theme, uniqueClassName } from "../styling";
+import { styled } from "@mui/joy";
+import { cx, uniqueClassName } from "../utils/styles";
 import Button from "./Button";
-
-const Tabs = styled(
-  "div",
-  css`
-    display: flex;
-    width: 100%;
-  `
-);
 
 const classes = { tabActive: uniqueClassName() };
 
-export const Tab = styled(
-  Button,
-  css`
-    border: 1px solid ${theme.accent.base};
-    border-radius: 0;
-    flex: 1;
-    padding: 8px;
-    border-right-width: 0;
+const Tabs = styled("div")({
+  display: "flex",
+  width: "100%",
+});
 
-    &:first-child {
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-    }
+export const Tab = styled(Button)(({ theme }) => ({
+  border: `1px solid ${theme.palette.primary[400]}`,
+  borderRadius: 0,
+  flex: 1,
+  padding: "8px",
+  borderRightwidth: 0,
 
-    &:last-child {
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
-      border-right-width: 1px;
-    }
+  "&:first-of-type": {
+    borderTopLeftRadius: "4px",
+    borderBottomLeftRadius: "4px",
+  },
 
-    &.${classes.tabActive} {
-      background: ${theme.accent.base} !important;
-      color: #24324b !important;
-    }
-  `
-);
+  "&:last-child": {
+    borderTopRightRadius: "4px",
+    borderBottomRightRadius: "4px",
+    borderRightWidth: "1px",
+  },
+
+  [`&.${classes.tabActive}`]: {
+    background: `${theme.palette.primary[400]} !important`,
+    color: `#24324b !important`,
+  },
+}));
 
 export default function TabGroup<T extends string>({
   options,

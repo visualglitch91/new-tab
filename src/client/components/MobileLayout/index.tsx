@@ -89,7 +89,7 @@ export default function MobileLayout({
     <Wrapper ref={wrapperRef}>
       {modals}
       <Content>
-        <Stack className="mobile-layout__fade">{content}</Stack>
+        <Stack>{content}</Stack>
       </Content>
       <StatusBar />
       <Tabs>

@@ -1,5 +1,5 @@
-import { Fragment, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState } from "react";
+import { DialogBaseProvider } from "../components/DialogBase";
 
 type Renderer = (unmount: () => void) => React.ReactNode;
 
@@ -16,22 +16,41 @@ export default function useModal() {
 
   function mount(renderer: Renderer) {
     const key = Date.now().toString();
-    const container = document.createElement("div");
+
+    let closeModal: () => void;
+    let shouldUnmount = false;
 
     function requestCloseModal() {
-      unmountByKey(key);
+      shouldUnmount = true;
+      closeModal?.();
     }
 
-    document.body.appendChild(container);
+    function Modal() {
+      const [open, setOpen] = useState(false);
+
+      useEffect(() => {
+        setOpen(true);
+        closeModal = () => setOpen(false);
+      }, []);
+
+      return (
+        <DialogBaseProvider
+          open={open}
+          onExited={() => {
+            if (shouldUnmount) {
+              unmountByKey(key);
+            }
+          }}
+        >
+          {renderer(requestCloseModal)}
+        </DialogBaseProvider>
+      );
+    }
 
     setModals((prev) => {
       return {
         ...prev,
-        [key]: (
-          <Fragment key={key}>
-            {createPortal(renderer(requestCloseModal), container)}
-          </Fragment>
-        ),
+        [key]: <Modal key={key} />,
       };
     });
 

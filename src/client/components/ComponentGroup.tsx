@@ -1,5 +1,5 @@
 import { Fragment, useMemo } from "react";
-import { styled, css, theme } from "../styling";
+import { styled } from "@mui/joy";
 import { ComponentGroupProps } from "../utils/typings";
 import { useResponsive } from "../utils/general";
 import ListCard from "./ListCard";
@@ -10,13 +10,10 @@ import BaseEntityButton from "./BaseEntityButton";
 import EntityListItem from "./EntityListItem";
 import ListItem from "./ListItem";
 
-export const ListDivider = styled(
-  "div",
-  css`
-    height: 1px;
-    background-color: ${theme.background.d10};
-  `
-);
+export const ListDivider = styled("div")(({ theme }) => ({
+  height: "1px",
+  backgroundColor: theme.palette.background.body,
+}));
 
 export default function ComponentGroup({
   layout,

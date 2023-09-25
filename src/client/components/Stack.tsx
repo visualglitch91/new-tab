@@ -1,59 +1,52 @@
+import { SxProps } from "@mui/joy/styles/types";
 import { forwardRef } from "react";
-import { css, cx } from "../styling";
+import { sxx } from "../utils/styles";
+import BaseDiv from "./BaseDiv";
 
-const classes = {
-  wrapper: css`
-    display: flex;
-    grid-gap: 16px;
-  `,
-  horizontal: css`
-    flex-direction: row;
-
-    & > * {
-      flex: 1;
-    }
-  `,
-  vertical: css`
-    flex-direction: column;
-  `,
-  smallGap: css`
-    grid-gap: 8px;
-  `,
-  largeGap: css`
-    grid-gap: 24px;
-  `,
+const styles = {
+  wrapper: {
+    display: "flex",
+    gridGap: "16px",
+  },
+  horizontal: {
+    flexDirection: "row",
+    "& > *": { flex: 1 },
+  },
+  vertical: { flexDirection: "column" },
+  smallGap: { gridGap: "8px" },
+  largeGap: { gridGap: "24px" },
 };
 
 const Stack = forwardRef(function Stack(
   {
-    className,
     horizontal,
     smallGap,
     largeGap,
-    children,
+    sx,
+    ...props
   }: {
+    sx?: SxProps;
     className?: string;
     horizontal?: boolean;
     smallGap?: boolean;
     largeGap?: boolean;
     children: React.ReactNode;
   },
-  ref: React.LegacyRef<HTMLDivElement>
+  ref: React.Ref<HTMLDivElement>
 ) {
   return (
-    <div
+    <BaseDiv
+      {...props}
       ref={ref}
-      className={cx(
-        classes.wrapper,
-        horizontal && classes.horizontal,
-        !horizontal && classes.vertical,
-        smallGap && classes.smallGap,
-        largeGap && classes.largeGap,
-        className
+      sx={sxx(
+        styles.wrapper,
+        horizontal && styles.horizontal,
+        !horizontal && styles.vertical,
+        smallGap && styles.smallGap,
+        largeGap && styles.largeGap,
+        sx
       )}
-    >
-      {children}
-    </div>
+    />
   );
 });
 

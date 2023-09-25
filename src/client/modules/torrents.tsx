@@ -1,4 +1,4 @@
-import { css, styled } from "../styling";
+import { LinearProgress, styled } from "@mui/joy";
 import { callService, useEntity } from "../utils/hass";
 import ButtonCard from "../components/ButtonCard";
 import PillButton from "../components/PillButton";
@@ -6,60 +6,44 @@ import Stack from "../components/Stack";
 import { useMemo } from "react";
 import Icon from "../components/Icon";
 import FlexRow from "../components/FlexRow";
-import ProgressBar from "../components/ProgressBar";
 import ComponentGroup from "../components/ComponentGroup";
 import { useMenu } from "../utils/useMenu";
 import { usePrompt } from "../utils/usePrompt";
 
-const ItemCard = styled(
-  ButtonCard,
-  css`
-    padding: 12px;
-    justify-content: stretch;
-    text-align: left;
-  `
-);
+const ItemCard = styled(ButtonCard)({
+  padding: "12px",
+  justifyContent: "stretch",
+  textAlign: "left",
+});
 
-const ItemContent = styled(
-  "div",
-  css`
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
-    width: 100%;
-    align-items: flex-start;
-    overflow: hidden;
-  `
-);
+const ItemContent = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  rowGap: "8px",
+  width: "100%",
+  alignItems: "flex-start",
+  overflow: "hidden",
+});
 
-const Header = styled(
-  FlexRow,
-  css`
-    width: 100%;
-    overflow: hidden;
-  `
-);
+const Header = styled(FlexRow)({
+  width: "100%",
+  overflow: "hidden",
+});
 
-const Name = styled(
-  "span",
-  css`
-  flex:1;
-    font-size 14px;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  `
-);
+const Name = styled("span")({
+  flex: 1,
+  fontSize: "14px",
+  fontWeight: "bold",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+});
 
-const Details = styled(
-  FlexRow,
-  css`
-    opacity: 0.8;
-    font-size 12px;
-    font-weight: bold;
-  `
-);
+const Details = styled(FlexRow)({
+  opacity: 0.8,
+  fontSize: "12px",
+  fontWeight: "bold",
+});
 
 type TorrentMap = Record<
   string,
@@ -170,7 +154,12 @@ function Torrents() {
               />
               <Name>{it.name}</Name>
             </Header>
-            <ProgressBar value={it.percentDone} />
+            <LinearProgress
+              determinate
+              variant="outlined"
+              value={it.percentDone}
+              sx={{ width: "100%" }}
+            />
             <Details>
               <span>{status[it.status]}</span>
               <span>{`${it.percentDone}%`}</span>

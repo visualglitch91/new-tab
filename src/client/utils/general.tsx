@@ -1,6 +1,9 @@
 import { useMemo, useState, useEffect, useContext, createContext } from "react";
 import version from "../version.json";
 import useLatestRef from "./useLatestRef";
+import { useTheme } from "@mui/joy";
+import useMountEffect from "./useMountEffect";
+import { extractMediaQuery } from "./styles";
 
 export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -154,45 +157,6 @@ export function autoUpdater() {
     });
 }
 
-export function loadCordovaJS() {
-  return new Promise<boolean>((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://localhost/cordova.js";
-
-    script.onload = () => {
-      document.addEventListener("deviceready", onDeviceReady, false);
-
-      function onDeviceReady() {
-        const NavigationBar = (window as any).NavigationBar;
-        const StatusBar = (window as any).StatusBar;
-
-        document.body.classList.add("statusbar-overlay");
-
-        NavigationBar.show();
-        NavigationBar.backgroundColorByHexString("#24324b");
-
-        window.addEventListener("keyboardWillShow", () => {
-          StatusBar.overlaysWebView(false);
-          document.body.classList.remove("statusbar-overlay");
-        });
-
-        window.addEventListener("keyboardWillHide", () => {
-          StatusBar.overlaysWebView(true);
-          document.body.classList.add("statusbar-overlay");
-        });
-
-        resolve(true);
-      }
-    };
-
-    script.onerror = () => {
-      resolve(false);
-    };
-
-    document.body.appendChild(script);
-  });
-}
-
 export function useDebouncedCallback<T extends (...args: any[]) => void>(
   callback: T
 ) {
@@ -238,26 +202,30 @@ const ResponsiveContext = createContext<
   { isMobile: boolean; isDesktop: boolean } | undefined
 >(undefined);
 
-function isMobile() {
-  const minWidth = 655;
-  return window.innerWidth < minWidth;
-}
-
 export function ResponsiveProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [mobile, setMobile] = useState(isMobile);
+  const theme = useTheme();
 
-  useEffect(() => {
-    const handler = debounce(() => setMobile(isMobile()));
-    window.addEventListener("resize", handler);
+  const [mql] = useState(() =>
+    window.matchMedia(extractMediaQuery(theme.breakpoints.down("sm")))
+  );
+
+  const [mobile, setMobile] = useState(mql.matches);
+
+  useMountEffect(() => {
+    function update() {
+      setMobile(mql.matches);
+    }
+
+    mql.addEventListener("change", update);
 
     return () => {
-      window.removeEventListener("resize", handler);
+      mql.removeEventListener("change", update);
     };
-  }, []);
+  });
 
   useEffect(() => {
     document.body.classList.toggle("mobile", mobile);
