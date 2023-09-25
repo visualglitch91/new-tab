@@ -4,7 +4,7 @@ import Stack from "../components/Stack";
 import AppMonitor from "../components/AppMonitor";
 
 const systemModule = (
-  <Stack>
+  <>
     <ComponentGroup
       title="Sistema"
       layout="list"
@@ -59,7 +59,7 @@ const systemModule = (
       }))}
     />
     <AppMonitor entityId="sensor.app_monitor" />
-  </Stack>
+  </>
 );
 
 export default systemModule;

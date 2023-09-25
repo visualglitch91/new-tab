@@ -11,6 +11,7 @@ import klipperModule from "./modules/klipper";
 import systemModule from "./modules/system";
 // import packagesModule from "./modules/packages";
 import torrentsModule from "./modules/torrents";
+import DesktopLayout from "./components/DesktopLayout";
 
 const columnStyle = {
   display: "flex",
@@ -95,15 +96,41 @@ export default function App() {
   }
 
   return (
-    <MasonryLayout>
-      {tvModule}
-      <div style={columnStyle}>{houseModule}</div>
-      {isAdmin && systemModule}
-      {isAdmin && vacuumModule}
-      {isAdmin && camerasOn && camerasModule}
-      {isAdmin && printerOn && klipperModule}
-      {/* {isAdmin && packagesModule} */}
-      {isAdmin && torrentsModule}
-    </MasonryLayout>
+    <DesktopLayout
+      tabs={compact([
+        {
+          key: "media",
+          title: "Media",
+          icon: "mdi:television-classic",
+          content: [tvModule, isAdmin && torrentsModule],
+        },
+        {
+          key: "house",
+          title: "Casa",
+          icon: "mdi:home",
+          content: [
+            houseModule,
+            isAdmin && camerasOn && camerasModule,
+            isAdmin && vacuumModule,
+          ],
+        },
+        ...(isAdmin
+          ? [
+              printerOn && {
+                key: "klipper",
+                title: "Impressora 3D",
+                icon: "mdi:printer-3d-nozzle",
+                content: [klipperModule],
+              },
+              {
+                key: "system",
+                title: "Sistema",
+                icon: "mdi:cpu-64-bit",
+                content: [systemModule],
+              },
+            ]
+          : []),
+      ])}
+    />
   );
 }

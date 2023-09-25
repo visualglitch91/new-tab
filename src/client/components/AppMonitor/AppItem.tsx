@@ -1,7 +1,7 @@
 import { useConfirm } from "../../utils/useConfirm";
 import { callService } from "../../utils/hass";
 import ListItem from "../ListItem";
-import { App } from "./types";
+import { App, formatName } from "./utils";
 import { useMenu } from "../../utils/useMenu";
 import useAsyncChange from "../../utils/useAsyncChange";
 import DotLoading from "../DotLoading";
@@ -54,7 +54,7 @@ export function AppItem({ app, stack }: { app: App; stack?: string }) {
   return (
     <ListItem
       icon={running ? "mdi-check-circle-outline" : "mdi-close-circle-outline"}
-      label={name}
+      label={formatName(name)}
       onSecondaryAction={showActionsMenu}
     >
       {menu}
