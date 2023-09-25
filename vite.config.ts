@@ -10,6 +10,7 @@ export default function DefineConfig({ mode }) {
   return {
     base: env.VITE_BASE_URL || "/",
     server: {
+      port: 6173,
       host: true,
       proxy: { "/api": "http://localhost:5700" },
     },

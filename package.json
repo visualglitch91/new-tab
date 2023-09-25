@@ -7,7 +7,7 @@
     "dev": "run-p dev:*",
     "dev:client": "npm run prerun && vite",
     "dev:server": "PORT=5700 vite-node src/server/index.ts",
-    "start": "PORT=5173 vite-node src/server/index.ts",
+    "start": "PORT=6173 vite-node src/server/index.ts",
     "build": "npm run prerun && tsc && vite build",
     "postbuild": "cp src/client/robots.txt dist && cp -R src/client/assets/icons dist/icons && cp src/client/version.json dist/latest.json"
   },
