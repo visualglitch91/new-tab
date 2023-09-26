@@ -76,7 +76,7 @@ export default function Controls({
       />
       <Control
         icon="volume-off"
-        onClick={makeTurnOnCall("script.sala_volume_mute")}
+        onClick={makeTurnOnCall("script.sala_volume_mute_unmute")}
       />
       <Control
         icon="volume-plus"
