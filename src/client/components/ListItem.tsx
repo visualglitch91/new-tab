@@ -7,6 +7,7 @@ import DotLoading from "./DotLoading";
 import Icon from "./Icon";
 import Switch from "./Switch";
 import RippleButton from "./RippleButton";
+import { SxProps } from "@mui/joy/styles/types";
 
 const classes = {
   wrapperDisabled: "LitemItem__Root--wrapperDisabled",
@@ -98,12 +99,14 @@ export default function ListItem({
   checked,
   changeTimeout = 0,
   children,
+  sx,
   renderListContent,
   onPrimaryAction = () => {},
   onSecondaryAction,
   onLongPress,
   onHold,
 }: BaseComponentGroupItem & {
+  sx?: SxProps;
   children?: React.ReactNode;
   renderListContent?: () => React.ReactNode;
 }) {
@@ -137,6 +140,7 @@ export default function ListItem({
 
   return (
     <Root
+      sx={sx}
       className={cx(
         disabled && classes.wrapperDisabled,
         hasInteraction && classes.clickableLabel

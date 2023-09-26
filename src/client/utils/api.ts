@@ -1,3 +1,4 @@
+import axios from "axios";
 import { getAccessToken } from "./hass";
 
 export default function api<T = any>(
@@ -5,20 +6,12 @@ export default function api<T = any>(
   method: string,
   body?: any
 ): Promise<T> {
-  return fetch(`/api${path}`, {
+  return axios(`/api${path}`, {
     method,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getAccessToken()}`,
     },
-    body: JSON.stringify(body),
-  })
-    .then((res) => res.text())
-    .then((text) => {
-      if (text) {
-        return JSON.parse(text);
-      }
-
-      return undefined;
-    });
+    data: JSON.stringify(body),
+  }).then((res) => res.data);
 }

@@ -1,12 +1,13 @@
 import { useMutation } from "react-query";
 import { useConfirm } from "../../utils/useConfirm";
 import { queryClient } from "../../utils/queryClient";
-import ListItem from "../ListItem";
-import { ParsedApp, STATUS_COLORS, formatName } from "./utils";
 import { useMenu } from "../../utils/useMenu";
+import api from "../../utils/api";
+import ListItem from "../ListItem";
 import DotLoading from "../DotLoading";
 import ColorBadge from "../ColorBadge";
-import api from "../../utils/api";
+import Icon from "../Icon";
+import { ParsedApp, STATUS_COLORS, formatName } from "./utils";
 
 type Action = "stop" | "start" | "restart";
 
@@ -45,8 +46,16 @@ export function AppItem({ app }: { app: ParsedApp }) {
 
   return (
     <ListItem
+      sx={{ "& > *": { height: 32 } }}
       icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
-      label={formatName(app.name)}
+      label={
+        <>
+          {formatName(app.name)}
+          {app.updateAvailable && (
+            <Icon icon="arrow-up-circle-outline" size={18} />
+          )}
+        </>
+      }
       onSecondaryAction={showActionsMenu}
     >
       {menu}

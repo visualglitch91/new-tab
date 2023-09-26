@@ -45,6 +45,7 @@ export function list() {
               ? timeSince(app.pm2_env.pm_uptime)
               : null,
             type: "pm2",
+            updateAvailable: false,
           }))
         );
       });

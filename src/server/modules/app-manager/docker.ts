@@ -2,6 +2,7 @@
 import Docker from "dockerode";
 import { App, AppStatus, DockerStatus } from "../../../types/app-manager";
 import { bytesToSize, isDefined } from "../../helpers";
+import axios from "axios";
 
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 
@@ -14,6 +15,27 @@ const statusMap: Record<DockerStatus, AppStatus> = {
   exited: "stoppped",
   dead: "errored",
 };
+
+const updatesAvailableByName: Record<string, boolean | undefined> = {};
+
+function checkForUpdates() {
+  axios
+    .get<{ name: string; updateAvailable: boolean }[]>(
+      `${process.env.WHATS_UP_DOCKER_URL}/api/containers`
+    )
+    .then((res) =>
+      res.data.forEach((it) => {
+        if (it.updateAvailable) {
+          updatesAvailableByName[it.name] = true;
+        } else {
+          delete updatesAvailableByName[it.name];
+        }
+      })
+    );
+}
+
+checkForUpdates();
+setInterval(checkForUpdates, 10 * 60_0000);
 
 function translateStatus(status: DockerStatus) {
   return statusMap[status];
@@ -48,7 +70,7 @@ export async function getContainers(name?: string): Promise<App[]> {
 
       return getStats(name).then((stats) => ({
         id: container.Id as string,
-        name: name,
+        name,
         type: "docker" as const,
         status: translateStatus(container.State),
         memory: isDefined(stats.memory_stats.usage)
@@ -56,6 +78,7 @@ export async function getContainers(name?: string): Promise<App[]> {
           : "0mb",
         cpu: calculateCPUPercentUnix(stats.cpu_stats, stats.precpu_stats) || 0,
         uptime: container.Status,
+        updateAvailable: !!updatesAvailableByName[name],
       }));
     });
 

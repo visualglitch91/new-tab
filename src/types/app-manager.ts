@@ -6,6 +6,7 @@ export interface App {
   memory: string | null;
   uptime: string | null;
   type: "docker" | "pm2";
+  updateAvailable: boolean;
 }
 
 export type AppStatus = "running" | "stoppped" | "errored";
