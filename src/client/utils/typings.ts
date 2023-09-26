@@ -2,7 +2,7 @@ import { HassEntity } from "home-assistant-js-websocket";
 
 export interface BaseComponentGroupItem {
   label?: React.ReactNode;
-  icon?: string;
+  icon?: string | React.ReactNode;
   color?: string;
   disabled?: boolean;
   loading?: boolean;

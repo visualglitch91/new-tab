@@ -150,7 +150,7 @@ export default function ListItem({
         />
       </BackgroundButtonWrapper>
       <InnerWrapper>
-        {icon && <LabelIcon icon={icon} />}
+        {typeof icon === "string" ? <LabelIcon icon={icon} /> : icon}
         <Label>
           {label}
           {color && <ColorBadge size={12} color={color} />}

@@ -11,6 +11,7 @@ import {
 } from "@mui/joy";
 import { useResponsive } from "../../utils/general";
 import BaseDiv from "../BaseDiv";
+import { alpha } from "../../utils/styles";
 
 const DialogHelperContext = createContext<{
   open: boolean;
@@ -77,16 +78,18 @@ export default function DialogBase({
           onClose={onClose}
           slotProps={{
             backdrop: {
-              sx: {
+              sx: (theme) => ({
                 opacity: 0,
                 backdropFilter: "none",
-                transition: `opacity ${duration}ms, backdrop-filter ${duration}ms`,
+                background: alpha(theme.palette.background.body, 0.6),
+                transition: `opacity ${duration}`,
+                willChange: "opacity",
                 transitionTimingFunction,
                 ...{
-                  entering: { opacity: 1, backdropFilter: "blur(8px)" },
-                  entered: { opacity: 1, backdropFilter: "blur(8px)" },
+                  entering: { opacity: 1 },
+                  entered: { opacity: 1 },
                 }[state],
-              },
+              }),
             },
           }}
           sx={{ visibility: state === "exited" ? "hidden" : "visible" }}

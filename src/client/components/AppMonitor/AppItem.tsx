@@ -5,6 +5,13 @@ import { App, formatName } from "./utils";
 import { useMenu } from "../../utils/useMenu";
 import useAsyncChange from "../../utils/useAsyncChange";
 import DotLoading from "../DotLoading";
+import ColorBadge from "../ColorBadge";
+
+const STATUS_COLORS = {
+  running: "#50fa7b",
+  stoppped: "#ff79c6",
+  errored: "#ff5555",
+} as const;
 
 export function AppItem({ app, stack }: { app: App; stack?: string }) {
   const [showMenu, menu] = useMenu();
@@ -53,7 +60,7 @@ export function AppItem({ app, stack }: { app: App; stack?: string }) {
 
   return (
     <ListItem
-      icon={running ? "mdi-check-circle-outline" : "mdi-close-circle-outline"}
+      icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
       label={formatName(name)}
       onSecondaryAction={showActionsMenu}
     >
@@ -62,7 +69,7 @@ export function AppItem({ app, stack }: { app: App; stack?: string }) {
       {changing ? (
         <DotLoading />
       ) : running ? (
-        `${app.memory} | ${app.cpu.toFixed(2)}%`
+        `${app.memory} • ${app.cpu.toFixed(2)}%`
       ) : (
         "Parado"
       )}
