@@ -20,16 +20,7 @@ const groups: ComponentGroupProps[] = [
         changeTimeout: 30_000,
         icon: "curtains",
       },
-      {
-        hiddenOnDesktop: true,
-        element: <TVEntityButton />,
-      },
-      // {
-      //   hiddenOnDesktop: true,
-      //   changeTimeout: 30_000,
-      //   entityId: "switch.sala_receiver",
-      //   ignoreOnGroupSwitch: true,
-      // },
+      <TVEntityButton />,
     ],
   },
   {
@@ -85,6 +76,7 @@ const groups: ComponentGroupProps[] = [
     title: "Casa",
     layout: "grid",
     items: [
+      "input_boolean.casa_ignorar_interfone",
       {
         entityId: "switch.impressora_3d_servidor",
         changeTimeout: 40_000,
