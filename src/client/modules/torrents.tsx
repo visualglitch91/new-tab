@@ -1,14 +1,17 @@
+import { useMutation, useQuery } from "react-query";
 import { LinearProgress, styled } from "@mui/joy";
-import { callService, useEntity } from "../utils/hass";
+import { type Torrent } from "../../types/transmission";
 import ButtonCard from "../components/ButtonCard";
 import PillButton from "../components/PillButton";
 import Stack from "../components/Stack";
-import { useMemo } from "react";
 import Icon from "../components/Icon";
 import FlexRow from "../components/FlexRow";
 import ComponentGroup from "../components/ComponentGroup";
 import { useMenu } from "../utils/useMenu";
 import { usePrompt } from "../utils/usePrompt";
+import api from "../utils/api";
+import { queryClient } from "../utils/queryClient";
+import { formatNumericValue } from "../utils/general";
 
 const ItemCard = styled(ButtonCard)({
   padding: "12px",
@@ -45,66 +48,93 @@ const Details = styled(FlexRow)({
   fontWeight: "bold",
 });
 
-type TorrentMap = Record<
-  string,
-  {
-    added_date: number;
-    eta?: string;
-    id: number;
-    percent_done: string;
-    status: string;
-  }
->;
-
-const status = {
-  stopped: "Parado",
-  check_pending: "Checando",
-  checking: "Checando",
-  download_pending: "Baixando",
+const STATUS_LABELS = {
   downloading: "Baixando",
-  seed_pending: "Subindo",
   seeding: "Subindo",
+  completed: "Completo",
+  stopped: "Parado",
+  error: "Erro",
+  queued: "Na Fila",
+  verifying: "Verificando",
 };
 
-const entryId = "21886dbb4e4f9430377f46acd48e667b";
+function getStatus(torrent: Torrent): keyof typeof STATUS_LABELS {
+  if (torrent.status === 4) {
+    return "downloading";
+  }
+
+  if (torrent.status === 6) {
+    return "seeding";
+  }
+
+  if (torrent.percentDone === 1) {
+    return "completed";
+  }
+
+  if (torrent.status === 0) {
+    return "stopped";
+  }
+
+  if (torrent.errorString !== "") {
+    return "error";
+  }
+
+  if (torrent.status === 3) {
+    return "queued";
+  }
+
+  if (torrent.status === 1 || torrent.status === 2) {
+    return "verifying";
+  }
+
+  return "error";
+}
+
+function parseTorrent(torrent: Torrent) {
+  const status = getStatus(torrent);
+
+  return {
+    id: torrent.id,
+    name: torrent.name,
+    eta: torrent.eta > 0 ? torrent.eta : null,
+    status,
+    active: status !== "stopped",
+    completed: status === "completed",
+    percentDone: torrent.percentDone * 100,
+  };
+}
+
+type ParsedTorrent = ReturnType<typeof parseTorrent>;
 
 function Torrents() {
-  const torrentsEntity = useEntity("sensor.transmission_total_torrents");
-  const totalTorrents: TorrentMap = torrentsEntity?.attributes?.torrent_info;
+  const { data = [] } = useQuery(
+    "torrents",
+    () => {
+      return api<Torrent[]>("/transmission/torrents", "get").then((res) =>
+        res.map(parseTorrent)
+      );
+    },
+    { refetchInterval: 2_000 }
+  );
+
+  const { mutate } = useMutation((func: () => Promise<any>) =>
+    func().then(() => queryClient.refetchQueries("torrents"))
+  );
+
   const [showMenu, menu] = useMenu();
   const [prompt, modals] = usePrompt();
-
-  const torrents = useMemo(() => {
-    if (!totalTorrents) {
-      return [];
-    }
-
-    return Object.entries(totalTorrents).map(([name, entry]) => ({
-      name,
-      id: entry.id,
-      eta: entry.eta,
-      status: entry.status as keyof typeof status,
-      active: entry.status !== "stopped",
-      completed: entry.percent_done === "100.00",
-      percentDone: Number(entry.percent_done),
-    }));
-  }, [totalTorrents]);
-
-  type Torrent = (typeof torrents)[number];
 
   function add() {
     prompt({
       title: "Adicionar",
       fields: ["Magnet URI"],
-      onConfirm: ([uri]) => {
-        callService("script", "transmission_add_other", {
-          magnet_uri: uri,
-        });
+      onConfirm: ([magnet]) => {
+        mutate(() => api("/transmission/add", "post", { magnet }));
       },
     });
   }
 
-  function onClick(torrent: Torrent) {
+  function onClick(torrent: ParsedTorrent) {
     showMenu({
       title: "Opções",
       options: [
@@ -117,11 +147,14 @@ function Torrents() {
       onSelect: (value) => {
         const action = value.startsWith("remove") ? "remove" : value;
 
-        callService("transmission", `${action}_torrent`, {
-          entry_id: entryId,
-          id: torrent.id,
-          delete_data: value === "remove_with_data" ? true : undefined,
-        });
+        mutate(() =>
+          api(`/transmission/${action}`, "post", {
+            ids: [torrent.id],
+            ...(action === "remove"
+              ? { deleteData: value === "remove_with_data" }
+              : {}),
+          })
+        );
       },
     });
   }
@@ -138,7 +171,7 @@ function Torrents() {
         }
         items={[{ entityId: "switch.transmission_turtle_mode" }]}
       />
-      {torrents?.map((it) => (
+      {data.map((it) => (
         <ItemCard key={it.id} onClick={() => onClick(it)}>
           <ItemContent>
             <Header>
@@ -147,6 +180,8 @@ function Torrents() {
                 icon={
                   it.completed
                     ? "mdi-check"
+                    : it.status === "seeding"
+                    ? "mdi-arrow-up"
                     : it.active
                     ? "mdi-arrow-down"
                     : "mdi-pause"
@@ -161,8 +196,8 @@ function Torrents() {
               sx={{ width: "100%" }}
             />
             <Details>
-              <span>{status[it.status]}</span>
-              <span>{`${it.percentDone}%`}</span>
+              <span>{STATUS_LABELS[it.status]}</span>
+              <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
               <span>{it.eta}</span>
             </Details>
           </ItemContent>

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { type Request, type Response, Router } from "express";
 
 export function bytesToSize(bytes: number, precision: number = 0) {
