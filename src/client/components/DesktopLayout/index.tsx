@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { loadValue, saveValue } from "../../utils/general";
 import Tab from "./Tab";
 import { Wrapper, Tabs, Content } from "./components";
@@ -9,6 +9,7 @@ interface TabConfig {
   title: string;
   icon: string;
   content: React.ComponentProps<typeof MasonryLayout>["items"];
+  masonry?: boolean;
 }
 
 export default function DesktopLayout({ tabs }: { tabs: TabConfig[] }) {
@@ -24,7 +25,8 @@ export default function DesktopLayout({ tabs }: { tabs: TabConfig[] }) {
     return tabs[0].key;
   });
 
-  const content = tabs.find((it) => it.key === active)?.content;
+  const { content, masonry = true } =
+    tabs.find((it) => it.key === active) || {};
 
   useEffect(() => {
     if (tabs.length && !content) {
@@ -64,7 +66,13 @@ export default function DesktopLayout({ tabs }: { tabs: TabConfig[] }) {
         ))}
       </Tabs>
       <Content ref={contentRef}>
-        {content && active && <MasonryLayout key={active} items={content} />}
+        {content &&
+          active &&
+          (masonry ? (
+            <MasonryLayout key={active} items={content} />
+          ) : (
+            content.map((it, index) => <Fragment key={index}>{it}</Fragment>)
+          ))}
       </Content>
     </Wrapper>
   );

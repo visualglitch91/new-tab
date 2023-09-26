@@ -285,9 +285,9 @@ export function useEntities(...entityIds: string[]) {
   return states;
 }
 
-export function useEntity(entityId: string) {
+export function useEntity<T = HassEntity>(entityId: string) {
   const states = useEntities(entityId);
-  return states[entityId];
+  return states[entityId] as T | undefined;
 }
 
 export function sendMessage<T>(message: MessageBase) {

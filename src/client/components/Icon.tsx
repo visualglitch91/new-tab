@@ -17,9 +17,9 @@ export default function Icon({
     justifyContent: "center",
     fontSize: size,
     minWidth: size,
-    minWeight: size,
+    minHeight: size,
     maxWidth: size,
-    maxWeight: size,
+    maxHeight: size,
     ...extraStyles,
   };
 

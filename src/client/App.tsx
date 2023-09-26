@@ -11,6 +11,7 @@ import systemModule from "./modules/system";
 import torrentsModule from "./modules/torrents";
 import DesktopLayout from "./components/DesktopLayout";
 import Stack from "./components/Stack";
+import desktopDashboard from "./modules/desktop-dashboard";
 
 export default function App() {
   const isAdmin = useUser().is_admin;
@@ -91,6 +92,13 @@ export default function App() {
   return (
     <DesktopLayout
       tabs={compact([
+        isAdmin && {
+          key: "desktop-dashboard",
+          title: "Dashboard",
+          icon: "mdi:view-dashboard-variant-outline",
+          masonry: false,
+          content: [desktopDashboard],
+        },
         {
           key: "media",
           title: "Media",

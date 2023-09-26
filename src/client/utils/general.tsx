@@ -198,6 +198,25 @@ export function getContrastColor(color: RGB) {
     : "#FFFFFF";
 }
 
+export function useMediaQuery(query: string) {
+  const [mql] = useState(() => window.matchMedia(extractMediaQuery(query)));
+  const [matches, setMatches] = useState(mql.matches);
+
+  useMountEffect(() => {
+    function update() {
+      setMatches(mql.matches);
+    }
+
+    mql.addEventListener("change", update);
+
+    return () => {
+      mql.removeEventListener("change", update);
+    };
+  });
+
+  return matches;
+}
+
 const ResponsiveContext = createContext<
   { isMobile: boolean; isDesktop: boolean } | undefined
 >(undefined);
@@ -208,24 +227,7 @@ export function ResponsiveProvider({
   children: React.ReactNode;
 }) {
   const theme = useTheme();
-
-  const [mql] = useState(() =>
-    window.matchMedia(extractMediaQuery(theme.breakpoints.down("sm")))
-  );
-
-  const [mobile, setMobile] = useState(mql.matches);
-
-  useMountEffect(() => {
-    function update() {
-      setMobile(mql.matches);
-    }
-
-    mql.addEventListener("change", update);
-
-    return () => {
-      mql.removeEventListener("change", update);
-    };
-  });
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     document.body.classList.toggle("mobile", mobile);
