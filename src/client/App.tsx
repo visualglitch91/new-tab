@@ -12,6 +12,7 @@ import torrentsModule from "./modules/torrents";
 import DesktopLayout from "./components/DesktopLayout";
 import Stack from "./components/Stack";
 import desktopDashboard from "./modules/desktop-dashboard";
+import ombiModule from "./modules/ombi";
 
 export default function App() {
   const isAdmin = useUser().is_admin;
@@ -57,6 +58,12 @@ export default function App() {
                 //   icon: "mdi:truck-delivery-outline",
                 //   content: packagesModule,
                 // },
+                {
+                  key: "ombi",
+                  title: "Ombi",
+                  icon: "mdi:movie-open-outline",
+                  content: ombiModule,
+                },
                 camerasOn && {
                   key: "cameras",
                   title: "Câmeras",
@@ -103,7 +110,7 @@ export default function App() {
           key: "media",
           title: "Media",
           icon: "mdi:movie-open-outline",
-          content: [tvModule, isAdmin && torrentsModule],
+          content: [tvModule, ombiModule, isAdmin && torrentsModule],
         },
         {
           key: "house",

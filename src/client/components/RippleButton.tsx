@@ -12,6 +12,7 @@ const StyledButton = styled("button")({
   display: "inline-flex",
   overflow: "hidden",
   cursor: "pointer",
+  outline: "none",
   "& *": { pointerEvents: "none" },
 });
 
@@ -98,6 +99,10 @@ const RippleButton = forwardRef<
   const onHoldRef = useLatestRef(onHold);
   const onLongPressRef = useLatestRef(onLongPress);
 
+  const hasInteractionRef = useLatestRef(
+    Boolean(onClick || onHold || onLongPress)
+  );
+
   useEffect(() => {
     const listenerGroup = new ListenerGroup();
 
@@ -105,6 +110,10 @@ const RippleButton = forwardRef<
       (buttonRef && "current" in buttonRef && buttonRef.current) || null;
 
     function createRipple(pageX: number, pageY: number) {
+      if (!hasInteractionRef.current) {
+        return;
+      }
+
       const rect = button!.getBoundingClientRect();
       const key = (++counterRef.current).toString();
       const left = pageX - (rect.left + window.scrollX);

@@ -82,13 +82,13 @@ const Label = styled("div")({
   display: "flex",
   alignItems: "center",
   columnGap: "8px",
-  flexShrink: 0,
 });
 
 const Content = styled("div")({
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
+  flexShrink: 0,
 });
 
 export default function ListItem({

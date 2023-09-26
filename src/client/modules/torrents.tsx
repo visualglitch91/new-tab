@@ -166,9 +166,7 @@ function Torrents() {
       <ComponentGroup
         layout="list"
         title="Torrents"
-        titleAction={
-          <PillButton icon="mdi:plus" label="Adicionar" onClick={add} />
-        }
+        titleAction={<PillButton icon="mdi:plus" onClick={add} />}
         items={[{ entityId: "switch.transmission_turtle_mode" }]}
       />
       {data.map((it) => (
