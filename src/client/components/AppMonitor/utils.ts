@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { App } from "../../../types/app-manager";
 import api from "../../utils/api";
 
-export const STACKS = ["home-control", "media-center", "matrix", "management"];
-
 const LABELS: Record<string, string | undefined> = {
   other: "Outros",
   management: "Administração",
@@ -22,15 +20,20 @@ function formatUsage(app: App) {
 }
 
 export function parseApp(app: App) {
-  const { name, status, ...rest } = app;
-  const stack = STACKS.find((stack) => name.startsWith(stack));
+  const { name: rawName, status, ...rest } = app;
+  let [stack, name] = rawName.split("--");
+
+  if (!name) {
+    name = stack;
+    stack = "other";
+  }
 
   return {
-    stack: stack || "other",
-    name: (stack ? name.substring(stack.length + 1) : "") || name,
+    stack,
+    name,
+    rawName,
     status: status || "stoppped",
     usage: formatUsage(app),
-    rawName: name,
     ...rest,
   };
 }
