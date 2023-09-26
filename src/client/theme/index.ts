@@ -19,6 +19,9 @@ declare module "@mui/joy/styles" {
 
 const theme = {
   ...extendTheme({
+    fontFamily: {
+      body: "inherit",
+    },
     components: {
       JoySwitch,
       JoyLinearProgress,
