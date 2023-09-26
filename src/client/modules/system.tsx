@@ -10,6 +10,7 @@ const systemModule = (
         title="Sistema"
         layout="list"
         items={[
+          "switch.pi_hole",
           {
             label: "Uso do Disco de Mídia",
             entityId: "sensor.disk_use_percent_drives_visualglitch91",
