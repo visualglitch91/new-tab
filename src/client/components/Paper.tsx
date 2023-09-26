@@ -1,6 +1,6 @@
 import { styled } from "@mui/joy";
 
-const Paper = styled("div")(({ theme }) => ({
+const Paper = styled("div")({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
@@ -8,7 +8,6 @@ const Paper = styled("div")(({ theme }) => ({
   boxShadow: "rgb(25, 25, 25) 3px 3px 13px -6px",
   borderRadius: "16px",
   color: "white",
-  "body.touch-device &": { backdropFilter: "none" },
-}));
+});
 
 export default Paper;

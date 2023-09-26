@@ -22,12 +22,11 @@ const ButtonCard = styled(Paper.withComponent(RippleButton))(({ theme }) => ({
   boxSizing: "border-box",
   border: "1px solid transparent",
 
-  "&.hover": {
-    backgroundColor: alpha(theme.palette.background.body, 0.7),
-    boxShadow: "rgb(27, 55, 80) 3px 3px 13px -6px",
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.neutral[800], 0.9),
   },
 
-  "&.disabled": {
+  "&:disabled": {
     opacity: 0.6,
     pointerEvents: "none",
   },

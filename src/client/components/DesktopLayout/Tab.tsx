@@ -3,30 +3,29 @@ import { cx } from "../../utils/styles";
 import RippleButton from "../RippleButton";
 import Icon from "../Icon";
 
-export const Wrapper = styled(RippleButton)(({ theme }) => ({
+export const Wrapper = styled(RippleButton)({
   margin: 0,
-  padding: "0 16px",
+  padding: "0 18px",
   border: "none",
-  borderRight: "2px solid transparent",
+  borderRadius: 16,
   outline: "none",
   background: "transparent",
-  fontSize: "13px",
+  fontSize: "14px",
   color: "inherit",
   display: "flex",
   flexDirection: "row",
-  columnGap: "6px",
+  columnGap: "12px",
   alignItems: "center",
   justifyContent: "flex-start",
   cursor: "pointer",
   height: 64,
+  fontWeight: "bolder",
   transition: "all 80ms cubic-bezier(0.76, 0, 0.24, 1)",
   "& > i": { fontSize: "26px" },
-  "&:hover": { background: "rgba(0, 0, 0, 0.1)" },
-  "&.active": {
-    fontWeight: "bolder",
-    borderColor: theme.palette.primary[400],
-  },
-}));
+  "&:hover": { background: "rgba(10, 10, 10, 0.2)" },
+  "&.active": { background: "rgba(10, 10, 10, 0.3)" },
+  "&:hover.active": { background: "rgba(10, 10, 10, 0.4)" },
+});
 
 const Title = styled("span")({
   marginTop: 1,

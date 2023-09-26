@@ -10,6 +10,7 @@ import klipperModule from "./modules/klipper";
 import systemModule from "./modules/system";
 import torrentsModule from "./modules/torrents";
 import DesktopLayout from "./components/DesktopLayout";
+import Stack from "./components/Stack";
 
 export default function App() {
   const isAdmin = useUser().is_admin;
@@ -101,7 +102,8 @@ export default function App() {
           title: "Casa",
           icon: "mdi:home",
           content: [
-            houseModule,
+            <Stack>{houseModule.slice(0, 3)}</Stack>,
+            <Stack>{houseModule.slice(3)}</Stack>,
             isAdmin && camerasOn && camerasModule,
             isAdmin && vacuumModule,
           ],

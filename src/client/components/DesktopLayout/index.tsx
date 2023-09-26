@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { loadValue, saveValue } from "../../utils/general";
 import Tab from "./Tab";
-import { Wrapper, Tabs, Content, ContentInner } from "./components";
+import { Wrapper, Tabs, Content } from "./components";
 import MasonryLayout from "../MasonryLayout";
 
 interface TabConfig {
@@ -64,9 +64,7 @@ export default function DesktopLayout({ tabs }: { tabs: TabConfig[] }) {
         ))}
       </Tabs>
       <Content ref={contentRef}>
-        <ContentInner>
-          {content && active && <MasonryLayout key={active} items={content} />}
-        </ContentInner>
+        {content && active && <MasonryLayout key={active} items={content} />}
       </Content>
     </Wrapper>
   );

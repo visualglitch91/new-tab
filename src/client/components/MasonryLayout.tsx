@@ -3,7 +3,6 @@ import {
   Fragment,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -11,8 +10,8 @@ import { useDebouncedCallback } from "../utils/general";
 import { styled } from "@mui/joy";
 
 const gutter = 16;
-const smallerColumnWidth = 300;
-const largerColumnWidth = 400;
+const smallerColumnWidth = 350;
+const largerColumnWidth = 370;
 
 const Wrapper = styled("div")({
   padding: "8px",
@@ -34,7 +33,7 @@ export default function MasonryLayout({
   const getColumnCount = useCallback(() => {
     const availableWidth = nodeRef.current?.offsetWidth || 0;
     const columnWidth =
-      window.innerWidth < 700 ? smallerColumnWidth : largerColumnWidth;
+      availableWidth < 1000 ? smallerColumnWidth : largerColumnWidth;
 
     const columnCount = Math.max(
       1,
