@@ -1,42 +1,27 @@
+import { useMutation } from "react-query";
 import { useConfirm } from "../../utils/useConfirm";
-import { callService } from "../../utils/hass";
+import { queryClient } from "../../utils/queryClient";
 import ListItem from "../ListItem";
-import { App, formatName } from "./utils";
+import { ParsedApp, STATUS_COLORS, formatName } from "./utils";
 import { useMenu } from "../../utils/useMenu";
-import useAsyncChange from "../../utils/useAsyncChange";
 import DotLoading from "../DotLoading";
 import ColorBadge from "../ColorBadge";
+import api from "../../utils/api";
 
-const STATUS_COLORS = {
-  running: "#50fa7b",
-  stoppped: "#ff79c6",
-  errored: "#ff5555",
-} as const;
+type Action = "stop" | "start" | "restart";
 
-export function AppItem({ app, stack }: { app: App; stack?: string }) {
+export function AppItem({ app }: { app: ParsedApp }) {
   const [showMenu, menu] = useMenu();
   const [confirm, modals] = useConfirm();
-  const running = app.status === "running";
-  let name = app.name;
 
-  const { changing, change } = useAsyncChange({
-    flag: running,
-    timeout: 30_000,
+  const runAction = useMutation(({ action }: { action: Action }) => {
+    return api(
+      `/app-manager/${app.type}/${app.rawName}/${action}`,
+      "post"
+    ).then(() => queryClient.refetchQueries("apps"));
   });
 
-  if (stack && name !== stack) {
-    name = name.substring(stack.length + 1);
-  }
-
-  function runAction(action: "stop" | "start" | "restart") {
-    if (change()) {
-      callService("script", "app_monitor_action", {
-        action,
-        type: app.type,
-        name: app.name,
-      });
-    }
-  }
+  const running = app.status === "running";
 
   function showActionsMenu() {
     showMenu({
@@ -48,31 +33,25 @@ export function AppItem({ app, stack }: { app: App; stack?: string }) {
           ]
         : [{ value: "start", label: "Iniciar" }],
       onSelect: running
-        ? (value) => {
+        ? (action) => {
             confirm({
               title: "Continuar?",
-              onConfirm: () => runAction(value),
+              onConfirm: () => runAction.mutate({ action }),
             });
           }
-        : runAction,
+        : (action) => runAction.mutate({ action }),
     });
   }
 
   return (
     <ListItem
       icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
-      label={formatName(name)}
+      label={formatName(app.name)}
       onSecondaryAction={showActionsMenu}
     >
       {menu}
       {modals}
-      {changing ? (
-        <DotLoading />
-      ) : running ? (
-        `${app.memory} • ${app.cpu.toFixed(2)}%`
-      ) : (
-        "Parado"
-      )}
+      {runAction.isLoading ? <DotLoading /> : running ? app.usage : "Parado"}
     </ListItem>
   );
 }

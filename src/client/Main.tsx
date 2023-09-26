@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { GlobalStyles, CssBaseline, CssVarsProvider } from "@mui/joy";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "./utils/queryClient";
 import { HassProvider } from "./utils/hass";
 import {
   autoUpdater,
@@ -48,14 +50,16 @@ export default function Main() {
   }, []);
 
   return (
-    <CssVarsProvider theme={theme} defaultMode="dark">
-      <CssBaseline />
-      {globalStyles}
-      <ResponsiveProvider>
-        <HassProvider>
-          <App />
-        </HassProvider>
-      </ResponsiveProvider>
-    </CssVarsProvider>
+    <QueryClientProvider client={queryClient}>
+      <CssVarsProvider theme={theme} defaultMode="dark">
+        <CssBaseline />
+        {globalStyles}
+        <ResponsiveProvider>
+          <HassProvider>
+            <App />
+          </HassProvider>
+        </ResponsiveProvider>
+      </CssVarsProvider>
+    </QueryClientProvider>
   );
 }

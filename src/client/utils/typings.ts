@@ -29,7 +29,7 @@ export type ComponentGroupItem =
     }
   | (BaseComponentGroupItem & {
       label: string;
-      icon: string;
+      icon: string | React.ReactNode;
       renderListContent?: () => React.ReactNode;
     })
   | (BaseComponentGroupItem & {

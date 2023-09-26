@@ -65,7 +65,7 @@ const systemModule = (
         }))}
       />
     </Stack>
-    <AppMonitor entityId="sensor.app_monitor" />
+    <AppMonitor />
   </>
 );
 

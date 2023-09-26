@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useEntity, useUser } from "./utils/hass";
 import { compact, useResponsive } from "./utils/general";
-import MasonryLayout from "./components/MasonryLayout";
 import MobileLayout from "./components/MobileLayout";
 import tvModule from "./modules/tv";
 import houseModule from "./modules/house";
@@ -9,15 +8,8 @@ import vacuumModule from "./modules/vacuum";
 import camerasModule, { useAvailableCameras } from "./modules/cameras";
 import klipperModule from "./modules/klipper";
 import systemModule from "./modules/system";
-// import packagesModule from "./modules/packages";
 import torrentsModule from "./modules/torrents";
 import DesktopLayout from "./components/DesktopLayout";
-
-const columnStyle = {
-  display: "flex",
-  flexDirection: "column",
-  rowGap: 16,
-} as const;
 
 export default function App() {
   const isAdmin = useUser().is_admin;

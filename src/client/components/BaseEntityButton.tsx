@@ -92,7 +92,9 @@ export default function BaseEntityButton({
           <CircularProgress />
         ) : (
           <>
-            <Icon icon={disabled ? "cancel" : icon || "cancel"} />
+            {typeof icon === "string" && (
+              <Icon icon={disabled ? "cancel" : icon || "cancel"} />
+            )}
             <Label>{label}</Label>
           </>
         )}

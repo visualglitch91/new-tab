@@ -54,12 +54,18 @@ export default function MasonryLayout({
   const onResize = useDebouncedCallback(recalculateMacy);
 
   useEffect(() => {
+    const node = nodeRef.current;
+
+    if (!node) {
+      return;
+    }
+
     let readyTimeout: number;
     //@ts-expect-error no typings for macy
     import("macy").then(({ default: Macy }) => {
       macyRef.current = Macy({
         margin: { x: gutter, y: gutter },
-        container: nodeRef.current!,
+        container: node,
         columns: getColumnCount(),
       });
 
@@ -69,13 +75,16 @@ export default function MasonryLayout({
     });
 
     const resizeObserver = new ResizeObserver(onResize);
+    const mutationObserver = new MutationObserver(onResize);
 
-    resizeObserver.observe(nodeRef.current!);
+    resizeObserver.observe(node);
+    mutationObserver.observe(node, { childList: true, subtree: true });
 
     return () => {
       window.clearTimeout(readyTimeout);
       window.removeEventListener("resize", onResize);
       resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
     //eslint-disable-next-line
   }, []);

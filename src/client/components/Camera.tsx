@@ -5,7 +5,6 @@ import Paper from "./Paper";
 import FullScreenCamera from "./FullScreenCamera";
 import RippleButton from "./RippleButton";
 import useModal from "../utils/useModal";
-import DotLoading from "./DotLoading";
 
 const Wrapper = styled(Paper)({
   position: "relative",

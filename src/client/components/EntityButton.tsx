@@ -21,7 +21,7 @@ export default function EntityButton({
   onSecondaryAction,
   onLongPress,
 }: {
-  icon?: string;
+  icon?: string | React.ReactNode;
   label?: React.ReactNode;
   changeTimeout?: number;
   entityId: string;

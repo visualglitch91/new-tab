@@ -8,7 +8,7 @@ import LightEntityDialog from "./LightEntityDialog";
 import { useConfirm } from "../utils/useConfirm";
 
 interface Props {
-  icon?: string;
+  icon?: string | React.ReactNode;
   label?: React.ReactNode;
   changeTimeout?: number;
   entityId: string;

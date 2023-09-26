@@ -12,5 +12,13 @@ export default function api<T = any>(
       Authorization: `Bearer ${getAccessToken()}`,
     },
     body: JSON.stringify(body),
-  }).then((res) => res.json());
+  })
+    .then((res) => res.text())
+    .then((text) => {
+      if (text) {
+        return JSON.parse(text);
+      }
+
+      return undefined;
+    });
 }
