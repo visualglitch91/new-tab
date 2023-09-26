@@ -2,12 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { App } from "../../../types/app-manager";
 import api from "../../utils/api";
 
-export const STACKS = [
-  "home-assistant",
-  "media-center",
-  "matrix",
-  "management",
-];
+export const STACKS = ["home-control", "media-center", "matrix", "management"];
 
 const LABELS: Record<string, string | undefined> = {
   other: "Outros",
