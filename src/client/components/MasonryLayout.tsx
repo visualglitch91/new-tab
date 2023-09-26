@@ -11,7 +11,7 @@ import { styled } from "@mui/joy";
 
 const gutter = 16;
 const smallerColumnWidth = 350;
-const largerColumnWidth = 370;
+const largerColumnWidth = 380;
 
 const Wrapper = styled("div")({
   padding: "8px",

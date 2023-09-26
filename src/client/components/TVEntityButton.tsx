@@ -1,13 +1,10 @@
 import { callService, useEntity } from "../utils/hass";
 import BaseEntityButton from "./BaseEntityButton";
 
-export function TVEntityButton({
-  icon,
-  label,
-}: {
-  icon: string;
-  label: string;
-}) {
+const icon = "mdi:television";
+const label = "TV";
+
+export function TVEntityButton() {
   const checked = useEntity("media_player.sala_tv")?.state === "on";
 
   return (

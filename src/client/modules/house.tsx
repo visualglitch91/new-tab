@@ -22,7 +22,7 @@ const groups: ComponentGroupProps[] = [
       },
       {
         hiddenOnDesktop: true,
-        element: <TVEntityButton icon="mdi:television-classic" label="TV" />,
+        element: <TVEntityButton />,
       },
       // {
       //   hiddenOnDesktop: true,
