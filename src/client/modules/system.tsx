@@ -2,6 +2,7 @@ import { formatNumericValue } from "../utils/general";
 import ComponentGroup from "../components/ComponentGroup";
 import Stack from "../components/Stack";
 import AppMonitor from "../components/AppMonitor";
+import HACSUpdates from "../components/HACSUpdates";
 
 const systemModule = (
   <>
@@ -65,6 +66,7 @@ const systemModule = (
             formatNumericValue(entity.state, "%", 0),
         }))}
       />
+      <HACSUpdates />
     </Stack>
     <AppMonitor />
   </>

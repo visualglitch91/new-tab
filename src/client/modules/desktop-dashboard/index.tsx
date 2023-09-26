@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { TickTickData } from "../../../types/ticktick";
 import api from "../../utils/api";
 import Stack from "../../components/Stack";
@@ -15,7 +15,7 @@ const links = <Links />;
 const mediaCard = <MediaCard />;
 
 function DesktopDashboard() {
-  const { data, refetch } = useQuery("ticktick", () =>
+  const { data, refetch } = useQuery(["ticktick"], () =>
     api<TickTickData>("/ticktick/data", "GET")
   );
 

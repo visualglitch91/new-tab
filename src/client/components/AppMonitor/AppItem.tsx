@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useConfirm } from "../../utils/useConfirm";
 import { queryClient } from "../../utils/queryClient";
 import { useMenu } from "../../utils/useMenu";
@@ -19,7 +19,7 @@ export function AppItem({ app }: { app: ParsedApp }) {
     return api(
       `/app-manager/${app.type}/${app.rawName}/${action}`,
       "post"
-    ).then(() => queryClient.refetchQueries("apps"));
+    ).then(() => queryClient.refetchQueries(["apps"]));
   });
 
   const running = app.status === "running";

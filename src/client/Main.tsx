@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { GlobalStyles, CssBaseline, CssVarsProvider } from "@mui/joy";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/queryClient";
 import { HassProvider } from "./utils/hass";
 import {

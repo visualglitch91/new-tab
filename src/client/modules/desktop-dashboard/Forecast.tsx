@@ -20,7 +20,7 @@ const ForecastItemRoot = styled("div")({
   rowGap: "8px",
   textAlign: "center",
 
-  "& > span:first-child": {
+  "& > span[data-label]": {
     fontSize: 16,
     fontWeight: 700,
   },
@@ -32,7 +32,7 @@ function ForecastItem({ daysFromNow }: { daysFromNow: number }) {
 
   return (
     <ForecastItemRoot>
-      <span>
+      <span data-label>
         {date.toLocaleDateString("pt-br", { weekday: "short" }).slice(0, -1)}
       </span>
       <WeatherInfo

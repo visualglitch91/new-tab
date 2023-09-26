@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearProgress, styled } from "@mui/joy";
 import { type Torrent } from "../../types/transmission";
 import ButtonCard from "../components/ButtonCard";
@@ -108,7 +108,7 @@ type ParsedTorrent = ReturnType<typeof parseTorrent>;
 
 function Torrents() {
   const { data = [] } = useQuery(
-    "torrents",
+    ["torrents"],
     () => {
       return api<Torrent[]>("/transmission/torrents", "get").then((res) =>
         res.map(parseTorrent)
@@ -118,7 +118,7 @@ function Torrents() {
   );
 
   const { mutate } = useMutation((func: () => Promise<any>) =>
-    func().then(() => queryClient.refetchQueries("torrents"))
+    func().then(() => queryClient.refetchQueries(["torrents"]))
   );
 
   const [showMenu, menu] = useMenu();

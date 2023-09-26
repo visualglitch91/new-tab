@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { App } from "../../../types/app-manager";
 import api from "../../utils/api";
 
@@ -62,7 +62,7 @@ export function formatStackName(stack: string) {
 export type ParsedApp = ReturnType<typeof parseApp>;
 
 export function useData() {
-  return useQuery("apps", () =>
+  return useQuery(["apps"], () =>
     api<{ apps: App[] }>("/app-manager/apps", "get")
       .then(({ apps }) => apps.map(parseApp))
       .then((parsedApps) =>
