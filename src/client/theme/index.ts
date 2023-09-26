@@ -1,8 +1,9 @@
 import { extendTheme } from "@mui/joy/styles";
 import JoySwitch from "./overrides/JoySwitch";
+import JoySlider from "./overrides/JoySlider";
+import JoyTooltip from "./overrides/JoyTooltip";
 import JoyLinearProgress from "./overrides/JoyLinearProgress";
 import JoyCircularProgress from "./overrides/JoyCircularProgress";
-import JoySlider from "./overrides/JoySlider";
 
 function getImage(name: string) {
   return new URL(`./${name}`, import.meta.url).href;
@@ -24,9 +25,10 @@ const theme = {
     },
     components: {
       JoySwitch,
+      JoySlider,
+      JoyTooltip,
       JoyLinearProgress,
       JoyCircularProgress,
-      JoySlider,
     },
     colorSchemes: {
       dark: {

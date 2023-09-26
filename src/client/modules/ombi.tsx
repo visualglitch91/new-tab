@@ -1,4 +1,4 @@
-import { styled, Chip } from "@mui/joy";
+import { styled, Chip, Tooltip } from "@mui/joy";
 import { useQuery } from "@tanstack/react-query";
 import api from "../utils/api";
 import ListCard from "../components/ListCard";
@@ -58,30 +58,35 @@ function OmbiRecentlyRequested() {
       titleAction={<PillButton icon="magnify" />}
     >
       {data.map((it) => (
-        <ListItem
-          key={it.id}
-          icon={it.poster ? <Poster src={it.poster} /> : undefined}
-          label={
-            <Label>
-              <span>{it.title}</span>
-              <span style={{ fontWeight: 500 }}>
-                {new Date(it.releaseDate).getFullYear()} • {TYPE_LABEL[it.type]}
-              </span>
-            </Label>
-          }
-        >
-          <Chip
-            size="sm"
-            sx={{
-              color: getContrastColor(STATUS_COLORS[it.request!.status]),
-              backgroundColor: `rgb(${STATUS_COLORS[it.request!.status].join(
-                ","
-              )})`,
-            }}
-          >
-            {STATUS_LABELS[it.request!.status]}
-          </Chip>
-        </ListItem>
+        <Tooltip key={it.id} title={it.title}>
+          <span>
+            <ListItem
+              sx={{ py: "6px" }}
+              icon={it.poster ? <Poster src={it.poster} /> : undefined}
+              label={
+                <Label>
+                  <span>{it.title}</span>
+                  <span style={{ fontWeight: 500 }}>
+                    {new Date(it.releaseDate).getFullYear()} •{" "}
+                    {TYPE_LABEL[it.type]}
+                  </span>
+                </Label>
+              }
+            >
+              <Chip
+                size="sm"
+                sx={{
+                  color: getContrastColor(STATUS_COLORS[it.request!.status]),
+                  backgroundColor: `rgb(${STATUS_COLORS[
+                    it.request!.status
+                  ].join(",")})`,
+                }}
+              >
+                {STATUS_LABELS[it.request!.status]}
+              </Chip>
+            </ListItem>
+          </span>
+        </Tooltip>
       ))}
     </ListCard>
   );

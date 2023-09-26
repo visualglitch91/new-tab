@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { LinearProgress, styled } from "@mui/joy";
+import { LinearProgress, Tooltip, styled } from "@mui/joy";
 import { type Torrent } from "../../types/transmission";
 import PillButton from "../components/PillButton";
 import Stack from "../components/Stack";
@@ -13,7 +13,6 @@ import { formatNumericValue, useResponsive } from "../utils/general";
 import ListCard from "../components/ListCard";
 import EntityListItem from "../components/EntityListItem";
 import RippleButton from "../components/RippleButton";
-import BaseDiv from "../components/BaseDiv";
 import { alpha } from "../utils/styles";
 
 const ItemCard = styled(RippleButton)(({ theme }) => ({
@@ -182,37 +181,39 @@ function Torrents() {
           entityId="switch.transmission_turtle_mode"
         />
         {data.map((it) => (
-          <ItemCard key={it.id} onClick={() => onClick(it)}>
-            <ItemContent>
-              <Header>
-                <Icon
-                  size={16}
-                  icon={
-                    it.completed
-                      ? "mdi-check"
-                      : it.status === "seeding"
-                      ? "mdi-arrow-up"
-                      : it.active
-                      ? "mdi-arrow-down"
-                      : "mdi-pause"
-                  }
+          <Tooltip key={it.id} title={it.name}>
+            <ItemCard onClick={() => onClick(it)}>
+              <ItemContent>
+                <Header>
+                  <Icon
+                    size={16}
+                    icon={
+                      it.completed
+                        ? "mdi-check"
+                        : it.status === "seeding"
+                        ? "mdi-arrow-up"
+                        : it.active
+                        ? "mdi-arrow-down"
+                        : "mdi-pause"
+                    }
+                  />
+                  <Name>{it.name}</Name>
+                </Header>
+                <LinearProgress
+                  determinate
+                  variant="outlined"
+                  thickness={isMobile ? 6 : 7}
+                  value={it.percentDone}
+                  sx={{ width: "100%" }}
                 />
-                <Name>{it.name}</Name>
-              </Header>
-              <LinearProgress
-                determinate
-                variant="outlined"
-                thickness={isMobile ? 6 : 7}
-                value={it.percentDone}
-                sx={{ width: "100%" }}
-              />
-              <Details>
-                <span>{STATUS_LABELS[it.status]}</span>
-                <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                <span>{it.eta}</span>
-              </Details>
-            </ItemContent>
-          </ItemCard>
+                <Details>
+                  <span>{STATUS_LABELS[it.status]}</span>
+                  <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
+                  <span>{it.eta}</span>
+                </Details>
+              </ItemContent>
+            </ItemCard>
+          </Tooltip>
         ))}
       </ListCard>
     </Stack>
