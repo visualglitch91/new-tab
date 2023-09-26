@@ -1,4 +1,4 @@
-import Button from "./Button";
+import PillButton from "./PillButton";
 import { makeTurnOnCall } from "../utils/hass";
 
 export default function RunScriptButton({
@@ -11,8 +11,10 @@ export default function RunScriptButton({
   entityId: string;
 }) {
   return (
-    <Button className={className} onClick={makeTurnOnCall(entityId)}>
-      {label}
-    </Button>
+    <PillButton
+      className={className}
+      onClick={makeTurnOnCall(entityId)}
+      label={label}
+    />
   );
 }

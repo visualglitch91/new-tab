@@ -2,7 +2,7 @@ import { HassEntity } from "home-assistant-js-websocket";
 import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
 import useModal from "../utils/useModal";
 import { rgbToHex } from "../utils/general";
-import Button from "./Button";
+import PillButton from "./PillButton";
 import ListItem from "./ListItem";
 import LightEntityDialog from "./LightEntityDialog";
 import { useConfirm } from "../utils/useConfirm";
@@ -65,7 +65,8 @@ function BaseEntityListItem({
     : domain === "script"
     ? {
         children: (
-          <Button
+          <PillButton
+            label="Executar"
             onClick={
               onPrimaryAction
                 ? () => {
@@ -80,9 +81,7 @@ function BaseEntityListItem({
                   }
                 : undefined
             }
-          >
-            Executar
-          </Button>
+          />
         ),
       }
     : { children: entity.state };
