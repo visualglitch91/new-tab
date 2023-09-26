@@ -1,23 +1,31 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { LinearProgress, styled } from "@mui/joy";
 import { type Torrent } from "../../types/transmission";
-import ButtonCard from "../components/ButtonCard";
 import PillButton from "../components/PillButton";
 import Stack from "../components/Stack";
 import Icon from "../components/Icon";
 import FlexRow from "../components/FlexRow";
-import ComponentGroup from "../components/ComponentGroup";
 import { useMenu } from "../utils/useMenu";
 import { usePrompt } from "../utils/usePrompt";
 import api from "../utils/api";
 import { queryClient } from "../utils/queryClient";
-import { formatNumericValue } from "../utils/general";
+import { formatNumericValue, useResponsive } from "../utils/general";
+import ListCard from "../components/ListCard";
+import EntityListItem from "../components/EntityListItem";
+import RippleButton from "../components/RippleButton";
+import BaseDiv from "../components/BaseDiv";
+import { alpha } from "../utils/styles";
 
-const ItemCard = styled(ButtonCard)({
-  padding: "12px",
+const ItemCard = styled(RippleButton)(({ theme }) => ({
+  padding: 16,
+  width: "100%",
   justifyContent: "stretch",
   textAlign: "left",
-});
+  background: "transparent",
+  border: "none",
+  borderTop: `1px solid ${alpha(theme.palette.primary[400], 0.3)}`,
+  "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
+}));
 
 const ItemContent = styled("div")({
   display: "flex",
@@ -36,7 +44,7 @@ const Header = styled(FlexRow)({
 const Name = styled("span")({
   flex: 1,
   fontSize: "14px",
-  fontWeight: "bold",
+  fontWeight: 500,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
@@ -45,7 +53,7 @@ const Name = styled("span")({
 const Details = styled(FlexRow)({
   opacity: 0.8,
   fontSize: "12px",
-  fontWeight: "bold",
+  fontWeight: 600,
 });
 
 const STATUS_LABELS = {
@@ -107,6 +115,7 @@ function parseTorrent(torrent: Torrent) {
 type ParsedTorrent = ReturnType<typeof parseTorrent>;
 
 function Torrents() {
+  const { isMobile } = useResponsive();
   const { data = [] } = useQuery(
     ["torrents"],
     () => {
@@ -163,44 +172,49 @@ function Torrents() {
     <Stack>
       {menu}
       {modals}
-      <ComponentGroup
-        layout="list"
+      <ListCard
+        gap={0}
         title="Torrents"
         titleAction={<PillButton icon="mdi:plus" onClick={add} />}
-        items={[{ entityId: "switch.transmission_turtle_mode" }]}
-      />
-      {data.map((it) => (
-        <ItemCard key={it.id} onClick={() => onClick(it)}>
-          <ItemContent>
-            <Header>
-              <Icon
-                size={16}
-                icon={
-                  it.completed
-                    ? "mdi-check"
-                    : it.status === "seeding"
-                    ? "mdi-arrow-up"
-                    : it.active
-                    ? "mdi-arrow-down"
-                    : "mdi-pause"
-                }
+      >
+        <EntityListItem
+          sx={{ py: "16px" }}
+          entityId="switch.transmission_turtle_mode"
+        />
+        {data.map((it) => (
+          <ItemCard key={it.id} onClick={() => onClick(it)}>
+            <ItemContent>
+              <Header>
+                <Icon
+                  size={16}
+                  icon={
+                    it.completed
+                      ? "mdi-check"
+                      : it.status === "seeding"
+                      ? "mdi-arrow-up"
+                      : it.active
+                      ? "mdi-arrow-down"
+                      : "mdi-pause"
+                  }
+                />
+                <Name>{it.name}</Name>
+              </Header>
+              <LinearProgress
+                determinate
+                variant="outlined"
+                thickness={isMobile ? 6 : 7}
+                value={it.percentDone}
+                sx={{ width: "100%" }}
               />
-              <Name>{it.name}</Name>
-            </Header>
-            <LinearProgress
-              determinate
-              variant="outlined"
-              value={it.percentDone}
-              sx={{ width: "100%" }}
-            />
-            <Details>
-              <span>{STATUS_LABELS[it.status]}</span>
-              <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-              <span>{it.eta}</span>
-            </Details>
-          </ItemContent>
-        </ItemCard>
-      ))}
+              <Details>
+                <span>{STATUS_LABELS[it.status]}</span>
+                <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
+                <span>{it.eta}</span>
+              </Details>
+            </ItemContent>
+          </ItemCard>
+        ))}
+      </ListCard>
     </Stack>
   );
 }

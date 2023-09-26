@@ -1,4 +1,5 @@
 import { HassEntity } from "home-assistant-js-websocket";
+import { SxProps } from "@mui/joy/styles/types";
 import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
 import useModal from "../utils/useModal";
 import { rgbToHex } from "../utils/general";
@@ -13,10 +14,12 @@ interface Props {
   changeTimeout?: number;
   entityId: string;
   confirmBefore?: boolean;
+  sx?: SxProps;
   renderListContent?: (entity: HassEntity) => React.ReactNode;
 }
 
 function BaseEntityListItem({
+  sx,
   icon: customIcon,
   label: _label,
   changeTimeout = 0,
@@ -91,6 +94,7 @@ function BaseEntityListItem({
       {modals}
       {confirmModals}
       <ListItem
+        sx={sx}
         disabled={unavailable}
         icon={icon}
         label={label}

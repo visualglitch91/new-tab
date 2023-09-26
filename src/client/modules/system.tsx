@@ -14,6 +14,7 @@ const systemModule = (
           "switch.pi_hole",
           {
             label: "Uso do Disco de Mídia",
+            changeTimeout: 30_000,
             entityId: "sensor.disk_use_percent_drives_visualglitch91",
             renderListContent: (entity) =>
               formatNumericValue(entity.state, "%"),

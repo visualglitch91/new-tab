@@ -64,7 +64,7 @@ function OmbiRecentlyRequested() {
           label={
             <Label>
               <span>{it.title}</span>
-              <span>
+              <span style={{ fontWeight: 500 }}>
                 {new Date(it.releaseDate).getFullYear()} • {TYPE_LABEL[it.type]}
               </span>
             </Label>

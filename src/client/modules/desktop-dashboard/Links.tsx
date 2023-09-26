@@ -9,7 +9,7 @@ const LinksGrid = styled("ul")({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
-  gridGap: 50,
+  gridGap: 28,
 
   "& li": { width: 90 },
 
@@ -24,7 +24,7 @@ const LinksGrid = styled("ul")({
     height: 90,
     display: "block",
     margin: "0 auto 10px",
-    borderRadius: 6,
+    borderRadius: 12,
     transition: "border-color 100ms linear",
     border: "2px solid transparent",
     boxSizing: "border-box",

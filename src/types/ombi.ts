@@ -4,7 +4,7 @@ export interface OmbiMedia {
   title: string;
   overview: string;
   releaseDate: string;
-  poster: string;
+  poster: string | null;
   request?: {
     id: string;
     status: "available" | "partially" | "approved" | "denied" | "pending";

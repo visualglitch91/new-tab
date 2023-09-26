@@ -6,7 +6,7 @@ const fanartTVApiKey = process.env.FANART_TV_API_KEY!;
 async function fetchMissingPoster(
   id: string,
   type: "tv" | "movie",
-  poster?: string
+  poster?: string | null
 ) {
   if (poster) {
     return `https://image.tmdb.org/t/p/w300${poster}`;
@@ -21,14 +21,18 @@ async function fetchMissingPoster(
       }/${id}?api_key=${fanartTVApiKey}`
     );
 
-    if (isMovie) {
-      return res.data.movieposter[0]?.url || null;
-    }
+    const url = isMovie
+      ? res.data.movieposter[0]?.url
+      : res.data.tvposter[0]?.url;
 
-    return res.data.tvposter[0]?.url || null;
-  } catch (_) {
-    return null;
-  }
+    if (url) {
+      const parts = url.split("/");
+      parts[3] = "preview";
+      return parts.join("/");
+    }
+  } catch (_) {}
+
+  return null;
 }
 
 export async function createOmbiMedia(

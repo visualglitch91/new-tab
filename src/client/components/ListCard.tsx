@@ -19,18 +19,19 @@ const Heading = styled("h2")({
 const Content = styled("div")({
   display: "flex",
   flexDirection: "column",
-  padding: "16px",
-  rowGap: "8px",
+  padding: "16px 0",
 });
 
 export default function ListCard({
   title,
   titleAction,
   children,
+  gap = "8px",
 }: {
   title?: string;
   titleAction?: ReactNode;
   children: ReactNode;
+  gap?: number | string;
 }) {
   return (
     <Paper>
@@ -40,7 +41,7 @@ export default function ListCard({
           {titleAction}
         </Header>
       )}
-      <Content>{children}</Content>
+      <Content sx={{ gap }}>{children}</Content>
     </Paper>
   );
 }

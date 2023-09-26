@@ -16,10 +16,10 @@ const classes = {
 
 const Root = styled("div")({
   position: "relative",
-  padding: "0 8px",
-  margin: "0 -8px",
-  borderRadius: "10px",
+  padding: "4px 16px",
   overflow: "hidden",
+
+  "&:hover": { background: "rgba(0, 0, 0, 0.1)" },
 
   [`&.${classes.wrapperDisabled}`]: {
     opacity: 0.5,
@@ -29,7 +29,6 @@ const Root = styled("div")({
   [`&.${classes.clickableLabel}:not(.${classes.wrapperDisabled})`]: {
     cursor: "pointer",
     transition: "background 100ms linear",
-    "&:hover": { background: "rgba(0, 0, 0, 0.1)" },
   },
 });
 
@@ -63,8 +62,6 @@ const InnerWrapper = styled("div")({
   color: "white",
   zIndex: 2,
   position: "relative",
-  pointerEvents: "none",
-  "& button, & label": { pointerEvents: "all" },
 });
 
 const LabelIcon = styled(Icon)({
@@ -146,13 +143,15 @@ export default function ListItem({
         hasInteraction && classes.clickableLabel
       )}
     >
-      <BackgroundButtonWrapper>
-        <RippleButton
-          onClick={onSecondaryAction}
-          onLongPress={onLongPress}
-          onHold={onHold}
-        />
-      </BackgroundButtonWrapper>
+      {hasInteraction && (
+        <BackgroundButtonWrapper>
+          <RippleButton
+            onClick={onSecondaryAction}
+            onLongPress={onLongPress}
+            onHold={onHold}
+          />
+        </BackgroundButtonWrapper>
+      )}
       <InnerWrapper>
         {typeof icon === "string" ? <LabelIcon icon={icon} /> : icon}
         <Label>

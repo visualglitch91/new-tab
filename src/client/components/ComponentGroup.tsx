@@ -9,10 +9,11 @@ import EntityButton from "./EntityButton";
 import BaseEntityButton from "./BaseEntityButton";
 import EntityListItem from "./EntityListItem";
 import ListItem from "./ListItem";
+import { alpha } from "../utils/styles";
 
 export const ListDivider = styled("div")(({ theme }) => ({
   height: "1px",
-  backgroundColor: theme.palette.background.body,
+  backgroundColor: alpha(theme.palette.primary[400], 0.3),
 }));
 
 export default function ComponentGroup({
