@@ -101,7 +101,7 @@ export default function App() {
         {
           key: "media",
           title: "Media",
-          icon: "mdi:television-classic",
+          icon: "mdi:movie-open-outline",
           content: [tvModule, isAdmin && torrentsModule],
         },
         {

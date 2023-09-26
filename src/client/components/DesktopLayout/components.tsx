@@ -7,7 +7,6 @@ export const Wrapper = styled("div")({
 });
 
 export const Tabs = styled("div")(({ theme }) => ({
-  width: 96,
   backdropFilter: "blur(10px)",
   background: `linear-gradient(
       to bottom,
