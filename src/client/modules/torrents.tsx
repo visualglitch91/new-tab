@@ -98,7 +98,7 @@ function parseTorrent(torrent: Torrent) {
     name: torrent.name,
     eta: torrent.eta > 0 ? torrent.eta : null,
     status,
-    active: status !== "stopped",
+    active: !["stopped", "error", "completed"].includes(status),
     completed: status === "completed",
     percentDone: torrent.percentDone * 100,
   };
