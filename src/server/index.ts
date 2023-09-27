@@ -1,10 +1,11 @@
-import "dotenv/config";
 import path from "path";
 import Fastify from "fastify";
+import { config } from "../../config";
 import { auth } from "./auth";
 
-const host = "0.0.0.0";
-const port = Number(process.env.PORT) || 5700;
+const port = process.env.NODE_ENV
+  ? config.development_server_port
+  : config.port;
 
 const fastify = Fastify({
   logger: {
@@ -34,7 +35,7 @@ fastify.register(require("@fastify/static"), {
 });
 
 try {
-  await fastify.listen({ host, port });
+  await fastify.listen({ host: "0.0.0.0", port });
 } catch (err) {
   fastify.log.error(err);
   process.exit(1);

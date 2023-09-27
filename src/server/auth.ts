@@ -5,6 +5,7 @@ import {
   FastifyReply,
   FastifyRequest,
 } from "fastify";
+import { config } from "../../config";
 
 export function auth(
   instance: FastifyInstance,
@@ -28,7 +29,7 @@ export function auth(
       }
 
       return axios
-        .get(process.env.VITE_HASS_URL!, {
+        .get(config.home_assistant.url, {
           headers: { authorization: token },
         })
         .then((res) => {

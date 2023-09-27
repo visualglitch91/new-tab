@@ -23,6 +23,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-deploy.sh
 src/client/version.json
-mobile-app/*
+config.ts

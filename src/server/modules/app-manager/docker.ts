@@ -1,5 +1,6 @@
 import axios from "axios"; //@ts-expect-error
 import Docker from "dockerode";
+import { config } from "../../../../config";
 import { App, AppStatus, DockerStatus } from "../../../types/app-manager";
 import { bytesToSize, isDefined } from "../../helpers";
 import { createProccessOutputStreamer } from "./utils";
@@ -21,7 +22,7 @@ const updatesAvailableByName: Record<string, boolean | undefined> = {};
 function checkForUpdates() {
   axios
     .get<{ name: string; updateAvailable: boolean }[]>(
-      `${process.env.WHATS_UP_DOCKER_URL}/api/containers`
+      `${config.whats_up_docker.url}/api/containers`
     )
     .then((res) =>
       res.data.forEach((it) => {

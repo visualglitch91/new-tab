@@ -2,9 +2,10 @@ import { differenceInCalendarDays, isWithinInterval } from "date-fns";
 import TickTick from "./ticktick";
 import { createAppModule } from "../../helpers";
 import { ScheduledTask, UnscheduledTask } from "../../../types/ticktick";
+import { config } from "../../../../config";
 
 const tick = new TickTick();
-const projectIds = process.env.TICKTICK_PROJECT_IDS!.split(",");
+const { username, password, project_ids: projectIds } = config.ticktick;
 
 function removeTimezone(date: string) {
   return date.split("+")[0];
@@ -15,10 +16,7 @@ function fixTimezone(date: string) {
 }
 
 export default createAppModule("ticktick", async (instance) => {
-  await tick.login({
-    username: process.env.TICKTICK_USERNAME!,
-    password: process.env.TICKTICK_PASSWORD!,
-  });
+  await tick.login({ username, password });
 
   instance.log.info("ticktick logged in");
 

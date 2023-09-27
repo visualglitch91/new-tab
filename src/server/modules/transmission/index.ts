@@ -1,8 +1,9 @@
 import axios from "axios";
 import { createAppModule } from "../../helpers";
 import { Torrent } from "../../../types/transmission";
+import { config } from "../../../../config";
 
-const host = process.env.VITE_TRANSMISSION_URL!;
+const { url: host } = config.transmission;
 
 let sessionId = "";
 let tagCounter = 1;

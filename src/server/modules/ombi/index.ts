@@ -1,14 +1,14 @@
 import axios from "axios";
 import { createAppModule } from "../../helpers";
 import { createOmbiMedia } from "./utils";
+import { config } from "../../../../config";
 
-const host = process.env.OMBI_URL!;
-const apiKey = process.env.OMBI_API_KEY!;
+const { url: host, key } = config.ombi;
 
 export default createAppModule("ombi", (instance) => {
   const client = axios.create({
     baseURL: `${host}/ombi/api`,
-    headers: { ApiKey: apiKey },
+    headers: { ApiKey: key },
   });
 
   instance.get("/recently-requested", () => {

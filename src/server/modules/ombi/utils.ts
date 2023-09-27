@@ -1,7 +1,8 @@
 import axios from "axios";
 import { OmbiMedia } from "../../../types/ombi";
+import { config } from "../../../../config";
 
-const fanartTVApiKey = process.env.FANART_TV_API_KEY!;
+const fanartTVKey = config.ombi.fanarttv_key;
 
 async function fetchMissingPoster(
   id: string,
@@ -18,7 +19,7 @@ async function fetchMissingPoster(
     const res = await axios.get(
       `http://webservice.fanart.tv/v3/${
         isMovie ? "movies" : "tv"
-      }/${id}?api_key=${fanartTVApiKey}`
+      }/${id}?api_key=${fanartTVKey}`
     );
 
     const url = isMovie

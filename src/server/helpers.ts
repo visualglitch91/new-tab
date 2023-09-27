@@ -1,6 +1,31 @@
 import "dotenv/config";
 import { FastifyInstance } from "fastify";
 
+export function wait(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
+export function withRetry<O extends () => Promise<any>>(
+  operation: O,
+  delay: number,
+  retries: number
+): ReturnType<O> {
+  return new Promise((resolve, reject) => {
+    return operation()
+      .then(resolve)
+      .catch((reason) => {
+        if (retries > 0) {
+          return wait(delay)
+            .then(withRetry.bind(null, operation, delay, retries - 1))
+            .then(resolve)
+            .catch(reject);
+        }
+
+        return reject(reason);
+      });
+  }) as any;
+}
+
 export function bytesToSize(bytes: number, precision: number = 0) {
   var kilobyte = 1024;
   var megabyte = kilobyte * 1024;
