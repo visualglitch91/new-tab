@@ -267,3 +267,5 @@ export function useResponsive() {
 export function wait(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
+
+export const isNewTab = getSearchParam("newTab") === "true";

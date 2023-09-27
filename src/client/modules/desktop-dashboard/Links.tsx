@@ -1,4 +1,5 @@
 import { styled } from "@mui/joy";
+import { isNewTab } from "../../utils/general";
 import Paper from "../../components/Paper";
 import config from "./config";
 
@@ -58,7 +59,7 @@ export default function Links() {
       <LinksGrid>
         {config.links.map((link, index) => (
           <li key={index}>
-            <a href={link.url} target="_parent">
+            <a href={link.url} target={isNewTab ? "_parent" : "_blank"}>
               <img src={link.icon} />
               <span>{link.name}</span>
             </a>
