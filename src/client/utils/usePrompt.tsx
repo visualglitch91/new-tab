@@ -23,7 +23,7 @@ function Prompt({
 
     setTimeout(() => {
       inputElement.focus();
-    }, 20);
+    }, 50);
   }, []);
 
   return (

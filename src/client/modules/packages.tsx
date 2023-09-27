@@ -1,19 +1,24 @@
 import { styled } from "@mui/joy";
-import { callService } from "../utils/hass";
-import { usePackages } from "../utils/packages";
-import { Package } from "../utils/typings";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useConfirm } from "../utils/useConfirm";
 import { usePrompt } from "../utils/usePrompt";
-import ButtonCard from "../components/ButtonCard";
+import { alpha } from "../utils/styles";
+import api from "../utils/api";
 import PillButton from "../components/PillButton";
-import Stack from "../components/Stack";
-import TitleCard from "../components/TitleCard";
+import { PackageTrackerItem } from "../../types/package-tracker";
+import ListCard from "../components/ListCard";
+import RippleButton from "../components/RippleButton";
 
-const ItemCard = styled(ButtonCard)({
-  padding: "12px",
+const ItemCard = styled(RippleButton)(({ theme }) => ({
+  padding: 16,
+  width: "100%",
   justifyContent: "stretch",
   textAlign: "left",
-});
+  background: "transparent",
+  border: "none",
+  borderTop: `1px solid ${alpha(theme.palette.primary[400], 0.3)}`,
+  "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
+}));
 
 const ItemContent = styled("div")({
   display: "grid",
@@ -45,6 +50,7 @@ const Desciption = styled("span")({
   opacity: 0.8,
   fontSize: "12px",
   fontWeight: "bold",
+  whiteSpace: "pre-wrap",
 });
 
 function parseDate(date: string) {
@@ -55,7 +61,23 @@ function parseDate(date: string) {
 }
 
 function Packages() {
-  const { packages, refresh } = usePackages();
+  const { data: packages = [], refetch } = useQuery(["packages"], () =>
+    api<PackageTrackerItem[]>("/package-tracker/list", "get")
+  );
+
+  const { mutate } = useMutation(
+    ({
+      action,
+      ...body
+    }:
+      | { action: "add"; name: string; code: string }
+      | { action: "remove"; code: string }) => {
+      return api(`/package-tracker/${action}`, "post", body).then(() =>
+        refetch()
+      );
+    }
+  );
+
   const [prompt, $prompt] = usePrompt();
   const [confirm, $confirm] = useConfirm();
 
@@ -65,34 +87,29 @@ function Packages() {
       fields: ["Nome", "Código"],
       onConfirm: (values) => {
         if (values[0] && values[1]) {
-          callService("rest_command", "correios_add", {
-            name: values[0],
-            code: values[1],
-          }).then(() => refresh());
+          mutate({ action: "add", name: values[0], code: values[1] });
         }
       },
     });
   }
 
-  function remove(item: Package) {
+  function remove(item: PackageTrackerItem) {
     confirm({
       title: `Remover "${item.name}"`,
       onConfirm: () => {
-        callService("rest_command", "correios_remove", {
-          code: item.code,
-        }).then(() => refresh());
+        mutate({ action: "remove", code: item.code });
       },
     });
   }
 
   return (
-    <Stack>
+    <ListCard
+      gap={0}
+      title="Encomendas"
+      titleAction={<PillButton icon="mdi:plus" onClick={add} />}
+    >
       {$prompt}
       {$confirm}
-      <TitleCard
-        title="Encomendas"
-        action={<PillButton icon="mdi:plus" label="Adicionar" onClick={add} />}
-      />
       {packages?.map((it) => (
         <ItemCard key={it.code} onLongPress={() => remove(it)}>
           <ItemContent>
@@ -101,7 +118,7 @@ function Packages() {
             </Label>
             {it.lastEvent ? (
               <>
-                <At>{parseDate(it.lastEvent.at)}</At>
+                {it.lastEvent.at && <At>{parseDate(it.lastEvent.at)}</At>}
                 <Desciption>
                   {it.lastEvent.description}
 
@@ -119,7 +136,7 @@ function Packages() {
           </ItemContent>
         </ItemCard>
       ))}
-    </Stack>
+    </ListCard>
   );
 }
 

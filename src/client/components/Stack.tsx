@@ -10,6 +10,7 @@ const styles = {
   },
   horizontal: {
     flexDirection: "row",
+    alignItems: "flex-start",
     "& > *": { flex: 1 },
   },
   vertical: { flexDirection: "column" },

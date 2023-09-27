@@ -13,6 +13,7 @@ import DesktopLayout from "./components/DesktopLayout";
 import Stack from "./components/Stack";
 import desktopDashboard from "./modules/desktop-dashboard";
 import ombiModule from "./modules/ombi";
+import packagesModule from "./modules/packages";
 
 export default function App() {
   const isAdmin = useUser().is_admin;
@@ -52,12 +53,12 @@ export default function App() {
         extraTabs={
           isAdmin
             ? compact([
-                // {
-                //   key: "packages",
-                //   title: "Encomendas",
-                //   icon: "mdi:truck-delivery-outline",
-                //   content: packagesModule,
-                // },
+                {
+                  key: "packages",
+                  title: "Encomendas",
+                  icon: "mdi:truck-delivery-outline",
+                  content: packagesModule,
+                },
                 {
                   key: "ombi",
                   title: "Ombi",

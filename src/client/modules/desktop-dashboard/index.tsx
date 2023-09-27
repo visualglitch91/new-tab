@@ -9,6 +9,7 @@ import ClockAndWeather from "./ClockAndWeather";
 import Forecast from "./Forecast";
 import { useMediaQuery } from "../../utils/general";
 import MediaCard from "../../components/MediaCard";
+import packagesModule from "../packages";
 
 const clock = <ClockAndWeather />;
 const links = <Links />;
@@ -55,6 +56,7 @@ function DesktopDashboard() {
           </Stack>
         </Stack>
         {links}
+        {packagesModule}
       </Stack>
     );
   }
@@ -70,12 +72,15 @@ function DesktopDashboard() {
         {clock}
         {mediaCard}
         {habits}
-        {next}
-        {unscheduled}
+        {packagesModule}
       </Stack>
       <Stack sx={{ width: "67%" }}>
         <Forecast days={5} />
         {links}
+        <Stack horizontal>
+          {next}
+          {unscheduled}
+        </Stack>
       </Stack>
     </Stack>
   );

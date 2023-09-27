@@ -25,7 +25,7 @@ const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
 for (let key in modules) {
   //@ts-ignore
   const { default: mod } = modules[key];
-  fastify.log.info("module loaded:", mod.name);
+  fastify.log.info(`module loaded: ${mod.name}`);
   fastify.register(mod.plugin, { prefix: `/api/${mod.name}` });
 }
 

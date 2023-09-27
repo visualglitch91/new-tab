@@ -46,13 +46,3 @@ export interface ComponentGroupProps {
   showGroupSwitch?: boolean;
   extraGroupSwitchEntityIds?: string[];
 }
-
-export interface Package {
-  name: string;
-  code: string;
-  lastEvent?: {
-    at: string;
-    description: string;
-    location?: string;
-  };
-}
