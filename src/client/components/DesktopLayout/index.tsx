@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { loadValue, saveValue } from "../../utils/general";
+import { getSearchParam, loadValue, saveValue } from "../../utils/general";
 import Tab from "./Tab";
 import { Wrapper, Tabs, Content } from "./components";
 import MasonryLayout from "../MasonryLayout";
@@ -16,7 +16,10 @@ export default function DesktopLayout({ tabs }: { tabs: TabConfig[] }) {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const [active, setActive] = useState(() => {
-    const lastActive = loadValue<string>("last_active_tab_desktop");
+    const tabFromUrl = getSearchParam("desktop-tab");
+
+    const lastActive =
+      tabFromUrl || loadValue<string>("last_active_tab_desktop");
 
     if (tabs.some((it) => it.key === lastActive)) {
       return lastActive;

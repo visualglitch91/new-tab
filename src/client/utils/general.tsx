@@ -124,6 +124,17 @@ export function loadValue<T>(key: string): T | undefined {
   }
 }
 
+export function getSearchParam(key: string) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(key);
+}
+
+export function setSearchParam(key: string, value: any) {
+  const url = new URL(window.location.href);
+  url.searchParams.set(key, value);
+  return url;
+}
+
 export function autoUpdater() {
   if (process.env.NODE_ENV === "development") {
     return;
@@ -150,9 +161,7 @@ export function autoUpdater() {
           });
         }
 
-        const url = new URL(window.location.href);
-        url.searchParams.set("version", latest);
-        window.location.assign(url);
+        window.location.assign(setSearchParam("version", latest));
       }
     });
 }

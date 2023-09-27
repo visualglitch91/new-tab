@@ -44,7 +44,10 @@ function VacuumActionsRow() {
       <>
         {clean}
         <ListItem icon="mdi:robot-vacuum" label="Retornar para a base">
-          <Button onClick={makeVacuumCall("return_to_base")}>Retornar</Button>
+          <PillButton
+            onClick={makeVacuumCall("return_to_base")}
+            label="Retornar"
+          />
         </ListItem>
       </>
     );

@@ -62,6 +62,8 @@ const InnerWrapper = styled("div")({
   color: "white",
   zIndex: 2,
   position: "relative",
+  pointerEvents: "none",
+  "& button, & label, & .MuiSwitch-root": { pointerEvents: "all" },
 });
 
 const LabelIcon = styled(Icon)({

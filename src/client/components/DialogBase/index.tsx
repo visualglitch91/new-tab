@@ -1,17 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Transition } from "react-transition-group";
-import Modal from "@mui/joy/Modal";
-// import BaseDiv from "../BaseDiv";
 import {
-  DialogContent,
-  DialogTitle,
-  ModalClose,
-  ModalDialog,
+  Modal,
   Typography,
+  ModalClose,
+  DialogTitle,
+  ModalDialog,
 } from "@mui/joy";
+import { SxProps } from "@mui/joy/styles/types";
+import { Transition } from "react-transition-group";
 import { useResponsive } from "../../utils/general";
+import { alpha, sxx } from "../../utils/styles";
 import BaseDiv from "../BaseDiv";
-import { alpha } from "../../utils/styles";
 
 const DialogHelperContext = createContext<{
   open: boolean;
@@ -43,12 +42,18 @@ export function DialogBaseProvider({
 }
 
 export default function DialogBase({
+  sx,
+  contentSx,
   title,
   children,
+  closeButtonOnMobile,
   onClose,
 }: {
+  sx?: SxProps;
+  contentSx?: SxProps;
   title?: React.ReactNode;
   children: React.ReactNode;
+  closeButtonOnMobile?: boolean;
   onClose: () => void;
 }) {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -58,8 +63,8 @@ export default function DialogBase({
     onExited,
   } = useContext(DialogHelperContext) || fallbackContext;
 
-  const { isMobile } = useResponsive();
-  const duration = isMobile ? _duration * 2 : _duration;
+  const { isDesktop } = useResponsive();
+  const duration = isDesktop ? _duration : _duration * 2;
 
   useEffect(() => {
     if (open) {
@@ -96,47 +101,49 @@ export default function DialogBase({
         >
           <ModalDialog
             variant="plain"
-            sx={(theme) => ({
-              boxShadow: theme.shadow.xs,
-              transitionTimingFunction,
-              [theme.breakpoints.down("sm")]: {
-                top: "unset",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                borderBottomLeftRadius: 0,
-                borderBottomRightRadius: 0,
-                maxWidth: "unset",
-                transform: "translate3d(0, 100%, 0)",
-                transition: `transform ${duration}ms`,
-                willChange: "transform",
-                ...{
-                  entering: { transform: "translate3d(0, 0, 0)" },
-                  entered: { transform: "translate3d(0, 0, 0)" },
-                }[state],
-              },
-              [theme.breakpoints.up("sm")]: {
-                opacity: 0,
-                transition: `opacity ${duration}ms`,
-                ...{
-                  entering: { opacity: 1 },
-                  entered: { opacity: 1 },
-                }[state],
-              },
-            })}
+            sx={sxx(
+              (theme) => ({
+                padding: 0,
+                boxShadow: theme.shadow.xs,
+                gap: 0,
+                transitionTimingFunction,
+                [theme.breakpoints.down("sm")]: {
+                  top: "unset",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                  maxWidth: "unset",
+                  transform: "translate3d(0, 100%, 0)",
+                  transition: `transform ${duration}ms`,
+                  willChange: "transform",
+                  ...{
+                    entering: { transform: "translate3d(0, 0, 0)" },
+                    entered: { transform: "translate3d(0, 0, 0)" },
+                  }[state],
+                },
+                [theme.breakpoints.up("sm")]: {
+                  opacity: 0,
+                  transition: `opacity ${duration}ms`,
+                  ...{
+                    entering: { opacity: 1 },
+                    entered: { opacity: 1 },
+                  }[state],
+                },
+              }),
+              sx
+            )}
           >
             {title && (
-              <DialogTitle>
+              <DialogTitle
+                sx={{ padding: "var(--Card-padding)", paddingBottom: 0 }}
+              >
                 <Typography>{title}</Typography>
               </DialogTitle>
             )}
-            {!isMobile && <ModalClose />}
-            <BaseDiv
-              sx={{
-                margin: "calc(var(--Card-padding) * -1)",
-                padding: "var(--Card-padding)",
-              }}
-            >
+            {(isDesktop || closeButtonOnMobile) && <ModalClose />}
+            <BaseDiv sx={sxx({ padding: "var(--Card-padding)" }, contentSx)}>
               {children}
             </BaseDiv>
           </ModalDialog>

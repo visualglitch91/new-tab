@@ -28,10 +28,14 @@ const TYPE_LABEL = {
   movie: "Filme",
 };
 
-const Poster = styled("img")({
-  height: 56,
+const Poster = styled("img")(({ theme }) => ({
+  width: 42,
+  height: 48,
+  objectFit: "cover",
   borderRadius: 6,
-});
+  backgroundColor: theme.palette.background.body,
+  flexShrink: 0,
+}));
 
 const Label = styled("div")({
   display: "flex",

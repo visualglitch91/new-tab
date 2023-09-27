@@ -1,8 +1,8 @@
-//@ts-expect-error
+import axios from "axios"; //@ts-expect-error
 import Docker from "dockerode";
 import { App, AppStatus, DockerStatus } from "../../../types/app-manager";
 import { bytesToSize, isDefined } from "../../helpers";
-import axios from "axios";
+import { createProccessOutputStreamer } from "./utils";
 
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 
@@ -101,4 +101,17 @@ export async function action(
 ) {
   const container = await docker.getContainer(name);
   await container[action]();
+}
+
+export async function createLogStreamer(name: string) {
+  await getContainerByName(name);
+
+  return createProccessOutputStreamer("docker", [
+    "container",
+    "logs",
+    name,
+    "-f",
+    "--tail",
+    "100",
+  ]);
 }

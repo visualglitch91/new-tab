@@ -12,7 +12,20 @@ export default function DefineConfig({ mode }) {
     server: {
       port: 6173,
       host: true,
-      proxy: { "/api": "http://localhost:5700" },
+      proxy: {
+        "/api": {
+          target: "http://localhost:5700",
+          configure: (proxy) => {
+            proxy.on("proxyReq", (proxyReq, _, res) => {
+              res.on("close", () => {
+                if (!res.writableEnded) {
+                  proxyReq.destroy();
+                }
+              });
+            });
+          },
+        },
+      },
     },
     plugins: [
       react(),

@@ -1,46 +1,70 @@
 import { useMutation } from "@tanstack/react-query";
-import { useConfirm } from "../../utils/useConfirm";
 import { queryClient } from "../../utils/queryClient";
+import { useConfirm } from "../../utils/useConfirm";
 import { useMenu } from "../../utils/useMenu";
+import useModal from "../../utils/useModal";
 import api from "../../utils/api";
 import ListItem from "../ListItem";
 import DotLoading from "../DotLoading";
 import ColorBadge from "../ColorBadge";
 import Icon from "../Icon";
 import { ParsedApp, STATUS_COLORS, formatName } from "./utils";
+import LogDialog from "./LogDialog";
 
-type Action = "stop" | "start" | "restart";
+enum Menu {
+  LOGS = "logs",
+  STOP = "stop",
+  START = "start",
+  RESTART = "restart",
+}
 
 export function AppItem({ app }: { app: ParsedApp }) {
   const [showMenu, menu] = useMenu();
-  const [confirm, modals] = useConfirm();
+  const [confirm, modals1] = useConfirm();
+  const [mount, modals2] = useModal();
 
-  const runAction = useMutation(({ action }: { action: Action }) => {
-    return api(
-      `/app-manager/${app.type}/${app.rawName}/${action}`,
-      "post"
-    ).then(() => queryClient.refetchQueries(["apps"]));
-  });
+  const { mutate, isLoading } = useMutation(
+    ({ action }: { action: Omit<Menu, "LOGS"> }) => {
+      return api(
+        `/app-manager/${app.type}/${app.rawName}/${action}`,
+        "post"
+      ).then(() => queryClient.refetchQueries(["apps"]));
+    }
+  );
 
   const running = app.status === "running";
+
+  function showLogs() {
+    mount((unmount) => <LogDialog app={app} onClose={unmount} />);
+  }
 
   function showActionsMenu() {
     showMenu({
       title: "Opções",
-      options: running
-        ? [
-            { value: "stop", label: "Parar" },
-            { value: "restart", label: "Reiniciar" },
-          ]
-        : [{ value: "start", label: "Iniciar" }],
-      onSelect: running
-        ? (action) => {
-            confirm({
-              title: "Continuar?",
-              onConfirm: () => runAction.mutate({ action }),
-            });
-          }
-        : (action) => runAction.mutate({ action }),
+      options: [
+        ...(running
+          ? [
+              { value: Menu.STOP, label: "Parar" },
+              { value: Menu.RESTART, label: "Reiniciar" },
+            ]
+          : [{ value: Menu.START, label: "Iniciar" }]),
+        { value: Menu.LOGS, label: "Logs" },
+      ],
+      onSelect: (action) => {
+        if (action === Menu.LOGS) {
+          showLogs();
+          return;
+        }
+
+        if (running) {
+          confirm({
+            title: "Continuar?",
+            onConfirm: () => mutate({ action }),
+          });
+        } else {
+          mutate({ action });
+        }
+      },
     });
   }
 
@@ -59,8 +83,9 @@ export function AppItem({ app }: { app: ParsedApp }) {
       onSecondaryAction={showActionsMenu}
     >
       {menu}
-      {modals}
-      {runAction.isLoading ? <DotLoading /> : running ? app.usage : "Parado"}
+      {modals1}
+      {modals2}
+      {isLoading ? <DotLoading /> : running ? app.usage : "Parado"}
     </ListItem>
   );
 }

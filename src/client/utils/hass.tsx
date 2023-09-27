@@ -35,10 +35,10 @@ function setupHASS({
     .then((connection) => {
       _connection = connection;
 
-      const url = new URL(window.location.href);
+      // const url = new URL(window.location.href);
 
-      url.search = "";
-      window.history.replaceState(null, "", url.toString());
+      // url.search = "";
+      // window.history.replaceState(null, "", url.toString());
 
       subscribeEntities(connection, (stateMap) => {
         onStatesChange(Object.values(stateMap));

@@ -1,6 +1,7 @@
 import pm2 from "pm2";
 import { bytesToSize, isDefined, timeSince } from "../../helpers";
 import { App, AppStatus, PM2Status } from "../../../types/app-manager";
+import { createProccessOutputStreamer } from "./utils";
 
 const statusMap: Record<PM2Status, AppStatus> = {
   online: "running",
@@ -54,7 +55,13 @@ export function list() {
 }
 
 export function getAppByName(name: string) {
-  return list().then((apps) => apps.find((it) => it.name === name));
+  const app = list().then((apps) => apps.find((it) => it.name === name));
+
+  if (!app) {
+    throw new Error("App not found");
+  }
+
+  return app;
 }
 
 export function action(name: string, action: "start" | "stop" | "restart") {
@@ -75,4 +82,16 @@ export function action(name: string, action: "start" | "stop" | "restart") {
       });
     });
   });
+}
+
+export async function createLogStreamer(name: string) {
+  await getAppByName(name);
+
+  return createProccessOutputStreamer("pm2", [
+    "logs",
+    name,
+    "--raw",
+    "--lines",
+    "100",
+  ]);
 }

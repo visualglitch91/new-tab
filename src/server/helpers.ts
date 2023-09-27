@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { type Request, type Response, Router } from "express";
+import { FastifyInstance } from "fastify";
 
 export function bytesToSize(bytes: number, precision: number = 0) {
   var kilobyte = 1024;
@@ -73,72 +73,13 @@ export function isDefined(value: any) {
   return true;
 }
 
-export function createAppModule(name: string) {
-  const router = Router();
-  const logger = createLogger(name);
-
-  function createMethod(
-    method: "get" | "post" | "patch" | "put" | "delete" | "head"
-  ) {
-    return function defineRoute<
-      Config extends {
-        Params?: object;
-        Body?: object;
-        Query?: object;
-        Response?: object;
-      }
-    >(
-      path: string,
-      handler: (
-        req: Request<
-          Config["Params"],
-          Config["Response"],
-          Config["Body"],
-          Config["Query"]
-        >,
-        res: Response<Config["Response"]>
-      ) => Promise<Config["Response"]>
-    ) {
-      router[method](
-        `/${name}${path}`,
-        (
-          req: Request<
-            Config["Params"],
-            Config["Response"],
-            Config["Body"],
-            Config["Query"]
-          >,
-          res: Response<Config["Response"]>
-        ) => {
-          handler(req, res).then(
-            (result) => res.send(result),
-            (error) => res.status(500).send({ error } as any)
-          );
-        }
-      );
-    };
+export function createAppModule(
+  name: string,
+  definition: (instance: FastifyInstance) => void
+) {
+  async function plugin(instance: FastifyInstance) {
+    return definition(instance);
   }
 
-  return {
-    ...logger,
-    name,
-    middleware: router,
-    get: createMethod("get"),
-    post: createMethod("post"),
-    patch: createMethod("patch"),
-    put: createMethod("put"),
-    delete: createMethod("delete"),
-    head: createMethod("head"),
-  };
-}
-
-export function createLogger(name: string) {
-  return {
-    log(...args: any) {
-      console.log(...[`(${name})`, ...args]);
-    },
-    error(...args: any) {
-      console.error(...[`(${name})`, ...args]);
-    },
-  };
+  return { name, plugin };
 }

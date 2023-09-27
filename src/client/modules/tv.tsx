@@ -21,7 +21,14 @@ function AndroidRemoteButton() {
   function showRemote() {
     mount((unmount) => (
       <DialogBase title="Controle" onClose={unmount}>
-        <BaseDiv sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        <BaseDiv
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            width: "286px",
+          }}
+        >
           <ButtonRow height={90}>
             <IconButtonCard
               icon="mdi:image-outline"
