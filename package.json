@@ -28,7 +28,6 @@
     "cron": "^2.4.4",
     "date-fns": "^2.30.0",
     "dockerode": "^3.3.5",
-    "dotenv": "^16.3.1",
     "fastify": "^4.23.2",
     "home-assistant-js-websocket": "^8.2.0",
     "humanize-duration": "^3.30.0",

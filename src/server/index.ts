@@ -3,9 +3,8 @@ import Fastify from "fastify";
 import { config } from "../../config";
 import { auth } from "./auth";
 
-const port = process.env.NODE_ENV
-  ? config.development_server_port
-  : config.port;
+const port =
+  process.env.NODE_ENV === "dev" ? config.development_server_port : config.port;
 
 const fastify = Fastify({
   logger: {
@@ -20,6 +19,8 @@ const fastify = Fastify({
 });
 
 fastify.register(auth, { prefix: "/api" });
+
+fastify.log.info(`NODE_ENV: ${process.env.NODE_ENV}`);
 
 //@ts-expect-error
 const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
