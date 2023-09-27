@@ -11,10 +11,12 @@ const systemModule = (
         title="Sistema"
         layout="list"
         items={[
-          "switch.pi_hole",
+          {
+            entityId: "switch.pi_hole",
+            changeTimeout: 30_000,
+          },
           {
             label: "Uso do Disco de Mídia",
-            changeTimeout: 30_000,
             entityId: "sensor.disk_use_percent_drives_visualglitch91",
             renderListContent: (entity) =>
               formatNumericValue(entity.state, "%"),

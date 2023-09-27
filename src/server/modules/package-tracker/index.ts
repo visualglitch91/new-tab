@@ -1,14 +1,13 @@
-//@ts-expect-error
-import cron from "node-cron";
+import { job } from "cron";
 import storage from "./storage";
 import refresh from "./refresh";
 import { createAppModule } from "../../helpers";
 
 export default createAppModule("package-tracker", (instance) => {
-  cron.schedule("0 * * * *", () => {
-    instance.log.info("refreshin packages...");
+  job("0 * * * *", () => {
+    instance.log.info("refreshing package statuses...");
     refresh();
-  });
+  }).start();
 
   instance.get("/list", storage.read);
 

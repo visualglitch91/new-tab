@@ -35,4 +35,9 @@ export const config = {
   tvbox: {
     adb_host: "",
   },
+
+  camera_snapshots: {
+    camera1: "rtsp://camera1/stream1",
+    camera2: "rtsp://camera2/stream1",
+  },
 };

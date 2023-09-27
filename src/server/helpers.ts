@@ -8,7 +8,7 @@ export function wait(ms: number) {
 export function withRetry<O extends () => Promise<any>>(
   operation: O,
   delay: number,
-  retries: number
+  retries = 1
 ): ReturnType<O> {
   return new Promise((resolve, reject) => {
     return operation()

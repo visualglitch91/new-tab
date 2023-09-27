@@ -1,16 +1,13 @@
+import { job } from "cron";
+import path from "path";
 import { exec } from "child_process";
-import { withRetry } from "../..helpers";
+import { createAppModule, withRetry } from "../../helpers";
+import { config } from "../../../../config";
 
-const cameras = config as Record<string, string>;
+const cameras = config.camera_snapshots;
 const snapshotDir = `${__dirname}/snapshots/`;
 
-app.use("/snapshots", express.static(snapshotDir));
-
-export function captureSnapshot(
-  name: string,
-  source: string,
-  snapshotDir: string
-) {
+function captureSnapshot(name: string, source: string, snapshotDir: string) {
   const tmpFile = `${snapshotDir}/${name}-tmp.jpg`;
   const finalFile = `${snapshotDir}/${name}.jpg`;
 
@@ -32,20 +29,22 @@ export function captureSnapshot(
   );
 }
 
-async function loop() {
-  for (const name in cameras) {
-    await withRetry(
-      () => captureSnapshot(name, cameras[name], snapshotDir),
-      500,
-      1
-    ).catch(() => {});
-  }
+export default createAppModule("camera-snapshots", (instance) => {
+  job("*/10 * * * * *", async () => {
+    let name: keyof typeof cameras;
 
-  setTimeout(loop, 10_000);
-}
+    for (name in cameras) {
+      await withRetry(
+        () => captureSnapshot(name, cameras[name], snapshotDir),
+        500
+      ).then(
+        () => instance.log.info(`snapshot captured from camera "${name}"`),
+        () => {}
+      );
+    }
+  }).start();
 
-loop();
-
-app.listen(port, host, () => {
-  console.log(`camera-snapshots listening at ${host}:${port}`);
+  instance.register(require("@fastify/static"), {
+    root: path.resolve(snapshotDir),
+  });
 });

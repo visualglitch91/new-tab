@@ -21,6 +21,7 @@ const fastify = Fastify({
 
 fastify.register(auth, { prefix: "/api" });
 
+//@ts-expect-error
 const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
 
 for (let key in modules) {
