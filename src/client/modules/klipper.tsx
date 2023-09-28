@@ -77,7 +77,7 @@ function AutoShutdown({ entity }: { entity: HassEntity }) {
   return (
     <ListItem label="Auto-Desligar" icon="power">
       <FlexRow>
-        {humanizeDuration(remaningTime, { round: true })}
+        {humanizeDuration(remaningTime, { round: true, language: "pt" })}
         <PillButton
           onClick={makeServiceCall("script", "turn_off", {
             entity_id: entity.entity_id,

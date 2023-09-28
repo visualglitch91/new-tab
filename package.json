@@ -31,6 +31,7 @@
     "fastify": "^4.23.2",
     "home-assistant-js-websocket": "^8.2.0",
     "humanize-duration": "^3.30.0",
+    "jdownloader-api": "^1.1.3",
     "macy": "^2.5.1",
     "p-queue": "^7.4.1",
     "pino-pretty": "^10.2.0",

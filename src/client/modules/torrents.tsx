@@ -1,71 +1,16 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { LinearProgress, Tooltip, styled } from "@mui/joy";
 import { type Torrent } from "../../types/transmission";
-import PillButton from "../components/PillButton";
-import Stack from "../components/Stack";
-import Icon from "../components/Icon";
-import FlexRow from "../components/FlexRow";
 import { useMenu } from "../utils/useMenu";
 import { usePrompt } from "../utils/usePrompt";
 import api from "../utils/api";
 import { queryClient } from "../utils/queryClient";
-import { formatNumericValue, useResponsive } from "../utils/general";
-import ListCard from "../components/ListCard";
 import EntityListItem from "../components/EntityListItem";
-import RippleButton from "../components/RippleButton";
-import { alpha } from "../utils/styles";
+import DownloadListCard, {
+  DownloadItem,
+  DownloadStatus,
+} from "../components/DownloadListCard";
 
-const ItemCard = styled(RippleButton)(({ theme }) => ({
-  padding: 16,
-  width: "100%",
-  justifyContent: "stretch",
-  textAlign: "left",
-  background: "transparent",
-  border: "none",
-  borderTop: `1px solid ${alpha(theme.palette.primary[400], 0.3)}`,
-  "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
-}));
-
-const ItemContent = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  rowGap: "8px",
-  width: "100%",
-  alignItems: "flex-start",
-  overflow: "hidden",
-});
-
-const Header = styled(FlexRow)({
-  width: "100%",
-  overflow: "hidden",
-});
-
-const Name = styled("span")({
-  flex: 1,
-  fontSize: "14px",
-  fontWeight: 500,
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-});
-
-const Details = styled(FlexRow)({
-  opacity: 0.8,
-  fontSize: "12px",
-  fontWeight: 600,
-});
-
-const STATUS_LABELS = {
-  downloading: "Baixando",
-  seeding: "Subindo",
-  completed: "Completo",
-  stopped: "Parado",
-  error: "Erro",
-  queued: "Na Fila",
-  verifying: "Verificando",
-};
-
-function getStatus(torrent: Torrent): keyof typeof STATUS_LABELS {
+function getStatus(torrent: Torrent): DownloadStatus {
   if (torrent.status === 4) {
     return "downloading";
   }
@@ -97,11 +42,11 @@ function getStatus(torrent: Torrent): keyof typeof STATUS_LABELS {
   return "error";
 }
 
-function parseTorrent(torrent: Torrent) {
+function parseTorrent(torrent: Torrent): DownloadItem {
   const status = getStatus(torrent);
 
   return {
-    id: torrent.id,
+    id: String(torrent.id),
     name: torrent.name,
     eta: torrent.eta > 0 ? torrent.eta : null,
     status,
@@ -111,10 +56,7 @@ function parseTorrent(torrent: Torrent) {
   };
 }
 
-type ParsedTorrent = ReturnType<typeof parseTorrent>;
-
 function Torrents() {
-  const { isMobile } = useResponsive();
   const { data = [] } = useQuery(
     ["torrents"],
     () => {
@@ -132,7 +74,7 @@ function Torrents() {
   const [showMenu, menu] = useMenu();
   const [prompt, modals] = usePrompt();
 
-  function add() {
+  function onAdd() {
     prompt({
       title: "Adicionar",
       fields: ["Magnet URI"],
@@ -142,7 +84,7 @@ function Torrents() {
     });
   }
 
-  function onClick(torrent: ParsedTorrent) {
+  function onItemClick(torrent: DownloadItem) {
     showMenu({
       title: "Opções",
       options: [
@@ -168,55 +110,21 @@ function Torrents() {
   }
 
   return (
-    <Stack>
+    <>
       {menu}
       {modals}
-      <ListCard
-        gap={0}
+      <DownloadListCard
         title="Torrents"
-        titleAction={<PillButton icon="mdi:plus" onClick={add} />}
+        downloads={data}
+        onAdd={onAdd}
+        onItemClick={onItemClick}
       >
         <EntityListItem
           sx={{ py: "16px" }}
           entityId="switch.transmission_turtle_mode"
         />
-        {data.map((it) => (
-          <Tooltip key={it.id} title={it.name}>
-            <ItemCard onClick={() => onClick(it)}>
-              <ItemContent>
-                <Header>
-                  <Icon
-                    size={16}
-                    icon={
-                      it.completed
-                        ? "mdi-check"
-                        : it.status === "seeding"
-                        ? "mdi-arrow-up"
-                        : it.active
-                        ? "mdi-arrow-down"
-                        : "mdi-pause"
-                    }
-                  />
-                  <Name>{it.name}</Name>
-                </Header>
-                <LinearProgress
-                  determinate
-                  variant="outlined"
-                  thickness={isMobile ? 6 : 7}
-                  value={it.percentDone}
-                  sx={{ width: "100%" }}
-                />
-                <Details>
-                  <span>{STATUS_LABELS[it.status]}</span>
-                  <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                  <span>{it.eta}</span>
-                </Details>
-              </ItemContent>
-            </ItemCard>
-          </Tooltip>
-        ))}
-      </ListCard>
-    </Stack>
+      </DownloadListCard>
+    </>
   );
 }
 

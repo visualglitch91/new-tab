@@ -129,9 +129,18 @@ export function getSearchParam(key: string) {
   return url.searchParams.get(key);
 }
 
-export function setSearchParam(key: string, value: any) {
+export function setSearchParam(map: { [key: string]: any }) {
   const url = new URL(window.location.href);
-  url.searchParams.set(key, value);
+
+  Object.keys(map).forEach((key) => {
+    const value = map[key];
+    if (typeof value === "undefined") {
+      url.searchParams.delete(key);
+    } else {
+      url.searchParams.set(key, value);
+    }
+  });
+
   return url;
 }
 
@@ -161,7 +170,7 @@ export function autoUpdater() {
           });
         }
 
-        window.location.assign(setSearchParam("version", latest));
+        window.location.assign(setSearchParam({ version: latest }));
       }
     });
 }

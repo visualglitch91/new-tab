@@ -11,6 +11,11 @@ export const config = {
     url: "",
   },
 
+  jdownloader: {
+    username: "",
+    password: "",
+  },
+
   whats_up_docker: {
     url: "",
   },

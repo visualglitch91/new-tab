@@ -12,7 +12,7 @@ import {
   MessageBase,
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
-import { loadValue, saveValue, clearValue } from "./general";
+import { loadValue, saveValue, clearValue, setSearchParam } from "./general";
 import api from "./api";
 
 let _connection: Connection | undefined;
@@ -35,10 +35,15 @@ function setupHASS({
     .then((connection) => {
       _connection = connection;
 
-      // const url = new URL(window.location.href);
-
-      // url.search = "";
-      // window.history.replaceState(null, "", url.toString());
+      window.history.replaceState(
+        null,
+        "",
+        setSearchParam({
+          code: undefined,
+          state: undefined,
+          auth_callback: undefined,
+        }).toString()
+      );
 
       subscribeEntities(connection, (stateMap) => {
         onStatesChange(Object.values(stateMap));

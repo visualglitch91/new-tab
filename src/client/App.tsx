@@ -14,6 +14,7 @@ import Stack from "./components/Stack";
 import desktopDashboard from "./modules/desktop-dashboard";
 import ombiModule from "./modules/ombi";
 import packagesModule from "./modules/packages";
+import jDownloaderModule from "./modules/jdownloader";
 
 export default function App() {
   const isAdmin = useUser().is_admin;
@@ -83,7 +84,12 @@ export default function App() {
                   icon: "mdi:download",
                   content: torrentsModule,
                 },
-
+                {
+                  key: "jdownloader",
+                  title: "JDownloader",
+                  icon: "mdi:download",
+                  content: jDownloaderModule,
+                },
                 {
                   key: "system",
                   title: "Sistema",
@@ -111,7 +117,12 @@ export default function App() {
           key: "media",
           title: "Media",
           icon: "mdi:movie-open-outline",
-          content: [tvModule, ombiModule, isAdmin && torrentsModule],
+          content: [
+            tvModule,
+            ombiModule,
+            isAdmin && torrentsModule,
+            isAdmin && jDownloaderModule,
+          ],
         },
         {
           key: "house",
