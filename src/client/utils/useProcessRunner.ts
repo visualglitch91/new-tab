@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useShellOutput from "../components/ShellOutput";
 import useMountEffect from "./useMountEffect";
 import { getAccessToken } from "./hass";
+import { useSocketIO } from "./api";
 
 function readChunks(reader: ReadableStreamDefaultReader<Uint8Array>) {
   return {
@@ -38,8 +39,8 @@ async function* readLines(reader: ReadableStreamDefaultReader<Uint8Array>) {
   }
 }
 
-export default function useTextHTTPStream(path?: string) {
-  const controllerRef = useRef<AbortController>();
+export default function useProcessRunner(processId?: string) {
+  const socket = useSocketIO();
 
   const { element, write } = useShellOutput({
     sx: (theme) => ({
@@ -48,47 +49,28 @@ export default function useTextHTTPStream(path?: string) {
   });
 
   function abort() {
-    controllerRef.current?.abort();
+    socket.emit(`process-output:kill:${processId}`);
   }
 
   useEffect(() => {
-    if (!path) {
+    if (!processId) {
       return;
     }
 
-    const controller = new AbortController();
+    const key = `process-output:log:${processId}`;
+    const onLine = (line: string) => write(line);
 
-    controllerRef.current = controller;
-
-    fetch(`/api${path}`, {
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${getAccessToken()}`,
-      },
-    })
-      .then(async (response: Response) => {
-        const reader = response.body?.getReader();
-
-        if (!reader) {
-          throw new Error();
-        }
-
-        for await (const line of readLines(reader)) {
-          write(line);
-        }
-      })
-      .catch(() => {});
-
+    socket.on(key, onLine);
     window.addEventListener("beforeunload", abort);
 
     return () => {
       abort();
+      socket.off(key, onLine);
       window.removeEventListener("beforeunload", abort);
     };
 
     //eslint-disable-next-line
-  }, [path]);
+  }, [processId]);
 
   return { shellOutput: element, abort };
 }

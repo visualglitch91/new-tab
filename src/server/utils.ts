@@ -1,6 +1,8 @@
+import ObjectID from "bson-objectid";
 import { spawn } from "child_process";
 import { Request, Response, Router } from "express";
 import pino, { HttpLogger } from "pino-http";
+import { Socket } from "socket.io";
 
 export function wait(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -100,35 +102,65 @@ export function isDefined(value: any) {
 }
 
 export function createProccessOutputStreamer(cmd: string, params: string[]) {
-  return function streamProcessOutput(
+  return async function streamProcessOutput(
     request: Request<any, any, any, any>,
     response: Response
   ) {
     const child = spawn(cmd, params);
+    const processId = String(ObjectID());
+    const { io, session } = request;
+    const room = io.to(session.id);
+    let ended = false;
 
-    request.log.warn(`streaming output for ${cmd} ${params.join(" ")}`);
+    const socketsInRoom = (await room.fetchSockets()).reduce((acc, { id }) => {
+      const socket = io.sockets.sockets.get(id);
+      return socket ? [...acc, socket] : acc;
+    }, [] as Socket[]);
 
-    child.stdout.on("data", (data) => {
-      response.write(data);
-    });
+    const end = () => {
+      if (ended) {
+        return;
+      }
 
-    child.stderr.on("data", (data) => {
-      response.write(data);
-    });
+      request.log.warn(
+        `streaming ended for process ${processId} and session ${session.id} [${[
+          cmd,
+          ...params,
+        ].join(" ")}]`
+      );
 
-    child.on("close", () => {
-      try {
-        response.end();
-      } catch (_) {}
-    });
-
-    request.on("close", () => {
-      request.log.warn(`streaming ended for ${cmd} ${params.join(" ")}`);
+      socketsInRoom.forEach((socket) => {
+        socket.off(`process-output:kill:${processId}`, end);
+        socket.off("disconnect", end);
+      });
 
       try {
         child.kill();
       } catch (_) {}
+    };
+
+    const emitLog = (message: string) => {
+      logger.debug(`[process-output:log:${processId}]: ${message}`);
+      room.emit(`process-output:log:${processId}`, message);
+    };
+
+    request.log.warn(
+      `streaming started for process ${processId} and session ${session.id} [${[
+        cmd,
+        ...params,
+      ].join(" ")}]`
+    );
+
+    socketsInRoom.forEach((socket) => {
+      socket.on(`process-output:kill:${processId}`, end);
+      socket.on("disconnect", end);
     });
+
+    child.stdout.on("data", (data) => emitLog(data.toString()));
+    child.stderr.on("data", (data) => emitLog(data.toString()));
+    child.on("close", end);
+
+    response.send({ processId });
   };
 }
 

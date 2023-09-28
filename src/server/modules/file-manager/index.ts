@@ -1,6 +1,5 @@
 //@ts-expect-error
 import filemanager from "@opuscapita/filemanager-server";
-import objectid from "bson-objectid";
 import { config } from "../../../../config";
 import { createAppModule, logger } from "../../utils";
 import installSwitchGame from "./utils";
@@ -18,26 +17,7 @@ export default createAppModule("file-manager", (instance) => {
     })
   );
 
-  instance.get<{ Params: { id: string } }>(
-    "/install-switch/:id",
-    (req, res) => {
-      const paths = switchInstallations[req.params.id];
-      delete switchInstallations[req.params.id];
-      installSwitchGame(root, paths)(req, res);
-      return;
-    }
-  );
-
-  /*
-   * It appears that only get requests
-   * can stream, so we need to get creative
-   */
-  instance.post<{ Body: { paths: string[] } }>(
-    "/install-switch",
-    async (req) => {
-      const installId = String(objectid());
-      switchInstallations[installId] = req.body.paths;
-      return { installId };
-    }
+  instance.post<{ Body: { paths: string[] } }>("/install-switch", (req, res) =>
+    installSwitchGame(root, req.body.paths)(req, res)
   );
 });

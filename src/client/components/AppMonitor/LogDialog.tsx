@@ -1,6 +1,9 @@
 import { ParsedApp } from "./utils";
 import DialogBase from "../DialogBase";
-import useTextHTTPStream from "../../utils/useTextHTTPStream";
+import useProcessRunner from "../../utils/useProcessRunner";
+import useMountEffect from "../../utils/useMountEffect";
+import { useState } from "react";
+import api from "../../utils/api";
 
 export default function LogDialog({
   app,
@@ -9,9 +12,15 @@ export default function LogDialog({
   app: ParsedApp;
   onClose: () => void;
 }) {
-  const { shellOutput } = useTextHTTPStream(
-    `/app-manager/${app.type}/${app.rawName}/logs`
-  );
+  const [processId, setProcessId] = useState<string>();
+  const { shellOutput } = useProcessRunner(processId);
+
+  useMountEffect(() => {
+    api<{ processId: string }>(
+      `/app-manager/${app.type}/${app.rawName}/logs`,
+      "get"
+    ).then((res) => setProcessId(res.processId));
+  });
 
   return (
     <DialogBase

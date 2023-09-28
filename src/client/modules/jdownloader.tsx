@@ -42,7 +42,7 @@ function JDownloader() {
         (data) => data.map(parseItem)
       );
     },
-    { enabled, refetchInterval: 2_000 }
+    { enabled, refetchInterval: 2_000, cacheTime: 5 * 60_000 }
   );
 
   const { mutate } = useMutation((func: () => Promise<any>) =>
@@ -86,7 +86,7 @@ function JDownloader() {
       {modals}
       <DownloadListCard
         title="JDownloader"
-        downloads={data}
+        downloads={enabled ? data : []}
         onAdd={onAdd}
         onItemClick={onItemClick}
       >

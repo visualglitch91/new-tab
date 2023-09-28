@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { File } from "./utils";
-import useTextHTTPStream from "../../utils/useTextHTTPStream";
+import useProcessRunner from "../../utils/useProcessRunner";
 import DialogBase from "../../components/DialogBase";
 import useMountEffect from "../../utils/useMountEffect";
 import api from "../../utils/api";
@@ -16,18 +16,13 @@ export default function SwitchInstallDialog({
   file: File;
   onClose: () => void;
 }) {
-  const [installId, setInstallId] = useState<string>();
-
-  const { shellOutput } = useTextHTTPStream(
-    installId ? `/file-manager/install-switch/${installId}` : undefined
-  );
+  const [processId, setProcessId] = useState<string>();
+  const { shellOutput } = useProcessRunner(processId);
 
   useMountEffect(() => {
-    api<{ installId: string }>("/file-manager/install-switch", "post", {
+    api<{ processId: string }>("/file-manager/install-switch", "post", {
       paths: [getPath(file)],
-    }).then((res) => {
-      setInstallId(res.installId);
-    });
+    }).then((res) => setProcessId(res.processId));
   });
 
   return (

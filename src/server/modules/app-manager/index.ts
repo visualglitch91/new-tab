@@ -42,9 +42,6 @@ export default createAppModule("app-manager", (instance) => {
       docker
         .createLogStreamer(req.params.name)
         .then((streamLogs) => streamLogs(req, res));
-
-      // do not end response
-      return;
     }
   );
 
@@ -76,8 +73,5 @@ export default createAppModule("app-manager", (instance) => {
     pm2
       .createLogStreamer(req.params.name)
       .then((streamLogs) => streamLogs(req, res));
-
-    // do not end response
-    return;
   });
 });

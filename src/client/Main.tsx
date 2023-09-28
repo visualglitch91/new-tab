@@ -3,6 +3,7 @@ import { GlobalStyles, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/queryClient";
 import { HassProvider } from "./utils/hass";
+import { SocketIOProvider } from "./utils/api";
 import {
   autoUpdater,
   isTouchDevice,
@@ -56,7 +57,9 @@ export default function Main() {
         {globalStyles}
         <ResponsiveProvider>
           <HassProvider>
-            <App />
+            <SocketIOProvider>
+              <App />
+            </SocketIOProvider>
           </HassProvider>
         </ResponsiveProvider>
       </CssVarsProvider>

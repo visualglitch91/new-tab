@@ -27,6 +27,10 @@ export default defineConfig({
           });
         },
       },
+      "/socket": {
+        target: `ws://localhost:${config.development_server_port}`,
+        ws: true,
+      },
     },
   },
   plugins: [
