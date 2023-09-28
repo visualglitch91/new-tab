@@ -1,26 +1,24 @@
 import path from "path";
-import Fastify from "fastify";
+import express from "express";
+import bodyParser from "body-parser";
 import { config } from "../../config";
+import { pinoHttp,logger } from "./utils";
 import { auth } from "./auth";
 
-const port =
-  process.env.NODE_ENV === "dev" ? config.development_server_port : config.port;
+const isDev = process.env.NODE_ENV === "dev";
+const app = express();
+const host = "0.0.0.0";
+const port = isDev ? config.development_server_port : config.port;
 
-const fastify = Fastify({
-  logger: {
-    transport: {
-      target: "pino-pretty",
-      options: {
-        translateTime: "HH:MM:ss",
-        ignore: "pid,hostname",
-      },
-    },
-  },
-});
+app.use(bodyParser.json());
 
-fastify.register(auth, { prefix: "/api" });
+app.use(pinoHttp);
 
-fastify.log.info(`NODE_ENV: ${process.env.NODE_ENV}`);
+app.use("/api", auth());
+
+if (!isDev) {
+  app.use(express.static(path.resolve(__dirname + "/../../dist")));
+}
 
 //@ts-expect-error
 const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
@@ -28,17 +26,10 @@ const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
 for (let key in modules) {
   //@ts-ignore
   const { default: mod } = modules[key];
-  fastify.log.info(`module loaded: ${mod.name}`);
-  fastify.register(mod.plugin, { prefix: `/api/${mod.name}` });
+  app.use(`/api/${mod.name}`, mod.middleware);
+  logger.info(`module loaded: ${mod.name}`);
 }
 
-fastify.register(require("@fastify/static"), {
-  root: path.resolve(__dirname + "/../../dist"),
+app.listen({ host, port }, () => {
+  logger.info(`Server listening at ${host}:${port}`);
 });
-
-try {
-  await fastify.listen({ host: "0.0.0.0", port });
-} catch (err) {
-  fastify.log.error(err);
-  process.exit(1);
-}

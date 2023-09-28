@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createAppModule } from "../../helpers";
+import { createAppModule } from "../../utils";
 import { config } from "../../../../config";
 
 const { homeserver, token } = config.matrix;

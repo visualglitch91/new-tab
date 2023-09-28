@@ -1,12 +1,12 @@
 import { exec } from "child_process";
-import { createAppModule } from "../../helpers";
+import { createAppModule } from "../../utils";
 
 export default createAppModule("host", (instance) => {
   instance.get("/reboot", (req) => {
-    return new Promise<void>((resolve) => {
+    return new Promise<undefined>((resolve) => {
       exec("sudo /sbin/reboot", (...args) => {
         req.log.info(args.join(" "));
-        resolve();
+        resolve(undefined);
       });
     });
   });

@@ -83,6 +83,11 @@ const Label = styled("div")({
   columnGap: "8px",
 });
 
+const LabelContent = styled("span")({
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+});
+
 const Content = styled("div")({
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -157,7 +162,7 @@ export default function ListItem({
       <InnerWrapper>
         {typeof icon === "string" ? <LabelIcon icon={icon} /> : icon}
         <Label>
-          {label}
+          {label && <LabelContent>{label}</LabelContent>}
           {color && <ColorBadge size={12} color={color} />}
         </Label>
         <Content>{content}</Content>

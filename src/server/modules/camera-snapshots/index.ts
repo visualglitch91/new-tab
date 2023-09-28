@@ -1,7 +1,8 @@
 import { job } from "cron";
 import path from "path";
+import express from "express";
 import { exec } from "child_process";
-import { createAppModule, withRetry } from "../../helpers";
+import { createAppModule, withRetry } from "../../utils";
 import { config } from "../../../../config";
 
 const cameras = config.camera_snapshots;
@@ -29,7 +30,7 @@ function captureSnapshot(name: string, source: string, snapshotDir: string) {
   );
 }
 
-export default createAppModule("camera-snapshots", (instance) => {
+export default createAppModule("camera-snapshots", (instance, logger) => {
   job("*/10 * * * * *", async () => {
     let name: keyof typeof cameras;
 
@@ -38,13 +39,11 @@ export default createAppModule("camera-snapshots", (instance) => {
         () => captureSnapshot(name, cameras[name], snapshotDir),
         500
       ).then(
-        () => instance.log.info(`snapshot captured from camera "${name}"`),
+        () => logger.info(`snapshot captured from camera "${name}"`),
         () => {}
       );
     }
   }).start();
 
-  instance.register(require("@fastify/static"), {
-    root: path.resolve(snapshotDir),
-  });
+  instance.router.use(express.static(path.resolve(snapshotDir)));
 });

@@ -15,6 +15,7 @@ import desktopDashboard from "./modules/desktop-dashboard";
 import ombiModule from "./modules/ombi";
 import packagesModule from "./modules/packages";
 import jDownloaderModule from "./modules/jdownloader";
+import fileManagerModule from "./modules/fileManger";
 
 export default function App() {
   const isAdmin = useUser().is_admin;
@@ -91,6 +92,12 @@ export default function App() {
                   content: jDownloaderModule,
                 },
                 {
+                  key: "downloads",
+                  title: "Downloads",
+                  icon: "mdi:folder-multiple",
+                  content: fileManagerModule,
+                },
+                {
                   key: "system",
                   title: "Sistema",
                   icon: "mdi:cpu-64-bit",
@@ -142,6 +149,12 @@ export default function App() {
                 title: "Impressora 3D",
                 icon: "mdi:printer-3d-nozzle",
                 content: [klipperModule],
+              },
+              {
+                key: "file-manager",
+                title: "Downloads",
+                icon: "mdi:download",
+                content: [fileManagerModule],
               },
               {
                 key: "system",

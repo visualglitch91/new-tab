@@ -12,23 +12,25 @@ export function useMenu() {
     onSelect,
   }: {
     title: string;
-    options: { value: T; label: string }[];
+    options: { value: T; label: string; hidden?: boolean }[];
     onSelect: (value: T) => void;
   }) {
     mount((unmount) => (
       <DialogBase title={title} onClose={unmount}>
         <Stack>
-          {options.map((it) => (
-            <BorderButton
-              key={it.value}
-              onClick={() => {
-                unmount();
-                onSelect(it.value);
-              }}
-            >
-              {it.label}
-            </BorderButton>
-          ))}
+          {options.map((it) =>
+            it.hidden ? null : (
+              <BorderButton
+                key={it.value}
+                onClick={() => {
+                  unmount();
+                  onSelect(it.value);
+                }}
+              >
+                {it.label}
+              </BorderButton>
+            )
+          )}
           <BorderButton onClick={unmount}>Cancelar</BorderButton>
         </Stack>
       </DialogBase>

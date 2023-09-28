@@ -1,7 +1,6 @@
-import { job } from "cron";
 //@ts-expect-error
 import jdownloaderAPI from "./api";
-import { createAppModule } from "../../helpers";
+import { createAppModule } from "../../utils";
 import { config } from "../../../../config";
 import { JDownloaderItem } from "../../../types/jdownloader";
 
@@ -10,10 +9,6 @@ const { username, password } = config.jdownloader;
 function connect() {
   return jdownloaderAPI.connect(username, password);
 }
-
-job("0 * * * *", () => {
-  jdownloaderAPI.reconnect();
-}).start();
 
 export default createAppModule("jdownloader", async (instance) => {
   let deviceId: string | null = null;
@@ -32,39 +27,53 @@ export default createAppModule("jdownloader", async (instance) => {
     return deviceId;
   }
 
-  instance.get("/downloads", async () => {
-    const deviceId = await getDeviceId();
-
-    if (!deviceId) {
-      return [];
+  async function run<T>(func: () => Promise<T>) {
+    try {
+      return await func();
+    } catch (err: any) {
+      if (String(err?.message).includes("AUTH_FAILED")) {
+        await jdownloaderAPI.disconnect();
+        await connect();
+        return func();
+      }
     }
+  }
 
-    return jdownloaderAPI
-      .queryLinks(deviceId)
-      .then((res: { data: JDownloaderItem }) => res.data);
+  instance.get("/downloads", () => {
+    return run(async () => {
+      const deviceId = await getDeviceId();
+
+      if (!deviceId) {
+        return [];
+      }
+
+      return jdownloaderAPI
+        .queryLinks(deviceId)
+        .then((res: { data: JDownloaderItem }) => res.data);
+    });
   });
 
-  instance.post<{ Body: { id: string } }>("/remove", async (req) => {
-    const deviceId = await getDeviceId();
+  instance.post<{ Body: { id: string } }>("/remove", (req) => {
+    return run(async () => {
+      const deviceId = await getDeviceId();
 
-    if (!deviceId) {
-      throw new Error("device not found");
-    }
+      if (!deviceId) {
+        throw new Error("device not found");
+      }
 
-    await jdownloaderAPI.cleanUpLink(deviceId, req.body.id);
-
-    return;
+      await jdownloaderAPI.cleanUpLink(deviceId, req.body.id);
+    });
   });
 
-  instance.post<{ Body: { url: string } }>("/add", async (req) => {
-    const deviceId = await getDeviceId();
+  instance.post<{ Body: { url: string } }>("/add", (req) => {
+    return run(async () => {
+      const deviceId = await getDeviceId();
 
-    if (!deviceId) {
-      throw new Error("device not found");
-    }
+      if (!deviceId) {
+        throw new Error("device not found");
+      }
 
-    await jdownloaderAPI.addLinks(req.body.url, deviceId, true);
-
-    return;
+      await jdownloaderAPI.addLinks(req.body.url, deviceId, true);
+    });
   });
 });

@@ -1,10 +1,10 @@
-import { ComponentOverride, getColor } from "./utils";
+import { ComponentOverride } from "./utils";
 import { alpha } from "../../utils/styles";
 
 const JoyTooltip: ComponentOverride["JoyTooltip"] = {
   defaultProps: {
     arrow: true,
-    enterDelay: 3_000,
+    enterDelay: 1500,
   },
   styleOverrides: {
     root: ({ theme }) => ({

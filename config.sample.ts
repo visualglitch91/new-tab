@@ -2,6 +2,10 @@ export const config = {
   port: 6173,
   development_server_port: 6174,
 
+  file_manager: {
+    root_dir: "",
+  },
+
   home_assistant: {
     url: "",
     token: "",

@@ -1,11 +1,11 @@
 import { job } from "cron";
 import storage from "./storage";
 import refresh from "./refresh";
-import { createAppModule } from "../../helpers";
+import { createAppModule } from "../../utils";
 
-export default createAppModule("package-tracker", (instance) => {
+export default createAppModule("package-tracker", (instance, logger) => {
   job("0 * * * *", () => {
-    instance.log.info("refreshing package statuses...");
+    logger.info("refreshing package statuses...");
     refresh();
   }).start();
 
@@ -34,5 +34,6 @@ export default createAppModule("package-tracker", (instance) => {
 
   instance.get("/refresh", async () => {
     await refresh();
+    return undefined;
   });
 });

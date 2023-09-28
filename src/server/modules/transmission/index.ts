@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createAppModule } from "../../helpers";
+import { createAppModule } from "../../utils";
 import { Torrent } from "../../../types/transmission";
 import { config } from "../../../../config";
 

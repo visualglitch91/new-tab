@@ -76,79 +76,83 @@ export default function DialogBase({
 
   return (
     <Transition in={internalOpen} timeout={duration} onExited={onExited}>
-      {(state: string) => (
-        <Modal
-          keepMounted
-          open={!["exited", "exiting"].includes(state)}
-          onClose={onClose}
-          slotProps={{
-            backdrop: {
-              sx: (theme) => ({
-                opacity: 0,
-                backdropFilter: "none",
-                background: alpha(theme.palette.background.body, 0.6),
-                transition: `opacity ${duration}`,
-                willChange: "opacity",
-                transitionTimingFunction,
-                ...{
-                  entering: { opacity: 1 },
-                  entered: { opacity: 1 },
-                }[state],
-              }),
-            },
-          }}
-          sx={{ visibility: state === "exited" ? "hidden" : "visible" }}
-        >
-          <ModalDialog
-            variant="plain"
-            sx={sxx(
-              (theme) => ({
-                padding: 0,
-                boxShadow: theme.shadow.xs,
-                gap: 0,
-                transitionTimingFunction,
-                [theme.breakpoints.down("sm")]: {
-                  top: "unset",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  borderBottomLeftRadius: 0,
-                  borderBottomRightRadius: 0,
-                  maxWidth: "unset",
-                  transform: "translate3d(0, 100%, 0)",
-                  transition: `transform ${duration}ms`,
-                  willChange: "transform",
-                  ...{
-                    entering: { transform: "translate3d(0, 0, 0)" },
-                    entered: { transform: "translate3d(0, 0, 0)" },
-                  }[state],
-                },
-                [theme.breakpoints.up("sm")]: {
+      {(state: string) => {
+        const isOpen = !["exited", "exiting"].includes(state);
+
+        return (
+          <Modal
+            keepMounted
+            open={isOpen}
+            onClose={state === "entered" ? onClose : undefined}
+            slotProps={{
+              backdrop: {
+                sx: (theme) => ({
                   opacity: 0,
-                  transition: `opacity ${duration}ms`,
+                  backdropFilter: "none",
+                  background: alpha(theme.palette.background.body, 0.6),
+                  transition: `opacity ${duration}`,
+                  willChange: "opacity",
+                  transitionTimingFunction,
                   ...{
                     entering: { opacity: 1 },
                     entered: { opacity: 1 },
                   }[state],
-                },
-              }),
-              sx
-            )}
+                }),
+              },
+            }}
+            sx={{ visibility: state === "exited" ? "hidden" : "visible" }}
           >
-            {title && (
-              <DialogTitle
-                sx={{ padding: "var(--Card-padding)", paddingBottom: 0 }}
-              >
-                <Typography>{title}</Typography>
-              </DialogTitle>
-            )}
-            {(isDesktop || closeButtonOnMobile) && <ModalClose />}
-            <BaseDiv sx={sxx({ padding: "var(--Card-padding)" }, contentSx)}>
-              {children}
-            </BaseDiv>
-          </ModalDialog>
-        </Modal>
-      )}
+            <ModalDialog
+              variant="plain"
+              sx={sxx(
+                (theme) => ({
+                  padding: 0,
+                  boxShadow: theme.shadow.xs,
+                  gap: 0,
+                  transitionTimingFunction,
+                  [theme.breakpoints.down("sm")]: {
+                    top: "unset",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    borderBottomLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                    maxWidth: "unset",
+                    transform: "translate3d(0, 100%, 0)",
+                    transition: `transform ${duration}ms`,
+                    willChange: "transform",
+                    ...{
+                      entering: { transform: "translate3d(0, 0, 0)" },
+                      entered: { transform: "translate3d(0, 0, 0)" },
+                    }[state],
+                  },
+                  [theme.breakpoints.up("sm")]: {
+                    opacity: 0,
+                    transition: `opacity ${duration}ms`,
+                    ...{
+                      entering: { opacity: 1 },
+                      entered: { opacity: 1 },
+                    }[state],
+                  },
+                }),
+                sx
+              )}
+            >
+              {title && (
+                <DialogTitle
+                  sx={{ padding: "var(--Card-padding)", paddingBottom: 0 }}
+                >
+                  <Typography>{title}</Typography>
+                </DialogTitle>
+              )}
+              {(isDesktop || closeButtonOnMobile) && <ModalClose />}
+              <BaseDiv sx={sxx({ padding: "var(--Card-padding)" }, contentSx)}>
+                {children}
+              </BaseDiv>
+            </ModalDialog>
+          </Modal>
+        );
+      }}
     </Transition>
   );
 }

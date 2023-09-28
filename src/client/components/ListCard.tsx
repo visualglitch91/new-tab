@@ -14,6 +14,7 @@ const Heading = styled("h2")({
   margin: 0,
   fontSize: "18px",
   lineHeight: "32px",
+  overflow: "hidden",
 });
 
 const Content = styled("div")({
@@ -28,7 +29,7 @@ export default function ListCard({
   children,
   gap = "8px",
 }: {
-  title?: string;
+  title?: ReactNode;
   titleAction?: ReactNode;
   children: ReactNode;
   gap?: number | string;

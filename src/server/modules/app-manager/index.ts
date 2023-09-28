@@ -1,6 +1,6 @@
 import * as pm2 from "./pm2";
 import * as docker from "./docker";
-import { createAppModule, compareByName } from "../../helpers";
+import { createAppModule, compareByName } from "../../utils";
 
 export default createAppModule("app-manager", (instance) => {
   instance.get("/apps", async () => {
@@ -38,10 +38,10 @@ export default createAppModule("app-manager", (instance) => {
 
   instance.get<{ Params: { name: string } }>(
     "/docker/:name/logs",
-    (req, reply) => {
+    (req, res) => {
       docker
         .createLogStreamer(req.params.name)
-        .then((streamLogs) => streamLogs(reply));
+        .then((streamLogs) => streamLogs(req, res));
 
       // do not end response
       return;
@@ -72,15 +72,12 @@ export default createAppModule("app-manager", (instance) => {
     return pm2.action(name, action);
   });
 
-  instance.get<{ Params: { name: string } }>(
-    "/pm2/:name/logs",
-    (req, reply) => {
-      pm2
-        .createLogStreamer(req.params.name)
-        .then((streamLogs) => streamLogs(reply));
+  instance.get<{ Params: { name: string } }>("/pm2/:name/logs", (req, res) => {
+    pm2
+      .createLogStreamer(req.params.name)
+      .then((streamLogs) => streamLogs(req, res));
 
-      // do not end response
-      return;
-    }
-  );
+    // do not end response
+    return;
+  });
 });

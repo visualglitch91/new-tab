@@ -1,6 +1,6 @@
 import WebSocket from "ws";
 import axios from "axios";
-import { createAppModule } from "../../helpers";
+import { createAppModule } from "../../utils";
 import { config } from "../../../../config";
 
 const { url: hassUrl, token } = config.home_assistant;
