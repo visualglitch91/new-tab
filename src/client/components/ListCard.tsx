@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { styled } from "@mui/joy";
 import Paper from "./Paper";
+import { SxProps } from "@mui/joy/styles/types";
 
 const Header = styled("div")({
   display: "flex",
@@ -24,18 +25,20 @@ const Content = styled("div")({
 });
 
 export default function ListCard({
+  sx,
   title,
   titleAction,
   children,
   gap = "8px",
 }: {
+  sx?: SxProps;
   title?: ReactNode;
   titleAction?: ReactNode;
   children: ReactNode;
   gap?: number | string;
 }) {
   return (
-    <Paper>
+    <Paper sx={sx}>
       {Boolean(title) && (
         <Header>
           <Heading>{title}</Heading>

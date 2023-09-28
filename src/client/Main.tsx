@@ -10,7 +10,7 @@ import {
   ResponsiveProvider,
 } from "./utils/general";
 import theme from "./theme";
-import App from "./App";
+import App from "./components/App";
 import "./styles.css";
 
 const globalStyles = (
