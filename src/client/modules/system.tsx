@@ -3,8 +3,7 @@ import ComponentGroup from "../components/ComponentGroup";
 import Stack from "../components/Stack";
 import AppMonitor from "../components/AppMonitor";
 import HACSUpdates from "../components/HACSUpdates";
-import ListItem from "../components/ListItem";
-import PillButton from "../components/PillButton";
+import HomeControlSystemCard from "../components/HomeControlSystemCard";
 
 const systemModule = (
   <>
@@ -47,14 +46,9 @@ const systemModule = (
             confirmBefore: true,
             entityId: "script.servidor_reiniciar",
           },
-          <ListItem label="Home Control">
-            <PillButton
-              label="Recarregar"
-              onClick={() => window.location.reload()}
-            />
-          </ListItem>,
         ]}
       />
+      <HomeControlSystemCard />
       <ComponentGroup
         title="Baterias"
         layout="list"

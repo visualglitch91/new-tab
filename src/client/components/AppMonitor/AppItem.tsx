@@ -1,3 +1,4 @@
+import { styled } from "@mui/joy";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../../utils/queryClient";
 import { useConfirm } from "../../utils/useConfirm";
@@ -17,6 +18,12 @@ enum Menu {
   START = "start",
   RESTART = "restart",
 }
+
+const Label = styled("div")({
+  gap: 6,
+  display: "flex",
+  alignItems: "center",
+});
 
 export function AppItem({ app }: { app: ParsedApp }) {
   const [showMenu, menu] = useMenu();
@@ -73,12 +80,12 @@ export function AppItem({ app }: { app: ParsedApp }) {
       sx={{ "& > *": { height: 32 } }}
       icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
       label={
-        <>
+        <Label>
           {formatName(app.name)}
           {app.updateAvailable && (
             <Icon icon="arrow-up-circle-outline" size={18} />
           )}
-        </>
+        </Label>
       }
       onSecondaryAction={showActionsMenu}
     >

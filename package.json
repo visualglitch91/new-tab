@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "prerun": "echo \"\\\"$(date +%s)\\\"\" > src/client/version.json",
+    "prerun": "echo \"\\\"$(date +'%Y.%m.%d-%H:%M:%S')\\\"\" > src/client/version.json",
     "dev": "run-p dev:*",
     "dev:client": "npm run prerun && vite",
-    "dev:server": "NODE_ENV=dev vite-node src/server/index.ts",
+    "dev:server": "NODE_ENV=development vite-node src/server/index.ts",
     "start": "vite-node src/server/index.ts",
     "build": "npm run prerun && tsc && vite build",
     "postbuild": "cp src/client/robots.txt dist && cp -R src/client/assets/icons dist/icons && cp src/client/version.json dist/latest.json"

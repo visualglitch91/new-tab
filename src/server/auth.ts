@@ -43,7 +43,7 @@ export function expressAuth() {
 export function ioAuth() {
   return function middleware(socket: Socket, next: (err?: Error) => void) {
     const token = socket.handshake.auth.token;
-    logger.warn("validating socket connection");
+    logger.info("validating socket connection");
 
     validateToken(token).then(
       () => next(),

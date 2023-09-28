@@ -12,7 +12,12 @@ import {
   MessageBase,
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
-import { loadValue, saveValue, clearValue, setSearchParam } from "./general";
+import {
+  loadValue,
+  saveValue,
+  clearValue,
+  removeParamsFromUrl,
+} from "./general";
 import api from "./api";
 
 let _connection: Connection | undefined;
@@ -35,15 +40,7 @@ function setupHASS({
     .then((connection) => {
       _connection = connection;
 
-      window.history.replaceState(
-        null,
-        "",
-        setSearchParam({
-          code: undefined,
-          state: undefined,
-          auth_callback: undefined,
-        }).toString()
-      );
+      removeParamsFromUrl(["code", "state", "auth_callback"]);
 
       subscribeEntities(connection, (stateMap) => {
         onStatesChange(Object.values(stateMap));

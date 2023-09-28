@@ -122,7 +122,7 @@ export function createProccessOutputStreamer(cmd: string, params: string[]) {
         return;
       }
 
-      request.log.warn(
+      request.log.info(
         `streaming ended for process ${processId} and session ${session.id} [${[
           cmd,
           ...params,
@@ -144,7 +144,7 @@ export function createProccessOutputStreamer(cmd: string, params: string[]) {
       room.emit(`process-output:log:${processId}`, message);
     };
 
-    request.log.warn(
+    request.log.info(
       `streaming started for process ${processId} and session ${session.id} [${[
         cmd,
         ...params,
@@ -251,10 +251,11 @@ export function createAppModule(
 ) {
   const router = Router();
 
-  defineAppModule(createAppModuleInstance(router), logger);
-
   return {
     name,
-    middleware: router,
+    setup: async () => {
+      await defineAppModule(createAppModuleInstance(router), logger);
+      return router;
+    },
   };
 }

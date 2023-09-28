@@ -1,6 +1,6 @@
 //@ts-expect-error
 import jdownloaderAPI from "./api";
-import { createAppModule } from "../../utils";
+import { createAppModule, withRetry } from "../../utils";
 import { config } from "../../../../config";
 import { JDownloaderItem } from "../../../types/jdownloader";
 
@@ -36,11 +36,17 @@ export default createAppModule("jdownloader", async (instance) => {
         await connect();
         return func();
       }
+
+      throw err;
     }
   }
 
+  function runWithRetry<T>(func: () => Promise<T>) {
+    return withRetry(() => run(func), 1500);
+  }
+
   instance.get("/downloads", () => {
-    return run(async () => {
+    return runWithRetry(async () => {
       const deviceId = await getDeviceId();
 
       if (!deviceId) {
@@ -54,7 +60,7 @@ export default createAppModule("jdownloader", async (instance) => {
   });
 
   instance.post<{ Body: { id: string } }>("/remove", (req) => {
-    return run(async () => {
+    return runWithRetry(async () => {
       const deviceId = await getDeviceId();
 
       if (!deviceId) {
@@ -66,7 +72,7 @@ export default createAppModule("jdownloader", async (instance) => {
   });
 
   instance.post<{ Body: { url: string } }>("/add", (req) => {
-    return run(async () => {
+    return runWithRetry(async () => {
       const deviceId = await getDeviceId();
 
       if (!deviceId) {

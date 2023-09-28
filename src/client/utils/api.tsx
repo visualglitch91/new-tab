@@ -37,6 +37,10 @@ export function SocketIOProvider({ children }: { children: ReactNode }) {
     };
   });
 
+  if (!socket) {
+    return null;
+  }
+
   return (
     <SocketIOContext.Provider value={socket}>
       {children}

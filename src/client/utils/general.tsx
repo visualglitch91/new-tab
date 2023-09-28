@@ -144,6 +144,32 @@ export function setSearchParam(map: { [key: string]: any }) {
   return url;
 }
 
+export function removeParamsFromUrl(keys: string[]) {
+  window.history.replaceState(
+    null,
+    "",
+    setSearchParam(
+      keys.reduce((acc, key) => ({ ...acc, [key]: undefined }), {})
+    ).toString()
+  );
+}
+
+export async function clearAllCachesAndReload() {
+  const registration = await navigator.serviceWorker?.getRegistration();
+
+  if (registration) {
+    registration.unregister();
+  }
+
+  if (window.caches) {
+    await window.caches.keys().then((keys) => {
+      return Promise.all(keys.map((key) => window.caches.delete(key)));
+    });
+  }
+
+  window.location.assign(setSearchParam({ reload: Date.now() }));
+}
+
 export function autoUpdater() {
   if (process.env.NODE_ENV === "development") {
     return;
@@ -157,20 +183,7 @@ export function autoUpdater() {
     .then(async (latest) => {
       if (latest && latest !== version) {
         console.log(`Loading the new version ${latest}`);
-
-        const registration = await navigator.serviceWorker?.getRegistration();
-
-        if (registration) {
-          registration.unregister();
-        }
-
-        if (caches) {
-          await caches.keys().then((keys) => {
-            return Promise.all(keys.map((key) => caches.delete(key)));
-          });
-        }
-
-        window.location.assign(setSearchParam({ version: latest }));
+        clearAllCachesAndReload();
       }
     });
 }
