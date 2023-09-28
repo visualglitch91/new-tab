@@ -7,7 +7,7 @@
     "dev": "run-p dev:*",
     "dev:client": "npm run prerun && vite",
     "dev:server": "NODE_ENV=development vite-node src/server/index.ts",
-    "start": "vite-node src/server/index.ts",
+    "start": "NODE_ENV=production vite-node src/server/index.ts",
     "build": "npm run prerun && tsc && vite build",
     "postbuild": "cp src/client/robots.txt dist && cp -R src/client/assets/icons dist/icons && cp src/client/version.json dist/latest.json"
   },

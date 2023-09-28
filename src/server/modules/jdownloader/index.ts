@@ -27,14 +27,25 @@ export default createAppModule("jdownloader", async (instance) => {
     return deviceId;
   }
 
+  async function withTimeout<T>(func: () => Promise<T>) {
+    return Promise.race([
+      func(),
+      new Promise((_, reject) => setTimeout(reject, 5000, "timeout")),
+    ]) as Promise<T>;
+  }
+
   async function run<T>(func: () => Promise<T>) {
     try {
-      return await func();
+      return await withTimeout(() => func());
     } catch (err: any) {
-      if (String(err?.message).includes("AUTH_FAILED")) {
+      if (
+        ["AUTH_FAILED", "TOKEN_INVALID"].some((it) =>
+          String(err?.message).includes(it)
+        )
+      ) {
         await jdownloaderAPI.disconnect();
         await connect();
-        return func();
+        return withTimeout(() => func());
       }
 
       throw err;

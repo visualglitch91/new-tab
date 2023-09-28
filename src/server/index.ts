@@ -12,6 +12,8 @@ const isDev = process.env.NODE_ENV === "development";
 const host = "0.0.0.0";
 const port = isDev ? config.development_server_port : config.port;
 
+console.log({ isDev, port });
+
 const app = express();
 const server = http.createServer(app);
 
