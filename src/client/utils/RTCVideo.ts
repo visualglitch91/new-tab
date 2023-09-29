@@ -1,18 +1,16 @@
 import { sendMessage } from "./hass";
 import ListenerGroup from "./ListenerGroup";
+import peerConnectionManager from "./peerConnectionManager";
 
 interface WebRtcAnswer {
   answer: string;
-}
-
-interface WebRtcSettings {
-  stun_server?: string;
 }
 
 abstract class VideoBase {
   private divElement = document.createElement("div");
   private canvasElement = document.createElement("canvas");
   protected videoElement = document.createElement("video");
+  public loading = false;
 
   constructor(protected entityId: string) {
     this.videoElement.autoplay = true;
@@ -26,15 +24,25 @@ abstract class VideoBase {
 
     this.divElement.appendChild(this.videoElement);
     this.divElement.appendChild(this.canvasElement);
-
-    this.drawFrame();
   }
 
-  private drawFrame() {
+  protected drawFrame() {
+    if (!this.videoElement.srcObject) {
+      return;
+    }
+
     this.canvasElement.width = this.videoElement.videoWidth;
     this.canvasElement.height = this.videoElement.videoHeight;
 
-    this.canvasElement.getContext("2d")!.drawImage(this.videoElement, 0, 0);
+    const context = this.canvasElement.getContext("2d")!;
+
+    context.drawImage(this.videoElement, 0, 0);
+
+    if (this.loading && context.getImageData(0, 0, 1, 1).data[3] === 255) {
+      this.loading = false;
+      this.videoElement.dispatchEvent(new Event("loading-changed"));
+    }
+
     window.requestAnimationFrame(() => this.drawFrame());
   }
 
@@ -42,19 +50,22 @@ abstract class VideoBase {
 
   abstract stopStreaming(): void;
 
+  on(name: string, handler: (event: Event) => void) {
+    this.videoElement.addEventListener(name, handler);
+    return () => this.off(name, handler);
+  }
+
+  off(name: string, handler: (event: Event) => void) {
+    this.videoElement.removeEventListener(name, handler);
+  }
+
   getElement() {
     return this.divElement;
   }
 }
 
-async function fetchWebRtcSettings() {
-  return sendMessage<WebRtcSettings>({
-    type: "rtsp_to_webrtc/get_settings",
-  });
-}
-
 export default class RTCVideo extends VideoBase {
-  private listenerGroup = new ListenerGroup();
+  private listenerGroup: ListenerGroup | undefined;
 
   private handleWebRtcOffer(offer: string) {
     return sendMessage<WebRtcAnswer>({
@@ -64,55 +75,21 @@ export default class RTCVideo extends VideoBase {
     });
   }
 
-  private async fetchPeerConfiguration() {
-    const settings = await fetchWebRtcSettings();
-
-    if (!settings || !settings.stun_server) {
-      return {};
+  async startStreaming() {
+    if (!this.loading) {
+      this.loading = true;
+      this.videoElement.dispatchEvent(new Event("loading-changed"));
     }
 
-    return { iceServers: [{ urls: [`stun:${settings.stun_server!}`] }] };
-  }
+    const { listenerGroup, peerConnection, offerSDPString } =
+      await peerConnectionManager.getPeerConnection();
 
-  async startStreaming() {
-    const configuration = await this.fetchPeerConfiguration();
-    const peerConnection = new RTCPeerConnection(configuration);
-    // Some cameras (such as nest) require a data channel to establish a stream
-    // however, not used by any integrations.
-    peerConnection.createDataChannel("dataSendChannel");
-    peerConnection.addTransceiver("audio", { direction: "recvonly" });
-    peerConnection.addTransceiver("video", { direction: "recvonly" });
-
-    const offerOptions: RTCOfferOptions = {
-      offerToReceiveAudio: true,
-      offerToReceiveVideo: true,
-    };
-    const offer: RTCSessionDescriptionInit = await peerConnection.createOffer(
-      offerOptions
-    );
-    await peerConnection.setLocalDescription(offer);
-
-    let candidates = ""; // Build an Offer SDP string with ice candidates
-
-    await new Promise<void>((resolve) => {
-      this.listenerGroup
-        .with(peerConnection)
-        .subscribe("icecandidate", (event) => {
-          if (!event.candidate) {
-            resolve(); // Gathering complete
-            return;
-          }
-
-          candidates += `a=${event.candidate.candidate}\r\n`;
-        });
-    });
-
-    const offer_sdp = offer.sdp! + candidates;
+    this.listenerGroup = listenerGroup;
 
     let webRtcAnswer: WebRtcAnswer;
 
     try {
-      webRtcAnswer = await this.handleWebRtcOffer(offer_sdp);
+      webRtcAnswer = await this.handleWebRtcOffer(offerSDPString);
     } catch (err: any) {
       console.log("Failed to start WebRTC stream: " + err.message);
       peerConnection.close();
@@ -132,6 +109,7 @@ export default class RTCVideo extends VideoBase {
       type: "answer",
       sdp: webRtcAnswer.answer,
     });
+
     try {
       await peerConnection.setRemoteDescription(remoteDesc);
     } catch (err: any) {
@@ -140,12 +118,14 @@ export default class RTCVideo extends VideoBase {
       return;
     }
 
+    this.drawFrame();
     this.listenerGroup.addUnsubscribe(() => peerConnection.close());
   }
 
   stopStreaming() {
-    this.listenerGroup.unsubscribeAll();
     this.videoElement.srcObject = null;
     this.videoElement.removeAttribute("src");
+    this.listenerGroup?.unsubscribeAll();
+    this.listenerGroup = undefined;
   }
 }

@@ -19,6 +19,7 @@ import {
   removeParamsFromUrl,
 } from "./general";
 import api from "./api";
+import peerConnectionManager from "./peerConnectionManager";
 
 let _connection: Connection | undefined;
 
@@ -45,6 +46,8 @@ function setupHASS({
       subscribeEntities(connection, (stateMap) => {
         onStatesChange(Object.values(stateMap));
       });
+
+      peerConnectionManager.preload();
 
       return Promise.all([getUser(connection), getStates(connection)]);
     })
