@@ -9,17 +9,18 @@ export default createAppModule("package-tracker", (instance, logger) => {
     refresh();
   }).start();
 
-  instance.get("/list", storage.read);
+  instance.get("/list", async () => storage.getAll());
 
   instance.post<{ Body: { name: string; code: string } }>(
     "/add",
     async (req) => {
-      const item = { name: req.body.name, code: req.body.code };
+      storage.save({
+        id: req.body.code,
+        code: req.body.code,
+        name: req.body.name,
+      });
 
-      await storage.add(item);
       await refresh();
-
-      req.log.info("added: ", JSON.stringify(item));
     }
   );
 
@@ -28,8 +29,6 @@ export default createAppModule("package-tracker", (instance, logger) => {
 
     await storage.remove(code);
     await refresh();
-
-    req.log.info("removed: ", code);
   });
 
   instance.get("/refresh", async () => {

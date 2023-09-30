@@ -60,23 +60,22 @@ function parseDateString(dateString: string): string | null {
   }
 }
 
-export default function refresh() {
-  return storage
-    .read()
-    .then((packages) => {
-      const packagesBycode = packages.reduce(
-        (acc, it) => ({ ...acc, [it.code]: it }),
-        {} as Record<string, PackageTrackerItem>
-      );
+export default async function refresh() {
+  const packages = storage.getAll();
 
-      return Promise.all(
-        Object.keys(packagesBycode).map((code) =>
-          track(code).then((lastEvent) => ({
-            ...packagesBycode[code],
-            lastEvent,
-          }))
-        )
-      );
-    })
-    .then(storage.write);
+  const packagesBycode = packages.reduce(
+    (acc, it) => ({ ...acc, [it.code]: it }),
+    {} as Record<string, PackageTrackerItem>
+  );
+
+  const updatedPackages = await Promise.all(
+    Object.keys(packagesBycode).map((code) =>
+      track(code).then((lastEvent) => ({
+        ...packagesBycode[code],
+        lastEvent,
+      }))
+    )
+  );
+
+  updatedPackages.forEach((it) => storage.save(it));
 }

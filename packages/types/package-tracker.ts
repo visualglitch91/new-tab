@@ -1,4 +1,5 @@
 export interface PackageTrackerItem {
+  id: string;
   name: string;
   code: string;
   lastEvent?: {

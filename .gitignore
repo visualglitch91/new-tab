@@ -25,3 +25,4 @@ yarn-error.log*
 
 src/client/version.json
 config.ts
+packages/server/src/*.db.json
