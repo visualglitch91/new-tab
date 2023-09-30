@@ -25,7 +25,7 @@ function parseItem(item: JDownloaderItem): DownloadItem {
       item.finished || item.speed <= 0
         ? null
         : parseETA((item.bytesTotal - item.bytesLoaded) / item.speed),
-    status: item.finished ? "downloading" : "completed",
+    status: item.finished ? "completed" : "downloading",
     active: !item.finished,
     completed: item.finished,
     percentDone: (item.bytesLoaded / item.bytesTotal) * 100,
