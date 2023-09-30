@@ -3,70 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "prerun": "echo \"\\\"$(date +'%Y.%m.%d-%H:%M:%S')\\\"\" > src/client/version.json",
     "dev": "run-p dev:*",
-    "dev:client": "npm run prerun && vite",
-    "dev:server": "NODE_ENV=development vite-node src/server/index.ts",
-    "start": "NODE_ENV=production vite-node src/server/index.ts",
-    "build": "npm run prerun && tsc && vite build",
-    "postbuild": "cp src/client/robots.txt dist && cp -R src/client/assets/icons dist/icons && cp src/client/version.json dist/latest.json"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/joy": "^5.0.0-beta.7",
-    "@opuscapita/filemanager-server": "^1.1.12",
-    "@tanstack/query-sync-storage-persister": "^4.35.3",
-    "@tanstack/react-query": "^4.35.3",
-    "@tanstack/react-query-persist-client": "^4.35.5",
-    "@uiw/react-color-wheel": "^1.4.2",
-    "axios": "^1.5.0",
-    "axios-cookiejar-support": "^4.0.7",
-    "body-parser": "^1.20.2",
-    "bson-objectid": "^2.0.4",
-    "cheerio": "^1.0.0-rc.12",
-    "color-rgba": "^3.0.0",
-    "cron": "^2.4.4",
-    "date-fns": "^2.30.0",
-    "dockerode": "^3.3.5",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "home-assistant-js-websocket": "^8.2.0",
-    "humanize-duration": "^3.30.0",
-    "i": "^0.3.7",
-    "macy": "^2.5.1",
-    "npm": "^10.1.0",
-    "p-queue": "^7.4.1",
-    "pino-http": "^8.5.0",
-    "pino-pretty": "^10.2.0",
-    "pm2": "^5.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-transition-group": "^4.4.5",
-    "shell-color": "^2.0.1",
-    "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2",
-    "tough-cookie": "^4.1.3",
-    "vite-node": "^0.26.3",
-    "ws": "^8.14.2"
+    "dev:client": "npm run dev -w packages/client",
+    "dev:server": "npm run dev -w packages/server",
+    "start": "npm run start -w packages/server",
+    "build": "npm run lint && npm run build -w packages/client",
+    "lint": "tsc"
   },
   "devDependencies": {
-    "@types/express": "^4.17.18",
-    "@types/express-session": "^1.17.8",
-    "@types/react": "^18.2.22",
-    "@types/react-dom": "^18.2.7",
-    "@types/react-transition-group": "^4.4.6",
-    "@types/tough-cookie": "^4.0.3",
-    "@types/ws": "^8.5.6",
-    "@vitejs/plugin-react": "^3.1.0",
+    "@types/node": "^20.8.0",
     "eslint": "^8.50.0",
     "eslint-config-react-app": "^7.0.1",
     "npm-run-all": "^4.1.5",
     "tsx": "^3.12.3",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0",
-    "vite-plugin-html": "^3.2.0",
-    "vite-plugin-pwa": "^0.16.5"
+    "typescript": "^4.9.3"
   },
   "eslintConfig": {
     "extends": [
@@ -74,6 +24,9 @@
     ]
   },
   "workspaces": [
-    "packages/jdownloader-api"
+    "packages/jdownloader-api",
+    "packages/server",
+    "packages/client",
+    "packages/types"
   ]
 }
