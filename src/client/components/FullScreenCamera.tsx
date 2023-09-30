@@ -8,11 +8,14 @@ const ButtonsWrapper = styled(FlexRow)({
   padding: "8px 0",
 });
 
-const Wrapper = styled("div")({
+const Wrapper = styled("div")(({ theme }) => ({
   width: "70vw",
   maxWidth: 960,
   lineHeight: 0,
-});
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+}));
 
 export default function FullScreenCamera({
   entityId,
@@ -26,7 +29,7 @@ export default function FullScreenCamera({
   onClose: () => void;
 }) {
   return (
-    <DialogBase title="Câmera" onClose={onClose}>
+    <DialogBase title="Câmera" onClose={onClose} sx={{ height: "100vh" }}>
       <Wrapper>
         <CameraStream aspectRatio={aspectRatio} entityId={entityId} />
       </Wrapper>

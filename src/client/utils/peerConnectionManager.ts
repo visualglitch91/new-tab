@@ -71,7 +71,7 @@ export async function preparePeerConnection() {
 
 type PeerConnection = Awaited<ReturnType<typeof preparePeerConnection>>;
 
-const PRELOADED_COUNT = 2;
+const PRELOADED_COUNT = 4;
 
 class PeerConnectionManager {
   private preloaded: PeerConnection[] = [];
