@@ -57,7 +57,7 @@ function parseTorrent(torrent: Torrent): DownloadItem {
 }
 
 export default function Torrents() {
-  const { data = [] } = useQuery(
+  const { data = [], isInitialLoading } = useQuery(
     ["torrents"],
     () => {
       return api<Torrent[]>("/transmission/torrents", "get").then((res) =>
@@ -116,6 +116,7 @@ export default function Torrents() {
       <DownloadListCard
         title="Torrents"
         downloads={data}
+        loading={isInitialLoading}
         onAdd={onAdd}
         onItemClick={onItemClick}
       >

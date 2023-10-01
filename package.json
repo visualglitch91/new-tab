@@ -28,5 +28,11 @@
     "packages/server",
     "packages/client",
     "packages/types"
-  ]
+  ],
+  "dependencies": {
+    "@mui/x-date-pickers": "^6.16.0",
+    "install": "^0.13.0",
+    "npm": "^10.1.0",
+    "uninstall": "^0.0.0"
+  }
 }

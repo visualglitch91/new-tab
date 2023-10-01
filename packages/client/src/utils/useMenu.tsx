@@ -12,7 +12,7 @@ export function useMenu() {
     onSelect,
   }: {
     title: string;
-    options: { value: T; label: string; hidden?: boolean }[];
+    options: { value: T; label: string; hidden?: boolean; primary?: boolean }[];
     onSelect: (value: T) => void;
   }) {
     mount((unmount) => (
@@ -22,6 +22,7 @@ export function useMenu() {
             it.hidden ? null : (
               <BorderButton
                 key={it.value}
+                primary={it.primary}
                 onClick={() => {
                   unmount();
                   onSelect(it.value);

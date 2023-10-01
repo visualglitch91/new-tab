@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styled } from "@mui/joy";
 import Paper from "./Paper";
 import { WEATHER_ICONS, WeatherEntity } from "./WeatherInfo/utils";
 import { useEntity } from "../utils/hass";
 import Icon from "./Icon";
 import { formatNumericValue } from "../utils/general";
+import useMountEffect from "../utils/useMountEffect";
+import clock from "../utils/clock";
 
 const Root = styled(Paper)({
   textAlign: "left",
@@ -52,15 +54,9 @@ export default function ClockAndWeather() {
   const [date, setDate] = useState(() => new Date());
   const weatherEntity = useEntity<WeatherEntity>("weather.republica");
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDate(() => new Date());
-    });
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  useMountEffect(() => {
+    return clock.on(() => setDate(() => new Date()));
+  });
 
   return (
     <Root>

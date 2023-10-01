@@ -1,6 +1,7 @@
 import ListCard from "../../components/ListCard";
 import { useData, formatStackName } from "./utils";
 import { AppItem } from "./AppItem";
+import { compareByStringProp } from "../../utils/array";
 
 export default function AppManager() {
   const { data } = useData();
@@ -13,11 +14,9 @@ export default function AppManager() {
     <>
       {data.map(([stack, apps]) => (
         <ListCard title={formatStackName(stack)} key={stack}>
-          {apps
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((app) => (
-              <AppItem key={`app-${app.id}`} app={app} />
-            ))}
+          {apps.sort(compareByStringProp("name")).map((app) => (
+            <AppItem key={`app-${app.id}`} app={app} />
+          ))}
         </ListCard>
       ))}
     </>

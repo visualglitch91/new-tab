@@ -4,6 +4,7 @@ import BorderButton from "../components/BorderButton";
 import DialogBase from "../components/DialogBase";
 import Stack from "../components/Stack";
 import useModal from "./useModal";
+import { focusOnRef } from "./react";
 
 function Prompt({
   title,
@@ -18,14 +19,6 @@ function Prompt({
 }) {
   const [values, setValues] = useState(() => fields.map(() => ""));
 
-  const firstFieldOnRef = useCallback((inputElement: HTMLInputElement) => {
-    if (!inputElement) return;
-
-    setTimeout(() => {
-      inputElement.focus();
-    }, 50);
-  }, []);
-
   return (
     <DialogBase title={title} onClose={onCancel}>
       <Stack>
@@ -34,7 +27,7 @@ function Prompt({
             <FormLabel>{label}</FormLabel>
             <Input
               slotProps={
-                index === 0 ? { input: { ref: firstFieldOnRef } } : undefined
+                index === 0 ? { input: { ref: focusOnRef } } : undefined
               }
               value={values[index]}
               onChange={(event) => {

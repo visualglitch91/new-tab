@@ -4,7 +4,7 @@ export default class Storage<T extends { id: string }> {
   private db: JSONdb;
 
   constructor(name: string) {
-    this.db = new JSONdb(`${__dirname}/${name}.db.json`);
+    this.db = new JSONdb(`${__dirname}/db/${name}.json`);
   }
 
   save(item: T) {
@@ -17,6 +17,10 @@ export default class Storage<T extends { id: string }> {
 
   getAll(): T[] {
     return Object.values(this.db.JSON() || {});
+  }
+
+  count() {
+    return this.getAll().length;
   }
 
   remove(id: string) {

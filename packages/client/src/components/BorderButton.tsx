@@ -20,6 +20,10 @@ function style(props: BorderButtonProps) {
           },
         }
       : {}),
+    "&:disabled": {
+      opacity: 0.6,
+      cursor: "not-allowed",
+    },
   });
 }
 

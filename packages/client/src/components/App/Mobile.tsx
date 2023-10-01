@@ -16,6 +16,8 @@ import FileManager from "../../widgets/FileManager";
 import HomeControlSystemCard from "../HomeControlSystemCard";
 import HACSUpdates from "../HACSUpdates";
 import AppManager from "../../widgets/AppManager";
+import Timers from "../Timers";
+import Schedules from "../Schedules";
 
 export default function MobileApp({
   isAdmin,
@@ -56,6 +58,17 @@ export default function MobileApp({
                 title: "Encomendas",
                 icon: "mdi:truck-delivery-outline",
                 content: <PackageTracker />,
+              },
+              {
+                key: "timers",
+                title: "Timers",
+                icon: "mdi:clock",
+                content: (
+                  <Stack>
+                    <Timers />
+                    <Schedules />
+                  </Stack>
+                ),
               },
               {
                 key: "ombi",

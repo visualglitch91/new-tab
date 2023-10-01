@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { GlobalStyles, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./utils/queryClient";
@@ -12,6 +11,8 @@ import {
 import theme from "./theme";
 import App from "./components/App";
 import "./styles.css";
+import useMountEffect from "./utils/useMountEffect";
+import clock from "./utils/clock";
 
 const globalStyles = (
   <GlobalStyles
@@ -32,7 +33,8 @@ const globalStyles = (
 );
 
 export default function Main() {
-  useEffect(() => {
+  useMountEffect(() => {
+    clock.start();
     autoUpdater();
 
     window.location.hash = "";
@@ -48,7 +50,7 @@ export default function Main() {
       document.removeEventListener("resume", autoUpdater);
       window.removeEventListener("focus", autoUpdater);
     };
-  }, []);
+  });
 
   return (
     <QueryClientProvider client={queryClient}>

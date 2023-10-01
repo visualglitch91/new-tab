@@ -2,6 +2,7 @@ import { extendTheme } from "@mui/joy/styles";
 import JoySwitch from "./overrides/JoySwitch";
 import JoySlider from "./overrides/JoySlider";
 import JoyTooltip from "./overrides/JoyTooltip";
+import JoyButton from "./overrides/JoyButton";
 import JoyLinearProgress from "./overrides/JoyLinearProgress";
 import JoyCircularProgress from "./overrides/JoyCircularProgress";
 
@@ -27,6 +28,7 @@ const theme = {
       JoySwitch,
       JoySlider,
       JoyTooltip,
+      JoyButton,
       JoyLinearProgress,
       JoyCircularProgress,
     },

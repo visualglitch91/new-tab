@@ -14,17 +14,17 @@ const JoySwitch: ComponentOverride["JoySwitch"] = {
         "--Switch-trackWidth": "34px",
         "--Switch-trackHeight": "14px",
         "--Switch-thumbBackground": theme.palette.neutral[400],
-        "--Switch-trackBackground": theme.palette.neutral[900],
+        "--Switch-trackBackground": "#0d121a",
         "&:hover": {
           "--Switch-thumbBackground": theme.palette.neutral[400],
           "--Switch-trackBackground": theme.palette.neutral[900],
         },
         [`&.${switchClasses.checked}`]: {
           "--Switch-thumbBackground": theme.palette[color][400],
-          "--Switch-trackBackground": theme.palette.neutral[900],
+          "--Switch-trackBackground": "#0d121a",
           "&:hover": {
             "--Switch-thumbBackground": theme.palette[color][300],
-            "--Switch-trackBackground": theme.palette.neutral[900],
+            "--Switch-trackBackground": "#0d121a",
           },
         },
         [`&.${switchClasses.disabled}`]: {

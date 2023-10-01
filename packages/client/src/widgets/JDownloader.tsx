@@ -26,7 +26,7 @@ function parseItem(item: JDownloaderItem): DownloadItem {
 export default function JDownloader() {
   const enabled = useEntity("switch.casa_jdownloader")?.state === "on";
 
-  const { data = [] } = useQuery(
+  const { data = [], isInitialLoading } = useQuery(
     ["jdownloader"],
     () => {
       return api<JDownloaderItem[]>("/jdownloader/downloads", "get").then(
@@ -78,6 +78,7 @@ export default function JDownloader() {
       <DownloadListCard
         title="JDownloader"
         downloads={enabled ? data : []}
+        loading={isInitialLoading}
         onAdd={onAdd}
         onItemClick={onItemClick}
       >

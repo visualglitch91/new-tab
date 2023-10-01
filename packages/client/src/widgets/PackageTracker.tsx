@@ -8,6 +8,7 @@ import PillButton from "../components/PillButton";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
 import ListCard from "../components/ListCard";
 import RippleButton from "../components/RippleButton";
+import EmptyState from "../components/EmptyState";
 
 const ItemCard = styled(RippleButton)(({ theme }) => ({
   padding: 16,
@@ -61,7 +62,11 @@ function parseDate(date: string) {
 }
 
 export default function PackageTracker() {
-  const { data: packages = [], refetch } = useQuery(["packages"], () =>
+  const {
+    data: packages = [],
+    refetch,
+    isInitialLoading,
+  } = useQuery(["packages"], () =>
     api<PackageTrackerItem[]>("/package-tracker/list", "get")
   );
 
@@ -110,32 +115,39 @@ export default function PackageTracker() {
     >
       {$prompt}
       {$confirm}
-      {packages?.map((it) => (
-        <ItemCard key={it.code} onLongPress={() => remove(it)}>
-          <ItemContent>
-            <Label>
-              {it.name} ({it.code})
-            </Label>
-            {it.lastEvent ? (
-              <>
-                {it.lastEvent.at && <At>{parseDate(it.lastEvent.at)}</At>}
-                <Desciption>
-                  {it.lastEvent.description}
+      {packages.length === 0 ? (
+        <EmptyState
+          loading={isInitialLoading}
+          text="Nenhum pacote adicionado"
+        />
+      ) : (
+        packages.map((it) => (
+          <ItemCard key={it.code} onLongPress={() => remove(it)}>
+            <ItemContent>
+              <Label>
+                {it.name} ({it.code})
+              </Label>
+              {it.lastEvent ? (
+                <>
+                  {it.lastEvent.at && <At>{parseDate(it.lastEvent.at)}</At>}
+                  <Desciption>
+                    {it.lastEvent.description}
 
-                  {it.lastEvent.location && (
-                    <>
-                      <br />
-                      {it.lastEvent.location}
-                    </>
-                  )}
-                </Desciption>
-              </>
-            ) : (
-              <Desciption>Não Encontrado</Desciption>
-            )}
-          </ItemContent>
-        </ItemCard>
-      ))}
+                    {it.lastEvent.location && (
+                      <>
+                        <br />
+                        {it.lastEvent.location}
+                      </>
+                    )}
+                  </Desciption>
+                </>
+              ) : (
+                <Desciption>Não Encontrado</Desciption>
+              )}
+            </ItemContent>
+          </ItemCard>
+        ))
+      )}
     </ListCard>
   );
 }

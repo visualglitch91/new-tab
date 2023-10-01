@@ -1,6 +1,8 @@
 import { compact } from "../../utils/general";
 import DesktopLayout from "../DesktopLayout";
 import Stack from "../Stack";
+import Timers from "../Timers";
+import Schedules from "../Schedules";
 
 import TV from "../../widgets/TV";
 import Home from "../../widgets/Home";
@@ -57,6 +59,12 @@ export default function DesktopApp({
             isAdmin && camerasOn && <Cameras />,
             isAdmin && <Vacuum />,
           ],
+        },
+        {
+          key: "timers",
+          title: "Timers",
+          icon: "mdi:clock",
+          content: [<Timers />, <Schedules />],
         },
         ...(isAdmin
           ? [

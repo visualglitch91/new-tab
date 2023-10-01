@@ -14,6 +14,7 @@
     "bson-objectid": "^2.0.4",
     "cheerio": "^1.0.0-rc.12",
     "cron": "^2.4.4",
+    "cron-time-generator": "^2.0.1",
     "date-fns": "^2.30.0",
     "dockerode": "^3.3.5",
     "express": "^4.18.2",
