@@ -27,6 +27,9 @@ export default function DaysRow({
 
   return (
     <ToggleButtonGroup
+      size="sm"
+      color="primary"
+      variant="outlined"
       {...props}
       value={Object.keys(value)}
       onChange={

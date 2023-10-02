@@ -117,9 +117,6 @@ export default function ScheduleItem({
         <Days>
           <DaysRow
             buttonFlex={1}
-            size="sm"
-            color="primary"
-            variant="outlined"
             value={schedule.days}
             onChange={(value) => onPatch("days", value)}
           />
