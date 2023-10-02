@@ -11,6 +11,7 @@ const localStoragePersister = createSyncStoragePersister({
 });
 
 persistQueryClient({
+  //@ts-ignore
   queryClient,
   persister: localStoragePersister,
 });

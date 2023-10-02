@@ -7,10 +7,12 @@ import useMountEffect from "./useMountEffect";
 export default function api<T = any>(
   path: string,
   method: string,
-  body?: any
+  body?: any,
+  signal?: AbortController["signal"]
 ): Promise<T> {
   return axios(`/api${path}`, {
     method,
+    signal,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getAccessToken()}`,

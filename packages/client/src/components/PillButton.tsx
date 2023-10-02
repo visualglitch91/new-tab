@@ -1,5 +1,6 @@
 import { styled } from "@mui/joy";
 import Icon from "./Icon";
+import { SxProps } from "@mui/joy/styles/types";
 
 const Wrapper = styled("button")(({ theme }) => ({
   height: "100%",
@@ -24,17 +25,19 @@ const Wrapper = styled("button")(({ theme }) => ({
 
 export default function PillButton({
   className,
+  sx,
   icon,
   label,
   onClick,
 }: {
   className?: string;
+  sx?: SxProps;
   icon?: string;
   label?: React.ReactNode;
   onClick?: () => void;
 }) {
   return (
-    <Wrapper type="button" className={className} onClick={onClick}>
+    <Wrapper type="button" sx={sx} className={className} onClick={onClick}>
       {icon && <Icon size={14} icon={icon} />}
       {label}
     </Wrapper>

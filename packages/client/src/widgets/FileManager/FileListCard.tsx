@@ -4,7 +4,6 @@ import PillButton from "../../components/PillButton";
 import { Tooltip } from "@mui/joy";
 import { Directory, Item } from "./utils";
 import { isTouchDevice, useResponsive } from "../../utils/general";
-import { sxx } from "../../utils/styles";
 
 export default function FileListCard({
   items,

@@ -1,12 +1,16 @@
-export interface OmbiMedia {
-  id: string;
-  type: "tv" | "movie";
+export type OmbiMedia = {
+  tmdbId: string;
   title: string;
   overview: string;
-  releaseDate: string;
+  year: number;
   poster: string | null;
   request?: {
     id: string;
     status: "available" | "partially" | "approved" | "denied" | "pending";
   };
+} & ({ type: "movie" } | { tvdbId: string; type: "tv" });
+
+export interface QualityProfile {
+  id: string;
+  name: string;
 }

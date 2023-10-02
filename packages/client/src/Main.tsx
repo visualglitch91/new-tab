@@ -1,5 +1,6 @@
 import { GlobalStyles, CssBaseline, CssVarsProvider } from "@mui/joy";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "./utils/queryClient";
 import { HassProvider } from "./utils/hass";
 import { SocketIOProvider } from "./utils/api";
@@ -54,6 +55,7 @@ export default function Main() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <CssVarsProvider theme={theme} defaultMode="dark">
         <CssBaseline />
         {globalStyles}

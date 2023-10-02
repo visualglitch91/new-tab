@@ -2,58 +2,98 @@ import axios from "axios";
 import { OmbiMedia } from "@home-control/types/ombi";
 import { config } from "../../../../../config";
 
-const fanartTVKey = config.ombi.fanarttv_key;
+export const ombi = axios.create({
+  baseURL: `${config.ombi.url}/ombi/api`,
+  headers: { ApiKey: config.ombi.key },
+});
 
-async function fetchMissingPoster(
-  id: string,
-  type: "tv" | "movie",
-  poster?: string | null
-) {
-  if (poster) {
-    return `https://image.tmdb.org/t/p/w300${poster}`;
-  }
+export const radarr = axios.create({
+  baseURL: `${config.radarr.url}/api`,
+  headers: { "X-Api-Key": config.radarr.key },
+});
 
-  const isMovie = type === "movie";
+export const sonarr = axios.create({
+  baseURL: `${config.sonarr.url}/api`,
+  headers: { "X-Api-Key": config.sonarr.key },
+});
 
-  try {
-    const res = await axios.get(
-      `http://webservice.fanart.tv/v3/${
-        isMovie ? "movies" : "tv"
-      }/${id}?api_key=${fanartTVKey}`
+export function getRadarrItem(tmdbId: string) {
+  return radarr
+    .get(`/v3/movie/lookup?term=tmdb%3A${tmdbId}`)
+    .then((res) => res.data[0]);
+}
+export function getSonarrItem(tmdbId: string) {
+  return ombi
+    .get(`/v2/search/Tv/moviedb/${tmdbId}`)
+    .then(({ data }) =>
+      data.theTvDbId
+        ? sonarr
+            .get(`/v3/series/lookup?term=tvdb%3A${data.theTvDbId}`)
+            .then((res) => res.data[0])
+        : undefined
     );
-
-    const url = isMovie
-      ? res.data.movieposter[0]?.url
-      : res.data.tvposter[0]?.url;
-
-    if (url) {
-      const parts = url.split("/");
-      parts[3] = "preview";
-      return parts.join("/");
-    }
-  } catch (_) {}
-
-  return null;
 }
 
-export async function createOmbiMedia(
-  id: OmbiMedia["id"],
-  type: 0 | 1 | "tv" | "movie",
-  title: OmbiMedia["title"],
-  overview: OmbiMedia["overview"],
-  releaseDate: OmbiMedia["releaseDate"],
-  poster: OmbiMedia["poster"] | undefined,
-  request: OmbiMedia["request"] | undefined
-): Promise<OmbiMedia> {
-  const normalizedType = type === 0 ? "tv" : type === 1 ? "movie" : type;
+export function getOmbiItem(tmdbId: string, type: OmbiMedia["type"]) {
+  return (
+    type === "movie"
+      ? ombi.get(`/v2/search/Movie/${tmdbId}`)
+      : ombi.get(`/v2/search/Tv/moviedb/${tmdbId}`)
+  ).then((res) => res.data);
+}
 
-  return {
-    id,
-    type: normalizedType,
-    title,
-    overview,
-    releaseDate,
-    poster: await fetchMissingPoster(id, normalizedType, poster),
+export async function fetchRequestObject(
+  tmdbId: string,
+  type: OmbiMedia["type"]
+): Promise<OmbiMedia["request"] | undefined> {
+  const ombiItem = await getOmbiItem(tmdbId, type);
+
+  return ombiItem.requested
+    ? {
+        id: String(ombiItem.requestId),
+        status: ombiItem.denied
+          ? "denied"
+          : ombiItem.tvPartiallyAvailable
+          ? "partially"
+          : ombiItem.available
+          ? "available"
+          : ombiItem.approved
+          ? "approved"
+          : "pending",
+      }
+    : undefined;
+}
+
+const cache: Record<string, any> = {};
+
+export async function fetchMediaData(tmdbId: string, ombiType: 0 | 1) {
+  const type = ombiType === 0 ? "tv" : "movie";
+
+  if (!cache[tmdbId]) {
+    cache[tmdbId] = await (type === "movie"
+      ? getRadarrItem(tmdbId)
+      : getSonarrItem(tmdbId));
+  }
+
+  const request = await fetchRequestObject(tmdbId, type);
+
+  const data = cache[tmdbId];
+
+  if (!data) {
+    return null;
+  }
+
+  const media: OmbiMedia = {
+    tmdbId,
+    //@ts-expect-error
+    tvdbId: type === "movie" ? undefined : String(data.tvdbId),
+    type,
+    title: data.title,
+    overview: data.overview,
+    year: data.year,
+    poster: data.images.find((it: any) => it.coverType === "poster")?.remoteUrl,
     request,
   };
+
+  return media;
 }
