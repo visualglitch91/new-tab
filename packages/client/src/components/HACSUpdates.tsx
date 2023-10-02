@@ -13,12 +13,12 @@ export default function HACSUpdates() {
   return (
     <ListCard
       title="HACS"
-      titleAction={
-        <PillButton
-          icon="mdi:open-in-new"
-          onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
-        />
-      }
+      // titleAction={
+      //   <PillButton
+      //     icon="mdi:open-in-new"
+      //     onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
+      //   />
+      // }
     >
       {repositories.length === 0 ? (
         <ListItem label="Sem atualizações pendentes" />

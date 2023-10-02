@@ -1,14 +1,15 @@
 import { styled } from "@mui/joy";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { PackageTrackerItem } from "@home-control/types/package-tracker";
 import { useConfirm } from "../utils/useConfirm";
 import { usePrompt } from "../utils/usePrompt";
 import { alpha } from "../utils/styles";
 import api from "../utils/api";
 import PillButton from "../components/PillButton";
-import { PackageTrackerItem } from "@home-control/types/package-tracker";
-import ListCard from "../components/ListCard";
+import { borderRadius } from "../components/Paper";
 import RippleButton from "../components/RippleButton";
 import EmptyState from "../components/EmptyState";
+import ResponsiveCard from "../components/ResponsiveCard";
 
 const ItemCard = styled(RippleButton)(({ theme }) => ({
   padding: 16,
@@ -17,7 +18,7 @@ const ItemCard = styled(RippleButton)(({ theme }) => ({
   textAlign: "left",
   background: "transparent",
   border: "none",
-  borderTop: `1px solid ${alpha(theme.palette.primary[400], 0.3)}`,
+  [theme.breakpoints.down("sm")]: { borderRadius },
   "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
 }));
 
@@ -108,46 +109,52 @@ export default function PackageTracker() {
   }
 
   return (
-    <ListCard
-      gap={0}
-      title="Encomendas"
-      titleAction={<PillButton icon="mdi:plus" onClick={add} />}
-    >
+    <>
       {$prompt}
       {$confirm}
-      {packages.length === 0 ? (
-        <EmptyState
-          loading={isInitialLoading}
-          text="Nenhum pacote adicionado"
-        />
-      ) : (
-        packages.map((it) => (
-          <ItemCard key={it.code} onLongPress={() => remove(it)}>
-            <ItemContent>
-              <Label>
-                {it.name} ({it.code})
-              </Label>
-              {it.lastEvent ? (
-                <>
-                  {it.lastEvent.at && <At>{parseDate(it.lastEvent.at)}</At>}
-                  <Desciption>
-                    {it.lastEvent.description}
-
-                    {it.lastEvent.location && (
+      <ResponsiveCard
+        title="Encomendas"
+        largerMobileTitle
+        // titleAction={<PillButton icon="mdi:plus" onClick={add} />}
+        spacing={0}
+        groups={
+          packages.length === 0
+            ? [
+                <EmptyState
+                  loading={isInitialLoading}
+                  text="Nenhum pacote adicionado"
+                />,
+              ]
+            : packages.map((it) => (
+                <ItemCard key={it.code} onLongPress={() => remove(it)}>
+                  <ItemContent>
+                    <Label>
+                      {it.name} ({it.code})
+                    </Label>
+                    {it.lastEvent ? (
                       <>
-                        <br />
-                        {it.lastEvent.location}
+                        {it.lastEvent.at && (
+                          <At>{parseDate(it.lastEvent.at)}</At>
+                        )}
+                        <Desciption>
+                          {it.lastEvent.description}
+
+                          {it.lastEvent.location && (
+                            <>
+                              <br />
+                              {it.lastEvent.location}
+                            </>
+                          )}
+                        </Desciption>
                       </>
+                    ) : (
+                      <Desciption>Não Encontrado</Desciption>
                     )}
-                  </Desciption>
-                </>
-              ) : (
-                <Desciption>Não Encontrado</Desciption>
-              )}
-            </ItemContent>
-          </ItemCard>
-        ))
-      )}
-    </ListCard>
+                  </ItemContent>
+                </ItemCard>
+              ))
+        }
+      />
+    </>
   );
 }

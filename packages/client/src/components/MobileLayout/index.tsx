@@ -6,6 +6,7 @@ import Tab from "./Tab";
 import { Wrapper, ExtraTab, Tabs, Content, StatusBar } from "./components";
 import DialogBase from "../DialogBase";
 import Icon from "../Icon";
+import useMountEffect from "../../utils/useMountEffect";
 
 interface TabConfig {
   key: string;
@@ -43,6 +44,22 @@ export default function MobileLayout({
     }
     //eslint-disable-next-line
   }, [content]);
+
+  useMountEffect(() => {
+    const node = wrapperRef.current!;
+
+    const onScroll = () => {
+      node.setAttribute("data-scrolled", String(node.scrollTop > 0));
+      node.style.setProperty("--scrollY", `${node.scrollTop}px`);
+    };
+
+    onScroll();
+    node.addEventListener("scroll", onScroll);
+
+    return () => {
+      node.removeEventListener("scroll", onScroll);
+    };
+  });
 
   function scrollToTop(smooth?: boolean) {
     wrapperRef.current?.scroll({
@@ -88,7 +105,7 @@ export default function MobileLayout({
   return (
     <Wrapper ref={wrapperRef}>
       {modals}
-      <Content>
+      <Content key={active}>
         <Stack>{content}</Stack>
       </Content>
       <StatusBar />

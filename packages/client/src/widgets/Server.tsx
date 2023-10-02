@@ -1,10 +1,10 @@
 import { formatNumericValue } from "../utils/general";
 import ComponentGroup from "../components/ComponentGroup";
 
-export default function SystemModule() {
+export default function ServerModule() {
   return (
     <ComponentGroup
-      title="Sistema"
+      title="Servidor"
       layout="list"
       items={[
         {

@@ -117,6 +117,7 @@ export default function Torrents() {
         title="Torrents"
         downloads={data}
         loading={isInitialLoading}
+        stickyMobileTitle
         onAdd={onAdd}
         onItemClick={onItemClick}
       >

@@ -3,11 +3,11 @@ import { Schedule } from "@home-control/types/hass-scheduler";
 import api from "../../utils/api";
 import useModal from "../../utils/useModal";
 import PillButton from "../PillButton";
-import ListCard from "../ListCard";
 import ScheduleDialog from "./ScheduleDialog";
 import ScheduleItem from "./ScheduleItem";
 import { queryClient } from "../../utils/queryClient";
 import EmptyState from "../EmptyState";
+import ResponsiveCard from "../ResponsiveCard";
 
 export default function Schedules() {
   const [mount, modals] = useModal();
@@ -75,28 +75,29 @@ export default function Schedules() {
   return (
     <>
       {modals}
-      <ListCard
-        gap={0}
+      <ResponsiveCard
+        spacing={0}
         title="Agendamentos"
-        titleAction={<PillButton icon="plus" onClick={() => onUpsert()} />}
-      >
-        {data.length === 0 ? (
-          <EmptyState
-            loading={isInitialLoading}
-            text="Nenhum agendamento criado"
-          />
-        ) : (
-          data.map((it) => (
-            <ScheduleItem
-              key={it.id}
-              schedule={it}
-              onPatch={(key, value) => onPatch(it, key, value)}
-              onEdit={() => onUpsert(it)}
-              onDelete={() => onDelete(it)}
-            />
-          ))
-        )}
-      </ListCard>
+        // titleAction={<PillButton icon="plus" onClick={() => onUpsert()} />}
+        groups={
+          data.length === 0
+            ? [
+                <EmptyState
+                  loading={isInitialLoading}
+                  text="Nenhum agendamento criado"
+                />,
+              ]
+            : data.map((it) => (
+                <ScheduleItem
+                  key={it.id}
+                  schedule={it}
+                  onPatch={(key, value) => onPatch(it, key, value)}
+                  onEdit={() => onUpsert(it)}
+                  onDelete={() => onDelete(it)}
+                />
+              ))
+        }
+      />
     </>
   );
 }

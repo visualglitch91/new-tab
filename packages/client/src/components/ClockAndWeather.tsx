@@ -12,6 +12,7 @@ const Root = styled(Paper)({
   textAlign: "left",
   flexDirection: "row",
   padding: 24,
+  fontWeight: "500",
 });
 
 const Time = styled("div")({
@@ -19,7 +20,7 @@ const Time = styled("div")({
   marginBottom: "0px",
   lineHeight: 1,
   margintTop: "-4px",
-  fontWeight: "500",
+  fontWeight: "400",
 });
 
 const DateTime = styled("div")({

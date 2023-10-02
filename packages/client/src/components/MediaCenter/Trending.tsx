@@ -3,26 +3,25 @@ import { useQuery } from "@tanstack/react-query";
 import { MediaItem } from "@home-control/types/media-center";
 import api from "../../utils/api";
 import MediaListCard from "./MediaListCard";
-import PillButton from "../PillButton";
 import { Input } from "@mui/joy";
 import { focusOnRef } from "../../utils/react";
-import FlexRow from "../FlexRow";
 import { alpha } from "../../utils/styles";
+import { useResponsive } from "../../utils/general";
 
 export default function Trending() {
-  const [searchMode, setSearchMode] = useState(false);
   const [term, setTerm] = useState("");
   const [delayedTerm, setDelayedTerm] = useState(term);
+  const { isMobile } = useResponsive();
 
   const {
     data = [],
     isInitialLoading,
     isLoading,
   } = useQuery(
-    searchMode
+    delayedTerm
       ? ["media-center", "search", delayedTerm]
       : ["media-center", "trending"],
-    searchMode
+    delayedTerm
       ? ({ signal }) =>
           api<MediaItem[]>(
             `/media-center/search/${delayedTerm}`,
@@ -34,10 +33,7 @@ export default function Trending() {
           api<MediaItem[]>("/media-center/trending", "get", undefined, {
             signal,
           }),
-    {
-      refetchInterval: 20_000,
-      enabled: searchMode ? !!delayedTerm : true,
-    }
+    { refetchInterval: 20_000 }
   );
 
   useEffect(() => {
@@ -45,38 +41,32 @@ export default function Trending() {
     return () => clearTimeout(timeout);
   }, [term]);
 
-  useEffect(() => {
-    setTerm("");
-    setDelayedTerm("");
-  }, [searchMode]);
+  const searchInput = (
+    <Input
+      sx={(theme) => ({
+        width: "100%",
+        backgroundColor: "rgba(47, 59, 82,0.6)",
+        boxShadow: "rgb(25, 25, 25) 3px 3px 13px -6px",
+        borderColor: alpha(theme.palette.primary[500], 0.5),
+      })}
+      size="sm"
+      placeholder="Buscar..."
+      slotProps={{ input: { ref: focusOnRef } }}
+      value={term}
+      onChange={(e) => setTerm(e.currentTarget.value)}
+    />
+  );
 
   return (
     <MediaListCard
-      title={searchMode ? "Busca" : "Populares"}
-      titleAction={
-        <FlexRow>
-          {searchMode && (
-            <Input
-              sx={(theme) => ({
-                boxShadow: "none",
-                minHeight: "26px",
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                borderColor: alpha(theme.palette.primary[500], 0.5),
-              })}
-              size="sm"
-              slotProps={{ input: { ref: focusOnRef } }}
-              value={term}
-              onChange={(e) => setTerm(e.currentTarget.value)}
-            />
-          )}
-          <PillButton
-            icon={searchMode ? "close" : "magnify"}
-            onClick={() => setSearchMode(!searchMode)}
-          />
-        </FlexRow>
-      }
+      title={term ? "Busca" : "Populares"}
+      titleChildren={isMobile ? searchInput : undefined}
       items={data}
-      loading={searchMode ? !!term && isLoading : isInitialLoading}
-    />
+      loading={delayedTerm ? isLoading : isInitialLoading}
+    >
+      {isMobile ? undefined : (
+        <div style={{ padding: "14px 12px 0" }}>{searchInput}</div>
+      )}
+    </MediaListCard>
   );
 }

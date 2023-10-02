@@ -43,7 +43,7 @@ export const TabRoot = styled(RippleButton)({
   justifyContent: "flex-start",
   cursor: "pointer",
   height: 64,
-  fontWeight: "bolder",
+  fontWeight: 600,
   transition: "all 80ms cubic-bezier(0.76, 0, 0.24, 1)",
   "& > i": { fontSize: "26px" },
   "&:hover": { background: "rgba(10, 10, 10, 0.2)" },

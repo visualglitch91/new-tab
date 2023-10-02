@@ -6,7 +6,6 @@ import clock from "../../utils/clock";
 import useMountEffect from "../../utils/useMountEffect";
 import useModal from "../../utils/useModal";
 import PillButton from "../PillButton";
-import ListCard from "../ListCard";
 import ListItem from "../ListItem";
 import NewTimerDialog from "./NewTimerDialog";
 import { formatSecondsToMinutesAndSeconds } from "../../utils/dateTime";
@@ -14,6 +13,7 @@ import FlexRow from "../FlexRow";
 import { queryClient } from "../../utils/queryClient";
 import { useResponsive } from "../../utils/general";
 import EmptyState from "../EmptyState";
+import ResponsiveCard from "../ResponsiveCard";
 
 function TimerItem({
   timer,
@@ -90,36 +90,40 @@ export default function Timers() {
   return (
     <>
       {modals}
-      <ListCard
+      <ResponsiveCard
         title="Timers"
-        titleAction={
-          <PillButton
-            icon="plus"
-            onClick={() =>
-              mount((unmount) => (
-                <NewTimerDialog
-                  defaultName={`Timer ${data.length + 1}`}
-                  onSave={onSave(unmount)}
-                  onClose={unmount}
+        // titleAction={
+        //   <PillButton
+        //     icon="plus"
+        //     onClick={() =>
+        //       mount((unmount) => (
+        //         <NewTimerDialog
+        //           defaultName={`Timer ${data.length + 1}`}
+        //           onSave={onSave(unmount)}
+        //           onClose={unmount}
+        //         />
+        //       ))
+        //     }
+        //   />
+        // }
+        groups={
+          data.length === 0
+            ? [
+                <EmptyState
+                  loading={isInitialLoading}
+                  text="Nenhum timer criado"
+                />,
+              ]
+            : data.map((it) => (
+                <TimerItem
+                  key={it.id}
+                  timer={it}
+                  onDone={refetch}
+                  onDelete={() => onDelete(it)}
                 />
               ))
-            }
-          />
         }
-      >
-        {data.length === 0 ? (
-          <EmptyState loading={isInitialLoading} text="Nenhum timer criado" />
-        ) : (
-          data.map((it) => (
-            <TimerItem
-              key={it.id}
-              timer={it}
-              onDone={refetch}
-              onDelete={() => onDelete(it)}
-            />
-          ))
-        )}
-      </ListCard>
+      />
     </>
   );
 }

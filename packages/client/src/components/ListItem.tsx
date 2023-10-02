@@ -81,6 +81,7 @@ const Label = styled("div")({
   display: "flex",
   alignItems: "center",
   columnGap: "8px",
+  fontWeight: 500,
 });
 
 const LabelContent = styled("span")({

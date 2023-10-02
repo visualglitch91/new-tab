@@ -34,7 +34,7 @@ export default function RecentlyRequested() {
 
   return (
     <MediaListCard
-      title="Últimas Requisições"
+      title="Recentes"
       items={data}
       loading={isInitialLoading}
       itemAction={(item) => <DeleteRequestButton item={item} />}

@@ -2,6 +2,7 @@ import Stack from "../components/Stack";
 import TitleCard from "../components/TitleCard";
 import TapoCamera from "../components/TapoCamera";
 import { useEntities } from "../utils/hass";
+import { useResponsive } from "../utils/general";
 
 const cameras = [
   {
@@ -36,10 +37,11 @@ export function useAvailableCameras() {
 
 export default function Cameras() {
   const availableEntityIds = useAvailableCameras();
+  const { isMobile } = useResponsive();
 
   return (
     <Stack>
-      <TitleCard title="Câmeras" />
+      <TitleCard size={isMobile ? "lg" : undefined} title="Câmeras" />
       {availableEntityIds.map((availabilityEntityId) => {
         const camera = cameras.find(
           (it) => it.availability === availabilityEntityId

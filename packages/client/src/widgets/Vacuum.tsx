@@ -2,10 +2,10 @@ import { makeServiceCall, useEntity } from "../utils/hass";
 import PillButton from "../components/PillButton";
 import ListItem from "../components/ListItem";
 import RunScriptButton from "../components/RunScriptButton";
-import Button from "../components/Button";
 import EntitiesSwitch from "../components/EntitiesSwitch";
 import FlexRow from "../components/FlexRow";
-import ComponentGroup from "../components/ComponentGroup";
+import ResponsiveCard from "../components/ResponsiveCard";
+import EntityListItem from "../components/EntityListItem";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -90,38 +90,66 @@ const booleanInputs = [
 
 export default function Vacuum() {
   return (
-    <ComponentGroup
-      layout="list"
+    <ResponsiveCard
       title="Aspirador"
-      items={[
-        {
-          label: "Status",
-          entityId: vacuumId,
-          renderListContent: (entity) => {
-            const status = entity.attributes
-              .status as keyof typeof statusLabels;
-            return statusLabels[status] || "Desconhecido";
-          },
-        },
-        {
-          label: "Bateria",
-          icon: "battery-50",
-          entityId: vacuumId,
-          renderListContent: (entity) => `${entity.attributes.battery_level}%`,
-        },
-        <VacuumActionsRow />,
-        "divider",
-        {
-          label: "Todos",
-          entityId: vacuumId,
-          renderListContent: () => (
-            <EntitiesSwitch
-              condition="every"
-              entityIds={booleanInputs.map((it) => it.entityId)}
-            />
-          ),
-        },
-        ...booleanInputs,
+      largerMobileTitle
+      groups={[
+        <>
+          <EntityListItem
+            label="Status"
+            entityId={vacuumId}
+            renderListContent={(entity) => {
+              const status = entity.attributes
+                .status as keyof typeof statusLabels;
+              return statusLabels[status] || "Desconhecido";
+            }}
+          />
+
+          <EntityListItem
+            label="Bateria"
+            icon="battery-50"
+            entityId={vacuumId}
+            renderListContent={(entity) =>
+              `${entity.attributes.battery_level}%`
+            }
+          />
+          <VacuumActionsRow />
+          <EntityListItem
+            label="Status"
+            entityId={vacuumId}
+            renderListContent={(entity) => {
+              const status = entity.attributes
+                .status as keyof typeof statusLabels;
+              return statusLabels[status] || "Desconhecido";
+            }}
+          />
+          <EntityListItem
+            label="Bateria"
+            icon="battery-50"
+            entityId={vacuumId}
+            renderListContent={(entity) =>
+              `${entity.attributes.battery_level}%`
+            }
+          />
+          <VacuumActionsRow />
+        </>,
+        <>
+          {[
+            {
+              label: "Todos",
+              entityId: vacuumId,
+              renderListContent: () => (
+                <EntitiesSwitch
+                  condition="every"
+                  entityIds={booleanInputs.map((it) => it.entityId)}
+                />
+              ),
+            },
+            ...booleanInputs,
+          ].map((props, index) => (
+            <EntityListItem {...props} key={index} />
+          ))}
+        </>,
       ]}
     />
   );

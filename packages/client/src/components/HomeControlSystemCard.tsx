@@ -24,9 +24,9 @@ export default function HomeControlSystemCard() {
   return (
     <ListCard
       title="Home Control"
-      titleAction={
-        <PillButton icon="refresh" onClick={() => clearAllCachesAndReload()} />
-      }
+      // titleAction={
+      //   <PillButton icon="refresh" onClick={() => clearAllCachesAndReload()} />
+      // }
     >
       <ListItem icon="numeric" label="Versão">
         {version}

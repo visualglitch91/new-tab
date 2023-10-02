@@ -21,6 +21,7 @@ const ButtonCard = styled(Paper.withComponent(RippleButton))(({ theme }) => ({
   tapHighlightColor: "transparent",
   boxSizing: "border-box",
   border: "1px solid transparent",
+  borderRadius: 22,
 
   "&:hover": {
     backgroundColor: alpha(theme.palette.neutral[800], 0.9),

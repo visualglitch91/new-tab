@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { makeTurnOnCall } from "../../utils/hass";
 import Stack from "../../components/Stack";
 import ButtonRow from "../../components/ButtonRow";
@@ -10,6 +11,8 @@ import { TVEntityButton } from "../../components/TVEntityButton";
 import BaseEntityButton from "../../components/BaseEntityButton";
 import useModal from "../../utils/useModal";
 import AndroidRemoteDialog from "../../components/AndroidRemoteDialog";
+import { useResponsive } from "../../utils/general";
+import StickMobileHeader from "../../components/StickMobileHeader";
 
 function spacer(height?: number) {
   return <div style={{ height: height && `${height}px` }} />;
@@ -35,9 +38,14 @@ function AndroidRemoteButton() {
 }
 
 export default function TV() {
+  const { isMobile } = useResponsive();
+  const MediaCardWrapper = isMobile ? StickMobileHeader : Fragment;
+
   return (
     <Stack smallGap>
-      <MediaCard />
+      <MediaCardWrapper>
+        <MediaCard />
+      </MediaCardWrapper>
 
       {spacer(12)}
 

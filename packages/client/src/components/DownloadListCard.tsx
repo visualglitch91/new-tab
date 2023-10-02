@@ -1,14 +1,14 @@
+import humanizeDuration from "humanize-duration";
 import { LinearProgress, Tooltip, styled } from "@mui/joy";
 import PillButton from "./PillButton";
-import Stack from "./Stack";
 import Icon from "./Icon";
 import FlexRow from "./FlexRow";
 import { formatNumericValue, useResponsive } from "../utils/general";
-import ListCard from "./ListCard";
-import RippleButton from "./RippleButton";
 import { alpha } from "../utils/styles";
-import humanizeDuration from "humanize-duration";
+import RippleButton from "./RippleButton";
+import { borderRadius } from "./Paper";
 import EmptyState from "./EmptyState";
+import ResponsiveCard from "./ResponsiveCard";
 
 const ItemCard = styled(RippleButton)(({ theme }) => ({
   padding: 16,
@@ -17,7 +17,7 @@ const ItemCard = styled(RippleButton)(({ theme }) => ({
   textAlign: "left",
   background: "transparent",
   border: "none",
-  borderTop: `1px solid ${alpha(theme.palette.primary[400], 0.3)}`,
+  [theme.breakpoints.down("sm")]: { borderRadius },
   "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
 }));
 
@@ -82,6 +82,7 @@ export interface DownloadItem {
 
 export default function DownloadListCard({
   title,
+  stickyMobileTitle,
   downloads,
   loading,
   children,
@@ -90,6 +91,7 @@ export default function DownloadListCard({
 }: {
   title: string;
   downloads: DownloadItem[];
+  stickyMobileTitle?: boolean;
   loading?: boolean;
   children?: React.ReactNode;
   onAdd: () => void;
@@ -98,59 +100,64 @@ export default function DownloadListCard({
   const { isMobile } = useResponsive();
 
   return (
-    <Stack>
-      <ListCard
-        gap={0}
-        title={title}
-        titleAction={<PillButton icon="mdi:plus" onClick={onAdd} />}
-      >
-        {children}
-        {downloads.length === 0 ? (
-          <EmptyState loading={loading} text="Nenhum download adicionado" />
-        ) : (
-          downloads.map((it) => (
-            <Tooltip key={it.id} title={it.name}>
-              <ItemCard onClick={() => onItemClick(it)}>
-                <ItemContent>
-                  <Header>
-                    <Icon
-                      size={16}
-                      icon={
-                        it.completed
-                          ? "mdi-check"
-                          : it.status === "seeding"
-                          ? "mdi-arrow-up"
-                          : it.active
-                          ? "mdi-arrow-down"
-                          : "mdi-pause"
-                      }
+    <ResponsiveCard
+      spacing={0}
+      title={title}
+      variant="compact"
+      stickyMobileTitle={stickyMobileTitle}
+      // titleChildren={<PillButton icon="mdi:plus" onClick={onAdd} />}
+      groups={[
+        <>{children}</>,
+        ...(downloads.length === 0
+          ? [
+              <EmptyState
+                sx={{ pt: "18px" }}
+                loading={loading}
+                text="Nenhum download adicionado"
+              />,
+            ]
+          : downloads.map((it) => (
+              <Tooltip key={it.id} title={it.name}>
+                <ItemCard onClick={() => onItemClick(it)}>
+                  <ItemContent>
+                    <Header>
+                      <Icon
+                        size={16}
+                        icon={
+                          it.completed
+                            ? "mdi-check"
+                            : it.status === "seeding"
+                            ? "mdi-arrow-up"
+                            : it.active
+                            ? "mdi-arrow-down"
+                            : "mdi-pause"
+                        }
+                      />
+                      <Name>{it.name}</Name>
+                    </Header>
+                    <LinearProgress
+                      determinate
+                      variant="outlined"
+                      thickness={isMobile ? 6 : 7}
+                      value={it.percentDone}
+                      sx={{ width: "100%" }}
                     />
-                    <Name>{it.name}</Name>
-                  </Header>
-                  <LinearProgress
-                    determinate
-                    variant="outlined"
-                    thickness={isMobile ? 6 : 7}
-                    value={it.percentDone}
-                    sx={{ width: "100%" }}
-                  />
-                  <Details>
-                    <span>{STATUS_LABELS[it.status]}</span>
-                    <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                    <span>
-                      {it.eta &&
-                        humanizeDuration(it.eta, {
-                          round: true,
-                          language: "pt",
-                        })}
-                    </span>
-                  </Details>
-                </ItemContent>
-              </ItemCard>
-            </Tooltip>
-          ))
-        )}
-      </ListCard>
-    </Stack>
+                    <Details>
+                      <span>{STATUS_LABELS[it.status]}</span>
+                      <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
+                      <span>
+                        {it.eta &&
+                          humanizeDuration(it.eta, {
+                            round: true,
+                            language: "pt",
+                          })}
+                      </span>
+                    </Details>
+                  </ItemContent>
+                </ItemCard>
+              </Tooltip>
+            ))),
+      ]}
+    />
   );
 }

@@ -1,11 +1,12 @@
 import { ButtonGroup, styled } from "@mui/joy";
 import { Schedule } from "@home-control/types/hass-scheduler";
 import { alpha } from "../../utils/styles";
-import DaysRow from "./DaysRow";
-import PillButton from "../PillButton";
-import FlexRow from "../FlexRow";
 import { useResponsive } from "../../utils/general";
 import { useMenu } from "../../utils/useMenu";
+import PillButton from "../PillButton";
+import { borderRadius } from "../Paper";
+import FlexRow from "../FlexRow";
+import DaysRow from "./DaysRow";
 import { formatTime } from "./utils";
 
 const Root = styled("div")(({ theme }) => ({
@@ -13,7 +14,7 @@ const Root = styled("div")(({ theme }) => ({
   width: "100%",
   boxSizing: "border-box",
   fontSize: 14,
-  borderTop: `1px solid ${alpha(theme.palette.primary[400], 0.3)}`,
+  [theme.breakpoints.down("sm")]: { borderRadius },
   "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
 }));
 

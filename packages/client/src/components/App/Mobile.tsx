@@ -7,9 +7,9 @@ import Home from "../../widgets/Home";
 import Vacuum from "../../widgets/Vacuum";
 import Cameras from "../../widgets/Cameras";
 import Klipper from "../../widgets/Klipper";
-import System from "../../widgets/Batteries";
+import Batteries from "../../widgets/Batteries";
+import Server from "../../widgets/Server";
 import Torrents from "../../widgets/Torrents";
-import Ombi from "../../widgets/Ombi";
 import PackageTracker from "../../widgets/PackageTracker";
 import JDownloader from "../../widgets/JDownloader";
 import FileManager from "../../widgets/FileManager";
@@ -18,6 +18,11 @@ import HACSUpdates from "../HACSUpdates";
 import AppManager from "../../widgets/AppManager";
 import Timers from "../Timers";
 import Schedules from "../Schedules";
+import MultipleResponsiveCard from "../ResponsiveCard/MulitpleResponsiveCard";
+import RecentlyRequested from "../MediaCenter/RecentlyRequested";
+import Trending from "../MediaCenter/Trending";
+import StickMobileHeader from "../StickMobileHeader";
+import TitleCard from "../TitleCard";
 
 export default function MobileApp({
   isAdmin,
@@ -34,14 +39,18 @@ export default function MobileApp({
         {
           key: "tv",
           title: "TV",
-          icon: "mdi:television-classic",
+          icon: "mdi:television",
           content: <TV />,
         },
         {
           key: "house",
           title: "Casa",
           icon: "mdi:home",
-          content: <Home />,
+          content: (
+            <Stack largeGap>
+              <Home />
+            </Stack>
+          ),
         },
         isAdmin && {
           key: "vacuum",
@@ -62,24 +71,37 @@ export default function MobileApp({
               {
                 key: "timers",
                 title: "Timers",
-                icon: "mdi:clock",
+                icon: "mdi:clock-outline",
                 content: (
-                  <Stack>
-                    <Timers />
-                    <Schedules />
-                  </Stack>
+                  <MultipleResponsiveCard
+                    stickyMobileTitle
+                    largerMobileTitle
+                    views={{
+                      timers: ["Timers", <Timers />],
+                      schedules: ["Agendamentos", <Schedules />],
+                    }}
+                  />
                 ),
               },
               {
-                key: "ombi",
-                title: "Ombi",
+                key: "media-center",
+                title: "Media Center",
                 icon: "mdi:movie-open-outline",
-                content: <Ombi />,
+                content: (
+                  <MultipleResponsiveCard
+                    stickyMobileTitle
+                    largerMobileTitle
+                    views={{
+                      recentlyRequested: ["Recentes", <RecentlyRequested />],
+                      rrending: ["Populares", <Trending />],
+                    }}
+                  />
+                ),
               },
               camerasOn && {
                 key: "cameras",
                 title: "Câmeras",
-                icon: "mdi:cctv",
+                icon: "mdi:webcam",
                 content: <Cameras />,
               },
               printerOn && {
@@ -89,31 +111,33 @@ export default function MobileApp({
                 content: <Klipper />,
               },
               {
-                key: "torrents",
-                title: "Torrents",
-                icon: "mdi:download",
-                content: <Torrents />,
-              },
-              {
-                key: "jdownloader",
-                title: "JDownloader",
-                icon: "mdi:download",
-                content: <JDownloader />,
-              },
-              {
                 key: "downloads",
                 title: "Downloads",
-                icon: "mdi:folder-multiple",
-                content: <FileManager />,
+                icon: "mdi:download-outline",
+                content: (
+                  <MultipleResponsiveCard
+                    stickyMobileTitle
+                    largerMobileTitle
+                    views={{
+                      torrets: ["Torrents", <Torrents />],
+                      jDownloader: ["JDownloader", <JDownloader />],
+                      fileManager: ["Downloads", <FileManager />],
+                    }}
+                  />
+                ),
               },
               {
                 key: "system",
                 title: "Sistema",
                 icon: "mdi:cpu-64-bit",
                 content: (
-                  <Stack>
+                  <Stack largeGap>
+                    <StickMobileHeader>
+                      <TitleCard size="lg" title="Sistema" />
+                    </StickMobileHeader>
                     <HomeControlSystemCard />
-                    <System />
+                    <Server />
+                    <Batteries />
                     <HACSUpdates />
                     <AppManager />
                   </Stack>

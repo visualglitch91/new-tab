@@ -9,16 +9,17 @@ import Home from "../../widgets/Home";
 import Vacuum from "../../widgets/Vacuum";
 import Cameras from "../../widgets/Cameras";
 import Klipper from "../../widgets/Klipper";
-import System from "../../widgets/System";
+import System from "../../widgets/Server";
 import Batteries from "../../widgets/Batteries";
 import Torrents from "../../widgets/Torrents";
 import DesktopDashboard from "../../widgets/DesktopDashboard";
-import Ombi from "../../widgets/Ombi";
 import JDownloader from "../../widgets/JDownloader";
 import FileManager from "../../widgets/FileManager";
 import HACSUpdates from "../HACSUpdates";
 import HomeControlSystemCard from "../HomeControlSystemCard";
 import AppManager from "../../widgets/AppManager";
+import RecentlyRequested from "../MediaCenter/RecentlyRequested";
+import Trending from "../MediaCenter/Trending";
 
 export default function DesktopApp({
   isAdmin,
@@ -43,17 +44,17 @@ export default function DesktopApp({
           key: "media",
           title: "Media",
           icon: "mdi:movie-open-outline",
-          content: [<TV />, <Ombi />],
+          content: [<TV />, <RecentlyRequested />, <Trending />],
         },
         {
           key: "house",
           title: "Casa",
           icon: "mdi:home",
           content: [
-            <Stack>
+            <Stack sx={{ gap: "34px" }}>
               <Home slice={[0, 3]} />
             </Stack>,
-            <Stack>
+            <Stack sx={{ gap: "34px" }}>
               <Home slice={[3]} />
             </Stack>,
             isAdmin && camerasOn && <Cameras />,

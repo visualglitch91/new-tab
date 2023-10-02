@@ -102,35 +102,35 @@ export default function Klipper() {
       {$confirm}
       <TitleCard
         title="Impressora 3D"
-        action={
-          isPrinting ? (
-            <PillButton
-              icon="mdi:stop"
-              label="Parar"
-              onClick={() => {
-                confirm({
-                  title: "Parar Impressão",
-                  onConfirm: makeServiceCall("button", "turn_on", {
-                    entity_id: "button.impressora_3d_macro_abort_print",
-                  }),
-                });
-              }}
-            />
-          ) : (
-            <PillButton
-              icon="mdi:power"
-              label="Desligar"
-              onClick={() => {
-                confirm({
-                  title: "Desligar Impressora",
-                  onConfirm: makeServiceCall("switch", "turn_off", {
-                    entity_id: "switch.impressora_3d_servidor",
-                  }),
-                });
-              }}
-            />
-          )
-        }
+        // action={
+        //   isPrinting ? (
+        //     <PillButton
+        //       icon="mdi:stop"
+        //       label="Parar"
+        //       onClick={() => {
+        //         confirm({
+        //           title: "Parar Impressão",
+        //           onConfirm: makeServiceCall("button", "turn_on", {
+        //             entity_id: "button.impressora_3d_macro_abort_print",
+        //           }),
+        //         });
+        //       }}
+        //     />
+        //   ) : (
+        //     <PillButton
+        //       icon="mdi:power"
+        //       label="Desligar"
+        //       onClick={() => {
+        //         confirm({
+        //           title: "Desligar Impressora",
+        //           onConfirm: makeServiceCall("switch", "turn_off", {
+        //             entity_id: "switch.impressora_3d_servidor",
+        //           }),
+        //         });
+        //       }}
+        //     />
+        //   )
+        // }
       />
       <CameraWrapper>
         <CameraStream entityId="camera.impressora_3d" aspectRatio={4 / 3} />

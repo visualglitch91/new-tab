@@ -1,6 +1,11 @@
 import { TVEntityButton } from "../components/TVEntityButton";
 import { ComponentGroupProps } from "../utils/typings";
 import ComponentGroup from "../components/ComponentGroup";
+import { useResponsive } from "../utils/general";
+import StickMobileHeader from "../components/StickMobileHeader";
+import TitleCard from "../components/TitleCard";
+import EntityButton from "../components/EntityButton";
+import GridCard from "../components/GridCard";
 
 const groups: ComponentGroupProps[] = [
   {
@@ -111,8 +116,39 @@ const groups: ComponentGroupProps[] = [
 ];
 
 export default function Home({ slice = [] }: { slice?: number[] }) {
+  const { isMobile } = useResponsive();
+
   return (
     <>
+      {isMobile && (
+        <>
+          <StickMobileHeader>
+            <TitleCard size="lg" title="Casa" />
+          </StickMobileHeader>
+          <GridCard>
+            {[
+              {
+                entityId: "switch.mesa_jantar_luz",
+                label: "Luz da Mesa",
+              },
+              {
+                entityId: "light.sala_luz",
+                label: "Luz da Sala",
+              },
+              {
+                entityId: "switch.escritorio_luz",
+                label: "Luz do\nEscritório",
+              },
+              {
+                entityId: "light.quarto_luz",
+                label: "Luz do Quarto",
+              },
+            ].map((it) => (
+              <EntityButton key={it.entityId} {...it} />
+            ))}
+          </GridCard>
+        </>
+      )}
       {groups.slice(...slice).map((props, index) => (
         <ComponentGroup key={index} {...props} />
       ))}

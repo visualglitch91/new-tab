@@ -20,7 +20,7 @@ const globalStyles = (
     styles={(theme) => ({
       body: {
         backgroundSize: "cover",
-        fontFamily: "Raleway",
+        fontFamily: "San Francisco",
         color: "white",
         [theme.breakpoints.down("md")]: {
           backgroundImage: `url(${theme.wallpaper.mobile})`,

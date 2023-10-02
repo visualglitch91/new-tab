@@ -43,14 +43,14 @@ export default function DesktopDashboard() {
 
   if (sm) {
     return (
-      <Stack>
-        <Stack horizontal>
+      <Stack largeGap>
+        <Stack horizontal largeGap>
           {clock}
           <Forecast days={3} />
         </Stack>
-        <Stack horizontal>
+        <Stack horizontal largeGap>
           {habits}
-          <Stack>
+          <Stack largeGap>
             {next}
             {unscheduled}
             {mediaCard}
@@ -63,8 +63,9 @@ export default function DesktopDashboard() {
   }
 
   return (
-    <Stack horizontal>
+    <Stack horizontal largeGap>
       <Stack
+        largeGap
         sx={{
           minWidth: "33%",
           maxWidth: "33%",
@@ -75,10 +76,10 @@ export default function DesktopDashboard() {
         {habits}
         {packageTracker}
       </Stack>
-      <Stack sx={{ width: "67%" }}>
+      <Stack sx={{ width: "67%" }} largeGap>
         <Forecast days={5} />
         {links}
-        <Stack horizontal>
+        <Stack horizontal largeGap>
           {next}
           {unscheduled}
         </Stack>

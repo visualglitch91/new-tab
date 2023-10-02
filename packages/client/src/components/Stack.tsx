@@ -6,7 +6,7 @@ import BaseDiv from "./BaseDiv";
 const styles = {
   wrapper: {
     display: "flex",
-    gridGap: "16px",
+    gap: "16px",
   },
   horizontal: {
     flexDirection: "row",
@@ -14,8 +14,8 @@ const styles = {
     "& > *": { flex: 1 },
   },
   vertical: { flexDirection: "column" },
-  smallGap: { gridGap: "8px" },
-  largeGap: { gridGap: "24px" },
+  smallGap: { gap: "8px" },
+  largeGap: { gap: "32px" },
 };
 
 const Stack = forwardRef(function Stack(
