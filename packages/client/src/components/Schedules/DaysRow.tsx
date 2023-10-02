@@ -1,6 +1,7 @@
 import { Button, ToggleButtonGroup } from "@mui/joy";
 import { Schedule } from "@home-control/types/hass-scheduler";
 import { useResponsive } from "../../utils/general";
+import { alpha } from "../../utils/styles";
 
 const days = [
   { value: "sunday", label: "Dom" },
@@ -15,11 +16,7 @@ const days = [
 export default function DaysRow({
   value,
   onChange,
-  ...props
-}: Omit<
-  React.ComponentProps<typeof ToggleButtonGroup>,
-  "value" | "onChange"
-> & {
+}: {
   value: Schedule["days"];
   onChange: (value: Schedule["days"]) => void;
 }) {
@@ -30,7 +27,20 @@ export default function DaysRow({
       size="sm"
       color="primary"
       variant="outlined"
-      {...props}
+      spacing="0.5rem"
+      buttonFlex={1}
+      sx={(theme) => ({
+        "& .MuiButton-root": {
+          fontSize: "13px",
+          paddingInline: 0,
+          '&[aria-pressed="true"]': {
+            backgroundColor: alpha(theme.palette.primary[700], 0.7),
+          },
+          '&[aria-pressed="true"]:hover': {
+            backgroundColor: alpha(theme.palette.primary[700], 0.9),
+          },
+        },
+      })}
       value={Object.keys(value)}
       onChange={
         onChange

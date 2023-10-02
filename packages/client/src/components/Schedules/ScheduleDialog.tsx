@@ -68,7 +68,7 @@ export default function NewScheduleDialog({
             </InputMask>
           </FormControl>
         </FlexRow>
-        <DaysRow buttonFlex={1} value={days} onChange={setDays} />
+        <DaysRow value={days} onChange={setDays} />
         <ActionsForm value={actions} onChange={setActions} />
         <BorderButton
           primary

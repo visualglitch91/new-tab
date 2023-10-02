@@ -163,8 +163,13 @@ export default createAppModule("media-center", (instance) => {
     const baseURL =
       req.params.type === "movie" ? config.radarr.url : config.sonarr.url;
 
-    axios
-      .get(`${baseURL}${req.query.path}`, { responseType: "stream" })
-      .then((response) => response.data.pipe(res));
+    try {
+      axios
+        .get(`${baseURL}${req.query.path}`, { responseType: "stream" })
+        .then((response) => response.data.pipe(res))
+        .catch(req.log.error);
+    } catch (error) {
+      req.log.error(error);
+    }
   });
 });
