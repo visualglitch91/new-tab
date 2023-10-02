@@ -1,4 +1,4 @@
-import { OmbiMedia } from "@home-control/types/ombi";
+import { MediaItem as IMediaItem } from "@home-control/types/media-center";
 import ListCard from "../ListCard";
 import { useResponsive } from "../../utils/general";
 import MediaItem from "./MediaItem";
@@ -14,8 +14,8 @@ export default function MediaListCard({
 }: {
   title: string;
   titleAction?: React.ReactNode;
-  itemAction?: (item: OmbiMedia) => React.ReactNode;
-  items: OmbiMedia[];
+  itemAction?: (item: IMediaItem) => React.ReactNode;
+  items: IMediaItem[];
   loading?: boolean;
   children?: React.ReactNode;
 }) {
@@ -24,7 +24,7 @@ export default function MediaListCard({
   return (
     <ListCard title={title} titleAction={titleAction}>
       {children}
-      <div style={isDesktop ? { height: "460px", overflow: "auto" } : {}}>
+      <div style={isDesktop ? { height: "582px", overflow: "auto" } : {}}>
         {items.length === 0 ? (
           <EmptyState
             sx={{ height: "100%" }}
@@ -34,7 +34,7 @@ export default function MediaListCard({
         ) : (
           items.map((item) => (
             <MediaItem
-              key={item.tmdbId}
+              key={`${item.type}_${item.mediaId}`}
               item={item}
               itemAction={itemAction?.(item)}
             />

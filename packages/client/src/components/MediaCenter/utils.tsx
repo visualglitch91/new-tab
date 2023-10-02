@@ -3,17 +3,15 @@ import { RGB } from "../../utils/general";
 export const STATUS_COLORS = {
   available: [56, 142, 60],
   partially: [0, 151, 167],
-  approved: [2, 119, 189],
-  denied: [198, 40, 40],
-  pending: [255, 143, 0],
+  monitored: [2, 119, 189],
+  "not-monitored": [198, 40, 40],
 } as Record<string, RGB>;
 
 export const STATUS_LABELS = {
   available: "Disponível",
   partially: "Parcial",
-  approved: "Aprovado",
-  denied: "Negado",
-  pending: "Pendente",
+  monitored: "Pendente",
+  "not-monitored": "Não Requisitado",
 };
 
 export const TYPE_LABEL = {

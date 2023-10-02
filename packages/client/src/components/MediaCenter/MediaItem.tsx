@@ -1,6 +1,9 @@
 import { styled, Chip, Tooltip } from "@mui/joy";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { OmbiMedia, QualityProfile } from "@home-control/types/ombi";
+import {
+  MediaItem as IMediaItem,
+  QualityProfile,
+} from "@home-control/types/media-center";
 import ListItem from "../ListItem";
 import { getContrastColor } from "../../utils/general";
 import { STATUS_COLORS, STATUS_LABELS, TYPE_LABEL } from "./utils";
@@ -10,15 +13,7 @@ import { useMenu } from "../../utils/useMenu";
 import DotLoading from "../DotLoading";
 import { queryClient } from "../../utils/queryClient";
 import FlexRow from "../FlexRow";
-
-const Poster = styled("img")(({ theme }) => ({
-  width: 42,
-  height: 48,
-  objectFit: "cover",
-  borderRadius: 6,
-  backgroundColor: theme.palette.background.body,
-  flexShrink: 0,
-}));
+import MediaPoster from "./MediaPoster";
 
 const Label = styled("div")({
   display: "flex",
@@ -36,22 +31,24 @@ export default function MediaItem({
   item,
   itemAction,
 }: {
-  item: OmbiMedia;
+  item: IMediaItem;
   itemAction?: React.ReactNode;
 }) {
   const [showMenu, menu] = useMenu();
 
   const { data: qualityProfiles } = useQuery<
-    Record<OmbiMedia["type"], QualityProfile[]>
-  >(["ombi", "quality-profiles"], () => api("/ombi/quality-profiles", "get"));
+    Record<IMediaItem["type"], QualityProfile[]>
+  >(["media-center", "quality-profiles"], () =>
+    api("/media-center/quality-profiles", "get")
+  );
 
   const requestMedia = useMutation(
     (body: {
-      tmdbId: string;
-      type: OmbiMedia["type"];
+      mediaId: string;
+      type: IMediaItem["type"];
       qualityProfile: string;
-    }) => api("/ombi/request", "post", body),
-    { onSuccess: () => queryClient.refetchQueries(["ombi"]) }
+    }) => api("/media-center/request", "post", body),
+    { onSuccess: () => queryClient.refetchQueries(["media-center"]) }
   );
 
   function request() {
@@ -64,7 +61,7 @@ export default function MediaItem({
       onSelect: (profile) =>
         requestMedia.mutate({
           type: item.type,
-          tmdbId: item.tmdbId,
+          mediaId: item.mediaId,
           qualityProfile: profile,
         }),
     });
@@ -73,11 +70,11 @@ export default function MediaItem({
   return (
     <>
       {menu}
-      <Tooltip key={item.tmdbId} title={item.title}>
+      <Tooltip title={item.title}>
         <span>
           <ListItem
             sx={{ py: "6px" }}
-            icon={item.poster ? <Poster src={item.poster} /> : undefined}
+            icon={<MediaPoster item={item} />}
             label={
               <Label>
                 <span>{item.title}</span>
@@ -88,17 +85,17 @@ export default function MediaItem({
             }
           >
             <FlexRow>
-              {item.request ? (
+              {item.status !== "not-monitored" ? (
                 <Chip
                   size="sm"
                   sx={{
-                    color: getContrastColor(STATUS_COLORS[item.request.status]),
-                    backgroundColor: `rgb(${STATUS_COLORS[
-                      item.request!.status
-                    ].join(",")})`,
+                    color: getContrastColor(STATUS_COLORS[item.status]),
+                    backgroundColor: `rgb(${STATUS_COLORS[item.status].join(
+                      ","
+                    )})`,
                   }}
                 >
-                  {STATUS_LABELS[item.request!.status]}
+                  {STATUS_LABELS[item.status]}
                 </Chip>
               ) : (
                 qualityProfiles &&

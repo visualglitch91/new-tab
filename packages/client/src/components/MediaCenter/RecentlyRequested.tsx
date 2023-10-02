@@ -1,15 +1,15 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { OmbiMedia } from "@home-control/types/ombi";
+import { MediaItem } from "@home-control/types/media-center";
 import { queryClient } from "../../utils/queryClient";
 import api from "../../utils/api";
 import PillButton from "../PillButton";
 import MediaListCard from "./MediaListCard";
 import DotLoading from "../DotLoading";
 
-function DeleteRequestButton({ item }: { item: OmbiMedia }) {
+function DeleteRequestButton({ item }: { item: MediaItem }) {
   const deleteRequest = useMutation(
-    () => api(`/ombi/${item.type}/request/${item.tmdbId}`, "delete"),
-    { onSuccess: () => queryClient.refetchQueries(["ombi"]) }
+    () => api(`/media-center/${item.type}/request/${item.itemId!}`, "delete"),
+    { onSuccess: () => queryClient.refetchQueries(["media-center"]) }
   );
 
   if (deleteRequest.isLoading) {
@@ -27,8 +27,8 @@ function DeleteRequestButton({ item }: { item: OmbiMedia }) {
 
 export default function RecentlyRequested() {
   const { data = [], isInitialLoading } = useQuery(
-    ["ombi", "recently-requested"],
-    () => api<OmbiMedia[]>("/ombi/recently-requested", "get"),
+    ["media-center", "recently-requested"],
+    () => api<MediaItem[]>("/media-center/recently-requested", "get"),
     { refetchInterval: 20_000 }
   );
 

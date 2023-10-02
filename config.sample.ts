@@ -30,10 +30,18 @@ export const config = {
     project_ids: "",
   },
 
-  ombi: {
+  tmdb: {
+    key: "",
+  },
+
+  sonarr: {
     url: "",
     key: "",
-    fanarttv_key: "",
+  },
+
+  radarr: {
+    url: "",
+    key: "",
   },
 
   matrix: {

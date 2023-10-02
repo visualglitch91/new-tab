@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { ReactNode, createContext, useContext, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import { getAccessToken } from "./hass";
@@ -8,11 +8,11 @@ export default function api<T = any>(
   path: string,
   method: string,
   body?: any,
-  signal?: AbortController["signal"]
+  options?: AxiosRequestConfig
 ): Promise<T> {
   return axios(`/api${path}`, {
+    ...options,
     method,
-    signal,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getAccessToken()}`,

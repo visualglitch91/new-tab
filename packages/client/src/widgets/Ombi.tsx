@@ -1,5 +1,5 @@
-import RecentlyRequested from "../components/ombi/RecentlyRequested";
-import Trending from "../components/ombi/Trending";
+import RecentlyRequested from "../components/MediaCenter/RecentlyRequested";
+import Trending from "../components/MediaCenter/Trending";
 
 export default function Ombi() {
   return (
