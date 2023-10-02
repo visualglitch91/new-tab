@@ -48,6 +48,21 @@ export default createAppModule("hass-scheduler", (instance) => {
   });
 
   instance.delete<{
+    Query: { name: string };
+  }>("/timers", async (req) => {
+    const ids = Object.values(timers)
+      .map((timer) => timer.toJSON())
+      .filter((it) => it.name === req.query.name)
+      .map((it) => it.id);
+
+    if (ids.length) {
+      ids.forEach(deleteTimer);
+    }
+
+    return { deleted: true };
+  });
+
+  instance.delete<{
     Params: { id: string };
   }>("/timers/:id", async (req) => {
     deleteTimer(req.params.id);

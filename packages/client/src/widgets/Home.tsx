@@ -42,6 +42,7 @@ const groups: ComponentGroupProps[] = [
     layout: "grid",
     items: [
       { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
+      "switch.cozinha_cafeteira",
       { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
       { entityId: "switch.lavanderia_banheiro", label: "Luz do\nBanheiro" },
     ],

@@ -25,6 +25,7 @@ export default class Timer {
       callback();
     }, ms);
   }
+
   isRunning() {
     return this.timeout !== null;
   }

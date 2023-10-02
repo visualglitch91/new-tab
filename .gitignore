@@ -23,5 +23,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-src/client/version.json
+packages/client/src/version.json
 config.ts
