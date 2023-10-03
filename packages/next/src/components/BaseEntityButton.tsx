@@ -4,7 +4,7 @@ import useAsyncChange from "../utils/useAsyncChange";
 import { cx } from "../utils/styling";
 import Icon from "./Icon";
 import HugeButton from "./HugeButton";
-import useLongPress from "../utils/useLongPress";
+import { useLongPress } from "@uidotdev/usehooks";
 
 const classes = {
   wrapperActive: "BaseEntityButton--Active",
@@ -69,7 +69,7 @@ export default function BaseEntityButton({
   changeTimeout = 0,
   confirmBefore,
   onClick,
-  onLongPress,
+  onLongPress = () => {},
   onHold,
   ...props
 }: BaseEntityButtonProps) {
@@ -80,25 +80,22 @@ export default function BaseEntityButton({
     timeout: changeTimeout,
   });
 
-  const buttonProps = useLongPress({
-    onClick: () => {
-      (confirmBefore
-        ? confirm({ title: "Continuar?" })
-        : Promise.resolve()
-      ).then(() => {
-        if (change() && onClick) {
-          onClick();
-        }
-      });
-    },
-    onLongPress,
-    onHold,
-  });
+  const buttonProps = useLongPress(onLongPress);
 
   return (
     <Wrapper
       {...props}
       {...buttonProps}
+      onClick={() => {
+        (confirmBefore
+          ? confirm({ title: "Continuar?" })
+          : Promise.resolve()
+        ).then(() => {
+          if (change() && onClick) {
+            onClick();
+          }
+        });
+      }}
       sx={sx}
       disabled={disabled}
       className={cx(

@@ -4,10 +4,10 @@ const PageTile = styled("h1")({
   fontSize: 42,
   fontWeight: 600,
   margin: 0,
-  transition: "font-size 70ms linear",
+  transition: "font-size 200ms var(--tween)",
   willChange: "fontSize",
   transform: "translate3d(0px, 0px, 0px)",
-  '[data-elevate="true"] &': {
+  '[data-shrink="true"] &': {
     fontSize: 24,
   },
 });

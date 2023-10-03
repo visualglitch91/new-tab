@@ -4,7 +4,7 @@ export const borderRadius = "16px";
 
 const ButtonCard = styled(ButtonBase)(({ theme }) => ({
   overflow: "hidden",
-  transition: "all 100ms cubic-bezier(0.76, 0, 0.24, 1)",
+  transition: "all 100ms var(--tween)",
   height: "100%",
   margin: 0,
   padding: "6px",

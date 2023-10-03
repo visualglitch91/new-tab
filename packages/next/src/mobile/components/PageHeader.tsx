@@ -3,8 +3,9 @@ import Icon from "../../components/Icon";
 import AltIconButton from "../../components/AltIconButton";
 
 const ElevatedHeader = styled("div")({
-  position: "sticky",
+  position: "fixed",
   top: 0,
+  width: "100%",
   zIndex: 10,
   "&:after": {
     zIndex: 1,
@@ -28,6 +29,11 @@ const ElevatedHeader = styled("div")({
   '&[data-elevate="true"]:after': { opacity: 1 },
 });
 
+const Ghost = styled("div")({
+  opacity: 0,
+  pointerEvents: "none",
+});
+
 const Root = styled("div")({
   zIndex: 2,
   position: "relative",
@@ -35,21 +41,29 @@ const Root = styled("div")({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-  transition: "align-items 100ms linear",
-  '[data-elevate="true"] &': {
-    alignItems: "center",
+  "& > span": {
+    transition: "transform 200ms var(--tween)",
+    position: "relative",
+  },
+  '[data-shrink="true"] & > span': {
+    transform: "translateX(48px)",
   },
 });
 
 const Buttons = styled("div")({
+  position: "absolute",
   width: "100%",
-  position: "relative",
   display: "flex",
   padding: "16px 16px 0",
   gap: 6,
   zIndex: 3,
-  '[data-elevate="true"] &': {
-    position: "absolute",
+});
+
+const ButtonsGhost = styled("div")({
+  height: 32,
+  transition: "height 200ms var(--tween)",
+  '[data-shrink="true"] &': {
+    height: 0,
   },
 });
 
@@ -60,24 +74,41 @@ export default function PageHeader({
   items?: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const trigger = useScrollTrigger({
+  const elevate = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 0,
+    threshold: 30,
+  });
+
+  const shrink = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 140,
   });
 
   function toggleAppDrawer() {
     window.dispatchEvent(new Event("toggle-app-drawer"));
   }
 
-  return (
-    <ElevatedHeader data-elevate={trigger}>
+  const content = (
+    <>
       <Buttons>
         <AltIconButton sx={{ marginRight: "auto" }} onClick={toggleAppDrawer}>
           <Icon icon="menu" size={20} />
         </AltIconButton>
         {items}
       </Buttons>
-      <Root>{children}</Root>
-    </ElevatedHeader>
+      <ButtonsGhost />
+      <Root>
+        <span>{children}</span>
+      </Root>
+    </>
+  );
+
+  return (
+    <>
+      <ElevatedHeader data-elevate={elevate} data-shrink={shrink}>
+        {content}
+      </ElevatedHeader>
+      <Ghost>{content}</Ghost>
+    </>
   );
 }
