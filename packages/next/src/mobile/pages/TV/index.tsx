@@ -1,17 +1,21 @@
+import { Box } from "@mui/material";
+import TV from "../../../components/TV";
 import PageLayout from "../../components/PageLayout";
-import PageTile from "../../components/PageTitle";
+import MediaCard from "../../../components/MediaCard";
 
-export default function TV() {
+export default function TVPage() {
   return (
-    <PageLayout header={<PageTile>TV</PageTile>}>
-      {[...new Array(24)]
-        .map(
-          () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-        )
-        .join("\n")}
+    <PageLayout
+      disableShrinkingHeader
+      header={
+        <Box mt="16px">
+          <MediaCard />
+        </Box>
+      }
+    >
+      <Box mt="8px">
+        <TV noMediCard />
+      </Box>
     </PageLayout>
   );
 }

@@ -43,6 +43,7 @@ const Root = styled("div")({
   alignItems: "flex-start",
   "& > span": {
     marginTop: 8,
+    width: "100%",
     transition: "transform 200ms var(--tween), margin 200ms var(--tween)",
     position: "relative",
   },
@@ -72,9 +73,11 @@ const ButtonsGhost = styled("div")({
 export default function PageHeader({
   items,
   children,
+  disableShrinking,
 }: {
   items?: React.ReactNode;
   children: React.ReactNode;
+  disableShrinking?: boolean;
 }) {
   const elevate = useScrollTrigger({
     disableHysteresis: true,
@@ -107,7 +110,10 @@ export default function PageHeader({
 
   return (
     <>
-      <ElevatedHeader data-elevate={elevate} data-shrink={shrink}>
+      <ElevatedHeader
+        data-elevate={elevate}
+        data-shrink={!disableShrinking && shrink}
+      >
         {content}
       </ElevatedHeader>
       <Ghost>{content}</Ghost>
