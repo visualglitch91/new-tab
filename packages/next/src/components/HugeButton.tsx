@@ -21,7 +21,11 @@ const ButtonCard = styled(ButtonBase)(({ theme }) => ({
   borderRadius: 22,
   flexDirection: "column",
   backgroundColor: "rgba(28, 34, 48,0.5)",
-  boxShadow: "rgb(25, 25, 25) 3px 3px 13px -6px",
+  boxShadow: `
+    0px 3px 1px -2px rgba(0,0,0,0.2),
+    0px 2px 2px 0px rgba(0,0,0,0.14),
+    0px 1px 5px 0px rgba(0,0,0,0.12)
+  `,
 
   "&:hover": {
     backgroundColor: alpha(theme.palette.grey[800], 0.9),

@@ -1,8 +1,23 @@
-import { SxProps } from "@mui/material";
 import EntityButton, { EntityButtonProps } from "./EntityButton";
 import GridSection from "./GridSection";
 
-const groups: { title: string; items: EntityButtonProps[] }[] = [
+const groups: {
+  title?: string;
+  horizontal?: boolean;
+  items: EntityButtonProps[];
+}[] = [
+  {
+    horizontal: true,
+    items: [
+      { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
+      { entityId: "light.sala_luz", label: "Luz da Sala" },
+      { entityId: "switch.escritorio_luz", label: "Luz do\nEscritório" },
+      { entityId: "light.quarto_luz", label: "Luz do Quarto" },
+      { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
+      { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
+    ],
+  },
+
   {
     title: "Sala",
     items: [
@@ -65,7 +80,8 @@ const groups: { title: string; items: EntityButtonProps[] }[] = [
     ],
   },
   {
-    title: "Casa",
+    title: "Outros",
+    horizontal: true,
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
       {
@@ -76,71 +92,56 @@ const groups: { title: string; items: EntityButtonProps[] }[] = [
       { entityId: "script.casa_apagar_todas_luzes" },
       {
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
-        label: "Somente Luz\nda Sala",
+        label: "Somente Luz da Sala",
       },
       {
         entityId: "script.computador_erica_desligar_monitor",
         confirmBefore: true,
-        label: "Desligar Monitor Erica",
+        label: "Desligar Monitor",
       },
       {
         entityId: "script.computador_erica_suspender",
         confirmBefore: true,
-        label: "Suspender Computador Erica",
+        label: "Suspender Computador",
       },
       {
         entityId: "script.computador_erica_reiniciar",
         confirmBefore: true,
-        label: "Reiniciar Computador Erica",
+        label: "Reiniciar Computador",
       },
-      { entityId: "script.encontrar_celular_lais" },
-      { entityId: "script.encontrar_celular_erica_1" },
-      { entityId: "script.encontrar_celular_erica_2" },
+      {
+        entityId: "script.encontrar_celular_erica_1",
+        label: "Encontrar Celular 1",
+      },
+      {
+        entityId: "script.encontrar_celular_erica_2",
+        label: "Encontrar Celular 2",
+      },
     ],
   },
 ];
 
-const favorites: EntityButtonProps[] = [
-  { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
-  { entityId: "light.sala_luz", label: "Luz da Sala" },
-  { entityId: "switch.escritorio_luz", label: "Luz do\nEscritório" },
-  { entityId: "light.quarto_luz", label: "Luz do Quarto" },
-  { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
-  { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
-];
-
-const favoriteIconSize = "28px";
-
-const favoriteSx: SxProps = {
-  flexDirection: "row",
-  justifyContent: "flex-start",
-  height: "58px",
-  px: "18px",
-  "& > i": {
-    fontSize: `${favoriteIconSize} !important`,
-    minWidth: `${favoriteIconSize} !important`,
-    maxWidth: `${favoriteIconSize} !important`,
-    minHeight: `${favoriteIconSize} !important`,
-    maxHeight: `${favoriteIconSize} !important`,
-  },
-  "& > i+div": {
-    fontSize: "12px",
-    fontWeight: 600,
-  },
+const horizontalSectionProps = {
+  columnWidth: 100,
+  gap: 8,
 };
-
-const renderItem = (sx?: SxProps) => (it: EntityButtonProps) =>
-  <EntityButton key={it.entityId} {...it} sx={sx} />;
 
 export default function HomeDevices({ slice = [] }: { slice?: number[] }) {
   return (
     <>
-      <GridSection columnWidth={100} gap={8}>
-        {favorites.map(renderItem(favoriteSx))}
-      </GridSection>
       {groups.slice(...slice).map((group, index) => (
-        <GridSection key={index} title={group.title}>
-          {group.items.map(renderItem())}
+        <GridSection
+          key={index}
+          title={group.title}
+          {...(group.horizontal ? horizontalSectionProps : {})}
+        >
+          {group.items.map((it) => (
+            <EntityButton
+              {...it}
+              key={it.entityId}
+              horizontal={group.horizontal}
+            />
+          ))}
         </GridSection>
       ))}
     </>

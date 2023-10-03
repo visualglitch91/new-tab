@@ -18,6 +18,7 @@ export interface EntityButtonProps {
   sx?: SxProps;
   icon?: string | React.ReactNode;
   label?: React.ReactNode;
+  horizontal?: boolean;
   changeTimeout?: number;
   entityId: string;
   confirmBefore?: boolean;
@@ -29,6 +30,7 @@ export default function EntityButton({
   sx,
   icon: customIcon,
   label: _label,
+  horizontal,
   changeTimeout,
   entityId,
   confirmBefore,
@@ -120,6 +122,7 @@ export default function EntityButton({
         sx={sx}
         checked={checked}
         disabled={unavailable}
+        horizontal={horizontal}
         icon={icon}
         label={label}
         changeTimeout={changeTimeout}

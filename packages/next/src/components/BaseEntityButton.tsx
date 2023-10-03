@@ -9,10 +9,12 @@ import { useLongPress } from "@uidotdev/usehooks";
 const classes = {
   wrapperActive: "BaseEntityButton--Active",
   wrapperCustomBG: "BaseEntityButton--CustomBG",
+  horizontal: "BaseEntityButton--horizontal",
 };
 
 const Wrapper = styled(HugeButton)({
-  height: "75px",
+  "--iconSize": "24px",
+  height: "82px",
   display: "flex",
   flexDirection: "column",
   rowGap: "6px",
@@ -20,9 +22,18 @@ const Wrapper = styled(HugeButton)({
   padding: "6px 8px",
   overflow: "hidden",
 
+  "& > i": {
+    fontSize: `var(--iconSize) !important`,
+    minWidth: `var(--iconSize) !important`,
+    maxWidth: `var(--iconSize) !important`,
+    minHeight: `var(--iconSize) !important`,
+    maxHeight: `var(--iconSize) !important`,
+  },
+
   [`&.${classes.wrapperActive}:not(.${classes.wrapperCustomBG})`]: {
-    background: "rgba(255, 255, 255, 0.12)",
+    background: "rgba(255, 255, 255, 0.6)",
     borderColor: "rgba(255, 255, 255, 0.1)",
+    color: "#222",
   },
 
   [`&.${classes.wrapperActive}.hover`]: {
@@ -34,12 +45,33 @@ const Wrapper = styled(HugeButton)({
     filter: "brightness(1.1)",
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
+
+  [`&.${classes.horizontal}`]: {
+    "--iconSize": "22px",
+
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    height: "58px",
+    padding: "18px 14px",
+
+    "& > i + div": {
+      fontSize: "12px",
+      fontWeight: 600,
+      textAlign: "left",
+      marginLeft: "8px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
+  },
 });
 
 const Label = styled("div")({
-  fontSize: "9px",
+  fontSize: "11px",
   fontWeight: "700",
   whiteSpace: "pre-wrap",
+  display: "-webkit-box",
+  "-webkit-line-clamp": "2",
+  "-webkit-box-orient": "vertical",
 });
 
 export interface BaseEntityButtonProps {
@@ -50,6 +82,7 @@ export interface BaseEntityButtonProps {
   disabled?: boolean;
   loading?: boolean;
   checked?: boolean;
+  horizontal?: boolean;
   changeTimeout?: number;
   hiddenOnDesktop?: boolean;
   confirmBefore?: boolean;
@@ -66,6 +99,7 @@ export default function BaseEntityButton({
   checked,
   loading,
   color,
+  horizontal,
   changeTimeout = 0,
   confirmBefore,
   onClick,
@@ -100,7 +134,8 @@ export default function BaseEntityButton({
       disabled={disabled}
       className={cx(
         color && !changing && classes.wrapperCustomBG,
-        checked && !changing && classes.wrapperActive
+        checked && !changing && classes.wrapperActive,
+        horizontal && !changing && classes.horizontal
       )}
       style={color && !changing ? { background: color } : undefined}
     >

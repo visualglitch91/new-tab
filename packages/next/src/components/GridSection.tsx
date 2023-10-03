@@ -6,7 +6,7 @@ import SectionTitle from "./SectionTitle";
 const Title = styled(SectionTitle)({ marginBottom: "16px" });
 
 export default function GridSection({
-  gap = 16,
+  gap = 12,
   columnWidth = 80,
   title,
   children,
