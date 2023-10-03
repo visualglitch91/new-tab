@@ -27,9 +27,12 @@ export default function ListItem({
 }) {
   const content = (
     <>
-      <ListItemIcon>
-        {startSlot || (typeof icon === "string" ? <Icon icon={icon} /> : icon)}
-      </ListItemIcon>
+      {(startSlot || icon) && (
+        <ListItemIcon>
+          {startSlot ||
+            (typeof icon === "string" ? <Icon icon={icon} /> : icon)}
+        </ListItemIcon>
+      )}
       <ListItemText primary={primaryText} secondary={secondaryText} />
     </>
   );

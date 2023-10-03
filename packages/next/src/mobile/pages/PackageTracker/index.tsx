@@ -1,26 +1,25 @@
 import AltIconButton from "../../../components/AltIconButton";
 import Icon from "../../../components/Icon";
+import PackageTracker, {
+  useAddPackage,
+} from "../../../components/PackageTracker";
 import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
 
-export default function PackageTracker() {
+export default function PackageTrackerPage() {
+  const [add, $prompt] = useAddPackage();
+
   return (
     <PageLayout
       header={<PageTile>Encomendas</PageTile>}
       headerItems={
-        <AltIconButton onClick={() => console.log("add package")}>
+        <AltIconButton onClick={add}>
           <Icon icon="plus" size={20} />
         </AltIconButton>
       }
     >
-      {[...new Array(24)]
-        .map(
-          () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-        )
-        .join("\n")}
+      {$prompt}
+      <PackageTracker />
     </PageLayout>
   );
 }

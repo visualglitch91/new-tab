@@ -24,4 +24,5 @@ yarn-debug.log*
 yarn-error.log*
 
 packages/client/src/version.json
+packages/next/src/version.json
 config.ts

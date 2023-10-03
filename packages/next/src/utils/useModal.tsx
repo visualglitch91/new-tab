@@ -1,10 +1,15 @@
 import { useState } from "react";
 import useMountEffect from "./useMountEffect";
-import { DialogBaseControlProps } from "../components/DialogBase";
 
 type Renderer = (
   unmount: () => void,
-  dialogProps: DialogBaseControlProps
+  dialogProps: {
+    open: boolean;
+    onClose: () => void;
+    TransitionProps: {
+      onExited: () => void;
+    };
+  }
 ) => React.ReactNode;
 
 export default function useModal() {
