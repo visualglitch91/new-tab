@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { IconButton } from "@mui/joy";
+import { Dropdown, IconButton, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { MultipleResponsiveCardContext } from "./utils";
 import { useMenu } from "../../utils/useMenu";
 import Icon from "../Icon";
@@ -31,22 +31,30 @@ export default function MultipleResponsiveCard({
     };
 
     const viewSwitcher = (
-      <RippleButton
-        sx={(theme) => ({
-          borderRadius: "100%",
-          border: "1px solid white",
-          color: "white",
-          width: "24px",
-          height: "24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "transparent",
-        })}
-        onClick={onShowMenu}
-      >
-        <Icon icon="chevron-down" />
-      </RippleButton>
+      <Dropdown>
+        <MenuButton
+          sx={{
+            borderRadius: "100%",
+            border: "1px solid white",
+            color: "white",
+            width: "24px",
+            height: "24px",
+            minHeight: 0,
+            padding: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "transparent",
+          }}
+        >
+          <Icon icon="chevron-down" />
+        </MenuButton>
+        <Menu>
+          {Object.entries(views).map(([key, view]) => (
+            <MenuItem onClick={() => setActive(key)}>{view[0]}</MenuItem>
+          ))}
+        </Menu>
+      </Dropdown>
     );
 
     return { viewSwitcher, stickyMobileTitle, largerMobileTitle };
