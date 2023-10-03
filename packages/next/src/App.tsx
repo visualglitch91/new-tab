@@ -8,7 +8,7 @@ import { SocketIOProvider } from "./utils/api";
 import { removeParamsFromUrl } from "./utils/url";
 import useMountEffect from "./utils/useMountEffect";
 import theme from "./theme";
-import MobileApp from "./MobileApp";
+import Mobile from "./mobile";
 
 export default function MyApp() {
   useMountEffect(() => {
@@ -22,7 +22,7 @@ export default function MyApp() {
         <ReactQueryDevtools initialIsOpen={false} />
         <HassProvider>
           <SocketIOProvider>
-            <MobileApp />
+            <Mobile />
           </SocketIOProvider>
         </HassProvider>
       </QueryClientProvider>
