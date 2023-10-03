@@ -8,6 +8,9 @@ const MuiButton: ComponentOverride["MuiButton"] = {
       "&.MuiButton-outlinedGlossy": { color: "white" },
     },
   },
+  defaultProps: {
+    variant: "outlined",
+  },
 };
 
 export default MuiButton;

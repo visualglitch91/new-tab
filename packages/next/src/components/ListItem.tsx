@@ -6,6 +6,27 @@ import {
   ListItemButton,
 } from "@mui/material";
 import Icon from "./Icon";
+import { sxx } from "../utils/styling";
+
+const customSx: SxProps = {
+  paddingRight: "16px",
+  "& .MuiListItemText-primary, & .MuiListItemText-secondary": {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  "& .MuiListItemSecondaryAction-root": {
+    position: "initial",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    height: "100%",
+    transform: "unset",
+    top: "unset",
+    right: "unset",
+    marginLeft: "8px",
+  },
+};
 
 export default function ListItem({
   sx,
@@ -38,7 +59,7 @@ export default function ListItem({
   );
 
   return (
-    <MuiListItem sx={sx} secondaryAction={endSlot}>
+    <MuiListItem sx={sxx(customSx, sx)} secondaryAction={endSlot}>
       {onClick ? (
         <ListItemButton onClick={onClick}>{content}</ListItemButton>
       ) : (

@@ -16,7 +16,7 @@ const ElevatedHeader = styled("div")({
     right: 0,
     bottom: 0,
     opacity: 0,
-    transition: "opacity 170ms linear",
+    transition: "opacity 100ms var(--tween)",
     backdropFilter: "blur(10px)",
     background: "",
     backgroundImage: `linear-gradient(
@@ -41,16 +41,6 @@ const Root = styled("div")({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-  "& > span": {
-    marginTop: 8,
-    width: "100%",
-    transition: "transform 200ms var(--tween), margin 200ms var(--tween)",
-    position: "relative",
-  },
-  '[data-shrink="true"] & > span': {
-    marginTop: -1,
-    transform: "translateX(48px)",
-  },
 });
 
 const Buttons = styled("div")({
@@ -81,7 +71,7 @@ export default function PageHeader({
 }) {
   const elevate = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 30,
+    threshold: 20,
   });
 
   const shrink = useScrollTrigger({
@@ -102,9 +92,7 @@ export default function PageHeader({
         {items}
       </Buttons>
       <ButtonsGhost />
-      <Root>
-        <span>{children}</span>
-      </Root>
+      <Root>{children}</Root>
     </>
   );
 
