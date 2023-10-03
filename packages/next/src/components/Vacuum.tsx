@@ -3,9 +3,9 @@ import { makeServiceCall, useEntity } from "../utils/hass";
 import ListItem from "./ListItem";
 import RunScriptButton from "./RunScriptButton";
 import EntitiesSwitch from "./EntitiesSwitch";
-import EntityListItem from "./EntityListItem";
-import Icon from "./Icon";
+import EntityListItem, { EntityListItems } from "./EntityListItem";
 import GlossyPaper from "./GlossyPaper";
+import Icon from "./Icon";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -119,21 +119,21 @@ export default function Vacuum() {
         <VacuumActionsRow />
       </List>
       <List component={GlossyPaper}>
-        {[
-          {
-            label: "Todos",
-            entityId: vacuumId,
-            renderListContent: () => (
-              <EntitiesSwitch
-                condition="every"
-                entityIds={booleanInputs.map((it) => it.entityId)}
-              />
-            ),
-          },
-          ...booleanInputs,
-        ].map((props, index) => (
-          <EntityListItem {...props} key={index} />
-        ))}
+        <EntityListItems
+          items={[
+            {
+              label: "Todos",
+              entityId: vacuumId,
+              renderListContent: () => (
+                <EntitiesSwitch
+                  condition="every"
+                  entityIds={booleanInputs.map((it) => it.entityId)}
+                />
+              ),
+            },
+            ...booleanInputs,
+          ]}
+        />
       </List>
     </Stack>
   );

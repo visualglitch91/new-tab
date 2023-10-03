@@ -1,17 +1,22 @@
+import { Stack } from "@mui/material";
 import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
+import Server from "../../../components/Server";
+import AppManager from "../../../components/AppManager";
+import Batteries from "../../../components/Batteries";
+import HACSUpdates from "../../../components/HACSUpdates";
+import HomeControlSystemCard from "../../../components/HomeControlSystemCard";
 
 export default function SysAdmin() {
   return (
     <PageLayout header={<PageTile>Sistema</PageTile>}>
-      {[...new Array(24)]
-        .map(
-          () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-        )
-        .join("\n")}
+      <Stack spacing={5}>
+        <HomeControlSystemCard />
+        <Server />
+        <Batteries />
+        <HACSUpdates />
+        <AppManager />
+      </Stack>
     </PageLayout>
   );
 }

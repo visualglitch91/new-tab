@@ -2,10 +2,13 @@ import { Button, styled } from "@mui/material";
 
 const AltIconButton = styled(Button)({
   borderRadius: "100%",
-  minWidth: 0,
-  padding: 6,
-  "&.MuiButton-sizeMedium": { padding: 8 },
-  "&.MuiButton-sizeLarge": { padding: 12 },
+  minWidth: "var(--size)",
+  maxWidth: "var(--size)",
+  minHeight: "var(--size)",
+  maxHeight: "var(--size)",
+  "--size": "32px",
+  "&.MuiButton-sizeMedium": { "--size": "42px" },
+  "&.MuiButton-sizeLarge": { "--size": "48px" },
 });
 
 AltIconButton.defaultProps = {

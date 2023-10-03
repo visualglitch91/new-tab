@@ -47,6 +47,11 @@ export default function ListItem({
   secondaryText?: React.ReactNode;
   onClick?: () => void;
 }) {
+  const props = {
+    sx: sxx(customSx, sx),
+    secondaryAction: endSlot,
+  };
+
   const content = (
     <>
       {(startSlot || icon) && (
@@ -59,13 +64,13 @@ export default function ListItem({
     </>
   );
 
-  return (
-    <MuiListItem sx={sxx(customSx, sx)} secondaryAction={endSlot}>
-      {onClick ? (
-        <ListItemButton onClick={onClick}>{content}</ListItemButton>
-      ) : (
-        content
-      )}
-    </MuiListItem>
-  );
+  if (onClick) {
+    return (
+      <ListItemButton {...props} onClick={onClick}>
+        {content}
+      </ListItemButton>
+    );
+  }
+
+  return <MuiListItem {...props}>{content}</MuiListItem>;
 }

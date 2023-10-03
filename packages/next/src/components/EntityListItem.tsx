@@ -11,7 +11,7 @@ import useAsyncChange from "../utils/useAsyncChange";
 import Icon from "./Icon";
 import DotLoading from "./DotLoading";
 
-interface Props {
+export interface EntityListItemProps {
   icon?: string | React.ReactNode;
   label?: React.ReactNode;
   changeTimeout?: number;
@@ -30,7 +30,7 @@ function BaseEntityListItem({
   entity,
   entityId,
   renderListContent,
-}: Props & { entity: HassEntity }) {
+}: EntityListItemProps & { entity: HassEntity }) {
   const icon = customIcon || getIcon(entity);
   const [mount, modals] = useModal();
   const confirm = useConfirm();
@@ -130,7 +130,17 @@ function BaseEntityListItem({
   );
 }
 
-export default function EntityListItem(props: Props) {
+export function EntityListItems({ items }: { items: EntityListItemProps[] }) {
+  return (
+    <>
+      {items.map((props, index) => (
+        <EntityListItem key={index} {...props} />
+      ))}
+    </>
+  );
+}
+
+export default function EntityListItem(props: EntityListItemProps) {
   const { entityId, label } = props;
   const entity = useEntity(entityId);
 

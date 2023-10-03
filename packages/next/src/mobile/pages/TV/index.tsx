@@ -8,7 +8,7 @@ export default function TVPage() {
     <PageLayout
       disableShrinkingHeader
       header={
-        <Box mt="16px">
+        <Box mt="16px" width="100%">
           <MediaCard />
         </Box>
       }
