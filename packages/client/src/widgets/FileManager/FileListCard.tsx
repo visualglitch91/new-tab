@@ -64,7 +64,9 @@ export default function FileListCard({
                     icon={isDir ? "folder" : "file"}
                     label={item.name}
                     onSecondaryAction={
-                      isDir ? () => onChangeDir(item) : undefined
+                      isDir
+                        ? () => setTimeout(onChangeDir, 200, item)
+                        : undefined
                     }
                     onLongPress={
                       isTouchDevice ? () => onOptions(item) : undefined

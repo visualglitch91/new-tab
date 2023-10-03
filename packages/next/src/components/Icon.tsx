@@ -1,33 +1,50 @@
-import { cx } from "../utils/styling";
+import { styled } from "@mui/material";
+import { SxProps } from "../theme/utils";
+import { cx, sxx } from "../utils/styling";
+
+const ImageIcon = styled("img")({
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
+
+const FontIcon = ImageIcon.withComponent("i");
 
 export default function Icon({
+  sx: _sx,
   className,
   icon,
   src,
   size = 24,
-  style: extraStyles,
+  style,
 }: {
+  sx?: SxProps;
   className?: string;
   icon?: string;
   src?: string;
   size?: number;
   style?: React.CSSProperties;
 }) {
-  const style = {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: size,
-    minWidth: size,
-    minHeight: size,
-    maxWidth: size,
-    maxHeight: size,
-    ...extraStyles,
-  };
+  const sx = sxx(
+    {
+      fontSize: size,
+      minWidth: size,
+      minHeight: size,
+      maxWidth: size,
+      maxHeight: size,
+    },
+    _sx
+  );
 
   if (src) {
     return (
-      <img style={style} className={cx(icon, className)} src={src} alt="" />
+      <ImageIcon
+        sx={sx}
+        style={style}
+        className={cx(icon, className)}
+        src={src}
+        alt=""
+      />
     );
   }
 
@@ -36,11 +53,23 @@ export default function Icon({
   }
 
   if (icon.startsWith("icofont-")) {
-    return <i style={style} className={cx("icofont", icon, className)} />;
+    return (
+      <FontIcon
+        sx={sx}
+        style={style}
+        className={cx("icofont", icon, className)}
+      />
+    );
   }
 
   const name =
     icon.startsWith("mdi:") || icon.startsWith("mdi-") ? icon.slice(4) : icon;
 
-  return <i style={style} className={cx("mdi", `mdi-${name}`, className)} />;
+  return (
+    <FontIcon
+      sx={sx}
+      style={style}
+      className={cx("mdi", `mdi-${name}`, className)}
+    />
+  );
 }

@@ -32,17 +32,13 @@ const assets = {
 
 export function ImageButtonCard({
   asset,
-  // repeatOnHold,
   action,
 }: {
   asset: keyof typeof assets;
   action: () => void;
-  repeatOnHold?: boolean;
 }) {
-  // const onHold = repeatOnHold ? action : undefined;
-
   return (
-    <HugeButton onClick={action} /*onLongPress={onHold} onHold={onHold}*/>
+    <HugeButton onClick={action}>
       <img alt="" src={assets[asset]} style={imgStyle} />
     </HugeButton>
   );

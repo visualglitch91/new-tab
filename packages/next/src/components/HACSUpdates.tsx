@@ -19,7 +19,7 @@ export default function HACSUpdates() {
           <AltIconButton
             onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
           >
-            <Icon icon="mdi:open-in-new" />
+            <Icon size={18} icon="mdi:open-in-new" />
           </AltIconButton>
         </>
       }

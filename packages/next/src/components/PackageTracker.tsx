@@ -15,7 +15,10 @@ const Desciption = styled("span")({
   opacity: 0.8,
   fontSize: "14px",
   fontWeight: "bold",
-  whiteSpace: "pre-wrap",
+  "& > p": {
+    whiteSpace: "pre-wrap",
+    margin: "0",
+  },
 });
 
 function parseDate(date: string) {
@@ -90,6 +93,8 @@ export default function PackageTracker() {
                 sx={{
                   "& .MuiListItemSecondaryAction-root": {
                     flexDirection: "column",
+                    alignItems: "flex-end",
+                    py: "6px",
                     "& > *:last-child": {
                       marginTop: lastEvent ? "auto" : "unset",
                     },

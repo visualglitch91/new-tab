@@ -42,8 +42,8 @@ export default function FileManager() {
         switch (action) {
           case "install-switch":
             if (item.type === "file") {
-              mount((unmount) => (
-                <SwitchInstallDialog file={item} onClose={unmount} />
+              mount((_, props) => (
+                <SwitchInstallDialog {...props} file={item} />
               ));
             }
 
@@ -62,11 +62,10 @@ export default function FileManager() {
           case "delete":
             confirm({
               title: "Deseja contiuar?",
-              onConfirm: () => {
-                api(`/file-manager/navigation/files/${item.id}`, "delete").then(
-                  refetch
-                );
-              },
+            }).then(() => {
+              api(`/file-manager/navigation/files/${item.id}`, "delete").then(
+                refetch
+              );
             });
             return;
         }

@@ -4,6 +4,7 @@ import { Directory, Item } from "./utils";
 import GlossyPaper from "../GlossyPaper";
 import AltIconButton from "../AltIconButton";
 import Icon from "../Icon";
+import SectionTitle from "../SectionTitle";
 
 export default function FileListCard({
   items,
@@ -20,17 +21,22 @@ export default function FileListCard({
 }) {
   return (
     <Stack spacing={2}>
-      <GlossyPaper
-        style={{
-          gap: 8,
-          display: "flex",
+      <Stack
+        direction="row"
+        component={GlossyPaper}
+        spacing={1}
+        padding={1.5}
+        sx={{
           overflow: "hidden",
           alignItems: "center",
+          fontSize: "18px",
+          fontWeight: 500,
+          height: "56px",
         }}
       >
         {prev && (
-          <AltIconButton onClick={() => onChangeDir(prev!)}>
-            <Icon icon="arrow-left" />
+          <AltIconButton size="small" onClick={() => onChangeDir(prev!)}>
+            <Icon size={18} icon="arrow-left" />
           </AltIconButton>
         )}
         <Tooltip title={current.name}>
@@ -44,7 +50,7 @@ export default function FileListCard({
             {current.name}
           </span>
         </Tooltip>
-      </GlossyPaper>
+      </Stack>
 
       <List component={GlossyPaper}>
         {items.map((item) => {
@@ -65,7 +71,9 @@ export default function FileListCard({
                       <Icon icon="dots-vertical" />
                     </AltIconButton>
                   }
-                  onClick={isDir ? () => onChangeDir(item) : undefined}
+                  onClick={
+                    isDir ? () => setTimeout(onChangeDir, 200, item) : undefined
+                  }
                 />
               </span>
             </Tooltip>

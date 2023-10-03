@@ -1,6 +1,7 @@
 import { styled, ButtonBase, SxProps } from "@mui/material";
 import { callService, makeServiceCall, makeTurnOnCall } from "../../utils/hass";
 import Icon from "../Icon";
+import { useLongPress } from "@uidotdev/usehooks";
 
 const Root = styled("div")({
   display: "flex",
@@ -26,7 +27,7 @@ const ControlRoot = styled(ButtonBase)({
 function Control({
   icon,
   sx,
-  //  onLongPress,
+  onLongPress,
   onClick,
 }: {
   icon: string;
@@ -34,8 +35,10 @@ function Control({
   onClick: () => void;
   onLongPress?: () => void;
 }) {
+  const buttonProps = useLongPress(onLongPress || (() => {}));
+
   return (
-    <ControlRoot sx={sx} onClick={onClick} /*onLongPress={onLongPress}*/>
+    <ControlRoot {...buttonProps} sx={sx} onClick={onClick}>
       <Icon icon={icon} size={17} />
     </ControlRoot>
   );

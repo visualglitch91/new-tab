@@ -22,7 +22,6 @@ export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
             action={makeTurnOnCall("script.sala_tv_ligar_tela")}
           />
           <IconHugeButton
-            repeatOnHold
             icon="mdi:chevron-up"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_cima")}
@@ -35,7 +34,6 @@ export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
         </ButtonRow>
         <ButtonRow height={90}>
           <IconHugeButton
-            repeatOnHold
             icon="mdi:chevron-left"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_esquerda")}
@@ -46,7 +44,6 @@ export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
             action={makeTurnOnCall("script.sala_mibox_navegar_selecionar")}
           />
           <IconHugeButton
-            repeatOnHold
             icon="mdi:chevron-right"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_direita")}
@@ -59,7 +56,6 @@ export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
             action={makeTurnOnCall("script.sala_mibox_navegar_voltar")}
           />
           <IconHugeButton
-            repeatOnHold
             icon="mdi:chevron-down"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_baixo")}

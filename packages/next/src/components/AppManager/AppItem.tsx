@@ -1,4 +1,4 @@
-import { styled } from "@mui/joy";
+import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useConfirm } from "material-ui-confirm";
 import { queryClient } from "../../utils/queryClient";
@@ -36,7 +36,7 @@ export function AppItem({ app }: { app: ParsedApp }) {
   const running = app.status === "running";
 
   function showLogs() {
-    mount((unmount) => <LogDialog app={app} onClose={unmount} />);
+    mount((_, props) => <LogDialog app={app} {...props} />);
   }
 
   function showActionsMenu() {
@@ -71,15 +71,18 @@ export function AppItem({ app }: { app: ParsedApp }) {
       {menu}
       {modals2}
       <ListItem
-        sx={{ "& > *": { height: 32 } }}
         icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
         primaryText={
-          <>
-            {formatName(app.name)}
+          <Stack direction="row" spacing={0.8} alignItems="center">
+            <span>{formatName(app.name)}</span>
             {app.updateAvailable && (
-              <Icon icon="arrow-up-circle-outline" size={18} />
+              <Icon
+                size={18}
+                sx={{ mt: "-1px" }}
+                icon="arrow-up-circle-outline"
+              />
             )}
-          </>
+          </Stack>
         }
         endSlot={isLoading ? <DotLoading /> : running ? app.usage : "Parado"}
         onClick={showActionsMenu}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../../utils/api";
 import useMountEffect from "../../utils/useMountEffect";
 import ShellOutputDialog from "../../components/ShellOutputDialog";
+import { DialogBaseControlProps } from "../DialogBase";
 import { File } from "./utils";
 
 function getPath(file: File) {
@@ -10,11 +11,10 @@ function getPath(file: File) {
 
 export default function SwitchInstallDialog({
   file,
-  onClose,
+  ...props
 }: {
   file: File;
-  onClose: () => void;
-}) {
+} & DialogBaseControlProps) {
   const [processId, setProcessId] = useState<string>();
 
   useMountEffect(() => {
@@ -29,10 +29,10 @@ export default function SwitchInstallDialog({
 
   return (
     <ShellOutputDialog
+      {...props}
       size={{ width: 1280, height: 720 }}
       processId={processId}
       title="Installing"
-      onClose={onClose}
     />
   );
 }

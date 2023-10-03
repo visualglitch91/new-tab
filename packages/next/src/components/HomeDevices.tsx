@@ -17,7 +17,6 @@ const groups: {
       { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
     ],
   },
-
   {
     title: "Sala",
     items: [
@@ -33,7 +32,7 @@ const groups: {
         changeTimeout: 30_000,
         icon: "curtains",
       },
-      // <TVEntityButton />,
+      { entityId: "media_player.sala_tv" },
     ],
   },
   {

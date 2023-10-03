@@ -6,6 +6,7 @@ import MuiBottomNavigation from "./overrides/MuiBottomNavigation";
 import MuiIconButton from "./overrides/MuiIconButton";
 import MuiListItemText from "./overrides/MuiListItemText";
 import MuiListItemIcon from "./overrides/MuiListItemIcon";
+import MuiListItemSecondaryAction from "./overrides/MuiListItemSecondaryAction";
 
 const theme = applyCustomColors(
   createTheme({
@@ -24,6 +25,7 @@ const theme = applyCustomColors(
       MuiIconButton,
       MuiListItemText,
       MuiListItemIcon,
+      MuiListItemSecondaryAction,
     },
   })
 );

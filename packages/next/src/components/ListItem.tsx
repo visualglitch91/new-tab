@@ -1,12 +1,14 @@
 import {
-  ListItem as MuiListItem,
+  styled,
+  SxProps,
+  ButtonBase,
   ListItemText,
   ListItemIcon,
-  SxProps,
-  ListItemButton,
+  ListItem as MuiListItem,
 } from "@mui/material";
 import Icon from "./Icon";
 import { sxx } from "../utils/styling";
+import { useLongPress } from "@uidotdev/usehooks";
 
 const customSx: SxProps = {
   paddingRight: "16px",
@@ -26,8 +28,22 @@ const customSx: SxProps = {
     right: "unset",
     marginLeft: "8px",
     flexShrink: 0,
+
+    "& button, & a, & .MuiSwitch-root": {
+      position: "relative",
+      zIndex: 2,
+    },
   },
 };
+
+const ListButton = styled(ButtonBase)({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  zIndex: 1,
+});
 
 export default function ListItem({
   sx,
@@ -37,6 +53,7 @@ export default function ListItem({
   primaryText,
   secondaryText,
   onClick,
+  onLongPress,
 }: {
   sx?: SxProps;
   icon?: React.ReactNode;
@@ -46,11 +63,15 @@ export default function ListItem({
   primaryText?: React.ReactNode;
   secondaryText?: React.ReactNode;
   onClick?: () => void;
+  onLongPress?: () => void;
 }) {
   const props = {
     sx: sxx(customSx, sx),
     secondaryAction: endSlot,
   };
+
+  const hasInteraction = onClick || onLongPress;
+  const buttonProps = useLongPress(onLongPress || (() => {}));
 
   const content = (
     <>
@@ -64,11 +85,12 @@ export default function ListItem({
     </>
   );
 
-  if (onClick) {
+  if (hasInteraction) {
     return (
-      <ListItemButton {...props} onClick={onClick}>
+      <MuiListItem {...props}>
+        <ListButton {...buttonProps} onClick={onClick} />
         {content}
-      </ListItemButton>
+      </MuiListItem>
     );
   }
 
