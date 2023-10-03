@@ -42,10 +42,12 @@ const Root = styled("div")({
   flexDirection: "column",
   alignItems: "flex-start",
   "& > span": {
-    transition: "transform 200ms var(--tween)",
+    marginTop: 8,
+    transition: "transform 200ms var(--tween), margin 200ms var(--tween)",
     position: "relative",
   },
   '[data-shrink="true"] & > span': {
+    marginTop: -1,
     transform: "translateX(48px)",
   },
 });
