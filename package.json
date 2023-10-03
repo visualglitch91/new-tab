@@ -27,6 +27,7 @@
     "packages/jdownloader-api",
     "packages/server",
     "packages/client",
+    "packages/next",
     "packages/types"
   ],
   "dependencies": {
