@@ -25,7 +25,7 @@ export default function TabLayout({
       </Box>
       {tabs.length && (
         <>
-          <Box sx={{ height: "62px" }} />
+          <Box sx={{ height: "70px" }} />
           <Box
             sx={{
               position: "fixed",
