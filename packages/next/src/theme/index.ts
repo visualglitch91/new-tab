@@ -11,7 +11,7 @@ const theme = applyCustomColors(
     palette: {
       mode: "dark",
       primary: { main: "#ff79c6" },
-      secondary: { main: "#8be9fd" },
+      secondary: { main: "#885ba3" },
     },
     typography: {
       fontFamily: "San Francisco",

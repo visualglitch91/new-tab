@@ -8,6 +8,7 @@ import { HassProvider } from "./utils/hass";
 import { SocketIOProvider } from "./utils/api";
 import { removeParamsFromUrl } from "./utils/url";
 import { isTouchDevice } from "./utils/general";
+import clock from "./utils/clock";
 import useMountEffect from "./utils/useMountEffect";
 import theme from "./theme";
 import Mobile from "./mobile";
@@ -18,6 +19,7 @@ export default function MyApp() {
       window.oncontextmenu = () => false;
     }
 
+    clock.start();
     removeParamsFromUrl(["reload"]);
   });
 

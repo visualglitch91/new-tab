@@ -10,6 +10,7 @@ import { sxx } from "../utils/styling";
 
 const customSx: SxProps = {
   paddingRight: "16px",
+  alignItems: "stretch",
   "& .MuiListItemText-primary, & .MuiListItemText-secondary": {
     whiteSpace: "nowrap",
     overflow: "hidden",
@@ -20,11 +21,11 @@ const customSx: SxProps = {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    height: "100%",
     transform: "unset",
     top: "unset",
     right: "unset",
     marginLeft: "8px",
+    flexShrink: 0,
   },
 };
 

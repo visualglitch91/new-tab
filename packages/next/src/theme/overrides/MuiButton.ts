@@ -7,6 +7,9 @@ const MuiButton: ComponentOverride["MuiButton"] = {
       "&.MuiButton-containedGlossy": { color: "white" },
       "&.MuiButton-outlinedGlossy": { color: "white" },
     },
+    outlinedSecondary: {
+      color: "white",
+    },
   },
   defaultProps: {
     variant: "outlined",

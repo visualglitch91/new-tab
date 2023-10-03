@@ -83,55 +83,47 @@ export default function PackageTracker() {
           text="Nenhum pacote adicionado"
         />
       ) : (
-        packages.map((it) => (
-          <GlossyPaper key={it.code}>
-            <ListItem
-              sx={{
-                "& .MuiListItemSecondaryAction-root": {
-                  height: "100%",
-                  py: "12px",
-                  textAlign: "right",
-                  display: "flex",
-                  flexDirection: "column",
-                  "& > *:last-child": { marginTop: "auto" },
-                },
-              }}
-              primaryText={`${it.name} (${it.code})`}
-              secondaryText={
-                it.lastEvent ? (
-                  <>
+        packages.map(({ lastEvent, ...it }) => {
+          return (
+            <GlossyPaper key={it.code}>
+              <ListItem
+                sx={{
+                  "& .MuiListItemSecondaryAction-root": {
+                    flexDirection: "column",
+                    "& > *:last-child": {
+                      marginTop: lastEvent ? "auto" : "unset",
+                    },
+                  },
+                }}
+                primaryText={`${it.name} (${it.code})`}
+                secondaryText={
+                  lastEvent ? (
                     <Desciption>
-                      {it.lastEvent.description}
-
-                      {it.lastEvent.location && (
-                        <>
-                          <br />
-                          {it.lastEvent.location}
-                        </>
-                      )}
+                      <p>{lastEvent!.description}</p>
+                      {lastEvent.location && <p>{lastEvent.location}</p>}
                     </Desciption>
+                  ) : (
+                    <Desciption>Não Encontrado</Desciption>
+                  )
+                }
+                endSlot={
+                  <>
+                    {lastEvent?.at && (
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        {parseDate(lastEvent.at)}
+                      </Typography>
+                    )}
+                    <span>
+                      <AltIconButton size="small" onClick={() => remove(it)}>
+                        <Icon size={18} icon="close" />
+                      </AltIconButton>
+                    </span>
                   </>
-                ) : (
-                  <Desciption>Não Encontrado</Desciption>
-                )
-              }
-              endSlot={
-                <>
-                  {it.lastEvent?.at && (
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {parseDate(it.lastEvent.at)}
-                    </Typography>
-                  )}
-                  <span>
-                    <AltIconButton size="small" onClick={() => remove(it)}>
-                      <Icon size={18} icon="close" />
-                    </AltIconButton>
-                  </span>
-                </>
-              }
-            />
-          </GlossyPaper>
-        ))
+                }
+              />
+            </GlossyPaper>
+          );
+        })
       )}
     </Stack>
   );

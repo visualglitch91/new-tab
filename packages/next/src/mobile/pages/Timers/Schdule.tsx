@@ -1,26 +1,24 @@
 import AltIconButton from "../../../components/AltIconButton";
 import Icon from "../../../components/Icon";
+import Schedules from "../../../components/Schedules";
+import useUpsertSchedule from "../../../components/Schedules/useUpsertSchedule";
 import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
 
-export default function Schedule() {
+export default function SchedulePage() {
+  const [upsertSchedule, modals] = useUpsertSchedule();
+
   return (
     <PageLayout
-      header={<PageTile>Schedule</PageTile>}
+      header={<PageTile>Agendamentos</PageTile>}
       headerItems={
-        <AltIconButton onClick={() => console.log("add schedule")}>
+        <AltIconButton onClick={() => upsertSchedule()}>
           <Icon icon="plus" size={20} />
         </AltIconButton>
       }
     >
-      {[...new Array(24)]
-        .map(
-          () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-        )
-        .join("\n")}
+      {modals}
+      <Schedules />
     </PageLayout>
   );
 }
