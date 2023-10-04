@@ -1,6 +1,6 @@
 import { ListItem, Stack, ButtonGroup, styled } from "@mui/material";
 import { Schedule } from "@home-control/types/hass-scheduler";
-import DaysRow from "./DaysRow";
+import DaysRow from "../DaysRow";
 import { formatTime } from "./utils";
 import Icon from "../Icon";
 import AltIconButton from "../AltIconButton";

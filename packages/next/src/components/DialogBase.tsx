@@ -64,6 +64,14 @@ export default function DialogBase({
                 minWidth: "unset",
                 maxWidth: "unset",
               },
+              ...(bottomMobileSheet
+                ? {
+                    "& .MuiDialogActions-root": {
+                      flexDirection: "column",
+                      alignItems: "stretch",
+                    },
+                  }
+                : {}),
             },
           })),
         sx
@@ -73,7 +81,7 @@ export default function DialogBase({
       {title && (
         <DialogTitle
           sx={
-            children
+            children && !dividers
               ? {
                   mb: "-16px",
                   "& + .MuiDialogContent-root": { pt: "16px !important" },

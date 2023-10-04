@@ -1,16 +1,17 @@
-import { Tab, Tabs } from "@mui/material";
+import { Tab, Tabs, TabsProps } from "@mui/material";
 
 export default function TabGroup<T extends string>({
   options,
   value,
   onChange,
+  ...props
 }: {
   options: ({ value: T; label: string } | null)[];
   value: T;
   onChange: (value: T) => void;
-}) {
+} & Omit<TabsProps, "value" | "onChange">) {
   return (
-    <Tabs value={value} onChange={(_, value) => onChange(value)}>
+    <Tabs {...props} value={value} onChange={(_, value) => onChange(value)}>
       {options.map((it) => {
         if (!it) {
           return null;

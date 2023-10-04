@@ -4,7 +4,7 @@ import { Button, Stack, TextField } from "@mui/material";
 import { Schedule, SimpleAction } from "@home-control/types/hass-scheduler";
 import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import ActionsForm from "../ActionsForm";
-import DaysRow from "./DaysRow";
+import DaysRow from "../DaysRow";
 import { formatTime } from "./utils";
 
 export default function ScheduleDialog({
@@ -35,37 +35,40 @@ export default function ScheduleDialog({
     <DialogBase
       {...props}
       title="Novo Timer"
-      sx={(theme) => ({
-        [theme.breakpoints.up("sm")]: {
-          width: "80vw",
-          maxWidth: "500px",
+      sx={{
+        "& .MuiDialog-paper": {
+          width: "90vw",
+          maxWidth: "600px",
         },
-      })}
+      }}
       footer={
-        <Button
-          variant="contained"
-          disabled={!isValidTime}
-          onClick={() => {
-            const [hour, minute] = time.split(":").map(Number);
+        <>
+          <Button onClick={props.onClose}>Cancelar</Button>
+          <Button
+            variant="contained"
+            disabled={!isValidTime}
+            onClick={() => {
+              const [hour, minute] = time.split(":").map(Number);
 
-            onSave({
-              ...initialValues,
-              id: initialValues.id,
-              name,
-              days,
-              time: { hour, minute },
-              actions: actions
-                .filter((it) => !!it.entityId)
-                .map((it) => ({
-                  domain: "homeassistant",
-                  service: it.on ? "turn_on" : "turn_off",
-                  data: { entity_id: it.entityId },
-                })),
-            });
-          }}
-        >
-          Confirmar
-        </Button>
+              onSave({
+                ...initialValues,
+                id: initialValues.id,
+                name,
+                days,
+                time: { hour, minute },
+                actions: actions
+                  .filter((it) => !!it.entityId)
+                  .map((it) => ({
+                    domain: "homeassistant",
+                    service: it.on ? "turn_on" : "turn_off",
+                    data: { entity_id: it.entityId },
+                  })),
+              });
+            }}
+          >
+            Confirmar
+          </Button>
+        </>
       }
     >
       <Stack spacing={2}>
@@ -83,7 +86,7 @@ export default function ScheduleDialog({
             value={time}
             onChange={(e) => setTime(e.currentTarget.value)}
           >
-            <TextField sx={{ width: "85px" }} label="Horário" />
+            <TextField sx={{ minWidth: "120px" }} label="Horário" />
           </InputMask>
         </Stack>
         <DaysRow value={days} onChange={setDays} />

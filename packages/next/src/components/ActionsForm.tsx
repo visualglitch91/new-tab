@@ -1,18 +1,12 @@
-import { orderBy } from "lodash";
-import { Fragment, useEffect } from "react";
-import {
-  Stack,
-  Select,
-  Switch,
-  ListSubheader,
-  MenuItem,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
-import { useHassStore } from "../utils/hass";
+import { useEffect } from "react";
+import { keyBy } from "lodash";
+import { Stack, Switch, Button } from "@mui/material";
 import Icon from "./Icon";
 import AltIconButton from "./AltIconButton";
 import { removeItemAtIndex } from "../utils/array";
+import useModal from "../utils/useModal";
+import { useHassStore } from "../utils/hass";
+import EntitySelectorDialog, { formatEntity } from "./EntitySelectorDialog";
 
 interface SimpleAction {
   on: boolean;
@@ -21,19 +15,6 @@ interface SimpleAction {
 
 const validDomains = ["light", "switch", "media_player", "curtain", "script"];
 
-function parseOption(name: string): [string, string] {
-  const pattern = /^\[(.*?)\] (.*)$/;
-  const match = name.match(pattern);
-
-  if (match && match.length === 3) {
-    const zone = match[1];
-    const entityName = match[2];
-    return [zone, entityName];
-  }
-
-  return ["Outros", name];
-}
-
 export default function ActionsForm({
   value: actions,
   onChange,
@@ -41,55 +22,8 @@ export default function ActionsForm({
   value: SimpleAction[];
   onChange: (value: SimpleAction[]) => void;
 }) {
+  const mount = useModal();
   const store = useHassStore();
-
-  const entities = orderBy(
-    store.states
-      .filter((entity) =>
-        validDomains.some((domain) => entity.entity_id.startsWith(`${domain}.`))
-      )
-      .map((it) => {
-        const [zone, name] = parseOption(it.attributes!.friendly_name!);
-        const domain = it.entity_id.split(".")[0];
-
-        return {
-          id: it.entity_id,
-          name,
-          zone: domain === "script" ? "Scripts" : zone,
-        };
-      })
-      .filter((it) => it.zone !== "Base"),
-    ["zone", "name"],
-    ["asc", "asc"]
-  );
-
-  console.log(entities);
-
-  const groupedEntities = (() => {
-    // type EntityOption = (typeof entities)[number] & { zone: string };
-    // const tmp: Record<string, EntityOption[]> = {};
-    // const push = (group: string, option: EntityOption) => {
-    //   if (!tmp[group]) {
-    //     tmp[group] = [];
-    //   }
-    //   tmp[group].push(option);
-    // };
-    // entities.forEach((entity) => {
-    //   if (entity.id.startsWith("script.")) {
-    //     push("Scripts", { ...entity, zone: "Scripts" });
-    //     return;
-    //   }
-    //   const [zone, name] = parseOption(entity.name);
-    //   if (zone !== "Base") {
-    //     push(zone, { id: entity.id, name, zone });
-    //   }
-    // });
-    // const { Scripts, Outros, ...rest } = tmp;
-    // const groups = orderBy(Object.entries(rest), ["0"], ["asc"]);
-    // groups.push(["Scripts", Scripts]);
-    // groups.push(["Outros", Outros]);
-    // return groups;
-  })();
 
   useEffect(() => {
     if (actions.length === 0) {
@@ -116,10 +50,33 @@ export default function ActionsForm({
     onChange(removeItemAtIndex(actions, index));
   }
 
+  function selectEntity(index: number) {
+    const selected = actions[index].entityId;
+
+    mount((_, props) => (
+      <EntitySelectorDialog
+        {...props}
+        maxSelected={1}
+        defaultValue={selected ? [selected] : []}
+        validDomains={validDomains}
+        onSelect={([entityId]) => {
+          if (!entityId) {
+            return;
+          }
+
+          setActionField(index, "entityId", entityId);
+        }}
+      />
+    ));
+  }
+
+  const entitiesById = keyBy(store.states.map(formatEntity), "id");
+
   return (
     <>
       {actions.map((it, index) => {
         const lastItem = index === actions.length - 1;
+        const entity = entitiesById[it.entityId];
 
         return (
           <Stack key={index} direction="row" alignItems="center" spacing="12px">
@@ -129,40 +86,11 @@ export default function ActionsForm({
                 setActionField(index, "on", checked);
               }}
             />
-            {/* <Select
-              sx={{ width: "100%" }}
-              value={it.entityId}
-              renderValue={(option) => {
-                return option
-                  ? `(${option.props["data-zone"]}) ${option.props.children}`
-                  : null;
-              }}
-              onChange={(_, option) => {
-                console.log(option.props.value);
-                if (option.props.value) {
-                  setActionField(index, "entityId", option.props.value);
-                }
-              }}
-            >
-              {groupedEntities.flatMap(([zone, entities]) => [
-                <ListSubheader key={`zone-${zone}`}>
-                  {zone} ({entities.length})
-                </ListSubheader>,
-                ...entities.map((it) => (
-                  <MenuItem key={it.id} value={it.id} data-zone={it.zone}>
-                    {it.name}
-                  </MenuItem>
-                )),
-              ])}
-            </Select> */}
-            <Autocomplete
-              id="grouped-demo"
-              options={entities}
-              groupBy={(option) => option.zone}
-              getOptionLabel={(option) => option.name}
-              sx={{ width: "100%" }}
-              renderInput={(params) => <TextField {...params} />}
-            />
+            <Button fullWidth onClick={() => selectEntity(index)}>
+              {entity
+                ? `(${entity.zone}) ${entity.name}`
+                : "Selecionar entidade"}
+            </Button>
             <AltIconButton
               onClick={() => (lastItem ? addAction() : removeAction(index))}
             >

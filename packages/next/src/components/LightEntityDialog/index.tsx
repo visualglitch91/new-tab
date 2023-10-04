@@ -61,6 +61,11 @@ function Components({ entity }: { entity: HassEntity }) {
   if (features.color && (features.temp || features.white)) {
     components.push(
       <TabGroup
+        centered
+        sx={{
+          mx: "-24px !important",
+          borderBottom: "1px solid rgba(200, 200, 200, 0.2)",
+        }}
         options={[
           {
             value: "color",
@@ -117,7 +122,7 @@ function Components({ entity }: { entity: HassEntity }) {
     ((!features.temp && !features.white) || mode === "color")
   ) {
     components.push(
-      <ColorStack>
+      <ColorStack spacing={3}>
         <ColorPicker selected={color.value} onChangeEnd={color.onChange} />
         <ColorPresets
           radius={8}
@@ -142,15 +147,13 @@ function Components({ entity }: { entity: HassEntity }) {
 
     if (features.rgbw) {
       components.push(
-        <>
-          <LabeledSlider
-            label="Brilho do Branco"
-            min={0}
-            max={100}
-            defaultValue={whiteValue.value}
-            onChangeEnd={whiteValue.onChange}
-          />
-        </>
+        <LabeledSlider
+          label="Brilho do Branco"
+          min={0}
+          max={100}
+          defaultValue={whiteValue.value}
+          onChangeEnd={whiteValue.onChange}
+        />
       );
     }
   }

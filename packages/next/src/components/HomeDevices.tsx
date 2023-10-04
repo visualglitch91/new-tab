@@ -121,7 +121,7 @@ const groups: {
 ];
 
 const horizontalSectionProps = {
-  columnWidth: 100,
+  columnWidth: 140,
   gap: 8,
 };
 

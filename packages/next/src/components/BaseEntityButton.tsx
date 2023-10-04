@@ -59,8 +59,19 @@ const Wrapper = styled(HugeButton)({
       fontWeight: 600,
       textAlign: "left",
       marginLeft: "8px",
-      overflow: "hidden",
+
+      whiteSpace: "nowrap",
       textOverflow: "ellipsis",
+      overflow: "hidden",
+
+      "@supports (-webkit-line-clamp: 2)": {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "initial",
+        display: "-webkit-box",
+        WebkitLineClamp: "2",
+        WebkitBoxOrient: "vertical",
+      },
     },
   },
 });
@@ -69,9 +80,6 @@ const Label = styled("div")({
   fontSize: "11px",
   fontWeight: "700",
   whiteSpace: "pre-wrap",
-  display: "-webkit-box",
-  WebkitLineClamp: "2",
-  WebkitBoxOrient: "vertical",
 });
 
 export interface BaseEntityButtonProps {

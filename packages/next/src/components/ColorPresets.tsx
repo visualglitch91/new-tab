@@ -1,4 +1,4 @@
-import { styled, ButtonBase } from "@mui/material";
+import { styled, Stack, ButtonBase } from "@mui/material";
 import {
   RGB,
   colorPresets,
@@ -8,7 +8,6 @@ import {
 } from "../utils/colors";
 import Icon from "./Icon";
 import ColorBadge from "./ColorBadge";
-import { Stack } from "@mui/material";
 
 const ColorPresetButton = styled(ButtonBase)({
   padding: 0,
@@ -41,7 +40,7 @@ export default function ColorPresets({
   onChange: (color: RGB) => void;
 }) {
   return (
-    <Stack>
+    <Stack direction="row" flexWrap="wrap" gap={2}>
       {colorPresets.map((color, index) => (
         <ColorPresetButton key={index} onClick={() => onChange(color)}>
           {selected && isColorEqual(selected, color) && (

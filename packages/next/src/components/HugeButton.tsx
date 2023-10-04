@@ -1,8 +1,6 @@
-import { ButtonBase, alpha, styled } from "@mui/material";
+import { ButtonBase, styled } from "@mui/material";
 
-export const borderRadius = "16px";
-
-const ButtonCard = styled(ButtonBase)(({ theme }) => ({
+const ButtonCard = styled(ButtonBase)({
   overflow: "hidden",
   transition: "all 100ms var(--tween)",
   height: "100%",
@@ -28,13 +26,13 @@ const ButtonCard = styled(ButtonBase)(({ theme }) => ({
   `,
 
   "&:hover": {
-    backgroundColor: alpha(theme.palette.grey[800], 0.9),
+    backgroundColor: "rgba(20, 20, 20, 0.6)",
   },
 
   "&:disabled": {
     opacity: 0.6,
     pointerEvents: "none",
   },
-}));
+});
 
 export default ButtonCard;
