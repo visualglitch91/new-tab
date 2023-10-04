@@ -6,7 +6,7 @@ import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
 
 export default function TimersPage() {
-  const [addTimer, modals] = useAddTimer();
+  const addTimer = useAddTimer();
 
   return (
     <PageLayout
@@ -17,7 +17,6 @@ export default function TimersPage() {
         </AltIconButton>
       }
     >
-      {modals}
       <Timers />
     </PageLayout>
   );

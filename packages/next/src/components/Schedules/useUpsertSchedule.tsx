@@ -5,7 +5,7 @@ import ScheduleDialog from "./ScheduleDialog";
 import { queryClient } from "../../utils/queryClient";
 
 export default function useUpsertSchedule() {
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   function onSave(unmount: () => void) {
     return function (
@@ -19,7 +19,7 @@ export default function useUpsertSchedule() {
     };
   }
 
-  function upsertSchedule(item?: Schedule) {
+  return function upsertSchedule(item?: Schedule) {
     mount((_, props) => (
       <ScheduleDialog
         {...props}
@@ -27,7 +27,5 @@ export default function useUpsertSchedule() {
         onSave={onSave(props.onClose)}
       />
     ));
-  }
-
-  return [upsertSchedule, modals] as const;
+  };
 }

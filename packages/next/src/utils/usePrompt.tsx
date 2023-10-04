@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Button, FormControl, FormLabel, Input, Stack } from "@mui/material";
+import { Button, TextField, Stack } from "@mui/material";
 import DialogBase, { DialogBaseControlProps } from "../components/DialogBase";
 import useModal from "./useModal";
+import { isTouchDevice } from "./general";
 
 function Prompt({
   title,
@@ -16,26 +17,10 @@ function Prompt({
   const [values, setValues] = useState(() => fields.map(() => ""));
 
   return (
-    <DialogBase title={title} {...props}>
-      <Stack spacing={2}>
-        {fields.map((label, index) => (
-          <FormControl key={index}>
-            <FormLabel>{label}</FormLabel>
-            <Input
-              autoFocus={index === 0}
-              value={values[index]}
-              onChange={(event) => {
-                const value = event.currentTarget.value;
-
-                setValues((prev) => {
-                  const next = [...prev];
-                  next[index] = value;
-                  return next;
-                });
-              }}
-            />
-          </FormControl>
-        ))}
+    <DialogBase
+      title={title}
+      {...props}
+      footer={
         <Button
           color="primary"
           variant="contained"
@@ -43,13 +28,33 @@ function Prompt({
         >
           Confirmar
         </Button>
+      }
+    >
+      <Stack spacing={2}>
+        {fields.map((label, index) => (
+          <TextField
+            key={index}
+            label={label}
+            autoFocus={index === 0 && !isTouchDevice}
+            value={values[index]}
+            onChange={(event) => {
+              const value = event.currentTarget.value;
+
+              setValues((prev) => {
+                const next = [...prev];
+                next[index] = value;
+                return next;
+              });
+            }}
+          />
+        ))}
       </Stack>
     </DialogBase>
   );
 }
 
 export function usePrompt() {
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   function prompt({
     title,
@@ -73,5 +78,5 @@ export function usePrompt() {
     ));
   }
 
-  return [prompt, modals] as const;
+  return prompt;
 }

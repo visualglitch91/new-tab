@@ -1,6 +1,5 @@
 import { HassEntity } from "home-assistant-js-websocket";
 import { SxProps, Button, Switch } from "@mui/material";
-import { useConfirm } from "material-ui-confirm";
 import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
 import useModal from "../utils/useModal";
 import { rgbToHex } from "../utils/colors";
@@ -10,6 +9,7 @@ import ColorBadge from "./ColorBadge";
 import useAsyncChange from "../utils/useAsyncChange";
 import Icon from "./Icon";
 import DotLoading from "./DotLoading";
+import useConfirm from "../utils/useConfirm";
 
 export interface EntityListItemProps {
   icon?: string | React.ReactNode;
@@ -32,7 +32,7 @@ function BaseEntityListItem({
   renderListContent,
 }: EntityListItemProps & { entity: HassEntity }) {
   const icon = customIcon || getIcon(entity);
-  const [mount, modals] = useModal();
+  const mount = useModal();
   const confirm = useConfirm();
 
   function onLightClick() {
@@ -90,10 +90,14 @@ function BaseEntityListItem({
             onClick={
               onPrimaryAction
                 ? () => {
-                    (confirmBefore
-                      ? confirm({ title: "Continuar?" })
-                      : Promise.resolve()
-                    ).then(onPrimaryAction);
+                    if (confirmBefore) {
+                      confirm({
+                        title: "Continuar?",
+                        onConfirm: onPrimaryAction,
+                      });
+                    } else {
+                      onPrimaryAction();
+                    }
                   }
                 : undefined
             }
@@ -107,26 +111,23 @@ function BaseEntityListItem({
   const colorBadge = attributes.rgb_color && rgbToHex(attributes.rgb_color);
 
   return (
-    <>
-      {modals}
-      <ListItem
-        sx={sx}
-        disabled={unavailable}
-        icon={icon}
-        primaryText={
-          colorBadge ? (
-            <>
-              {label}
-              <ColorBadge size={12} color={colorBadge} />
-            </>
-          ) : (
-            label
-          )
-        }
-        onClick={domain === "light" && checked ? onLightClick : undefined}
-        {...customProps}
-      />
-    </>
+    <ListItem
+      sx={sx}
+      disabled={unavailable}
+      icon={icon}
+      primaryText={
+        colorBadge ? (
+          <>
+            {label}
+            <ColorBadge size={12} color={colorBadge} />
+          </>
+        ) : (
+          label
+        )
+      }
+      onClick={domain === "light" && checked ? onLightClick : undefined}
+      {...customProps}
+    />
   );
 }
 

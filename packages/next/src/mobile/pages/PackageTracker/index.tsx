@@ -7,7 +7,7 @@ import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
 
 export default function PackageTrackerPage() {
-  const [add, $prompt] = useAddPackage();
+  const add = useAddPackage();
 
   return (
     <PageLayout
@@ -18,7 +18,6 @@ export default function PackageTrackerPage() {
         </AltIconButton>
       }
     >
-      {$prompt}
       <PackageTracker />
     </PageLayout>
   );

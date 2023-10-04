@@ -38,7 +38,7 @@ export default function EntityButton({
   onLongPress,
 }: EntityButtonProps) {
   const entity = useEntity(entityId);
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   if (!entity) {
     return <BaseEntityButton sx={sx} disabled label={_label || entityId} />;
@@ -84,7 +84,7 @@ export default function EntityButton({
   }
 
   function defaultOnLongPress() {
-    if (domain === "light" && checked) {
+    if (domain === "light") {
       onLightDetails();
       return;
     }
@@ -116,25 +116,22 @@ export default function EntityButton({
   }
 
   return (
-    <>
-      {modals}
-      <BaseEntityButton
-        sx={sx}
-        checked={checked}
-        disabled={unavailable}
-        horizontal={horizontal}
-        icon={icon}
-        label={label}
-        changeTimeout={changeTimeout}
-        color={
-          displayColor && !isWhite
-            ? getDisplayColorString(displayColor, 0.6)
-            : undefined
-        }
-        confirmBefore={confirmBefore}
-        onClick={onClick || defaultOnClick}
-        onLongPress={onLongPress || defaultOnLongPress}
-      />
-    </>
+    <BaseEntityButton
+      sx={sx}
+      checked={checked}
+      disabled={unavailable}
+      horizontal={horizontal}
+      icon={icon}
+      label={label}
+      changeTimeout={changeTimeout}
+      color={
+        displayColor && !isWhite
+          ? getDisplayColorString(displayColor, 0.6)
+          : undefined
+      }
+      confirmBefore={confirmBefore}
+      onClick={onClick || defaultOnClick}
+      onLongPress={onLongPress || defaultOnLongPress}
+    />
   );
 }

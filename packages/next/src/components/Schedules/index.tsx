@@ -9,7 +9,7 @@ import { List } from "@mui/material";
 import GlossyPaper from "../GlossyPaper";
 
 export default function Schedules() {
-  const [upsertSchedule, modals] = useUpsertSchedule();
+  const upsertSchedule = useUpsertSchedule();
 
   const {
     data = [],
@@ -50,26 +50,23 @@ export default function Schedules() {
   }
 
   return (
-    <>
-      {modals}
-      <List component={GlossyPaper}>
-        {data.length === 0 ? (
-          <EmptyState
-            loading={isInitialLoading}
-            text="Nenhum agendamento criado"
+    <List component={GlossyPaper}>
+      {data.length === 0 ? (
+        <EmptyState
+          loading={isInitialLoading}
+          text="Nenhum agendamento criado"
+        />
+      ) : (
+        data.map((it) => (
+          <ScheduleItem
+            key={it.id}
+            schedule={it}
+            onPatch={(key, value) => onPatch(it, key, value)}
+            onEdit={() => upsertSchedule(it)}
+            onDelete={() => onDelete(it)}
           />
-        ) : (
-          data.map((it) => (
-            <ScheduleItem
-              key={it.id}
-              schedule={it}
-              onPatch={(key, value) => onPatch(it, key, value)}
-              onEdit={() => upsertSchedule(it)}
-              onDelete={() => onDelete(it)}
-            />
-          ))
-        )}
-      </List>
-    </>
+        ))
+      )}
+    </List>
   );
 }

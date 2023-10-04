@@ -5,7 +5,7 @@ import NewTimerDialog from "./NewTimerDialog";
 import { queryClient } from "../../utils/queryClient";
 
 export default function useAddTimer() {
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   function onSave(unmount: () => void) {
     return function (name: string, duration: number, actions: Actions) {
@@ -26,5 +26,5 @@ export default function useAddTimer() {
     ));
   }
 
-  return [addTimer, modals] as const;
+  return addTimer;
 }

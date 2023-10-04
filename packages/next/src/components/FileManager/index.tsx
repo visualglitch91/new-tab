@@ -1,5 +1,5 @@
 import api from "../../utils/api";
-import { useConfirm } from "material-ui-confirm";
+import useConfirm from "../../utils/useConfirm";
 import { useMenu } from "../../utils/useMenu";
 import useModal from "../../utils/useModal";
 import { usePrompt } from "../../utils/usePrompt";
@@ -8,10 +8,10 @@ import SwitchInstallDialog from "./SwitchInstallDialog";
 import { Item, useFileNavigation } from "./utils";
 
 export default function FileManager() {
-  const [showMenu, menu] = useMenu();
-  const [prompt, modals1] = usePrompt();
+  const showMenu = useMenu();
+  const mount = useModal();
+  const prompt = usePrompt();
   const confirm = useConfirm();
-  const [mount, modals3] = useModal();
 
   const { current, prev, items, refetch, changeDir } = useFileNavigation();
 
@@ -62,10 +62,11 @@ export default function FileManager() {
           case "delete":
             confirm({
               title: "Deseja contiuar?",
-            }).then(() => {
-              api(`/file-manager/navigation/files/${item.id}`, "delete").then(
-                refetch
-              );
+              onConfirm: () => {
+                api(`/file-manager/navigation/files/${item.id}`, "delete").then(
+                  refetch
+                );
+              },
             });
             return;
         }
@@ -78,17 +79,12 @@ export default function FileManager() {
   }
 
   return (
-    <>
-      {menu}
-      {modals1}
-      {modals3}
-      <FileListCard
-        items={items}
-        current={current}
-        prev={prev}
-        onChangeDir={changeDir}
-        onOptions={onOptions}
-      />
-    </>
+    <FileListCard
+      items={items}
+      current={current}
+      prev={prev}
+      onChangeDir={changeDir}
+      onOptions={onOptions}
+    />
   );
 }

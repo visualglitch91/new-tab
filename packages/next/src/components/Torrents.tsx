@@ -66,9 +66,9 @@ function useTorrentMutation() {
 
 export function useAddTorrent() {
   const mutate = useTorrentMutation();
-  const [prompt, modals] = usePrompt();
+  const prompt = usePrompt();
 
-  function addTorrent() {
+  return function addTorrent() {
     prompt({
       title: "Adicionar",
       fields: ["Magnet URI"],
@@ -76,13 +76,11 @@ export function useAddTorrent() {
         mutate(() => api("/transmission/add", "post", { magnet }));
       },
     });
-  }
-
-  return [addTorrent, modals] as const;
+  };
 }
 
 export default function Torrents() {
-  const [showMenu, menu] = useMenu();
+  const showMenu = useMenu();
   const mutate = useTorrentMutation();
 
   const { data = [], isInitialLoading } = useQuery(
@@ -121,18 +119,15 @@ export default function Torrents() {
   }
 
   return (
-    <>
-      {menu}
-      <DownloadListCard
-        downloads={data}
-        loading={isInitialLoading}
-        onItemClick={onItemClick}
-      >
-        <EntityListItem
-          sx={{ py: "16px", mb: "-8px" }}
-          entityId="switch.transmission_turtle_mode"
-        />
-      </DownloadListCard>
-    </>
+    <DownloadListCard
+      downloads={data}
+      loading={isInitialLoading}
+      onItemClick={onItemClick}
+    >
+      <EntityListItem
+        sx={{ py: "16px", mb: "-8px" }}
+        entityId="switch.transmission_turtle_mode"
+      />
+    </DownloadListCard>
   );
 }

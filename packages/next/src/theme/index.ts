@@ -1,31 +1,42 @@
 import { createTheme } from "@mui/material";
-import MuiDrawer from "./overrides/MuiDrawer";
-import MuiButton from "./overrides/MuiButton";
 import { applyCustomColors } from "./colors";
-import MuiBottomNavigation from "./overrides/MuiBottomNavigation";
-import MuiIconButton from "./overrides/MuiIconButton";
-import MuiListItemText from "./overrides/MuiListItemText";
-import MuiListItemIcon from "./overrides/MuiListItemIcon";
-import MuiListItemSecondaryAction from "./overrides/MuiListItemSecondaryAction";
+
+function getModuleName(filePath: string) {
+  return filePath.match(/\/([^/]+)\.ts$/)?.[1] || null;
+}
+
+// Load all overrides from folder dinamically
+const overrides = Object.entries(
+  import.meta.glob("./overrides/*.ts", { eager: true })
+).reduce(
+  //@ts-expect-error
+  (acc, [key, { default: module }]) => ({
+    ...acc,
+    //@ts-expect-error
+    [getModuleName(key)]: module,
+  }),
+  {}
+);
+
+console.log("Overrides loaded:", Object.keys(overrides));
+
+const baseOverrides = {
+  shape: {
+    borderRadius: 12,
+  },
+  typography: {
+    fontFamily: "San Francisco",
+  },
+  components: overrides,
+};
 
 const theme = applyCustomColors(
   createTheme({
+    ...baseOverrides,
     palette: {
       mode: "dark",
       primary: { main: "#ff79c6" },
       secondary: { main: "#885ba3" },
-    },
-    typography: {
-      fontFamily: "San Francisco",
-    },
-    components: {
-      MuiDrawer,
-      MuiButton,
-      MuiBottomNavigation,
-      MuiIconButton,
-      MuiListItemText,
-      MuiListItemIcon,
-      MuiListItemSecondaryAction,
     },
   })
 );

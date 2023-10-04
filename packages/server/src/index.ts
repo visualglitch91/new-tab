@@ -33,7 +33,6 @@ if (!isDev) {
   app.use(express.static(path.resolve(__dirname + "/../../../dist")));
 }
 
-
 const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
 
 for (let key in modules) {

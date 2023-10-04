@@ -1,7 +1,6 @@
 import { Stack, Typography, styled } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
-import { useConfirm } from "material-ui-confirm";
 import { queryClient } from "../utils/queryClient";
 import { usePrompt } from "../utils/usePrompt";
 import api from "../utils/api";
@@ -10,6 +9,7 @@ import EmptyState from "./EmptyState";
 import AltIconButton from "./AltIconButton";
 import Icon from "./Icon";
 import ListItem from "./ListItem";
+import useConfirm from "../utils/useConfirm";
 
 const Desciption = styled("span")({
   opacity: 0.8,
@@ -44,10 +44,10 @@ function useAction() {
 }
 
 export function useAddPackage() {
-  const [prompt, $prompt] = usePrompt();
+  const prompt = usePrompt();
   const { mutate } = useAction();
 
-  function add() {
+  return function add() {
     prompt({
       title: "Adicionar",
       fields: ["Nome", "Código"],
@@ -57,9 +57,7 @@ export function useAddPackage() {
         }
       },
     });
-  }
-
-  return [add, $prompt] as const;
+  };
 }
 
 export default function PackageTracker() {
@@ -72,8 +70,7 @@ export default function PackageTracker() {
   function remove(item: PackageTrackerItem) {
     confirm({
       title: `Remover "${item.name}"`,
-    }).then(() => {
-      mutate({ action: "remove", code: item.code });
+      onConfirm: () => mutate({ action: "remove", code: item.code }),
     });
   }
 

@@ -1,7 +1,9 @@
-import { styled } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 import { SxProps } from "../../theme/utils";
 import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import useShellOutput from "./useShellOutput";
+import AltIconButton from "../AltIconButton";
+import Icon from "../Icon";
 
 interface Size {
   width: number;
@@ -9,11 +11,14 @@ interface Size {
 }
 
 const fullscreenSx: SxProps = {
-  width: "100vw",
-  height: "100vh",
-  maxWidth: "unset",
-  maxHeight: "unset",
-  borderRadius: 0,
+  "& .MuiDialog-paper": {
+    margin: 0,
+    width: "100vw",
+    height: "100vh",
+    maxWidth: "unset",
+    maxHeight: "unset",
+    borderRadius: 0,
+  },
 };
 
 const windowedSx =
@@ -49,8 +54,16 @@ export default function ShellOutputDialog({
   return (
     <DialogBase
       {...props}
+      bottomMobileSheet
       sx={size ? windowedSx(size) : fullscreenSx}
-      title={title}
+      title={
+        <Stack direction="row" justifyContent="space-between">
+          <span>{title}</span>
+          <AltIconButton size="small" onClick={props.onClose}>
+            <Icon icon="close" size={16} />
+          </AltIconButton>
+        </Stack>
+      }
     >
       <Content>{shellOutput}</Content>
     </DialogBase>

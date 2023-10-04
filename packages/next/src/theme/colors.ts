@@ -33,7 +33,7 @@ declare module "@mui/material/IconButton" {
   interface IconButtonPropsColorOverrides extends ColorOverrides {}
 }
 
-export function applyCustomColors(theme: Theme) {
+export function applyCustomColors(theme: Theme): Theme {
   return createTheme(theme, {
     palette: Object.entries(customColors).reduce(
       (acc, [key, value]) => ({

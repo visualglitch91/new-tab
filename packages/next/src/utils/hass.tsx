@@ -30,6 +30,7 @@ function setupHASS({
 }) {
   return getAuth({
     hassUrl,
+    redirectUrl: window.location.origin,
     saveTokens: (tokens) => saveValue(`hass_token_${hassUrl}`, tokens),
     loadTokens: async () => loadValue(`hass_token_${hassUrl}`),
   })

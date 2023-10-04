@@ -15,7 +15,7 @@ export default function EmptyState({
       direction="row"
       alignItems="center"
       justifyContent="center"
-      sx={sxx({ fontSize: 14, padding: "8px" }, sx)}
+      sx={sxx({ fontSize: 14, padding: "16px" }, sx)}
     >
       {loading ? <CircularProgress /> : text}
     </Stack>

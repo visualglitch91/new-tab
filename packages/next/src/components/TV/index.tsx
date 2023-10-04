@@ -15,17 +15,14 @@ function spacer(height?: number) {
 }
 
 function AndroidRemoteButton() {
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   function showRemote() {
     mount((_, props) => <AndroidRemoteDialog {...props} />);
   }
 
   return (
-    <>
-      {modals}
-      <BaseEntityButton icon="remote" label="Controle" onClick={showRemote} />
-    </>
+    <BaseEntityButton icon="remote" label="Controle" onClick={showRemote} />
   );
 }
 

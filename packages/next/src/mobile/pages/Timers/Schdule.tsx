@@ -6,7 +6,7 @@ import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
 
 export default function SchedulePage() {
-  const [upsertSchedule, modals] = useUpsertSchedule();
+  const upsertSchedule = useUpsertSchedule();
 
   return (
     <PageLayout
@@ -17,7 +17,6 @@ export default function SchedulePage() {
         </AltIconButton>
       }
     >
-      {modals}
       <Schedules />
     </PageLayout>
   );

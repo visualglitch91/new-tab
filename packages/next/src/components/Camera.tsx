@@ -34,10 +34,10 @@ export default function Camera({
   onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
 }) {
   const entity = useEntity(entityId);
-  const [mount, modals] = useModal();
+  const mount = useModal();
   const entityPicture = entity?.attributes?.entity_picture;
   const [snapshot, setSnapshot] = useState<string | undefined>("LOADING");
-  const isStreaming = modals.length < 0;
+  const [isStreaming, setIsStreaming] = useState(false);
 
   useEffect(() => {
     if (isStreaming) {
@@ -76,9 +76,13 @@ export default function Camera({
   }, [entityPicture, isStreaming]);
 
   function showStream() {
-    mount((_, props) => (
+    mount((_, { onClose, ...props }) => (
       <FullScreenCamera
         {...props}
+        onClose={() => {
+          setIsStreaming(false);
+          onClose();
+        }}
         aspectRatio={aspectRatio}
         entityId={entityId}
         onMove={onMove}
@@ -88,7 +92,6 @@ export default function Camera({
 
   return (
     <Wrapper style={{ aspectRatio: aspectRatio.toString() }}>
-      {modals}
       {snapshot === "LOADING" ? (
         <CircularProgress />
       ) : snapshot ? (

@@ -3,4 +3,5 @@ body {
   background-size: cover;
   background-attachment: fixed;
   --tween: cubic-bezier(0.76, 0, 0.24, 1);
+  min-height: 100vh;
 }

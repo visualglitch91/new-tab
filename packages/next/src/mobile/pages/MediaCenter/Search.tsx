@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Box, TextField, alpha } from "@mui/material";
 import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
-import { borderRadius } from "../../../components/GlossyPaper";
 import Search from "../../../components/MediaCenter/Search";
 
 export default function SearchPage() {
@@ -27,14 +26,10 @@ export default function SearchPage() {
               value={term}
               onChange={(e) => setTerm(e.currentTarget.value)}
               sx={(theme) => ({
-                "& .MuiInputBase-root": {
-                  borderRadius,
-                },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: alpha(theme.palette.primary.light, 0.6),
                 },
                 "& .MuiInputBase-input": {
-                  borderRadius,
                   backgroundColor: "rgba(47, 59, 82,0.6)",
                   boxShadow: "rgb(25, 25, 25) 3px 3px 13px -6px",
                 },

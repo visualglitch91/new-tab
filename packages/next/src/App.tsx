@@ -1,15 +1,14 @@
-import { useEffect } from "react";
 import { useLocation } from "wouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, useMediaQuery } from "@mui/material";
-import { ConfirmProvider } from "material-ui-confirm";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "./utils/queryClient";
 import { HassProvider } from "./utils/hass";
 import { SocketIOProvider } from "./utils/api";
 import { removeParamsFromUrl } from "./utils/url";
-import { isTouchDevice } from "./utils/general";
+import { BreakpointProvider, isTouchDevice } from "./utils/general";
+import { ModalProvider } from "./utils/useModal";
 import clock from "./utils/clock";
 import useMountEffect from "./utils/useMountEffect";
 import theme from "./theme";
@@ -19,14 +18,13 @@ export default function MyApp() {
   const [location, navigate] = useLocation();
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  useEffect(() => {
+  function onBreakpointChange() {
     const basePath = mobile ? "/mobile" : "/desktop";
 
     if (!location.startsWith(basePath)) {
       navigate(basePath);
     }
-    //eslint-disable-next-line
-  }, [mobile]);
+  }
 
   useMountEffect(() => {
     if (isTouchDevice) {
@@ -40,16 +38,18 @@ export default function MyApp() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <HassProvider>
-          <SocketIOProvider>
-            <ConfirmProvider>
-              <Mobile />
-            </ConfirmProvider>
-          </SocketIOProvider>
-        </HassProvider>
-      </QueryClientProvider>
+      <BreakpointProvider onChange={onBreakpointChange}>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <HassProvider>
+            <SocketIOProvider>
+              <ModalProvider>
+                <Mobile />
+              </ModalProvider>
+            </SocketIOProvider>
+          </HassProvider>
+        </QueryClientProvider>
+      </BreakpointProvider>
     </ThemeProvider>
   );
 }

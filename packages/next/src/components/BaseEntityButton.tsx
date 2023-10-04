@@ -1,10 +1,10 @@
 import { CircularProgress, SxProps, styled } from "@mui/material";
-import { useConfirm } from "material-ui-confirm";
+import { useLongPress } from "@uidotdev/usehooks";
 import useAsyncChange from "../utils/useAsyncChange";
 import { cx } from "../utils/styling";
 import Icon from "./Icon";
 import HugeButton from "./HugeButton";
-import { useLongPress } from "@uidotdev/usehooks";
+import useConfirm from "../utils/useConfirm";
 
 const classes = {
   wrapperActive: "BaseEntityButton__Active",
@@ -121,14 +121,17 @@ export default function BaseEntityButton({
       {...props}
       {...buttonProps}
       onClick={() => {
-        (confirmBefore
-          ? confirm({ title: "Continuar?" })
-          : Promise.resolve()
-        ).then(() => {
+        const run = () => {
           if (change() && onClick) {
             onClick();
           }
-        });
+        };
+
+        if (confirmBefore) {
+          confirm({ title: "Continuar?", onConfirm: run });
+        } else {
+          run();
+        }
       }}
       sx={sx}
       disabled={disabled}

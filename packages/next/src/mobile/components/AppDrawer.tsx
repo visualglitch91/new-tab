@@ -4,6 +4,7 @@ import { Button, List, ListItem, SwipeableDrawer, styled } from "@mui/material";
 import Icon from "../../components/Icon";
 import useMountEffect from "../../utils/useMountEffect";
 import ClockAndWeather from "../../components/ClockAndWeather";
+import useSwipe from "../../utils/useSwipe";
 
 const DrawerButton = styled(Button)({
   justifyContent: "flex-start",
@@ -62,11 +63,16 @@ export function AppDrawer({
     };
   });
 
+  useSwipe(document.body, (direction) => {
+    if (direction === "right") {
+      setOpen(true);
+    }
+  });
+
   return (
     <SwipeableDrawer
       disableDiscovery
-      swipeAreaWidth={20}
-      hysteresis={0.1}
+      disableSwipeToOpen
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}

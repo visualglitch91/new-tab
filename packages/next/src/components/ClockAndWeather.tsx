@@ -19,7 +19,6 @@ const Time = styled("div")({
   fontSize: "42px",
   marginBottom: "0px",
   lineHeight: 1,
-  marginTop: "-4px",
   fontWeight: 500,
 });
 

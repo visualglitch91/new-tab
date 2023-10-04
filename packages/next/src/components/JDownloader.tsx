@@ -32,10 +32,10 @@ function useDownloadMutation() {
 }
 
 export function useAddDownload() {
-  const [prompt, modals] = usePrompt();
+  const prompt = usePrompt();
   const mutate = useDownloadMutation();
 
-  function addDownload() {
+  return function addDownload() {
     prompt({
       title: "Adicionar",
       fields: ["Download URL"],
@@ -43,15 +43,13 @@ export function useAddDownload() {
         mutate(() => api("/jdownloader/add", "post", { url }));
       },
     });
-  }
-
-  return [addDownload, modals] as const;
+  };
 }
 
 export default function JDownloader() {
   const enabled = useEntity("switch.casa_jdownloader")?.state === "on";
   const mutate = useDownloadMutation();
-  const [showMenu, menu] = useMenu();
+  const showMenu = useMenu();
 
   const { data = [], isInitialLoading } = useQuery(
     ["jdownloader"],
@@ -83,7 +81,6 @@ export default function JDownloader() {
 
   return (
     <>
-      {menu}
       <DownloadListCard
         downloads={enabled ? data : []}
         loading={isInitialLoading}

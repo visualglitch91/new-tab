@@ -20,7 +20,7 @@ export default function MediaItem({
   item: IMediaItem;
   itemAction?: React.ReactNode;
 }) {
-  const [showMenu, menu] = useMenu();
+  const showMenu = useMenu();
 
   const { data: qualityProfiles } = useQuery<
     Record<IMediaItem["type"], QualityProfile[]>
@@ -54,44 +54,41 @@ export default function MediaItem({
   }
 
   return (
-    <>
-      {menu}
-      <Tooltip title={item.title}>
-        <span>
-          <ListItem
-            sx={{ py: "6px" }}
-            startSlot={<MediaPoster item={item} />}
-            primaryText={item.title}
-            secondaryText={`${item.year} • ${TYPE_LABEL[item.type]}`}
-            endSlot={
-              <Stack direction="row" alignItems="center" gap="6px">
-                {item.status !== "not-monitored" ? (
-                  <Chip
-                    size="small"
-                    sx={{
-                      color: getContrastColor(STATUS_COLORS[item.status]),
-                      backgroundColor: `rgb(${STATUS_COLORS[item.status].join(
-                        ","
-                      )})`,
-                    }}
-                    label={STATUS_LABELS[item.status]}
-                  />
+    <Tooltip title={item.title}>
+      <span>
+        <ListItem
+          sx={{ py: "6px" }}
+          startSlot={<MediaPoster item={item} />}
+          primaryText={item.title}
+          secondaryText={`${item.year} • ${TYPE_LABEL[item.type]}`}
+          endSlot={
+            <Stack direction="row" alignItems="center" gap="6px">
+              {item.status !== "not-monitored" ? (
+                <Chip
+                  size="small"
+                  sx={{
+                    color: getContrastColor(STATUS_COLORS[item.status]),
+                    backgroundColor: `rgb(${STATUS_COLORS[item.status].join(
+                      ","
+                    )})`,
+                  }}
+                  label={STATUS_LABELS[item.status]}
+                />
+              ) : (
+                qualityProfiles &&
+                (requestMedia.isLoading ? (
+                  <DotLoading />
                 ) : (
-                  qualityProfiles &&
-                  (requestMedia.isLoading ? (
-                    <DotLoading />
-                  ) : (
-                    <Button size="small" onClick={request}>
-                      Requisitar
-                    </Button>
-                  ))
-                )}
-                {itemAction}
-              </Stack>
-            }
-          />
-        </span>
-      </Tooltip>
-    </>
+                  <Button size="small" onClick={request}>
+                    Requisitar
+                  </Button>
+                ))
+              )}
+              {itemAction}
+            </Stack>
+          }
+        />
+      </span>
+    </Tooltip>
   );
 }

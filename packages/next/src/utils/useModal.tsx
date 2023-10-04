@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import useMountEffect from "./useMountEffect";
 
 type Renderer = (
@@ -12,7 +12,21 @@ type Renderer = (
   }
 ) => React.ReactNode;
 
+const ModalContext = createContext<((renderer: Renderer) => () => void) | null>(
+  null
+);
+
 export default function useModal() {
+  const mount = useContext(ModalContext);
+
+  if (!mount) {
+    throw new Error("Must be used inside a ModalProvider");
+  }
+
+  return mount;
+}
+
+export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [modals, setModals] = useState<Record<string, React.ReactNode>>({});
 
   function unmountByKey(key: string) {
@@ -69,8 +83,10 @@ export default function useModal() {
     };
   }
 
-  return [mount, Object.values(modals)] as [
-    (renderer: Renderer) => () => void,
-    React.ReactNode[]
-  ];
+  return (
+    <ModalContext.Provider value={mount}>
+      {Object.values(modals)}
+      {children}
+    </ModalContext.Provider>
+  );
 }

@@ -1,6 +1,5 @@
 import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { useConfirm } from "material-ui-confirm";
 import { queryClient } from "../../utils/queryClient";
 import { useMenu } from "../../utils/useMenu";
 import useModal from "../../utils/useModal";
@@ -11,6 +10,7 @@ import ColorBadge from "../../components/ColorBadge";
 import Icon from "../../components/Icon";
 import { ParsedApp, STATUS_COLORS, formatName } from "./utils";
 import LogDialog from "./LogDialog";
+import useConfirm from "../../utils/useConfirm";
 
 enum Menu {
   LOGS = "logs",
@@ -20,9 +20,9 @@ enum Menu {
 }
 
 export function AppItem({ app }: { app: ParsedApp }) {
-  const [showMenu, menu] = useMenu();
+  const showMenu = useMenu();
   const confirm = useConfirm();
-  const [mount, modals2] = useModal();
+  const mount = useModal();
 
   const { mutate, isLoading } = useMutation(
     ({ action }: { action: Omit<Menu, "LOGS"> }) => {
@@ -58,7 +58,7 @@ export function AppItem({ app }: { app: ParsedApp }) {
         }
 
         if (running) {
-          confirm({ title: "Continuar?" }).then(() => mutate({ action }));
+          confirm({ title: "Continuar?", onConfirm: () => mutate({ action }) });
         } else {
           mutate({ action });
         }
@@ -67,26 +67,22 @@ export function AppItem({ app }: { app: ParsedApp }) {
   }
 
   return (
-    <>
-      {menu}
-      {modals2}
-      <ListItem
-        icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
-        primaryText={
-          <Stack direction="row" spacing={0.8} alignItems="center">
-            <span>{formatName(app.name)}</span>
-            {app.updateAvailable && (
-              <Icon
-                size={18}
-                sx={{ mt: "-1px" }}
-                icon="arrow-up-circle-outline"
-              />
-            )}
-          </Stack>
-        }
-        endSlot={isLoading ? <DotLoading /> : running ? app.usage : "Parado"}
-        onClick={showActionsMenu}
-      />
-    </>
+    <ListItem
+      icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
+      primaryText={
+        <Stack direction="row" spacing={0.8} alignItems="center">
+          <span>{formatName(app.name)}</span>
+          {app.updateAvailable && (
+            <Icon
+              size={18}
+              sx={{ mt: "-1px" }}
+              icon="arrow-up-circle-outline"
+            />
+          )}
+        </Stack>
+      }
+      endSlot={isLoading ? <DotLoading /> : running ? app.usage : "Parado"}
+      onClick={showActionsMenu}
+    />
   );
 }

@@ -6,13 +6,16 @@ import ButtonRow from "./ButtonRow";
 
 export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
   return (
-    <DialogBase {...props} title="Controle">
+    <DialogBase {...props} bottomMobileSheet title="Controle">
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: "8px",
           minWidth: "286px",
+          "& button": {
+            background: "rgba(28, 34, 48,0.9)",
+          },
         }}
       >
         <ButtonRow height={90}>
