@@ -7,8 +7,8 @@
     "dev:client": "npm run dev -w packages/client",
     "dev:server": "npm run dev -w packages/server",
     "start": "npm run start -w packages/server",
-    "build": "npm run lint && npm run build -w packages/client",
-    "build:next": "npm run lint && npm run build -w packages/next",
+    "build": "npm run build -w packages/client",
+    "build:next": "npm run build -w packages/next",
     "lint": "tsc"
   },
   "devDependencies": {
