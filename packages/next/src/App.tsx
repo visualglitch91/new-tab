@@ -1,4 +1,4 @@
-import { useLocation } from "wouter";
+import { Router, useLocation } from "wouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import clock from "./utils/clock";
 import useMountEffect from "./utils/useMountEffect";
 import theme from "./theme";
 import Mobile from "./mobile";
+import Desktop from "./desktop";
 
 export default function MyApp() {
   const [location, navigate] = useLocation();
@@ -44,7 +45,12 @@ export default function MyApp() {
           <HassProvider>
             <SocketIOProvider>
               <ModalProvider>
-                <Mobile />
+                <Router base="/mobile">
+                  <Mobile />
+                </Router>
+                <Router base="/mobile">
+                  <Desktop />
+                </Router>
               </ModalProvider>
             </SocketIOProvider>
           </HassProvider>

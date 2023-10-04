@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/material";
 import Grid from "./Grid";
 import SectionTitle from "./SectionTitle";
 

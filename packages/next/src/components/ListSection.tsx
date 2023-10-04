@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { List, Stack } from "@mui/material";
-import SectionTitle from "./SectionTitle";
+import { List } from "@mui/material";
 import GlossyPaper from "./GlossyPaper";
+import Section from "./Section";
 
 export default function ListSection({
   title,
@@ -11,9 +11,8 @@ export default function ListSection({
   children?: React.ReactNode;
 }) {
   return (
-    <Stack spacing={2}>
-      <SectionTitle>{title}</SectionTitle>
+    <Section title={title}>
       <List component={GlossyPaper}>{children}</List>
-    </Stack>
+    </Section>
   );
 }

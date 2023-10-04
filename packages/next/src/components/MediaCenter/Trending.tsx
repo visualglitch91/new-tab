@@ -3,7 +3,7 @@ import { MediaItem } from "@home-control/types/media-center";
 import api from "../../utils/api";
 import MediaListCard from "./MediaListCard";
 
-export default function Trending() {
+export default function Trending({ maxHeight }: { maxHeight?: number }) {
   const { data = [], isInitialLoading } = useQuery(
     ["media-center", "trending"],
     ({ signal }) =>
@@ -13,5 +13,11 @@ export default function Trending() {
     { refetchInterval: 20_000 }
   );
 
-  return <MediaListCard items={data} loading={isInitialLoading} />;
+  return (
+    <MediaListCard
+      maxHeight={maxHeight}
+      items={data}
+      loading={isInitialLoading}
+    />
+  );
 }

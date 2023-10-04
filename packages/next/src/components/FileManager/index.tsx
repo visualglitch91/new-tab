@@ -7,7 +7,7 @@ import FileListCard from "./FileListCard";
 import SwitchInstallDialog from "./SwitchInstallDialog";
 import { Item, useFileNavigation } from "./utils";
 
-export default function FileManager() {
+export default function FileManager({ maxHeight }: { maxHeight?: number }) {
   const showMenu = useMenu();
   const mount = useModal();
   const prompt = usePrompt();
@@ -81,6 +81,7 @@ export default function FileManager() {
   return (
     <FileListCard
       items={items}
+      maxHeight={maxHeight}
       current={current}
       prev={prev}
       onChangeDir={changeDir}

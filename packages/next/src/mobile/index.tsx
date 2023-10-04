@@ -1,4 +1,4 @@
-import { Route, Router, Switch, useLocation } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { AppDrawer } from "./components/AppDrawer";
 import TimersAndSchedule from "./pages/Timers";
 import RouteRedirect from "../components/RouteRedirect";
@@ -68,21 +68,19 @@ export default function Mobile() {
   }, [location]);
 
   return (
-    <Router base="/mobile">
-      <Route path="/:rest*">
-        <RouteRedirect from="/" to="/home" />
-        <AppDrawer pages={pages} />
-        <Switch>
-          {pages.map((page) => (
-            <Route
-              key={page.path}
-              path={page.matchAll ? `${page.path}/:rest*` : page.path}
-            >
-              {page.component}
-            </Route>
-          ))}
-        </Switch>
-      </Route>
-    </Router>
+    <Route path="/:rest*">
+      <RouteRedirect from="/" to="/home" />
+      <AppDrawer pages={pages} />
+      <Switch>
+        {pages.map((page) => (
+          <Route
+            key={page.path}
+            path={page.matchAll ? `${page.path}/:rest*` : page.path}
+          >
+            {page.component}
+          </Route>
+        ))}
+      </Switch>
+    </Route>
   );
 }

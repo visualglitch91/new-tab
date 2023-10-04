@@ -79,7 +79,7 @@ export function useAddTorrent() {
   };
 }
 
-export default function Torrents() {
+export default function Torrents({ maxHeight }: { maxHeight?: number }) {
   const showMenu = useMenu();
   const mutate = useTorrentMutation();
 
@@ -120,6 +120,7 @@ export default function Torrents() {
 
   return (
     <DownloadListCard
+      maxHeight={maxHeight}
       downloads={data}
       loading={isInitialLoading}
       onItemClick={onItemClick}

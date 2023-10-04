@@ -4,18 +4,19 @@ import { Directory, Item } from "./utils";
 import GlossyPaper from "../GlossyPaper";
 import AltIconButton from "../AltIconButton";
 import Icon from "../Icon";
-import SectionTitle from "../SectionTitle";
 
 export default function FileListCard({
   items,
   current,
   prev,
+  maxHeight,
   onChangeDir,
   onOptions,
 }: {
   items: Item[];
   current: Directory;
   prev?: Directory;
+  maxHeight?: number;
   onChangeDir: (dir: Directory) => void;
   onOptions: (item: Item) => void;
 }) {
@@ -52,7 +53,10 @@ export default function FileListCard({
         </Tooltip>
       </Stack>
 
-      <List component={GlossyPaper}>
+      <List
+        component={GlossyPaper}
+        sx={maxHeight ? { maxHeight, overflow: "auto" } : {}}
+      >
         {items.map((item) => {
           const isDir = item.type === "dir";
 

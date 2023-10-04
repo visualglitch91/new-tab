@@ -46,7 +46,7 @@ export function useAddDownload() {
   };
 }
 
-export default function JDownloader() {
+export default function JDownloader({ maxHeight }: { maxHeight?: number }) {
   const enabled = useEntity("switch.casa_jdownloader")?.state === "on";
   const mutate = useDownloadMutation();
   const showMenu = useMenu();
@@ -82,6 +82,7 @@ export default function JDownloader() {
   return (
     <>
       <DownloadListCard
+        maxHeight={maxHeight}
         downloads={enabled ? data : []}
         loading={isInitialLoading}
         onItemClick={onItemClick}

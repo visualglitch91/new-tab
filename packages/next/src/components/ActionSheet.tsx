@@ -7,6 +7,7 @@ import {
 import DialogBase, { DialogBaseControlProps } from "./DialogBase";
 import { useBreakpoint } from "../utils/general";
 import DialogSlideTransition from "./DialogSlideTransition";
+import { sxx } from "../utils/styling";
 
 export type ActionMap<T extends string> = Record<
   T,
@@ -30,6 +31,7 @@ export default function ActionSheet<T extends string>({
   description,
   actions,
   hideCancelButton,
+  sx,
   onSelect,
   onClose,
   ...props
@@ -50,9 +52,22 @@ export default function ActionSheet<T extends string>({
   return (
     <DialogBase
       {...props}
+      sx={sxx(
+        {
+          "& .MuiDialogActions-root": {
+            flexDirection: "column",
+            gap: 1.5,
+            alignItems: "stretch",
+            "& > *": {
+              marginLeft: "unset !important",
+            },
+          },
+        },
+        sx
+      )}
       bottomMobileSheet
       title={title}
-      footer={isMobile ? <Stack spacing={2}>{buttons}</Stack> : buttons}
+      footer={buttons}
       TransitionComponent={isMobile ? DialogSlideTransition : undefined}
       onClose={onClose}
     >

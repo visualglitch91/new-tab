@@ -91,17 +91,19 @@ export default function DownloadListCard({
   downloads,
   loading,
   children,
+  maxHeight,
   onItemClick,
 }: {
   downloads: DownloadItem[];
   loading?: boolean;
+  maxHeight?: number;
   children?: React.ReactNode;
   onItemClick: (item: DownloadItem) => void;
 }) {
   return (
     <Stack component={GlossyPaper}>
       {children}
-      <List>
+      <List sx={maxHeight ? { maxHeight, overflow: "auto" } : {}}>
         {downloads.length === 0 ? (
           <EmptyState
             sx={{ pt: "18px" }}

@@ -36,7 +36,11 @@ function DeleteRequestButton({ item }: { item: MediaItem }) {
   );
 }
 
-export default function RecentlyRequested() {
+export default function RecentlyRequested({
+  maxHeight,
+}: {
+  maxHeight?: number;
+}) {
   const { data = [], isInitialLoading } = useQuery(
     ["media-center", "recently-requested"],
     () => api<MediaItem[]>("/media-center/recently-requested", "get"),
@@ -46,6 +50,7 @@ export default function RecentlyRequested() {
   return (
     <MediaListCard
       items={data}
+      maxHeight={maxHeight}
       loading={isInitialLoading}
       itemAction={(item) => <DeleteRequestButton item={item} />}
     />

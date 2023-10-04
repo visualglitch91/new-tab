@@ -26,7 +26,7 @@ function AndroidRemoteButton() {
   );
 }
 
-export default function TV({ noMediCard }: { noMediCard: boolean }) {
+export default function TV({ noMediCard }: { noMediCard?: boolean }) {
   return (
     <Stack spacing={2}>
       {!noMediCard && (

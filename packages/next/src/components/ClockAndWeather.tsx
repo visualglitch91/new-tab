@@ -73,7 +73,7 @@ export default function ClockAndWeather({
   sx,
   compact,
 }: {
-  sx: SxProps;
+  sx?: SxProps;
   compact?: boolean;
 }) {
   const [date, setDate] = useState(() => new Date());

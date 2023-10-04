@@ -93,3 +93,5 @@ export function useBreakpoint() {
 
   return result;
 }
+
+export const isNewTab = false;
