@@ -18,7 +18,7 @@ declare module "@mui/material/styles" {
   };
 
   type CustomPaletteOptions = {
-    [key in CustomColors]: PaletteOptions["primary"];
+    [key in CustomColors]?: PaletteOptions["primary"];
   };
 
   interface Palette extends CustomPalette {}
