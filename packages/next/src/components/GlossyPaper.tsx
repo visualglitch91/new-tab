@@ -1,4 +1,4 @@
-import { styled } from "@mui/joy";
+import { styled } from "@mui/material";
 
 export const borderRadius = "16px";
 

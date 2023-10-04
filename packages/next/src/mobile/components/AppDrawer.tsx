@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Button, List, ListItem, SwipeableDrawer, styled } from "@mui/material";
 import Icon from "../../components/Icon";
 import useMountEffect from "../../utils/useMountEffect";
+import ClockAndWeather from "../../components/ClockAndWeather";
 
 const DrawerButton = styled(Button)({
   justifyContent: "flex-start",
@@ -70,6 +71,14 @@ export function AppDrawer({
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
     >
+      <ClockAndWeather
+        compact
+        sx={(theme) => ({
+          margin: "32px 32px 10px",
+          background: theme.palette.white.main,
+          color: theme.palette.white.contrastText,
+        })}
+      />
       <List sx={{ px: 1.2 }}>
         {pages.map((it, index) => (
           <AppLink key={index} {...it} active={location.startsWith(it.path)} />

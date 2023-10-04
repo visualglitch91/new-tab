@@ -3,6 +3,7 @@ import { ComponentOverride } from "../utils";
 const MuiBottomNavigation: ComponentOverride["MuiBottomNavigation"] = {
   styleOverrides: {
     root: {
+      zIndex: 1,
       height: 62,
       backdropFilter: "blur(10px)",
       background: "rgba(180, 180, 180, 0.3)",

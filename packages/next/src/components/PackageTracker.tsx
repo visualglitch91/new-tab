@@ -15,9 +15,8 @@ const Desciption = styled("span")({
   opacity: 0.8,
   fontSize: "14px",
   fontWeight: "bold",
-  "& > p": {
+  "& > span": {
     whiteSpace: "pre-wrap",
-    margin: "0",
   },
 });
 
@@ -92,20 +91,18 @@ export default function PackageTracker() {
               <ListItem
                 sx={{
                   "& .MuiListItemSecondaryAction-root": {
-                    flexDirection: "column",
-                    alignItems: "flex-end",
                     py: "6px",
-                    "& > *:last-child": {
-                      marginTop: lastEvent ? "auto" : "unset",
-                    },
+                    alignItems: "flex-end",
+                    flexDirection: "column",
+                    justifyContent: lastEvent ? "space-between" : "center",
                   },
                 }}
                 primaryText={`${it.name} (${it.code})`}
                 secondaryText={
                   lastEvent ? (
                     <Desciption>
-                      <p>{lastEvent!.description}</p>
-                      {lastEvent.location && <p>{lastEvent.location}</p>}
+                      <span>{lastEvent!.description}</span>
+                      {lastEvent.location && <span>{lastEvent.location}</span>}
                     </Desciption>
                   ) : (
                     <Desciption>Não Encontrado</Desciption>

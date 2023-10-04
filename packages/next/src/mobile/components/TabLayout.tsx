@@ -16,7 +16,7 @@ export default function TabLayout({
 
   return (
     <Box>
-      <Box>
+      <Box zIndex={1}>
         {tabs.map((it) => (
           <Route key={it.path} path={it.path}>
             {it.component}
@@ -28,6 +28,7 @@ export default function TabLayout({
           <Box sx={{ height: "70px" }} />
           <Box
             sx={{
+              zIndex: 2,
               position: "fixed",
               bottom: 0,
               left: 0,

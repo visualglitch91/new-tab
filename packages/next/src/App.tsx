@@ -16,11 +16,15 @@ import theme from "./theme";
 import Mobile from "./mobile";
 
 export default function MyApp() {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    navigate(mobile ? "/mobile" : "/desktop");
+    const basePath = mobile ? "/mobile" : "/desktop";
+
+    if (!location.startsWith(basePath)) {
+      navigate(basePath);
+    }
     //eslint-disable-next-line
   }, [mobile]);
 

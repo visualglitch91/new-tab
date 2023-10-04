@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { styled } from "@mui/joy";
-import Paper from "./Paper";
+import { styled } from "@mui/material";
+import GlossyPaper from "./GlossyPaper";
 import { WEATHER_ICONS, WeatherEntity } from "./WeatherInfo/utils";
 import { useEntity } from "../utils/hass";
 import Icon from "./Icon";
 import { formatNumericValue } from "../utils/general";
 import useMountEffect from "../utils/useMountEffect";
 import clock from "../utils/clock";
+import { SxProps } from "../theme/utils";
+import { sxx } from "../utils/styling";
 
-const Root = styled(Paper)({
-  textAlign: "left",
-  flexDirection: "row",
-  padding: 24,
-  fontWeight: "500",
-});
+const classes = {
+  Time: "ClockAndWeather__Time",
+  Weather: "ClockAndWeather__Weather",
+};
 
 const Time = styled("div")({
   fontSize: "42px",
@@ -29,7 +29,6 @@ const DateTime = styled("div")({
   justifyContent: "center",
   letterSpacing: "-0.4px",
   rowGap: "12px",
-  flex: 1,
 });
 
 const Weather = styled("div")({
@@ -46,6 +45,24 @@ const FullDate = styled("div")({
   letterSpacing: "-0.2px",
 });
 
+const Root = styled(GlossyPaper)({
+  textAlign: "left",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  padding: 24,
+  fontWeight: "500",
+});
+
+const compactSx: SxProps = {
+  padding: "10px",
+  justifyContent: "space-around",
+  [`& .${classes.Time}`]: { fontSize: "38px" },
+  [`& .${classes.Weather}`]: {
+    rowGap: 0,
+    "& > *:first-child": { marginBottom: "-3px" },
+  },
+};
+
 function getCurrentTime(date: Date) {
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -53,7 +70,13 @@ function getCurrentTime(date: Date) {
   return `${hours}:${minutes}`;
 }
 
-export default function ClockAndWeather() {
+export default function ClockAndWeather({
+  sx,
+  compact,
+}: {
+  sx: SxProps;
+  compact?: boolean;
+}) {
   const [date, setDate] = useState(() => new Date());
   const weatherEntity = useEntity<WeatherEntity>("weather.republica");
 
@@ -62,23 +85,28 @@ export default function ClockAndWeather() {
   });
 
   return (
-    <Root>
+    <Root sx={sxx(sx, compact && compactSx)}>
       <DateTime>
-        <Time>{getCurrentTime(date)}</Time>
-        <FullDate>
-          {date
-            .toLocaleDateString("pt-br", {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-            })
-            .replace("-feira", "")}
-        </FullDate>
+        <Time className={classes.Time}>{getCurrentTime(date)}</Time>
+        {!compact && (
+          <FullDate>
+            {date
+              .toLocaleDateString("pt-br", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+              })
+              .replace("-feira", "")}
+          </FullDate>
+        )}
       </DateTime>
 
       {weatherEntity && weatherEntity.attributes && (
-        <Weather>
-          <Icon icon={WEATHER_ICONS[weatherEntity.state]} size={48} />
+        <Weather className={classes.Weather}>
+          <Icon
+            icon={WEATHER_ICONS[weatherEntity.state]}
+            size={compact ? 32 : 48}
+          />
           <span>
             {formatNumericValue(weatherEntity.attributes.temperature, "°C", 0)}
           </span>

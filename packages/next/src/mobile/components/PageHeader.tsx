@@ -47,13 +47,13 @@ const Buttons = styled("div")({
   position: "absolute",
   width: "100%",
   display: "flex",
-  padding: "16px 16px 0",
+  padding: "16px 16px 8px",
   gap: 6,
   zIndex: 3,
 });
 
 const ButtonsGhost = styled("div")({
-  height: 32,
+  height: 40,
   transition: "height 200ms var(--tween)",
   '[data-shrink="true"] &': {
     height: 0,

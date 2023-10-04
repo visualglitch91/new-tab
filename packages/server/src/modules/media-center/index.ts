@@ -122,6 +122,7 @@ export default createAppModule("media-center", (instance) => {
       await radarr
         .post("/v3/movie", {
           ...media,
+          monitored: true,
           qualityProfileId: qualityProfile,
           path: `${rootFolderPath}/${media.title}`,
           rootFolderPath: `${rootFolderPath}/`,

@@ -13,13 +13,16 @@ type ColorOverrides = {
 };
 
 declare module "@mui/material/styles" {
-  type Palette = {
+  type CustomPalette = {
     [key in CustomColors]: Palette["primary"];
   };
 
-  type PaletteOptions = {
+  type CustomPaletteOptions = {
     [key in CustomColors]: PaletteOptions["primary"];
   };
+
+  interface Palette extends CustomPalette {}
+  interface PaletteOptions extends CustomPaletteOptions {}
 }
 
 declare module "@mui/material/Button" {

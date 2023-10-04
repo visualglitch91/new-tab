@@ -7,9 +7,9 @@ import HugeButton from "./HugeButton";
 import { useLongPress } from "@uidotdev/usehooks";
 
 const classes = {
-  wrapperActive: "BaseEntityButton--Active",
-  wrapperCustomBG: "BaseEntityButton--CustomBG",
-  horizontal: "BaseEntityButton--horizontal",
+  wrapperActive: "BaseEntityButton__Active",
+  wrapperCustomBG: "BaseEntityButton__CustomBG",
+  horizontal: "BaseEntityButton__horizontal",
 };
 
 const Wrapper = styled(HugeButton)({
