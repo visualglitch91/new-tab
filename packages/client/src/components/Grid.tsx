@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
-import { SxProps } from "@mui/joy/styles/types";
-import BaseDiv from "./BaseDiv";
-import { sxx } from "../utils/styles";
+import { Box, SxProps } from "@mui/material";
+import { sxx } from "../utils/styling";
 
 export default function Grid({
   gap,
@@ -19,7 +18,7 @@ export default function Grid({
   children: ReactNode;
 }) {
   return (
-    <BaseDiv
+    <Box
       sx={sxx(
         {
           display: "grid",
@@ -33,6 +32,6 @@ export default function Grid({
       className={className}
     >
       {children}
-    </BaseDiv>
+    </Box>
   );
 }

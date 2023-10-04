@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/material";
 import { MediaItem as IMediaItem } from "@home-control/types/media-center";
 import api from "../../utils/api";
 import MemoryCache from "../../utils/MemoryCache";
@@ -18,7 +18,7 @@ const PosterRoot = styled("img")(({ theme }) => ({
   height: 48,
   objectFit: "cover",
   borderRadius: 6,
-  backgroundColor: theme.palette.background.body,
+  backgroundColor: theme.palette.background.default,
   flexShrink: 0,
 }));
 

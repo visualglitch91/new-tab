@@ -1,16 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { Schedule } from "@home-control/types/hass-scheduler";
 import api from "../../utils/api";
-import useModal from "../../utils/useModal";
-import PillButton from "../PillButton";
-import ScheduleDialog from "./ScheduleDialog";
 import ScheduleItem from "./ScheduleItem";
 import { queryClient } from "../../utils/queryClient";
 import EmptyState from "../EmptyState";
-import ResponsiveCard from "../ResponsiveCard";
+import useUpsertSchedule from "./useUpsertSchedule";
+import { List } from "@mui/material";
+import GlossyPaper from "../GlossyPaper";
 
 export default function Schedules() {
-  const [mount, modals] = useModal();
+  const upsertSchedule = useUpsertSchedule();
 
   const {
     data = [],
@@ -19,18 +18,6 @@ export default function Schedules() {
   } = useQuery(["schedules"], () =>
     api<Schedule[]>("/hass-scheduler/schedule", "get")
   );
-
-  function onSave(unmount: () => void) {
-    return function (
-      schedule: Omit<Schedule, "id" | "enabled"> & { id?: string }
-    ) {
-      unmount();
-      (schedule.id
-        ? api(`/hass-scheduler/schedule/${schedule.id}`, "patch", schedule)
-        : api("/hass-scheduler/schedule", "post", schedule)
-      ).then(() => refetch());
-    };
-  }
 
   function onPatch<K extends keyof Schedule>(
     item: Schedule,
@@ -54,16 +41,6 @@ export default function Schedules() {
     );
   }
 
-  function onUpsert(item?: Schedule) {
-    mount((unmount) => (
-      <ScheduleDialog
-        initialValues={item || { name: `Agendamento ${data.length + 1}` }}
-        onSave={onSave(unmount)}
-        onClose={unmount}
-      />
-    ));
-  }
-
   function onDelete(item: Schedule) {
     queryClient.setQueryData<Schedule[]>(["schedules"], (prev) => {
       return (prev || []).filter((it) => it.id !== item.id);
@@ -73,31 +50,23 @@ export default function Schedules() {
   }
 
   return (
-    <>
-      {modals}
-      <ResponsiveCard
-        spacing={0}
-        title="Agendamentos"
-        // titleAction={<PillButton icon="plus" onClick={() => onUpsert()} />}
-        groups={
-          data.length === 0
-            ? [
-                <EmptyState
-                  loading={isInitialLoading}
-                  text="Nenhum agendamento criado"
-                />,
-              ]
-            : data.map((it) => (
-                <ScheduleItem
-                  key={it.id}
-                  schedule={it}
-                  onPatch={(key, value) => onPatch(it, key, value)}
-                  onEdit={() => onUpsert(it)}
-                  onDelete={() => onDelete(it)}
-                />
-              ))
-        }
-      />
-    </>
+    <List component={GlossyPaper}>
+      {data.length === 0 ? (
+        <EmptyState
+          loading={isInitialLoading}
+          text="Nenhum agendamento criado"
+        />
+      ) : (
+        data.map((it) => (
+          <ScheduleItem
+            key={it.id}
+            schedule={it}
+            onPatch={(key, value) => onPatch(it, key, value)}
+            onEdit={() => upsertSchedule(it)}
+            onDelete={() => onDelete(it)}
+          />
+        ))
+      )}
+    </List>
   );
 }

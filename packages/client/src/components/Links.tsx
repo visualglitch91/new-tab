@@ -1,6 +1,6 @@
-import { styled } from "@mui/joy";
+import { styled } from "@mui/material";
 import { isNewTab } from "../utils/general";
-import Paper from "./Paper";
+import GlossyPaper from "./GlossyPaper";
 import { config } from "../../../../config";
 
 const LinksGrid = styled("ul")({
@@ -55,17 +55,21 @@ const LinksGrid = styled("ul")({
 
 export default function Links() {
   return (
-    <Paper>
+    <GlossyPaper>
       <LinksGrid>
         {config.links.map((link, index) => (
           <li key={index}>
-            <a href={link.url} target={isNewTab ? "_parent" : "_blank"}>
-              <img src={link.icon} />
+            <a
+              href={link.url}
+              target={isNewTab ? "_parent" : "_blank"}
+              rel="noreferrer"
+            >
+              <img src={link.icon} alt="" />
               <span>{link.name}</span>
             </a>
           </li>
         ))}
       </LinksGrid>
-    </Paper>
+    </GlossyPaper>
   );
 }

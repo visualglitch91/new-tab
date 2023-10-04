@@ -8,13 +8,8 @@ export function removeItemAtIndex<T>(arr: T[], index: number): T[] {
   return [...arr.slice(0, index), ...arr.slice(index + 1)];
 }
 
-export function compareByStringProp<T>(prop: keyof T) {
-  return (a: T, b: T) => {
-    if (typeof a[prop] === "string") {
-      //@ts-ignore
-      return a[prop].localeCompare(b[prop]);
-    }
-
-    return 0;
+export function mergeWith<A, B>(a: A) {
+  return (b: B) => {
+    return { ...a, ...b };
   };
 }

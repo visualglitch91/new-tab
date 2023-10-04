@@ -1,6 +1,4 @@
-import { styled } from "@mui/joy";
-import { keyframes } from "@emotion/react";
-import { alpha } from "../utils/styles";
+import { alpha, keyframes, styled } from "@mui/material";
 
 const animation = keyframes`
   0% {
@@ -17,16 +15,16 @@ const Wrapper = styled("div")(({ theme }) => ({
   width: "40px",
   display: "inline-flex",
   justifyContent: "center",
-  "--Color1": theme.palette.primary[400],
-  "--Color2": alpha(theme.palette.primary[400], 0.2),
+  "--Color1": theme.palette.primary.main,
+  "--Color2": alpha(theme.palette.primary.main, 0.2),
 
   "& > div": {
     position: "relative",
     width: "10px",
     height: "10px",
     borderRadius: "5px",
-    backgroundColor: theme.palette.primary[400],
-    color: theme.palette.primary[400],
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
     animation: `${animation} 1s infinite linear alternate`,
     animationDelay: "0.5s",
 
@@ -35,8 +33,8 @@ const Wrapper = styled("div")(({ theme }) => ({
       width: "10px",
       height: "10px",
       borderRadius: "5px",
-      backgroundColor: theme.palette.primary[400],
-      color: theme.palette.primary[400],
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.main,
       animation: `${animation} 1s infinite alternate`,
       animationDelay: "0s",
     },
@@ -53,8 +51,8 @@ const Wrapper = styled("div")(({ theme }) => ({
       width: "10px",
       height: "10px",
       borderRadius: "5px",
-      backgroundColor: theme.palette.primary[400],
-      color: theme.palette.primary[400],
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.primary.main,
       animation: `${animation} 1s infinite alternate`,
       animationDelay: "1s",
     },

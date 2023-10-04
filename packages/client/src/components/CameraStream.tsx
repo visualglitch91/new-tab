@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { CircularProgress } from "@mui/material";
 import type RTCVideo from "../utils/RTCVideo";
-import { CircularProgress } from "@mui/joy";
 
 export default function CameraStream({
   aspectRatio,

@@ -1,10 +1,6 @@
 import ListenerGroup from "./ListenerGroup";
 import { sendMessage } from "./hass";
 
-interface WebRtcAnswer {
-  answer: string;
-}
-
 interface WebRtcSettings {
   stun_server?: string;
 }

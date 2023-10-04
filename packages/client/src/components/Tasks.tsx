@@ -1,9 +1,9 @@
 import { differenceInCalendarDays, format } from "date-fns";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
-import ListCard from "./ListCard";
 import api from "../utils/api";
-import { useConfirm } from "../utils/useConfirm";
+import useConfirm from "../utils/useConfirm";
 import TaskList from "./TaskList";
+import ListSection from "./ListSection";
 
 const today = new Date();
 
@@ -39,41 +39,38 @@ export default function Tasks({
   items: (ScheduledTask | UnscheduledTask)[];
   requestRefresh: () => void;
 }) {
-  const [confirm, modals] = useConfirm();
+  const confirm = useConfirm();
 
   return (
-    <>
-      {modals}
-      <ListCard title={title}>
-        <TaskList
-          items={items.map((item) => ({
-            title: item.title,
-            subtitle:
-              "dueDate" in item ? (
-                <DueDate date={new Date(item.dueDate)} />
-              ) : undefined,
-            click:
-              "projectId" in item
-                ? () => {
-                    confirm({
-                      title: "Completar?",
-                      onConfirm: () => {
-                        api("/ticktick/tasks/complete", "POST", {
-                          id: item.id,
-                          projectId: item.projectId,
-                        }).then(() => {
-                          requestRefresh();
-                        });
-                      },
-                    });
-                  }
-                : undefined,
-            href: !("projectId" in item)
-              ? `https://ticktick.com/webapp/#q/all/week/${item.id}`
+    <ListSection title={title}>
+      <TaskList
+        items={items.map((item) => ({
+          title: item.title,
+          subtitle:
+            "dueDate" in item ? (
+              <DueDate date={new Date(item.dueDate)} />
+            ) : undefined,
+          click:
+            "projectId" in item
+              ? () => {
+                  confirm({
+                    title: "Completar?",
+                    onConfirm: () => {
+                      api("/ticktick/tasks/complete", "POST", {
+                        id: item.id,
+                        projectId: item.projectId,
+                      }).then(() => {
+                        requestRefresh();
+                      });
+                    },
+                  });
+                }
               : undefined,
-          }))}
-        />
-      </ListCard>
-    </>
+          href: !("projectId" in item)
+            ? `https://ticktick.com/webapp/#q/all/week/${item.id}`
+            : undefined,
+        }))}
+      />
+    </ListSection>
   );
 }

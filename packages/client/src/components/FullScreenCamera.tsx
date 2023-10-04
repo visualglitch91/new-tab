@@ -1,45 +1,51 @@
-import { styled } from "@mui/joy";
+import { Stack, styled } from "@mui/material";
 import CameraStream from "./CameraStream";
-import FlexRow from "./FlexRow";
-import PillButton from "./PillButton";
-import DialogBase from "./DialogBase";
-
-const ButtonsWrapper = styled(FlexRow)({
-  padding: "8px 0",
-});
+import DialogBase, { DialogBaseControlProps } from "./DialogBase";
+import Icon from "./Icon";
+import AltIconButton from "./AltIconButton";
 
 const Wrapper = styled("div")(({ theme }) => ({
   width: "70vw",
   maxWidth: 960,
   lineHeight: 0,
-  [theme.breakpoints.down("sm")]: {
-    width: "100%",
-  },
+  [theme.breakpoints.down("sm")]: { width: "100%" },
 }));
 
 export default function FullScreenCamera({
   entityId,
   aspectRatio,
   onMove,
-  onClose,
+  ...props
 }: {
   entityId: string;
   aspectRatio: number;
   onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
-  onClose: () => void;
-}) {
+} & DialogBaseControlProps) {
   return (
-    <DialogBase title="Câmera" onClose={onClose}>
+    <DialogBase title="Câmera" {...props}>
       <Wrapper>
         <CameraStream aspectRatio={aspectRatio} entityId={entityId} />
       </Wrapper>
       {onMove && (
-        <ButtonsWrapper wrap>
-          <PillButton icon="arrow-left" onClick={() => onMove("LEFT")} />
-          <PillButton icon="arrow-down" onClick={() => onMove("DOWN")} />
-          <PillButton icon="arrow-up" onClick={() => onMove("UP")} />
-          <PillButton icon="arrow-right" onClick={() => onMove("RIGHT")} />
-        </ButtonsWrapper>
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+          sx={{ margin: "12px auto" }}
+        >
+          <AltIconButton color="primary" onClick={() => onMove("LEFT")}>
+            <Icon icon="arrow-left" />
+          </AltIconButton>
+          <AltIconButton color="primary" onClick={() => onMove("DOWN")}>
+            <Icon icon="arrow-down" />
+          </AltIconButton>
+          <AltIconButton color="primary" onClick={() => onMove("UP")}>
+            <Icon icon="arrow-up" />
+          </AltIconButton>
+          <AltIconButton color="primary" onClick={() => onMove("RIGHT")}>
+            <Icon icon="arrow-right" />
+          </AltIconButton>
+        </Stack>
       )}
     </DialogBase>
   );

@@ -1,7 +1,7 @@
+import { styled } from "@mui/material";
 import { WEATHER_ICONS, WeatherEntity } from "./utils";
 import { useEntity } from "../../utils/hass";
 import { formatNumericValue } from "../../utils/general";
-import { styled } from "@mui/joy";
 import Icon from "../Icon";
 
 const Root = styled("div")({

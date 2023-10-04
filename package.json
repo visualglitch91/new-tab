@@ -8,7 +8,6 @@
     "dev:server": "npm run dev -w packages/server",
     "start": "npm run start -w packages/server",
     "build": "npm run build -w packages/client",
-    "build:next": "npm run build -w packages/next",
     "lint": "tsc"
   },
   "devDependencies": {
@@ -28,7 +27,6 @@
     "packages/jdownloader-api",
     "packages/server",
     "packages/client",
-    "packages/next",
     "packages/types"
   ],
   "dependencies": {

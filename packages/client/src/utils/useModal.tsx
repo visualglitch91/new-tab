@@ -1,9 +1,32 @@
-import { useEffect, useState } from "react";
-import { DialogBaseProvider } from "../components/DialogBase";
+import { createContext, useContext, useState } from "react";
+import useMountEffect from "./useMountEffect";
 
-type Renderer = (unmount: () => void) => React.ReactNode;
+type Renderer = (
+  unmount: () => void,
+  dialogProps: {
+    open: boolean;
+    onClose: () => void;
+    TransitionProps: {
+      onExited: () => void;
+    };
+  }
+) => React.ReactNode;
+
+const ModalContext = createContext<((renderer: Renderer) => () => void) | null>(
+  null
+);
 
 export default function useModal() {
+  const mount = useContext(ModalContext);
+
+  if (!mount) {
+    throw new Error("Must be used inside a ModalProvider");
+  }
+
+  return mount;
+}
+
+export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [modals, setModals] = useState<Record<string, React.ReactNode>>({});
 
   function unmountByKey(key: string) {
@@ -16,34 +39,35 @@ export default function useModal() {
 
   function mount(renderer: Renderer) {
     const key = Date.now().toString();
+    const unmount = () => unmountByKey(key);
 
-    let closeModal: () => void;
-    let shouldUnmount = false;
-
-    function requestCloseModal() {
-      shouldUnmount = true;
-      closeModal?.();
-    }
+    let onClose: () => void;
+    let canClose = false;
 
     function Modal() {
       const [open, setOpen] = useState(false);
 
-      useEffect(() => {
+      onClose = () => {
+        if (canClose) {
+          setOpen(false);
+        }
+      };
+
+      useMountEffect(() => {
         setOpen(true);
-        closeModal = () => setOpen(false);
-      }, []);
+        setTimeout(() => {
+          canClose = true;
+        }, 500);
+      });
 
       return (
-        <DialogBaseProvider
-          open={open}
-          onExited={() => {
-            if (shouldUnmount) {
-              unmountByKey(key);
-            }
-          }}
-        >
-          {renderer(requestCloseModal)}
-        </DialogBaseProvider>
+        <>
+          {renderer(unmount, {
+            open,
+            onClose,
+            TransitionProps: { onExited: unmount },
+          })}
+        </>
       );
     }
 
@@ -54,11 +78,15 @@ export default function useModal() {
       };
     });
 
-    return requestCloseModal;
+    return () => {
+      onClose?.();
+    };
   }
 
-  return [mount, Object.values(modals)] as [
-    (renderer: Renderer) => () => void,
-    React.ReactNode[]
-  ];
+  return (
+    <ModalContext.Provider value={mount}>
+      {Object.values(modals)}
+      {children}
+    </ModalContext.Provider>
+  );
 }

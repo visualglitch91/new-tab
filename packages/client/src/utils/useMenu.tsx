@@ -1,42 +1,57 @@
-import BorderButton from "../components/BorderButton";
-import DialogBase from "../components/DialogBase";
-import Stack from "../components/Stack";
+import ActionSheet, { ActionMap } from "../components/ActionSheet";
 import useModal from "./useModal";
 
 export function useMenu() {
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   function showMenu<T extends string>({
     title,
+    description,
     options,
+    hideCancelButton,
     onSelect,
   }: {
     title: string;
-    options: { value: T; label: string; hidden?: boolean; primary?: boolean }[];
+    description?: string;
+    hideCancelButton?: boolean;
+    options:
+      | { value: T; label: string; hidden?: boolean; primary?: boolean }[]
+      | ActionMap<T>;
     onSelect: (value: T) => void;
   }) {
-    mount((unmount) => (
-      <DialogBase title={title} onClose={unmount}>
-        <Stack>
-          {options.map((it) =>
-            it.hidden ? null : (
-              <BorderButton
-                key={it.value}
-                primary={it.primary}
-                onClick={() => {
-                  unmount();
-                  onSelect(it.value);
-                }}
-              >
-                {it.label}
-              </BorderButton>
-            )
-          )}
-          <BorderButton onClick={unmount}>Cancelar</BorderButton>
-        </Stack>
-      </DialogBase>
+    mount((_, props) => (
+      <ActionSheet
+        {...props}
+        hideCancelButton={hideCancelButton}
+        title={title}
+        description={description}
+        actions={
+          Array.isArray(options)
+            ? options.reduce(
+                (acc, it) =>
+                  it.hidden
+                    ? acc
+                    : {
+                        ...acc,
+                        [it.value]: {
+                          label: it.label,
+                          variant: it.primary ? "contained" : undefined,
+                        },
+                      },
+                {} as ActionMap<T>
+              )
+            : options
+        }
+        onSelect={(value) => {
+          if (value) {
+            onSelect(value);
+          }
+
+          props.onClose();
+        }}
+      />
     ));
   }
 
-  return [showMenu, modals] as const;
+  return showMenu;
 }

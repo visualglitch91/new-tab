@@ -1,6 +1,6 @@
 import { HassEntity } from "home-assistant-js-websocket";
 import { useRef } from "react";
-import { RGB } from "../../utils/general";
+import { RGB } from "../../utils/colors";
 import { callService } from "../../utils/hass";
 import {
   adjustColorBrightness,

@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect } from "react";
-import { styled } from "@mui/joy";
-import { SxProps } from "@mui/joy/styles/types";
+import { styled } from "@mui/material";
 //@ts-expect-error
 import ShellColor from "shell-color";
 import useMountEffect from "../../utils/useMountEffect";
 import { useSocketIO } from "../../utils/api";
 import { shellColorConfig } from "./utils";
+import { SxProps } from "../../theme/utils";
 
 const Root = styled("div")({
   flex: 1,

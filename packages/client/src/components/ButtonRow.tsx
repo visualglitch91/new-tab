@@ -1,26 +1,15 @@
-import { sxx } from "../utils/styles";
-import BaseDiv, { BaseDivProps } from "./BaseDiv";
+import styled from "@emotion/styled";
+import { Stack } from "@mui/material";
 
-export default function ButtonRow({
-  sx,
-  height,
-  ...props
-}: BaseDivProps & {
-  height?: number;
-}) {
-  return (
-    <BaseDiv
-      {...props}
-      sx={sxx(
-        height && { height: `${height}px` },
-        {
-          width: "100%",
-          display: "flex",
-          gridGap: "8px",
-          "& > *": { flex: 1, overflow: "hidden" },
-        },
-        sx
-      )}
-    />
-  );
-}
+const ButtonRow = styled(Stack)({
+  width: "100%",
+  display: "flex",
+  "& > *": { flex: 1, overflow: "hidden" },
+});
+
+ButtonRow.defaultProps = {
+  spacing: "8px",
+  direction: "row",
+};
+
+export default ButtonRow;

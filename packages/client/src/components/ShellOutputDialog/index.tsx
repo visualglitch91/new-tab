@@ -1,6 +1,9 @@
-import { SxProps } from "@mui/joy/styles/types";
-import DialogBase from "../DialogBase";
+import { Stack, styled } from "@mui/material";
+import { SxProps } from "../../theme/utils";
+import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import useShellOutput from "./useShellOutput";
+import AltIconButton from "../AltIconButton";
+import Icon from "../Icon";
 
 interface Size {
   width: number;
@@ -8,11 +11,14 @@ interface Size {
 }
 
 const fullscreenSx: SxProps = {
-  width: "100vw",
-  height: "100vh",
-  maxWidth: "unset",
-  maxHeight: "unset",
-  borderRadius: 0,
+  "& .MuiDialog-paper": {
+    margin: 0,
+    width: "100vw",
+    height: "100vh",
+    maxWidth: "unset",
+    maxHeight: "unset",
+    borderRadius: 0,
+  },
 };
 
 const windowedSx =
@@ -25,34 +31,41 @@ const windowedSx =
     [theme.breakpoints.down("sm")]: fullscreenSx,
   });
 
+const Content = styled("div")(({ theme }) => ({
+  height: "100%",
+  [theme.breakpoints.down("sm")]: { px: 0, pb: 0 },
+  display: "flex",
+  flexDirection: "column",
+  overflow: "hidden",
+}));
+
 export default function ShellOutputDialog({
   title,
   size,
   processId,
-  onClose,
+  ...props
 }: {
   title: string;
   size?: { width: number; height: number };
   processId: string;
-  onClose: () => void;
-}) {
+} & DialogBaseControlProps) {
   const { shellOutput } = useShellOutput(processId);
 
   return (
     <DialogBase
+      {...props}
+      bottomMobileSheet
       sx={size ? windowedSx(size) : fullscreenSx}
-      contentSx={(theme) => ({
-        height: "100%",
-        [theme.breakpoints.down("sm")]: { px: 0, pb: 0 },
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-      })}
-      title={title}
-      closeButtonOnMobile
-      onClose={onClose}
+      title={
+        <Stack direction="row" justifyContent="space-between">
+          <span>{title}</span>
+          <AltIconButton size="small" onClick={props.onClose}>
+            <Icon icon="close" size={16} />
+          </AltIconButton>
+        </Stack>
+      }
     >
-      {shellOutput}
+      <Content>{shellOutput}</Content>
     </DialogBase>
   );
 }

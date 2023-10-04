@@ -32,7 +32,6 @@ const clock = {
   on,
   off,
   start,
-  stop,
 };
 
 export default clock;

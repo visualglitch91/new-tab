@@ -1,35 +1,40 @@
-import BorderButton from "../components/BorderButton";
-import DialogBase from "../components/DialogBase";
-import Stack from "../components/Stack";
+import ActionSheet from "../components/ActionSheet";
 import useModal from "./useModal";
 
-export function useConfirm() {
-  const [mount, modals] = useModal();
+export default function useConfirm() {
+  const mount = useModal();
 
-  function confirm({
+  return function confirm({
     title,
+    description,
+    confirmLabel = "Continuar",
+    cancelLabel = "Cancelar",
     onConfirm,
   }: {
     title: string;
+    description?: string;
+    confirmLabel?: string;
+    cancelLabel?: string;
     onConfirm: () => void;
   }) {
-    mount((unmount) => (
-      <DialogBase title={title} onClose={unmount}>
-        <Stack>
-          <BorderButton onClick={unmount}>Cancelar</BorderButton>
-          <BorderButton
-            primary
-            onClick={() => {
-              unmount();
-              onConfirm();
-            }}
-          >
-            Confirmar
-          </BorderButton>
-        </Stack>
-      </DialogBase>
-    ));
-  }
+    return mount((_, props) => (
+      <ActionSheet
+        {...props}
+        hideCancelButton
+        title={title}
+        description={description}
+        actions={{
+          true: { label: confirmLabel },
+          false: { label: cancelLabel },
+        }}
+        onSelect={(value) => {
+          if (value === "true") {
+            onConfirm();
+          }
 
-  return [confirm, modals] as const;
+          props.onClose();
+        }}
+      />
+    ));
+  };
 }

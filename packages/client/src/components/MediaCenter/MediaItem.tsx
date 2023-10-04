@@ -1,31 +1,17 @@
-import { styled, Chip, Tooltip } from "@mui/joy";
+import { Chip, Tooltip, Stack, Button } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   MediaItem as IMediaItem,
   QualityProfile,
 } from "@home-control/types/media-center";
 import ListItem from "../ListItem";
-import { getContrastColor } from "../../utils/general";
+import { getContrastColor } from "../../utils/colors";
 import { STATUS_COLORS, STATUS_LABELS, TYPE_LABEL } from "./utils";
-import PillButton from "../PillButton";
 import api from "../../utils/api";
 import { useMenu } from "../../utils/useMenu";
 import DotLoading from "../DotLoading";
 import { queryClient } from "../../utils/queryClient";
-import FlexRow from "../FlexRow";
 import MediaPoster from "./MediaPoster";
-
-const Label = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  lineHeight: 1,
-  width: "100%",
-  gap: 2,
-  "& > span": {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-});
 
 export default function MediaItem({
   item,
@@ -34,7 +20,7 @@ export default function MediaItem({
   item: IMediaItem;
   itemAction?: React.ReactNode;
 }) {
-  const [showMenu, menu] = useMenu();
+  const showMenu = useMenu();
 
   const { data: qualityProfiles } = useQuery<
     Record<IMediaItem["type"], QualityProfile[]>
@@ -68,48 +54,41 @@ export default function MediaItem({
   }
 
   return (
-    <>
-      {menu}
-      <Tooltip title={item.title}>
-        <span>
-          <ListItem
-            sx={{ py: "6px" }}
-            icon={<MediaPoster item={item} />}
-            label={
-              <Label>
-                <span>{item.title}</span>
-                <span style={{ fontWeight: 500 }}>
-                  {item.year} • {TYPE_LABEL[item.type]}
-                </span>
-              </Label>
-            }
-          >
-            <FlexRow>
+    <Tooltip title={item.title}>
+      <span>
+        <ListItem
+          sx={{ py: "6px" }}
+          startSlot={<MediaPoster item={item} />}
+          primaryText={item.title}
+          secondaryText={`${item.year} • ${TYPE_LABEL[item.type]}`}
+          endSlot={
+            <Stack direction="row" alignItems="center" gap="6px">
               {item.status !== "not-monitored" ? (
                 <Chip
-                  size="sm"
+                  size="small"
                   sx={{
                     color: getContrastColor(STATUS_COLORS[item.status]),
                     backgroundColor: `rgb(${STATUS_COLORS[item.status].join(
                       ","
                     )})`,
                   }}
-                >
-                  {STATUS_LABELS[item.status]}
-                </Chip>
+                  label={STATUS_LABELS[item.status]}
+                />
               ) : (
                 qualityProfiles &&
                 (requestMedia.isLoading ? (
                   <DotLoading />
                 ) : (
-                  <PillButton label="Requisitar" onClick={request} />
+                  <Button size="small" onClick={request}>
+                    Requisitar
+                  </Button>
                 ))
               )}
               {itemAction}
-            </FlexRow>
-          </ListItem>
-        </span>
-      </Tooltip>
-    </>
+            </Stack>
+          }
+        />
+      </span>
+    </Tooltip>
   );
 }

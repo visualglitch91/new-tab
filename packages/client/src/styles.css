@@ -1,46 +1,7 @@
-html {
-  box-sizing: border-box;
-  user-select: none;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-  user-select: inherit;
-  overscroll-behavior: none;
-}
-
-html,
 body {
-  height: 100%;
-}
-
-#app {
-  height: 100%;
-  overflow: auto;
-  opacity: 0;
-  transition: opacity 200ms cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-body.ready #app {
-  opacity: 1;
-}
-
-body {
-  margin: 0;
+  background-image: url(./assets/background-mobile.jpg);
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   background-attachment: fixed;
-  background-color: #24324b;
-  overflow: hidden;
-  font-weight: 600;
-}
-
-input,
-button,
-[role="button"] {
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
+  --tween: cubic-bezier(0.76, 0, 0.24, 1);
+  min-height: 100vh;
 }

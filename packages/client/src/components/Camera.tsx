@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { CircularProgress, styled } from "@mui/joy";
+import { ButtonBase, CircularProgress, styled } from "@mui/material";
 import { hassUrl, useEntity } from "../utils/hass";
-import Paper from "./Paper";
+import GlossyPaper from "./GlossyPaper";
 import FullScreenCamera from "./FullScreenCamera";
-import RippleButton from "./RippleButton";
 import useModal from "../utils/useModal";
 
-const Wrapper = styled(Paper)({
+const Wrapper = styled(GlossyPaper)({
   position: "relative",
   overflow: "hidden",
   display: "flex",
@@ -19,7 +18,7 @@ const Overlay = styled("span")({
   fontSize: "18px",
 });
 
-const SnapshotButton = styled(RippleButton)({
+const SnapshotButton = styled(ButtonBase)({
   border: "none",
   padding: 0,
   background: "transparent",
@@ -35,10 +34,10 @@ export default function Camera({
   onMove?: (direction: "LEFT" | "RIGHT" | "UP" | "DOWN") => void;
 }) {
   const entity = useEntity(entityId);
-  const [mount, modals] = useModal();
+  const mount = useModal();
   const entityPicture = entity?.attributes?.entity_picture;
   const [snapshot, setSnapshot] = useState<string | undefined>("LOADING");
-  const isStreaming = modals.length < 0;
+  const [isStreaming, setIsStreaming] = useState(false);
 
   useEffect(() => {
     if (isStreaming) {
@@ -77,19 +76,22 @@ export default function Camera({
   }, [entityPicture, isStreaming]);
 
   function showStream() {
-    mount((unmount) => (
+    mount((_, { onClose, ...props }) => (
       <FullScreenCamera
+        {...props}
+        onClose={() => {
+          setIsStreaming(false);
+          onClose();
+        }}
         aspectRatio={aspectRatio}
         entityId={entityId}
         onMove={onMove}
-        onClose={unmount}
       />
     ));
   }
 
   return (
     <Wrapper style={{ aspectRatio: aspectRatio.toString() }}>
-      {modals}
       {snapshot === "LOADING" ? (
         <CircularProgress />
       ) : snapshot ? (

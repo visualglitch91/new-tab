@@ -1,57 +1,60 @@
-import { useCallback, useState } from "react";
-import { FormControl, FormLabel, Input } from "@mui/joy";
-import BorderButton from "../components/BorderButton";
-import DialogBase from "../components/DialogBase";
-import Stack from "../components/Stack";
+import { useState } from "react";
+import { Button, TextField, Stack } from "@mui/material";
+import DialogBase, { DialogBaseControlProps } from "../components/DialogBase";
 import useModal from "./useModal";
-import { focusOnRef } from "./react";
+import { isTouchDevice } from "./general";
 
 function Prompt({
   title,
   fields,
-  onCancel,
   onConfirm,
+  ...props
 }: {
   title: string;
   fields: string[];
-  onCancel: () => void;
   onConfirm: (values: string[]) => void;
-}) {
+} & DialogBaseControlProps) {
   const [values, setValues] = useState(() => fields.map(() => ""));
 
   return (
-    <DialogBase title={title} onClose={onCancel}>
-      <Stack>
-        {fields.map((label, index) => (
-          <FormControl key={index}>
-            <FormLabel>{label}</FormLabel>
-            <Input
-              slotProps={
-                index === 0 ? { input: { ref: focusOnRef } } : undefined
-              }
-              value={values[index]}
-              onChange={(event) => {
-                const value = event.currentTarget.value;
-
-                setValues((prev) => {
-                  const next = [...prev];
-                  next[index] = value;
-                  return next;
-                });
-              }}
-            />
-          </FormControl>
-        ))}
-        <BorderButton primary onClick={() => onConfirm(values)}>
+    <DialogBase
+      title={title}
+      {...props}
+      footer={
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => onConfirm(values)}
+        >
           Confirmar
-        </BorderButton>
+        </Button>
+      }
+    >
+      <Stack spacing={2}>
+        {fields.map((label, index) => (
+          <TextField
+            key={index}
+            label={label}
+            autoFocus={index === 0 && !isTouchDevice}
+            value={values[index]}
+            onChange={(event) => {
+              const value = event.currentTarget.value;
+
+              setValues((prev) => {
+                const next = [...prev];
+                next[index] = value;
+                return next;
+              });
+            }}
+          />
+        ))}
       </Stack>
     </DialogBase>
   );
 }
 
 export function usePrompt() {
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   function prompt({
     title,
@@ -62,18 +65,18 @@ export function usePrompt() {
     fields: string[];
     onConfirm: (values: string[]) => void;
   }) {
-    mount((unmount) => (
+    mount((_, props) => (
       <Prompt
+        {...props}
         title={title}
         fields={fields}
-        onCancel={unmount}
         onConfirm={(values) => {
-          unmount();
+          props.onClose();
           onConfirm(values);
         }}
       />
     ));
   }
 
-  return [prompt, modals] as const;
+  return prompt;
 }

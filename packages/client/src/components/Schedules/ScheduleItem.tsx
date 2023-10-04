@@ -1,35 +1,21 @@
-import { ButtonGroup, styled } from "@mui/joy";
+import { ListItem, Stack, ButtonGroup, styled } from "@mui/material";
 import { Schedule } from "@home-control/types/hass-scheduler";
-import { alpha } from "../../utils/styles";
-import { useResponsive } from "../../utils/general";
-import { useMenu } from "../../utils/useMenu";
-import PillButton from "../PillButton";
-import { borderRadius } from "../Paper";
-import FlexRow from "../FlexRow";
-import DaysRow from "./DaysRow";
+import DaysRow from "../DaysRow";
 import { formatTime } from "./utils";
+import Icon from "../Icon";
+import AltIconButton from "../AltIconButton";
 
-const Root = styled("div")(({ theme }) => ({
-  padding: 16,
-  width: "100%",
-  boxSizing: "border-box",
-  fontSize: 14,
-  [theme.breakpoints.down("sm")]: { borderRadius },
-  "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
-}));
-
-const Time = styled("div")({
-  fontWeight: "bold",
-  marginLeft: "auto",
+const Title = styled("div")({
+  flex: 1,
+  fontWeight: 600,
+  '&[data-disabled="true"]': {
+    textDecoration: "line-through",
+  },
 });
 
-const Days = styled("div")({
-  marginTop: 8,
-  display: "flex",
-  justifyContent: "center",
-  "& .MuiToggleButtonGroup-root": {
-    width: "100%",
-  },
+const Time = styled("div")({
+  fontWeight: 600,
+  marginLeft: "auto",
 });
 
 export default function ScheduleItem({
@@ -43,9 +29,6 @@ export default function ScheduleItem({
   onEdit: () => void;
   onDelete: () => void;
 }) {
-  const { isMobile } = useResponsive();
-  const [showMenu, menu] = useMenu();
-
   const options = [
     {
       label: schedule.enabled ? "Desativar" : "Ativar",
@@ -71,57 +54,24 @@ export default function ScheduleItem({
   ];
 
   return (
-    <>
-      {menu}
-      <Root>
-        <FlexRow>
-          {!isMobile && (
-            <ButtonGroup
-              sx={{
-                "--ButtonGroup-separatorColor": "transparent",
-                borderRadius: "4px",
-                overflow: "hidden",
-              }}
-            >
-              {options.map((it, index) => (
-                <PillButton key={index} icon={it.icon} onClick={it.action} />
-              ))}
-            </ButtonGroup>
-          )}
-          <span
-            style={{
-              textDecoration: schedule.enabled ? "unset" : "line-through",
-            }}
-          >
-            {schedule.name}
-          </span>
-          <Time>
-            <FlexRow>
-              {formatTime(schedule.time)}
-              {isMobile && (
-                <PillButton
-                  icon="dots-vertical"
-                  onClick={() =>
-                    showMenu({
-                      title: "Opções",
-                      options: options,
-                      onSelect: (value) => {
-                        options.find((it) => it.value === value)?.action();
-                      },
-                    })
-                  }
-                />
-              )}
-            </FlexRow>
-          </Time>
-        </FlexRow>
-        <Days>
-          <DaysRow
-            value={schedule.days}
-            onChange={(value) => onPatch("days", value)}
-          />
-        </Days>
-      </Root>
-    </>
+    <ListItem sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <Stack direction="row" spacing={2} width="100%" alignItems="center">
+        <ButtonGroup
+          sx={{ "& .MuiButtonGroup-grouped": { minWidth: "unset" } }}
+        >
+          {options.map((it, index) => (
+            <AltIconButton size="medium" key={index} onClick={it.action}>
+              <Icon size={14} icon={it.icon} />
+            </AltIconButton>
+          ))}
+        </ButtonGroup>
+        <Title data-disabled={!schedule.enabled}>{schedule.name}</Title>
+        <Time>{formatTime(schedule.time)}</Time>
+      </Stack>
+      <DaysRow
+        value={schedule.days}
+        onChange={(value) => onPatch("days", value)}
+      />
+    </ListItem>
   );
 }

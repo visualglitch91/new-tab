@@ -1,5 +1,5 @@
+import { Switch } from "@mui/material";
 import { callService, useEntities } from "../utils/hass";
-import Switch from "./Switch";
 
 export default function EntitiesSwitch({
   entityIds,

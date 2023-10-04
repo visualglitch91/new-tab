@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
-import Paper from "./Paper";
+import { useState } from "react";
+import GlossyPaper from "./GlossyPaper";
+import useMountEffect from "../utils/useMountEffect";
+import clock from "../utils/clock";
+import { SxProps } from "../theme/utils";
+import { sxx } from "../utils/styling";
 
 function getTime() {
   const now = new Date();
@@ -9,28 +13,25 @@ function getTime() {
   return `${hours}:${minutes}`;
 }
 
-export default function Clock() {
+export default function Clock({ sx }: { sx: SxProps }) {
   const [time, setTime] = useState(getTime);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(getTime);
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  useMountEffect(() => {
+    return clock.on(() => setTime(getTime()));
+  });
 
   return (
-    <Paper
-      sx={{
-        textAlign: "center",
-        fontSize: "86px",
-        padding: "12px 0 24px",
-      }}
+    <GlossyPaper
+      sx={sxx(
+        {
+          textAlign: "center",
+          fontSize: "86px",
+          padding: "12px 0 24px",
+        },
+        sx
+      )}
     >
       {time}
-    </Paper>
+    </GlossyPaper>
   );
 }

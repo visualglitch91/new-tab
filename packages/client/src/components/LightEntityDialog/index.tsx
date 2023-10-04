@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { styled } from "@mui/joy";
+import { Stack, styled } from "@mui/material";
 import { HassEntity } from "home-assistant-js-websocket";
 import { useEntity } from "../../utils/hass";
 import {
@@ -9,13 +9,12 @@ import {
   getSupportedFeatures,
   getLightCurrentModeRgbColor,
 } from "../../utils/light";
-import { hsvToRGB, RGB, rgbToHS } from "../../utils/general";
+import { hsvToRGB, RGB, rgbToHS } from "../../utils/colors";
 import ColorPicker from "../ColorPicker";
-import DialogBase from "../DialogBase";
+import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import LabeledSlider from "../LabeledSlider";
 import TabGroup from "../TabGroup";
 import ColorPresets from "../ColorPresets";
-import Stack from "../Stack";
 import { useBrightness } from "./useBrightness";
 import { useColor } from "./useColor";
 import { useColorBrightness } from "./useColorBrightness";
@@ -62,6 +61,11 @@ function Components({ entity }: { entity: HassEntity }) {
   if (features.color && (features.temp || features.white)) {
     components.push(
       <TabGroup
+        centered
+        sx={{
+          mx: "-24px !important",
+          borderBottom: "1px solid rgba(200, 200, 200, 0.2)",
+        }}
         options={[
           {
             value: "color",
@@ -118,7 +122,7 @@ function Components({ entity }: { entity: HassEntity }) {
     ((!features.temp && !features.white) || mode === "color")
   ) {
     components.push(
-      <ColorStack>
+      <ColorStack spacing={3}>
         <ColorPicker selected={color.value} onChangeEnd={color.onChange} />
         <ColorPresets
           radius={8}
@@ -143,15 +147,13 @@ function Components({ entity }: { entity: HassEntity }) {
 
     if (features.rgbw) {
       components.push(
-        <>
-          <LabeledSlider
-            label="Brilho do Branco"
-            min={0}
-            max={100}
-            defaultValue={whiteValue.value}
-            onChangeEnd={whiteValue.onChange}
-          />
-        </>
+        <LabeledSlider
+          label="Brilho do Branco"
+          min={0}
+          max={100}
+          defaultValue={whiteValue.value}
+          onChangeEnd={whiteValue.onChange}
+        />
       );
     }
   }
@@ -168,20 +170,19 @@ function Components({ entity }: { entity: HassEntity }) {
 export default function LightEntityDialog({
   title,
   entityId,
-  onClose,
+  ...props
 }: {
   title?: React.ReactNode;
   entityId: string;
-  onClose: () => void;
-}) {
+} & DialogBaseControlProps) {
   const entity = useEntity(entityId);
   if (!entity) {
     return null;
   }
 
   return (
-    <DialogBase title={title} onClose={onClose}>
-      <Stack largeGap>
+    <DialogBase title={title} {...props}>
+      <Stack spacing={3}>
         <Components entity={entity} />
       </Stack>
     </DialogBase>

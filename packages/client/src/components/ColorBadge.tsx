@@ -1,4 +1,4 @@
-import { alpha } from "../utils/styles";
+import { alpha } from "@mui/material";
 
 export default function ColorBadge({
   color,

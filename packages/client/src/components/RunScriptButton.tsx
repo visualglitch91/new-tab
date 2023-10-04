@@ -1,20 +1,11 @@
-import PillButton from "./PillButton";
+import { Button, ButtonProps } from "@mui/material";
 import { makeTurnOnCall } from "../utils/hass";
 
 export default function RunScriptButton({
-  className,
-  label = "Executar",
   entityId,
+  ...props
 }: {
-  className?: string;
-  label?: string;
   entityId: string;
-}) {
-  return (
-    <PillButton
-      className={className}
-      onClick={makeTurnOnCall(entityId)}
-      label={label}
-    />
-  );
+} & Omit<ButtonProps, "onClick">) {
+  return <Button {...props} onClick={makeTurnOnCall(entityId)} />;
 }

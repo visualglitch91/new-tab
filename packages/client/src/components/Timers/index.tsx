@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
+import { List, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { Actions, Timer } from "@home-control/types/hass-scheduler";
+import { Timer } from "@home-control/types/hass-scheduler";
 import api from "../../utils/api";
 import clock from "../../utils/clock";
-import useMountEffect from "../../utils/useMountEffect";
-import useModal from "../../utils/useModal";
-import PillButton from "../PillButton";
-import ListItem from "../ListItem";
-import NewTimerDialog from "./NewTimerDialog";
 import { formatSecondsToMinutesAndSeconds } from "../../utils/dateTime";
-import FlexRow from "../FlexRow";
+import useMountEffect from "../../utils/useMountEffect";
 import { queryClient } from "../../utils/queryClient";
-import { useResponsive } from "../../utils/general";
 import EmptyState from "../EmptyState";
-import ResponsiveCard from "../ResponsiveCard";
+import AltIconButton from "../AltIconButton";
+import ListItem from "../ListItem";
+import Icon from "../Icon";
+import GlossyPaper from "../GlossyPaper";
 
 function TimerItem({
   timer,
@@ -24,8 +22,6 @@ function TimerItem({
   onDone: () => void;
   onDelete: () => void;
 }) {
-  const { isMobile } = useResponsive();
-
   const [remaining, setRemaining] = useState(() => {
     return timer.duration - (Date.now() - timer.startedAt) / 1000;
   });
@@ -43,41 +39,27 @@ function TimerItem({
     //eslint-disable-next-line
   }, [remaining]);
 
-  const deleteButton = <PillButton icon="close" onClick={onDelete} />;
-
   return (
     <ListItem
-      label={
-        <FlexRow>
-          {!isMobile && deleteButton}
-          {timer.name}
-        </FlexRow>
+      primaryText={timer.name}
+      endSlot={
+        <Stack direction="row" gap="6px">
+          {formatSecondsToMinutesAndSeconds(remaining)}
+          <AltIconButton onClick={onDelete}>
+            <Icon size={18} icon="close" />
+          </AltIconButton>
+        </Stack>
       }
-    >
-      <FlexRow>
-        {formatSecondsToMinutesAndSeconds(remaining)}
-        {isMobile && deleteButton}
-      </FlexRow>
-    </ListItem>
+    />
   );
 }
 
 export default function Timers() {
-  const [mount, modals] = useModal();
   const {
     data = [],
     refetch,
     isInitialLoading,
   } = useQuery(["timers"], () => api<Timer[]>("/hass-scheduler/timers", "get"));
-
-  function onSave(unmount: () => void) {
-    return function (name: string, duration: number, actions: Actions) {
-      unmount();
-      api("/hass-scheduler/timers", "post", { name, duration, actions }).then(
-        () => refetch()
-      );
-    };
-  }
 
   function onDelete(item: Timer) {
     queryClient.setQueryData<Timer[]>(["timers"], (prev) => {
@@ -88,42 +70,19 @@ export default function Timers() {
   }
 
   return (
-    <>
-      {modals}
-      <ResponsiveCard
-        title="Timers"
-        // titleAction={
-        //   <PillButton
-        //     icon="plus"
-        //     onClick={() =>
-        //       mount((unmount) => (
-        //         <NewTimerDialog
-        //           defaultName={`Timer ${data.length + 1}`}
-        //           onSave={onSave(unmount)}
-        //           onClose={unmount}
-        //         />
-        //       ))
-        //     }
-        //   />
-        // }
-        groups={
-          data.length === 0
-            ? [
-                <EmptyState
-                  loading={isInitialLoading}
-                  text="Nenhum timer criado"
-                />,
-              ]
-            : data.map((it) => (
-                <TimerItem
-                  key={it.id}
-                  timer={it}
-                  onDone={refetch}
-                  onDelete={() => onDelete(it)}
-                />
-              ))
-        }
-      />
-    </>
+    <List component={GlossyPaper}>
+      {data.length === 0 ? (
+        <EmptyState loading={isInitialLoading} text="Nenhum timer criado" />
+      ) : (
+        data.map((it) => (
+          <TimerItem
+            key={it.id}
+            timer={it}
+            onDone={refetch}
+            onDelete={() => onDelete(it)}
+          />
+        ))
+      )}
+    </List>
   );
 }

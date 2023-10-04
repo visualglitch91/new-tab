@@ -1,8 +1,8 @@
-import { styled } from "@mui/joy";
-import Paper from "./Paper";
+import { styled } from "@mui/material";
+import GlossyPaper from "./GlossyPaper";
 import WeatherInfo from "./WeatherInfo";
 
-const Root = styled(Paper)({
+const Root = styled(GlossyPaper)({
   padding: 16,
 });
 

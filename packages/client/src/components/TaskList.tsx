@@ -15,17 +15,16 @@ export default function TaskList({
       {items.map((item, index) => (
         <ListItem
           key={index}
-          label={item.title}
-          onSecondaryAction={() => {
+          primaryText={item.title}
+          endSlot={item.subtitle}
+          onClick={() => {
             if (item.click) {
               item.click();
             } else if (item.href) {
               window.open(item.href);
             }
           }}
-        >
-          {item.subtitle}
-        </ListItem>
+        />
       ))}
     </>
   );

@@ -1,80 +1,44 @@
-import { extendTheme } from "@mui/joy/styles";
-import JoySwitch from "./overrides/JoySwitch";
-import JoySlider from "./overrides/JoySlider";
-import JoyTooltip from "./overrides/JoyTooltip";
-import JoyButton from "./overrides/JoyButton";
-import JoyLinearProgress from "./overrides/JoyLinearProgress";
-import JoyCircularProgress from "./overrides/JoyCircularProgress";
+import { createTheme } from "@mui/material";
+import { applyCustomColors } from "./colors";
 
-function getImage(name: string) {
-  return new URL(`./${name}`, import.meta.url).href;
+function getModuleName(filePath: string) {
+  return filePath.match(/\/([^/]+)\.ts$/)?.[1] || null;
 }
 
-declare module "@mui/joy/styles" {
-  interface Theme {
-    wallpaper: {
-      mobile: string;
-      desktop: string;
-    };
-  }
-}
-
-const theme = {
-  ...extendTheme({
-    fontFamily: {
-      body: "inherit",
-    },
-    components: {
-      JoySwitch,
-      JoySlider,
-      JoyTooltip,
-      JoyButton,
-      JoyLinearProgress,
-      JoyCircularProgress,
-    },
-    colorSchemes: {
-      dark: {
-        palette: {
-          text: {
-            secondary: "var(--joy-palette-common-white)",
-            primary: "var(--joy-palette-common-white)",
-          },
-          primary: {
-            50: "#fee4ea",
-            100: "#febccc",
-            200: "#fc90aa",
-            300: "#fa6489",
-            400: "#f6426f",
-            500: "#f32457",
-            600: "#e21f55",
-            700: "#cc1951",
-            800: "#b8114f",
-            900: "#94064a",
-          },
-          neutral: {
-            50: "#e8ecfe",
-            100: "#c8d3e7",
-            200: "#aab5ce",
-            300: "#8a98b5",
-            400: "#7383a1",
-            500: "#5c6e8f",
-            600: "#4f607e",
-            700: "#3e4d68",
-            800: "#2f3b52",
-            900: "#1c273a",
-          },
-          background: {
-            body: "#282a36",
-            popup: "#282a36",
-          },
-        },
-      },
-    },
+// Load all overrides from folder dinamically
+const overrides = Object.entries(
+  import.meta.glob("./overrides/*.ts", { eager: true })
+).reduce(
+  //@ts-expect-error
+  (acc, [key, { default: module }]) => ({
+    ...acc,
+    //@ts-expect-error
+    [getModuleName(key)]: module,
   }),
-  wallpaper: {
-    mobile: getImage("background-mobile.jpg"),
-    desktop: getImage("background-desktop.jpg"),
+  {}
+);
+
+console.log("Overrides loaded:", Object.keys(overrides));
+
+const baseOverrides = {
+  shape: {
+    borderRadius: 12,
   },
+  typography: {
+    fontFamily: "San Francisco",
+  },
+  components: overrides,
 };
+
+const theme = applyCustomColors(
+  createTheme({
+    ...baseOverrides,
+    palette: {
+      mode: "dark",
+      primary: { main: "#ff79c6" },
+      secondary: { main: "#885ba3" },
+    },
+  })
+);
 
 export default theme;

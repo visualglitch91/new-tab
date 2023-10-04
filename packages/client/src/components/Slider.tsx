@@ -1,4 +1,4 @@
-import { Slider as JoySlider } from "@mui/joy";
+import { Slider as MuiSlider } from "@mui/material";
 
 function noop() {}
 
@@ -22,7 +22,7 @@ export default function Slider({
   onChangeEnd?: (value: number) => void;
 }) {
   return (
-    <JoySlider
+    <MuiSlider
       min={min}
       max={max}
       value={value}

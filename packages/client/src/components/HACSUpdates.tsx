@@ -1,34 +1,40 @@
-import ListCard from "./ListCard";
 import { hassUrl, useEntity } from "../utils/hass";
+import AltIconButton from "./AltIconButton";
+import ListSection from "./ListSection";
 import ListItem from "./ListItem";
-import PillButton from "./PillButton";
+import Icon from "./Icon";
 
 export default function HACSUpdates() {
-  const repositories: {
+  const repos: {
     display_name: string;
     available_version: string;
     installed_version: string;
   }[] = useEntity("sensor.hacs")?.attributes?.repositories || [];
 
   return (
-    <ListCard
-      title="HACS"
-      // titleAction={
-      //   <PillButton
-      //     icon="mdi:open-in-new"
-      //     onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
-      //   />
-      // }
+    <ListSection
+      title={
+        <>
+          <span>HACS</span>
+          <AltIconButton
+            onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
+          >
+            <Icon size={18} icon="mdi:open-in-new" />
+          </AltIconButton>
+        </>
+      }
     >
-      {repositories.length === 0 ? (
-        <ListItem label="Sem atualizações pendentes" />
+      {repos.length === 0 ? (
+        <ListItem primaryText="Sem atualizações pendentes" />
       ) : (
-        repositories.map((it, index) => (
-          <ListItem key={index} label={it.display_name}>
-            {`${it.installed_version} > ${it.available_version}`}
-          </ListItem>
+        repos.map((it, index) => (
+          <ListItem
+            key={index}
+            primaryText={it.display_name}
+            endSlot={`${it.installed_version} > ${it.available_version}`}
+          />
         ))
       )}
-    </ListCard>
+    </ListSection>
   );
 }

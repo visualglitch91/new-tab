@@ -2,7 +2,7 @@ import {
   HassEntityBase,
   HassEntityAttributeBase,
 } from "home-assistant-js-websocket";
-import { RGB } from "./general";
+import { RGB } from "./colors";
 import { callService } from "./hass";
 
 export const enum LightEntityFeature {

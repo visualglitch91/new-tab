@@ -1,8 +1,7 @@
 import { createRoot } from "react-dom/client";
+import { disableEmotionWarnings } from "./utils/disableEmotionWarning";
 import "./styles.css";
-import Main from "./Main";
-import { removeParamsFromUrl } from "./utils/general";
+import App from "./App";
 
-removeParamsFromUrl(["reload"]);
-
-createRoot(document.getElementById("app")!).render(<Main />);
+disableEmotionWarnings();
+createRoot(document.getElementById("app")!).render(<App />);

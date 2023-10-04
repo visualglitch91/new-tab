@@ -1,18 +1,12 @@
-import { Fragment, useEffect } from "react";
-import {
-  List,
-  ListItem,
-  ListDivider,
-  Option,
-  Select,
-  Typography,
-} from "@mui/joy";
-import { useHassStore } from "../utils/hass";
-import { compareByStringProp, removeItemAtIndex } from "../utils/array";
-import BorderButton from "./BorderButton";
-import FlexRow from "./FlexRow";
-import Switch from "./Switch";
+import { useEffect } from "react";
+import { keyBy } from "lodash";
+import { Stack, Switch, Button } from "@mui/material";
 import Icon from "./Icon";
+import AltIconButton from "./AltIconButton";
+import { removeItemAtIndex } from "../utils/array";
+import useModal from "../utils/useModal";
+import { useHassStore } from "../utils/hass";
+import EntitySelectorDialog, { formatEntity } from "./EntitySelectorDialog";
 
 interface SimpleAction {
   on: boolean;
@@ -21,19 +15,6 @@ interface SimpleAction {
 
 const validDomains = ["light", "switch", "media_player", "curtain", "script"];
 
-function parseOption(name: string): [string, string] {
-  const pattern = /^\[(.*?)\] (.*)$/;
-  const match = name.match(pattern);
-
-  if (match && match.length === 3) {
-    const zone = match[1];
-    const entityName = match[2];
-    return [zone, entityName];
-  }
-
-  return ["Outros", name];
-}
-
 export default function ActionsForm({
   value: actions,
   onChange,
@@ -41,50 +22,8 @@ export default function ActionsForm({
   value: SimpleAction[];
   onChange: (value: SimpleAction[]) => void;
 }) {
+  const mount = useModal();
   const store = useHassStore();
-
-  const entities = store.states
-    .filter((entity) =>
-      validDomains.some((domain) => entity.entity_id.startsWith(`${domain}.`))
-    )
-    .map((it) => ({
-      id: it.entity_id,
-      name: it.attributes.friendly_name || it.entity_id,
-    }))
-    .sort(compareByStringProp("name"));
-
-  const groupedEntities = (() => {
-    type EntityOption = (typeof entities)[number] & { zone: string };
-    const tmp: Record<string, EntityOption[]> = {};
-    const push = (group: string, option: EntityOption) => {
-      if (!tmp[group]) {
-        tmp[group] = [];
-      }
-
-      tmp[group].push(option);
-    };
-
-    entities.forEach((entity) => {
-      if (entity.id.startsWith("script.")) {
-        push("Scripts", { ...entity, zone: "Scripts" });
-        return;
-      }
-
-      const [zone, name] = parseOption(entity.name);
-
-      if (zone !== "Base") {
-        push(zone, { id: entity.id, name, zone });
-      }
-    });
-
-    const { Scripts, Outros, ...rest } = tmp;
-    const groups = Object.entries(rest).sort(compareByStringProp("0"));
-
-    groups.push(["Scripts", Scripts]);
-    groups.push(["Outros", Outros]);
-
-    return groups;
-  })();
 
   useEffect(() => {
     if (actions.length === 0) {
@@ -111,63 +50,57 @@ export default function ActionsForm({
     onChange(removeItemAtIndex(actions, index));
   }
 
+  function selectEntity(index: number) {
+    const selected = actions[index].entityId;
+
+    mount((_, props) => (
+      <EntitySelectorDialog
+        {...props}
+        maxSelected={1}
+        defaultValue={selected ? [selected] : []}
+        validDomains={validDomains}
+        onSelect={([entityId]) => {
+          if (!entityId) {
+            return;
+          }
+
+          setActionField(index, "entityId", entityId);
+        }}
+      />
+    ));
+  }
+
+  const entitiesById = keyBy(store.states.map(formatEntity), "id");
+
   return (
     <>
       {actions.map((it, index) => {
         const lastItem = index === actions.length - 1;
+        const entity = entitiesById[it.entityId];
 
         return (
-          <FlexRow key={index} full sx={{ alignItems: "center", gap: "12px" }}>
+          <Stack key={index} direction="row" alignItems="center" spacing="12px">
             <Switch
               checked={it.on}
-              onChange={(e) => {
-                setActionField(index, "on", e.currentTarget.checked);
+              onChange={(_, checked) => {
+                setActionField(index, "on", checked);
               }}
             />
-            <Select
-              sx={{ width: "100%" }}
-              value={it.entityId}
-              renderValue={(option) => {
-                return option
-                  ? `(${option.ref.current?.getAttribute("data-zone")}) ${
-                      option.label
-                    }`
-                  : null;
-              }}
-              onChange={(_, value) => {
-                if (value) {
-                  setActionField(index, "entityId", value);
-                }
-              }}
-            >
-              {groupedEntities.map(([zone, entities], index) => (
-                <Fragment key={zone}>
-                  {index !== 0 && <ListDivider role="none" />}
-                  <List
-                    aria-labelledby={`select-group-${zone}`}
-                    sx={{ "--ListItemDecorator-size": "28px" }}
-                  >
-                    <ListItem id={`select-group-${zone}`} sticky>
-                      <Typography level="body-xs" textTransform="uppercase">
-                        {zone} ({entities.length})
-                      </Typography>
-                    </ListItem>
-                    {entities.map((it) => (
-                      <Option key={it.id} value={it.id} data-zone={it.zone}>
-                        {it.name}
-                      </Option>
-                    ))}
-                  </List>
-                </Fragment>
-              ))}
-            </Select>
-            <BorderButton
-              sx={{ borderRadius: "100%", width: "24px", height: "24px" }}
+            <Button fullWidth onClick={() => selectEntity(index)}>
+              {entity
+                ? `(${entity.zone}) ${entity.name}`
+                : "Selecionar entidade"}
+            </Button>
+            <AltIconButton
               onClick={() => (lastItem ? addAction() : removeAction(index))}
             >
-              {lastItem ? <Icon icon="plus" /> : <Icon icon="minus" />}
-            </BorderButton>
-          </FlexRow>
+              {lastItem ? (
+                <Icon size={24} icon="plus" />
+              ) : (
+                <Icon size={24} icon="minus" />
+              )}
+            </AltIconButton>
+          </Stack>
         );
       })}
     </>

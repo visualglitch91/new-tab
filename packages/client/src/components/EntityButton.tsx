@@ -1,40 +1,47 @@
 import { getIcon, useEntity, callService } from "../utils/hass";
-import { RGB } from "../utils/general";
+import { lightSupportsColor } from "../utils/light";
+import { RGB } from "../utils/colors";
 import {
   isColorEqual,
   getDisplayColor,
   getDisplayColorString,
-} from "../utils/colorPresets";
+} from "../utils/colors";
 import useModal from "../utils/useModal";
 import BaseEntityButton from "./BaseEntityButton";
+import { SxProps } from "@mui/material";
 import LightEntityDialog from "./LightEntityDialog";
-import { lightSupportsColor } from "../utils/light";
-import EntityGroupDialog from "./EntityGroupDialog";
+// import EntityGroupDialog from "./EntityGroupDialog";
 
-export default function EntityButton({
-  icon: customIcon,
-  label: _label,
-  changeTimeout,
-  entityId,
-  confirmBefore,
-  onPrimaryAction,
-  onSecondaryAction,
-  onLongPress,
-}: {
+const EntityGroupDialog = (props: any) => null;
+
+export interface EntityButtonProps {
+  sx?: SxProps;
   icon?: string | React.ReactNode;
   label?: React.ReactNode;
+  horizontal?: boolean;
   changeTimeout?: number;
   entityId: string;
   confirmBefore?: boolean;
-  onPrimaryAction?: () => void;
-  onSecondaryAction?: () => void;
+  onClick?: () => void;
   onLongPress?: () => void;
-}) {
+}
+
+export default function EntityButton({
+  sx,
+  icon: customIcon,
+  label: _label,
+  horizontal,
+  changeTimeout,
+  entityId,
+  confirmBefore,
+  onClick,
+  onLongPress,
+}: EntityButtonProps) {
   const entity = useEntity(entityId);
-  const [mount, modals] = useModal();
+  const mount = useModal();
 
   if (!entity) {
-    return <BaseEntityButton disabled label={_label || entityId} />;
+    return <BaseEntityButton sx={sx} disabled label={_label || entityId} />;
   }
 
   const icon = customIcon || getIcon(entity);
@@ -67,18 +74,21 @@ export default function EntityButton({
     : false;
 
   function onLightDetails() {
-    if (domain === "light" && checked) {
-      mount((unmount) => (
-        <LightEntityDialog
-          title={label}
-          entityId={entity!.entity_id}
-          onClose={unmount}
-        />
-      ));
-    }
+    mount((_, dialogProps) => (
+      <LightEntityDialog
+        title={label}
+        entityId={entity!.entity_id}
+        {...dialogProps}
+      />
+    ));
   }
 
   function defaultOnLongPress() {
+    if (domain === "light") {
+      onLightDetails();
+      return;
+    }
+
     const groupedIds: undefined | string | string[] =
       entity?.attributes.entity_id;
 
@@ -93,7 +103,7 @@ export default function EntityButton({
     }
   }
 
-  function defaultPrimaryAction() {
+  function defaultOnClick() {
     if (domain === "cover") {
       callService("cover", checked ? "close_cover" : "open_cover", {
         entity_id: entityId,
@@ -106,24 +116,22 @@ export default function EntityButton({
   }
 
   return (
-    <>
-      {modals}
-      <BaseEntityButton
-        checked={checked}
-        disabled={unavailable}
-        icon={icon}
-        label={label}
-        changeTimeout={changeTimeout}
-        color={
-          displayColor && !isWhite
-            ? getDisplayColorString(displayColor, 0.6)
-            : undefined
-        }
-        confirmBefore={confirmBefore}
-        onPrimaryAction={onPrimaryAction || defaultPrimaryAction}
-        onLongPress={onLongPress || defaultOnLongPress}
-        onSecondaryAction={onSecondaryAction || onLightDetails}
-      />
-    </>
+    <BaseEntityButton
+      sx={sx}
+      checked={checked}
+      disabled={unavailable}
+      horizontal={horizontal}
+      icon={icon}
+      label={label}
+      changeTimeout={changeTimeout}
+      color={
+        displayColor && !isWhite
+          ? getDisplayColorString(displayColor, 0.6)
+          : undefined
+      }
+      confirmBefore={confirmBefore}
+      onClick={onClick || defaultOnClick}
+      onLongPress={onLongPress || defaultOnLongPress}
+    />
   );
 }

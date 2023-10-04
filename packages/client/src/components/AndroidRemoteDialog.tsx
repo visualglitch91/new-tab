@@ -1,80 +1,75 @@
+import { Box } from "@mui/material";
 import { makeTurnOnCall } from "../utils/hass";
-import IconButtonCard from "./IconButtonCard";
+import IconHugeButton from "./IconHugeButton";
+import DialogBase, { DialogBaseControlProps } from "./DialogBase";
 import ButtonRow from "./ButtonRow";
-import DialogBase from "./DialogBase";
-import BaseDiv from "./BaseDiv";
 
-export default function AndroidRemoteDialog({
-  onClose,
-}: {
-  onClose: () => void;
-}) {
+export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
   return (
-    <DialogBase title="Controle" onClose={onClose}>
-      <BaseDiv
+    <DialogBase {...props} bottomMobileSheet title="Controle">
+      <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: "8px",
           minWidth: "286px",
+          "& button": {
+            background: "rgba(28, 34, 48,0.9)",
+          },
         }}
       >
         <ButtonRow height={90}>
-          <IconButtonCard
+          <IconHugeButton
             icon="mdi:image-outline"
             size={28}
             action={makeTurnOnCall("script.sala_tv_ligar_tela")}
           />
-          <IconButtonCard
-            repeatOnHold
+          <IconHugeButton
             icon="mdi:chevron-up"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_cima")}
           />
-          <IconButtonCard
+          <IconHugeButton
             icon="mdi:image-off-outline"
             size={28}
             action={makeTurnOnCall("script.sala_tv_desligar_tela")}
           />
         </ButtonRow>
         <ButtonRow height={90}>
-          <IconButtonCard
-            repeatOnHold
+          <IconHugeButton
             icon="mdi:chevron-left"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_esquerda")}
           />
-          <IconButtonCard
+          <IconHugeButton
             icon="mdi:record-circle-outline"
             size={25}
             action={makeTurnOnCall("script.sala_mibox_navegar_selecionar")}
           />
-          <IconButtonCard
-            repeatOnHold
+          <IconHugeButton
             icon="mdi:chevron-right"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_direita")}
           />
         </ButtonRow>
         <ButtonRow height={90}>
-          <IconButtonCard
+          <IconHugeButton
             icon="mdi:undo"
             size={30}
             action={makeTurnOnCall("script.sala_mibox_navegar_voltar")}
           />
-          <IconButtonCard
-            repeatOnHold
+          <IconHugeButton
             icon="mdi:chevron-down"
             size={32}
             action={makeTurnOnCall("script.sala_mibox_navegar_baixo")}
           />
-          <IconButtonCard
+          <IconHugeButton
             icon="mdi:home"
             size={25}
             action={makeTurnOnCall("script.sala_mibox_navegar_home")}
           />
         </ButtonRow>
-      </BaseDiv>
+      </Box>
     </DialogBase>
   );
 }

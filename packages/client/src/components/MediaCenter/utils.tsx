@@ -1,4 +1,4 @@
-import { RGB } from "../../utils/general";
+import { RGB } from "../../utils/colors";
 
 export const STATUS_COLORS = {
   available: [56, 142, 60],

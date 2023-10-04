@@ -1,5 +1,5 @@
 import { HassEntity } from "home-assistant-js-websocket";
-import { RGB } from "../../utils/general";
+import { RGB } from "../../utils/colors";
 import { adjustColorBrightness, setRgbWColor } from "../../utils/light";
 
 export function useColorBrightness({

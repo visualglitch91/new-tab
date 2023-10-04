@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useSocketIO } from "../utils/api";
 import useMountEffect from "../utils/useMountEffect";
+import { clearAllCachesAndReload } from "../utils/updater";
 import version from "../version.json";
-import ListCard from "./ListCard";
+import AltIconButton from "./AltIconButton";
+import ListSection from "./ListSection";
 import ListItem from "./ListItem";
-import PillButton from "./PillButton";
-import { clearAllCachesAndReload } from "../utils/general";
+import Icon from "./Icon";
 
 export default function HomeControlSystemCard() {
   const socket = useSocketIO();
@@ -22,18 +23,22 @@ export default function HomeControlSystemCard() {
   });
 
   return (
-    <ListCard
-      title="Home Control"
-      // titleAction={
-      //   <PillButton icon="refresh" onClick={() => clearAllCachesAndReload()} />
-      // }
+    <ListSection
+      title={
+        <>
+          <span>Home Control</span>
+          <AltIconButton onClick={clearAllCachesAndReload}>
+            <Icon icon="refresh" />
+          </AltIconButton>
+        </>
+      }
     >
-      <ListItem icon="numeric" label="Versão">
-        {version}
-      </ListItem>
-      <ListItem icon="connection" label="WebSocket">
-        {isWebsocket ? "Sim" : "Não"}
-      </ListItem>
-    </ListCard>
+      <ListItem icon="numeric" primaryText="Versão" endSlot={version} />
+      <ListItem
+        icon="connection"
+        primaryText="WebSocket"
+        endSlot={isWebsocket ? "Sim" : "Não"}
+      />
+    </ListSection>
   );
 }

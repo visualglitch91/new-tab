@@ -1,4 +1,4 @@
-import { styled } from "@mui/joy";
+import { styled } from "@mui/material";
 import CoverDominantColor from "./CoverDominantColor";
 
 const Root = styled("div")({

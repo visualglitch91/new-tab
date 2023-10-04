@@ -12,12 +12,8 @@ import {
   MessageBase,
 } from "home-assistant-js-websocket";
 import EventEmitter from "./EventEmitter";
-import {
-  loadValue,
-  saveValue,
-  clearValue,
-  removeParamsFromUrl,
-} from "./general";
+import { removeParamsFromUrl } from "./url";
+import { loadValue, saveValue, clearValue } from "./storage";
 import api from "./api";
 import peerConnectionManager from "./peerConnectionManager";
 
@@ -34,6 +30,7 @@ function setupHASS({
 }) {
   return getAuth({
     hassUrl,
+    redirectUrl: window.location.origin,
     saveTokens: (tokens) => saveValue(`hass_token_${hassUrl}`, tokens),
     loadTokens: async () => loadValue(`hass_token_${hassUrl}`),
   })

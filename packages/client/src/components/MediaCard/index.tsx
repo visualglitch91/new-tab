@@ -1,13 +1,12 @@
-import { CircularProgress, styled } from "@mui/joy";
-import Paper from "../Paper";
-import { callService, useEntity } from "../../utils/hass";
+import { CircularProgress, Box, styled } from "@mui/material";
+import GlossyPaper from "../GlossyPaper";
+import { useEntity } from "../../utils/hass";
 import { useCurrentMedia } from "./utils";
 import Controls from "./Controls";
 import Cover from "./Cover";
 import CoverDominantColor from "./CoverDominantColor";
-import BaseDiv from "../BaseDiv";
 
-const Root = styled(Paper)({
+const Root = styled(GlossyPaper)({
   position: "relative",
   textAlign: "left",
   overflow: "hidden",
@@ -93,7 +92,7 @@ export default function MediaCard() {
   return (
     <Root>
       <Inner>
-        <BaseDiv sx={{ display: "flex", flexDirection: "row", gap: "16px" }}>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: "16px" }}>
           <Cover src={media.image} />
           <Info sx={isSpotify ? {} : { justifyContent: "center" }}>
             <Title>{media.title}</Title>
@@ -106,7 +105,7 @@ export default function MediaCard() {
               <Controls volumeOnly={media.volumeOnly} />
             )}
           </Info>
-        </BaseDiv>
+        </Box>
         {isSpotify && (
           <SpotifyControlWrapper>
             <Controls isSpotify />

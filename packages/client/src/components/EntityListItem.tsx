@@ -1,14 +1,17 @@
 import { HassEntity } from "home-assistant-js-websocket";
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps, Button, Switch } from "@mui/material";
 import { useEntity, getIcon, makeServiceCall } from "../utils/hass";
 import useModal from "../utils/useModal";
-import { rgbToHex } from "../utils/general";
-import PillButton from "./PillButton";
+import { rgbToHex } from "../utils/colors";
 import ListItem from "./ListItem";
 import LightEntityDialog from "./LightEntityDialog";
-import { useConfirm } from "../utils/useConfirm";
+import ColorBadge from "./ColorBadge";
+import useAsyncChange from "../utils/useAsyncChange";
+import Icon from "./Icon";
+import DotLoading from "./DotLoading";
+import useConfirm from "../utils/useConfirm";
 
-interface Props {
+export interface EntityListItemProps {
   icon?: string | React.ReactNode;
   label?: React.ReactNode;
   changeTimeout?: number;
@@ -27,18 +30,14 @@ function BaseEntityListItem({
   entity,
   entityId,
   renderListContent,
-}: Props & { entity: HassEntity }) {
+}: EntityListItemProps & { entity: HassEntity }) {
   const icon = customIcon || getIcon(entity);
-  const [mount, modals] = useModal();
-  const [confirm, confirmModals] = useConfirm();
+  const mount = useModal();
+  const confirm = useConfirm();
 
   function onLightClick() {
-    mount((unmount) => (
-      <LightEntityDialog
-        title={label}
-        entityId={entity.entity_id}
-        onClose={unmount}
-      />
+    mount((_, props) => (
+      <LightEntityDialog title={label} entityId={entity.entity_id} {...props} />
     ));
   }
 
@@ -57,19 +56,37 @@ function BaseEntityListItem({
     { entity_id: entityId }
   );
 
+  const { changing, change } = useAsyncChange({
+    flag: checked || false,
+    timeout: changeTimeout,
+  });
+
   const customProps = renderListContent
-    ? { children: renderListContent(entity) }
+    ? { endSlot: renderListContent(entity) }
     : ["light", "switch", "input_boolean"].includes(domain)
     ? {
-        checked,
-        changeTimeout,
-        onPrimaryAction,
+        endSlot:
+          typeof checked === "boolean" ? (
+            unavailable ? (
+              <Icon icon="cancel" />
+            ) : changing ? (
+              <DotLoading />
+            ) : (
+              <Switch
+                checked={checked}
+                onChange={() => {
+                  if (change()) {
+                    onPrimaryAction();
+                  }
+                }}
+              />
+            )
+          ) : null,
       }
     : domain === "script"
     ? {
-        children: (
-          <PillButton
-            label="Executar"
+        endSlot: (
+          <Button
             onClick={
               onPrimaryAction
                 ? () => {
@@ -84,39 +101,58 @@ function BaseEntityListItem({
                   }
                 : undefined
             }
-          />
+          >
+            Executar
+          </Button>
         ),
       }
-    : { children: entity.state };
+    : { endSlot: entity.state };
+
+  const colorBadge = attributes.rgb_color && rgbToHex(attributes.rgb_color);
 
   return (
+    <ListItem
+      sx={sx}
+      disabled={unavailable}
+      icon={icon}
+      primaryText={
+        colorBadge ? (
+          <>
+            {label}
+            <ColorBadge size={12} color={colorBadge} />
+          </>
+        ) : (
+          label
+        )
+      }
+      onClick={domain === "light" && checked ? onLightClick : undefined}
+      {...customProps}
+    />
+  );
+}
+
+export function EntityListItems({ items }: { items: EntityListItemProps[] }) {
+  return (
     <>
-      {modals}
-      {confirmModals}
-      <ListItem
-        sx={sx}
-        disabled={unavailable}
-        icon={icon}
-        label={label}
-        color={attributes.rgb_color && rgbToHex(attributes.rgb_color)}
-        onSecondaryAction={
-          domain === "light" && checked ? onLightClick : undefined
-        }
-        {...customProps}
-      />
+      {items.map((props, index) => (
+        <EntityListItem key={index} {...props} />
+      ))}
     </>
   );
 }
 
-export default function EntityListItem(props: Props) {
+export default function EntityListItem(props: EntityListItemProps) {
   const { entityId, label } = props;
   const entity = useEntity(entityId);
 
   if (!entity) {
     return (
-      <ListItem disabled icon="cancel" label={entityId}>
-        {label || entityId}
-      </ListItem>
+      <ListItem
+        disabled
+        icon="cancel"
+        primaryText={entityId}
+        endSlot={label || entityId}
+      />
     );
   }
 

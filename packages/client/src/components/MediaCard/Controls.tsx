@@ -1,15 +1,14 @@
-import { styled } from "@mui/joy";
-import { SxProps } from "@mui/joy/styles/types";
+import { styled, ButtonBase, SxProps } from "@mui/material";
 import { callService, makeServiceCall, makeTurnOnCall } from "../../utils/hass";
-import RippleButton from "../RippleButton";
 import Icon from "../Icon";
+import { useLongPress } from "@uidotdev/usehooks";
 
 const Root = styled("div")({
   display: "flex",
   gap: 10,
 });
 
-const ControlRoot = styled(RippleButton)({
+const ControlRoot = styled(ButtonBase)({
   color: "white",
   border: "1px solid white",
   background: "transparent",
@@ -28,16 +27,18 @@ const ControlRoot = styled(RippleButton)({
 function Control({
   icon,
   sx,
-  onClick,
   onLongPress,
+  onClick,
 }: {
   icon: string;
   sx?: SxProps;
   onClick: () => void;
   onLongPress?: () => void;
 }) {
+  const buttonProps = useLongPress(onLongPress || (() => {}));
+
   return (
-    <ControlRoot sx={sx} onClick={onClick} onLongPress={onLongPress}>
+    <ControlRoot {...buttonProps} sx={sx} onClick={onClick}>
       <Icon icon={icon} size={17} />
     </ControlRoot>
   );

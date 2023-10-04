@@ -1,173 +1,98 @@
-import { styled } from "@mui/joy";
-import { BaseComponentGroupItem } from "../utils/typings";
-import useAsyncChange from "../utils/useAsyncChange";
-import { cx } from "../utils/styles";
-import ColorBadge from "./ColorBadge";
-import DotLoading from "./DotLoading";
+import {
+  styled,
+  SxProps,
+  ButtonBase,
+  ListItemText,
+  ListItemIcon,
+  ListItem as MuiListItem,
+} from "@mui/material";
 import Icon from "./Icon";
-import Switch from "./Switch";
-import RippleButton from "./RippleButton";
-import { SxProps } from "@mui/joy/styles/types";
+import { sxx } from "../utils/styling";
+import { useLongPress } from "@uidotdev/usehooks";
 
-const classes = {
-  wrapperDisabled: "LitemItem__Root--wrapperDisabled",
-  clickableLabel: "LitemItem__Root--clickableLabel",
+const customSx: SxProps = {
+  paddingRight: "16px",
+  alignItems: "stretch",
+  "& .MuiListItemText-primary, & .MuiListItemText-secondary": {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  "& .MuiListItemSecondaryAction-root": {
+    position: "initial",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    transform: "unset",
+    top: "unset",
+    right: "unset",
+    marginLeft: "8px",
+    flexShrink: 0,
+
+    "& button, & a, & .MuiSwitch-root": {
+      position: "relative",
+      zIndex: 2,
+    },
+  },
 };
 
-const Root = styled("div")({
-  position: "relative",
-  padding: "4px 16px",
-  overflow: "hidden",
-
-  "&:hover": { background: "rgba(0, 0, 0, 0.1)" },
-
-  [`&.${classes.wrapperDisabled}`]: {
-    opacity: 0.5,
-    cursor: "not-allowed",
-  },
-
-  [`&.${classes.clickableLabel}:not(.${classes.wrapperDisabled})`]: {
-    cursor: "pointer",
-    transition: "background 100ms linear",
-  },
-});
-
-const BackgroundButtonWrapper = styled("div")({
+const ListButton = styled(ButtonBase)({
   position: "absolute",
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
   zIndex: 1,
-
-  "& > button": {
-    background: "transparent",
-    border: "none",
-    width: "100%",
-    height: "100%",
-  },
-
-  [`.${classes.clickableLabel}:not(.${classes.wrapperDisabled}) &`]: {
-    cursor: "pointer",
-  },
-});
-
-const InnerWrapper = styled("div")({
-  width: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  fontSize: "14px",
-  columnGap: "12px",
-  color: "white",
-  zIndex: 2,
-  position: "relative",
-  pointerEvents: "none",
-  "& button, & label, & .MuiSwitch-root": { pointerEvents: "all" },
-});
-
-const LabelIcon = styled(Icon)({
-  fontSize: "24px",
-  minWidth: "40px",
-  maxWidth: "40px",
-  height: "40px",
-});
-
-const Label = styled("div")({
-  marginRight: "auto",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  display: "flex",
-  alignItems: "center",
-  columnGap: "8px",
-  fontWeight: 500,
-});
-
-const LabelContent = styled("span")({
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-});
-
-const Content = styled("div")({
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  flexShrink: 0,
 });
 
 export default function ListItem({
-  label,
-  icon,
-  color,
-  disabled,
-  checked,
-  changeTimeout = 0,
-  children,
   sx,
-  renderListContent,
-  onPrimaryAction = () => {},
-  onSecondaryAction,
+  icon,
+  endSlot,
+  startSlot,
+  primaryText,
+  secondaryText,
+  onClick,
   onLongPress,
-  onHold,
-}: BaseComponentGroupItem & {
+}: {
   sx?: SxProps;
-  children?: React.ReactNode;
-  renderListContent?: () => React.ReactNode;
+  icon?: React.ReactNode;
+  disabled?: boolean;
+  endSlot?: React.ReactNode;
+  startSlot?: React.ReactNode;
+  primaryText?: React.ReactNode;
+  secondaryText?: React.ReactNode;
+  onClick?: () => void;
+  onLongPress?: () => void;
 }) {
-  const hasInteraction = Boolean(onLongPress || onHold || onSecondaryAction);
+  const props = {
+    sx: sxx(customSx, sx),
+    secondaryAction: endSlot,
+  };
 
-  const { changing, change } = useAsyncChange({
-    flag: checked || false,
-    timeout: changeTimeout,
-  });
+  const hasInteraction = onClick || onLongPress;
+  const buttonProps = useLongPress(onLongPress || (() => {}));
 
-  const content = renderListContent ? (
-    renderListContent()
-  ) : children ? (
-    children
-  ) : typeof checked === "boolean" ? (
-    disabled ? (
-      <Icon icon="cancel" />
-    ) : changing ? (
-      <DotLoading />
-    ) : (
-      <Switch
-        checked={checked}
-        onChange={() => {
-          if (change()) {
-            onPrimaryAction();
-          }
-        }}
-      />
-    )
-  ) : null;
-
-  return (
-    <Root
-      sx={sx}
-      className={cx(
-        disabled && classes.wrapperDisabled,
-        hasInteraction && classes.clickableLabel
+  const content = (
+    <>
+      {(startSlot || icon) && (
+        <ListItemIcon>
+          {startSlot ||
+            (typeof icon === "string" ? <Icon icon={icon} /> : icon)}
+        </ListItemIcon>
       )}
-    >
-      {hasInteraction && (
-        <BackgroundButtonWrapper>
-          <RippleButton
-            onClick={onSecondaryAction}
-            onLongPress={onLongPress}
-            onHold={onHold}
-          />
-        </BackgroundButtonWrapper>
-      )}
-      <InnerWrapper>
-        {typeof icon === "string" ? <LabelIcon icon={icon} /> : icon}
-        <Label>
-          {label && <LabelContent>{label}</LabelContent>}
-          {color && <ColorBadge size={12} color={color} />}
-        </Label>
-        <Content>{content}</Content>
-      </InnerWrapper>
-    </Root>
+      <ListItemText primary={primaryText} secondary={secondaryText} />
+    </>
   );
+
+  if (hasInteraction) {
+    return (
+      <MuiListItem {...props}>
+        <ListButton {...buttonProps} onClick={onClick} />
+        {content}
+      </MuiListItem>
+    );
+  }
+
+  return <MuiListItem {...props}>{content}</MuiListItem>;
 }

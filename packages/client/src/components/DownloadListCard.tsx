@@ -1,24 +1,27 @@
 import humanizeDuration from "humanize-duration";
-import { LinearProgress, Tooltip, styled } from "@mui/joy";
-import PillButton from "./PillButton";
+import {
+  List,
+  alpha,
+  Stack,
+  styled,
+  Tooltip,
+  ButtonBase,
+  LinearProgress,
+} from "@mui/material";
 import Icon from "./Icon";
-import FlexRow from "./FlexRow";
-import { formatNumericValue, useResponsive } from "../utils/general";
-import { alpha } from "../utils/styles";
-import RippleButton from "./RippleButton";
-import { borderRadius } from "./Paper";
+import { formatNumericValue } from "../utils/general";
 import EmptyState from "./EmptyState";
-import ResponsiveCard from "./ResponsiveCard";
+import GlossyPaper from "./GlossyPaper";
 
-const ItemCard = styled(RippleButton)(({ theme }) => ({
-  padding: 16,
+const ItemCard = styled(ButtonBase)(({ theme }) => ({
+  padding: "20px 16px",
   width: "100%",
   justifyContent: "stretch",
   textAlign: "left",
   background: "transparent",
-  border: "none",
-  [theme.breakpoints.down("sm")]: { borderRadius },
-  "&:hover": { backgroundColor: alpha(theme.palette.neutral[800], 0.3) },
+  borderRadius: 0,
+  borderTop: `1px solid ${alpha(theme.palette.primary.dark, 0.7)}`,
+  "&:hover": { backgroundColor: alpha(theme.palette.grey[800], 0.3) },
 }));
 
 const ItemContent = styled("div")({
@@ -30,7 +33,9 @@ const ItemContent = styled("div")({
   overflow: "hidden",
 });
 
-const Header = styled(FlexRow)({
+const Header = styled("div")({
+  display: "flex",
+  gap: "8px",
   width: "100%",
   overflow: "hidden",
 });
@@ -44,7 +49,9 @@ const Name = styled("span")({
   whiteSpace: "nowrap",
 });
 
-const Details = styled(FlexRow)({
+const Details = styled("div")({
+  display: "flex",
+  gap: "8px",
   opacity: 0.8,
   fontSize: "12px",
   fontWeight: 600,
@@ -81,83 +88,70 @@ export interface DownloadItem {
 }
 
 export default function DownloadListCard({
-  title,
-  stickyMobileTitle,
   downloads,
   loading,
   children,
-  onAdd,
+  maxHeight,
   onItemClick,
 }: {
-  title: string;
   downloads: DownloadItem[];
-  stickyMobileTitle?: boolean;
   loading?: boolean;
+  maxHeight?: number;
   children?: React.ReactNode;
-  onAdd: () => void;
   onItemClick: (item: DownloadItem) => void;
 }) {
-  const { isMobile } = useResponsive();
-
   return (
-    <ResponsiveCard
-      spacing={0}
-      title={title}
-      variant="compact"
-      stickyMobileTitle={stickyMobileTitle}
-      // titleChildren={<PillButton icon="mdi:plus" onClick={onAdd} />}
-      groups={[
-        <>{children}</>,
-        ...(downloads.length === 0
-          ? [
-              <EmptyState
-                sx={{ pt: "18px" }}
-                loading={loading}
-                text="Nenhum download adicionado"
-              />,
-            ]
-          : downloads.map((it) => (
-              <Tooltip key={it.id} title={it.name}>
-                <ItemCard onClick={() => onItemClick(it)}>
-                  <ItemContent>
-                    <Header>
-                      <Icon
-                        size={16}
-                        icon={
-                          it.completed
-                            ? "mdi-check"
-                            : it.status === "seeding"
-                            ? "mdi-arrow-up"
-                            : it.active
-                            ? "mdi-arrow-down"
-                            : "mdi-pause"
-                        }
-                      />
-                      <Name>{it.name}</Name>
-                    </Header>
-                    <LinearProgress
-                      determinate
-                      variant="outlined"
-                      thickness={isMobile ? 6 : 7}
-                      value={it.percentDone}
-                      sx={{ width: "100%" }}
+    <Stack component={GlossyPaper}>
+      {children}
+      <List sx={maxHeight ? { maxHeight, overflow: "auto" } : {}}>
+        {downloads.length === 0 ? (
+          <EmptyState
+            sx={{ pt: "18px" }}
+            loading={loading}
+            text="Nenhum download adicionado"
+          />
+        ) : (
+          downloads.map((it) => (
+            <Tooltip key={it.id} title={it.name}>
+              <ItemCard onClick={() => onItemClick(it)}>
+                <ItemContent>
+                  <Header>
+                    <Icon
+                      size={16}
+                      icon={
+                        it.completed
+                          ? "mdi-check"
+                          : it.status === "seeding"
+                          ? "mdi-arrow-up"
+                          : it.active
+                          ? "mdi-arrow-down"
+                          : "mdi-pause"
+                      }
                     />
-                    <Details>
-                      <span>{STATUS_LABELS[it.status]}</span>
-                      <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                      <span>
-                        {it.eta &&
-                          humanizeDuration(it.eta, {
-                            round: true,
-                            language: "pt",
-                          })}
-                      </span>
-                    </Details>
-                  </ItemContent>
-                </ItemCard>
-              </Tooltip>
-            ))),
-      ]}
-    />
+                    <Name>{it.name}</Name>
+                  </Header>
+                  <LinearProgress
+                    variant="determinate"
+                    value={it.percentDone}
+                    sx={{ width: "100%", height: "6px", borderRadius: "4px" }}
+                  />
+                  <Details>
+                    <span>{STATUS_LABELS[it.status]}</span>
+                    <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
+                    <span>
+                      {it.eta &&
+                        humanizeDuration(it.eta, {
+                          round: true,
+                          language: "pt",
+                        })}
+                    </span>
+                  </Details>
+                </ItemContent>
+              </ItemCard>
+            </Tooltip>
+          ))
+        )}
+      </List>
+    </Stack>
   );
 }

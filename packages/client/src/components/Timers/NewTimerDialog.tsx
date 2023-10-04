@@ -1,72 +1,70 @@
 import { useState } from "react";
-import { Input, FormLabel, FormControl } from "@mui/joy";
+import { Stack, TextField, Button } from "@mui/material";
 import { Actions, SimpleAction } from "@home-control/types/hass-scheduler";
-import { focusOnRef } from "../../utils/react";
-import DialogBase from "../DialogBase";
-import Stack from "../Stack";
-import BorderButton from "../BorderButton";
+import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import ActionsForm from "../ActionsForm";
 
 export default function NewTimerDialog({
   defaultName,
   onSave,
-  onClose,
+  ...props
 }: {
   defaultName: string;
   onSave: (name: string, duration: number, actions: Actions) => void;
-  onClose: () => void;
-}) {
+} & DialogBaseControlProps) {
   const [name, setName] = useState(defaultName);
   const [duration, setDuration] = useState(0);
   const [actions, setActions] = useState<SimpleAction[]>([]);
 
   return (
     <DialogBase
+      {...props}
       title="Novo Timer"
-      sx={(theme) => ({
-        [theme.breakpoints.up("sm")]: {
-          width: "80vw",
+      sx={{
+        "& .MuiDialog-paper": {
+          width: "90vw",
           maxWidth: "600px",
         },
-      })}
-      onClose={onClose}
+      }}
+      footer={
+        <>
+          <Button onClick={props.onClose}>Cancelar</Button>
+          <Button
+            onClick={() =>
+              onSave(
+                name,
+                duration,
+                actions
+                  .filter((it) => !!it.entityId)
+                  .map((it) => ({
+                    domain: "homeassistant",
+                    service: it.on ? "turn_on" : "turn_off",
+                    data: { entity_id: it.entityId },
+                  }))
+              )
+            }
+          >
+            Confirmar
+          </Button>
+        </>
+      }
     >
-      <Stack>
-        <FormControl>
-          <FormLabel>Name</FormLabel>
-          <Input
+      <Stack gap={2}>
+        <Stack direction="row" gap={2}>
+          <TextField
+            label="Name"
             value={name}
             onChange={(event) => setName(event.currentTarget.value)}
           />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Segundos</FormLabel>
-          <Input
+          <TextField
+            sx={{ width: "33%" }}
+            label="Segundos"
             type="number"
-            slotProps={{ input: { ref: focusOnRef } }}
             value={duration}
             onChange={(event) => setDuration(Number(event.currentTarget.value))}
           />
-        </FormControl>
+        </Stack>
         <ActionsForm value={actions} onChange={setActions} />
-        <BorderButton
-          primary
-          onClick={() =>
-            onSave(
-              name,
-              duration,
-              actions
-                .filter((it) => !!it.entityId)
-                .map((it) => ({
-                  domain: "homeassistant",
-                  service: it.on ? "turn_on" : "turn_off",
-                  data: { entity_id: it.entityId },
-                }))
-            )
-          }
-        >
-          Confirmar
-        </BorderButton>
       </Stack>
     </DialogBase>
   );
