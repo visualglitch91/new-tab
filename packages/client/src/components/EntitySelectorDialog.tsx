@@ -49,7 +49,12 @@ export function formatEntity(entity: HassEntity): {
     };
   }
 
-  throw new Error();
+  return {
+    id,
+    domain,
+    name: entity.entity_id,
+    zone: "Outros",
+  };
 }
 
 const EntityItem = styled(Button)({
@@ -70,9 +75,9 @@ export default function EntitySelectorDialog({
 } & DialogBaseControlProps) {
   const store = useHassStore();
   const selected = useSet<string>(defaultValue);
-
   const entities = orderBy(
     store.states
+      .filter((it) => it.state !== "unavailable")
       .filter((entity) =>
         validDomains.some((domain) => entity.entity_id.startsWith(`${domain}.`))
       )
@@ -124,12 +129,19 @@ export default function EntitySelectorDialog({
       dividers
       title="Escolher entidade"
       bottomMobileSheet
-      sx={{
+      sx={(theme) => ({
+        "& .MuiDialog-paper": {
+          [theme.breakpoints.up("sm")]: {
+            width: "50vw",
+            maxWidth: "700px",
+          },
+        },
         "& .MuiDialogContent-root": {
           textAlign: "left",
           height: "70vh",
+          width: "100%",
         },
-      }}
+      })}
       footer={
         <>
           <Button onClick={props.onClose}>Cancelar</Button>

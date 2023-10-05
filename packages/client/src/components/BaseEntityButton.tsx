@@ -31,18 +31,18 @@ const Wrapper = styled(HugeButton)({
   },
 
   [`&.${classes.wrapperActive}:not(.${classes.wrapperCustomBG})`]: {
-    background: "rgba(255, 255, 255, 0.6)",
+    background: "rgba(255, 255, 255, 0.8)",
     borderColor: "rgba(255, 255, 255, 0.1)",
     color: "#222",
   },
 
-  [`&.${classes.wrapperActive}.hover`]: {
-    background: "rgba(255, 255, 255, 0.25)",
+  [`&.${classes.wrapperActive}:hover`]: {
+    background: "rgba(255, 255, 255, 0.6)",
   },
 
-  [`&.${classes.wrapperActive}.${classes.wrapperCustomBG}.hover`]: {
+  [`&.${classes.wrapperActive}.${classes.wrapperCustomBG}:hover`]: {
     background: "unset",
-    filter: "brightness(1.1)",
+    filter: "brightness(1.2)",
     borderColor: "rgba(255, 255, 255, 0.1)",
   },
 

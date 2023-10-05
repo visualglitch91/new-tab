@@ -52,6 +52,7 @@ export default function NewTimerDialog({
       <Stack gap={2}>
         <Stack direction="row" gap={2}>
           <TextField
+            sx={{ flex: 1 }}
             label="Name"
             value={name}
             onChange={(event) => setName(event.currentTarget.value)}
