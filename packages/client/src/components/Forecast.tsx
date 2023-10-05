@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { SxProps, styled } from "@mui/material";
 import GlossyPaper from "./GlossyPaper";
 import WeatherInfo from "./WeatherInfo";
 
@@ -46,9 +46,9 @@ function ForecastItem({ daysFromNow }: { daysFromNow: number }) {
   );
 }
 
-export default function Forecast({ days }: { days: number }) {
+export default function Forecast({ days, sx }: { days: number; sx?: SxProps }) {
   return (
-    <Root>
+    <Root sx={sx}>
       <Inner sx={{ maxWidth: days * 100 }}>
         {new Array(days).fill(0).map((_, index) => (
           <ForecastItem key={index} daysFromNow={index} />

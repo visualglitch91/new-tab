@@ -1,4 +1,5 @@
 import { Slider as MuiSlider } from "@mui/material";
+import { useState } from "react";
 
 function noop() {}
 
@@ -9,7 +10,7 @@ function parseValue(value: number | number[]) {
 export default function Slider({
   min,
   max,
-  value,
+  value: externalValue,
   defaultValue,
   onChange = noop,
   onChangeEnd = noop,
@@ -21,14 +22,23 @@ export default function Slider({
   onChange?: (value: number) => void;
   onChangeEnd?: (value: number) => void;
 }) {
+  const [internalValue, setIntervalValue] = useState(defaultValue || 0);
+  const value = externalValue || internalValue;
+
   return (
     <MuiSlider
       min={min}
       max={max}
       value={value}
       defaultValue={defaultValue}
-      onChange={(_, value) => onChange(parseValue(value))}
-      onChangeCommitted={(_, value) => onChangeEnd(parseValue(value))}
+      onChange={(_, raw) => {
+        const value = parseValue(raw);
+        setIntervalValue(value);
+        onChange?.(value);
+      }}
+      onChangeCommitted={(_, value) => {
+        onChangeEnd(parseValue(value));
+      }}
     />
   );
 }

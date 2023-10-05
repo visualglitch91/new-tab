@@ -43,7 +43,11 @@ export default function ActionSheet<T extends string>({
   ));
 
   if (!hideCancelButton) {
-    buttons.push(<Button onClick={onClose}>Cancelar</Button>);
+    buttons.push(
+      <Button key="cancel" onClick={onClose}>
+        Cancelar
+      </Button>
+    );
   }
 
   return (

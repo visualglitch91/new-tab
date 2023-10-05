@@ -1,4 +1,4 @@
-import { List, Stack, Tooltip } from "@mui/material";
+import { List, Stack } from "@mui/material";
 import ListItem from "../ListItem";
 import { Directory, Item } from "./utils";
 import GlossyPaper from "../GlossyPaper";

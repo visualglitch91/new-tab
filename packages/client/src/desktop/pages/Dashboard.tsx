@@ -1,4 +1,4 @@
-import { Stack, useMediaQuery } from "@mui/material";
+import { Box, Grid, Stack, useMediaQuery } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { TickTickData } from "@home-control/types/ticktick";
 import api from "../../utils/api";
@@ -17,7 +17,8 @@ const mediaCard = <MediaCard />;
 
 export default function DashboardPage() {
   const addPackage = useAddPackage();
-  const sm = useMediaQuery("@media(max-width: 1100px)");
+  const sm = useMediaQuery("@media(max-width: 1250px)");
+  const md = useMediaQuery("@media(max-width: 1400px)");
   const { data, refetch } = useQuery(["ticktick"], () =>
     api<TickTickData>("/ticktick/data", "GET")
   );
@@ -56,18 +57,42 @@ export default function DashboardPage() {
   if (sm) {
     return (
       <Stack spacing={5}>
-        <Forecast days={3} />
-        <Stack direction="row" spacing={5}>
-          {habits}
-          <Stack spacing={5}>
-            {next}
-            {unscheduled}
-            {mediaCard}
-          </Stack>
-        </Stack>
+        <Box sx={{ width: "100%" }}>{mediaCard}</Box>
+        <Forecast days={5} sx={{ width: "100%" }} />
         {links}
+        {next}
+        {habits}
+        {unscheduled}
         {packageTracker}
       </Stack>
+    );
+  }
+
+  if (md) {
+    return (
+      <Grid container spacing={5}>
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={5}>
+            <Box sx={{ width: "600px" }}>{mediaCard}</Box>
+            <Forecast days={3} sx={{ width: "100%" }} />
+          </Stack>
+        </Grid>
+        <Grid item xs={12}>
+          {links}
+        </Grid>
+        <Grid item xs={6}>
+          <Stack spacing={5}>
+            {next}
+            {habits}
+          </Stack>
+        </Grid>
+        <Grid item xs={6}>
+          <Stack spacing={5}>
+            {unscheduled}
+            {packageTracker}
+          </Stack>
+        </Grid>
+      </Grid>
     );
   }
 

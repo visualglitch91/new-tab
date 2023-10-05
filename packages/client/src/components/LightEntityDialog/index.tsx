@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Stack, styled } from "@mui/material";
 import { HassEntity } from "home-assistant-js-websocket";
 import { useEntity } from "../../utils/hass";
@@ -30,9 +30,17 @@ const ColorStack = styled(Stack)({
 function Components({ entity }: { entity: HassEntity }) {
   const components = [];
 
-  const [mode, onModeChange] = useState<LightGeneralMode>(() =>
-    lightIsInColorMode(entity) ? "color" : entity.attributes.color_mode
-  );
+  const initialMode = lightIsInColorMode(entity)
+    ? "color"
+    : entity.attributes.color_mode;
+
+  const [mode, onModeChange] = useState<LightGeneralMode>(() => initialMode);
+
+  useEffect(() => {
+    if (typeof mode === "undefined" && typeof initialMode !== "undefined") {
+      onModeChange(initialMode);
+    }
+  }, [mode, initialMode]);
 
   const currentRGB = getLightCurrentModeRgbColor(entity);
   const currentHS = currentRGB && rgbToHS(currentRGB.slice(0, 3) as RGB);
@@ -58,7 +66,7 @@ function Components({ entity }: { entity: HassEntity }) {
 
   const whiteValue = useWhiteValue({ entity, currentRGB });
 
-  if (features.color && (features.temp || features.white)) {
+  if (mode && features.color && (features.temp || features.white)) {
     components.push(
       <TabGroup
         centered
@@ -176,6 +184,7 @@ export default function LightEntityDialog({
   entityId: string;
 } & DialogBaseControlProps) {
   const entity = useEntity(entityId);
+
   if (!entity) {
     return null;
   }

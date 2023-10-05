@@ -8,7 +8,8 @@ import ListSection from "./ListSection";
 import ListItem from "./ListItem";
 import Icon from "./Icon";
 import useConfirm from "../utils/useConfirm";
-import devicePerformance from "../utils/devicePerformance";
+import { getConfig, setConfig } from "../utils/useConfig";
+import { Switch } from "@mui/material";
 
 export default function HomeControlCard() {
   const socket = useSocketIO();
@@ -44,17 +45,17 @@ export default function HomeControlCard() {
       />
       <ListItem
         icon="gauge"
-        primaryText="Performance do Dispositivo"
-        endSlot={devicePerformance.getScore().toFixed(2)}
-        onClick={() =>
-          confirm({
-            title: "Dejesa recalcular a performance do dispositivo?",
-            onConfirm: () => {
-              devicePerformance
-                .recalculate()
-                .then(() => window.location.reload());
-            },
-          })
+        primaryText="Efeitos de Blur"
+        endSlot={
+          <Switch
+            defaultChecked={!getConfig("disableBlurEffects")}
+            onChange={(_, checked) => {
+              setConfig("disableBlurEffects", !checked);
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }}
+          />
         }
       />
     </ListSection>

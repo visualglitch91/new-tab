@@ -1,5 +1,5 @@
 import { Components, Theme, SxProps as MuiSxProps, alpha } from "@mui/material";
-import devicePerformance from "../utils/devicePerformance";
+import { getConfig } from "../utils/useConfig";
 
 export type ComponentOverride = Components<Omit<Theme, "components">>;
 
@@ -10,14 +10,17 @@ export function getBlurredBackground(
   opacity: number,
   blur = 10
 ) {
-  const performance = devicePerformance.getScore();
+  const disableBlurEffects = getConfig("disableBlurEffects") === true;
 
-  return performance < 1000
+  return disableBlurEffects
     ? {
-        backdropFilter: `blur(${blur}px)`,
-        background: alpha(color, opacity),
+        background: alpha(
+          color,
+          opacity < 0.8 ? Math.min(1, opacity + 0.6) : opacity
+        ),
       }
     : {
         background: alpha(color, opacity),
+        backdropFilter: `blur(${blur}px)`,
       };
 }

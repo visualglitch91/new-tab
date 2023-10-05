@@ -13,11 +13,19 @@ import { useLongPress } from "@uidotdev/usehooks";
 const customSx: SxProps = {
   paddingRight: "16px",
   alignItems: "stretch",
+
+  "& .MuiListItemText-root": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+
   "& .MuiListItemText-primary, & .MuiListItemText-secondary": {
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
+
   "& .MuiListItemSecondaryAction-root": {
     position: "initial",
     display: "flex",
@@ -72,13 +80,13 @@ export default function ListItem({
   onClick?: () => void;
   onLongPress?: () => void;
 }) {
-  const props = {
-    sx: sxx(customSx, sx),
-    secondaryAction: endSlot,
-  };
-
   const hasInteraction = onClick || onLongPress;
   const buttonProps = useLongPress(onLongPress || (() => {}));
+
+  const props = {
+    sx: sxx(customSx, hasInteraction && interactionSx, sx),
+    secondaryAction: endSlot,
+  };
 
   const content = (
     <>
@@ -94,7 +102,7 @@ export default function ListItem({
 
   if (hasInteraction) {
     return (
-      <MuiListItem {...props} sx={sxx(interactionSx, sx)}>
+      <MuiListItem {...props}>
         <ListButton {...buttonProps} onClick={onClick} />
         {content}
       </MuiListItem>
