@@ -1,29 +1,4 @@
-import { compact } from "lodash";
 import DesktopLayout from "./components/DesktopLayout";
-import TV from "../components/TV";
-import RecentlyRequested from "../components/MediaCenter/RecentlyRequested";
-import Trending from "../components/MediaCenter/Trending";
-import { Grid, Stack } from "@mui/material";
-import HomeDevices from "../components/HomeDevices";
-import Cameras, { useAvailableCameras } from "../components/Cameras";
-import Vacuum from "../components/Vacuum";
-import Timers from "../components/Timers";
-import Schedules from "../components/Schedules";
-import FileManager from "../components/FileManager";
-import Torrents, { useAddTorrent } from "../components/Torrents";
-import JDownloader, { useAddDownload } from "../components/JDownloader";
-import ServerModule from "../components/Server";
-import Batteries from "../components/Batteries";
-import HACSUpdates from "../components/HACSUpdates";
-import HomeControlCard from "../components/HomeControlCard";
-import AppManager from "../components/AppManager";
-import { useEntity, useUser } from "../utils/hass";
-import Section from "../components/Section";
-import Klipper from "../components/Klipper";
-import useUpsertSchedule from "../components/Schedules/useUpsertSchedule";
-import useAddTimer from "../components/Timers/useAddTimer";
-import AltIconButton from "../components/AltIconButton";
-import Icon from "../components/Icon";
 import DashboardPage from "./pages/Dashboard";
 import MediaPage from "./pages/Media";
 import HomePage from "./pages/Home";
@@ -31,16 +6,17 @@ import TimersAndSchedulesPage from "./pages/TimersAndSchedules";
 import PrinterPage from "./pages/Printer";
 import DownloadsPage from "./pages/Downloads";
 import SysAdminPage from "./pages/SysAdmin";
-import { Route, Router, Switch, useLocation } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { useEffect, useRef } from "react";
 import RouteRedirect from "../components/RouteRedirect";
-import ClockAndWeather from "../components/ClockAndWeather";
+import { useIsAdmin } from "../utils/hass";
 
 const pages = [
   {
     path: "/dashboard",
     icon: "view-dashboard-variant-outline",
     label: "Dashboard",
+    admin: true,
     component: <DashboardPage />,
   },
   {
@@ -65,12 +41,14 @@ const pages = [
     path: "/printer",
     label: "Impressora 3D",
     icon: "printer-3d-nozzle",
+    admin: true,
     component: <PrinterPage />,
   },
   {
     path: "/downloads",
     icon: "cloud-download-outline",
     label: "Downloads",
+    admin: true,
     component: <DownloadsPage />,
   },
   {
@@ -84,6 +62,7 @@ const pages = [
 export default function Desktop() {
   const [location] = useLocation();
   const contentRef = useRef<HTMLDivElement>(null);
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
     if (contentRef.current) {
@@ -95,11 +74,17 @@ export default function Desktop() {
     <DesktopLayout contentRef={contentRef} pages={pages}>
       <RouteRedirect from="/" to="/dashboard" />
       <Switch>
-        {pages.map((page) => (
-          <Route key={page.path} path={page.path}>
-            {page.component}
-          </Route>
-        ))}
+        {pages.map((page) => {
+          if (page.admin && !isAdmin) {
+            return null;
+          }
+
+          return (
+            <Route key={page.path} path={page.path}>
+              {page.component}
+            </Route>
+          );
+        })}
       </Switch>
     </DesktopLayout>
   );

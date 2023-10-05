@@ -6,8 +6,10 @@ import useUpsertSchedule from "../../components/Schedules/useUpsertSchedule";
 import useAddTimer from "../../components/Timers/useAddTimer";
 import AltIconButton from "../../components/AltIconButton";
 import Icon from "../../components/Icon";
+import { useIsAdmin } from "../../utils/hass";
 
 export default function TimersAndSchedulesPage() {
+  const isAdmin = useIsAdmin();
   const addTimer = useAddTimer();
   const upsertSchedule = useUpsertSchedule();
 
@@ -25,18 +27,20 @@ export default function TimersAndSchedulesPage() {
           <Timers />
         </Section>
       </Grid>
-      <Grid item xs={12} lg={6} xl={5}>
-        <Section
-          title="Agendamentos"
-          button={
-            <AltIconButton onClick={() => upsertSchedule()}>
-              <Icon icon="plus" size={20} />
-            </AltIconButton>
-          }
-        >
-          <Schedules />
-        </Section>
-      </Grid>
+      {isAdmin && (
+        <Grid item xs={12} lg={6} xl={5}>
+          <Section
+            title="Agendamentos"
+            button={
+              <AltIconButton onClick={() => upsertSchedule()}>
+                <Icon icon="plus" size={20} />
+              </AltIconButton>
+            }
+          >
+            <Schedules />
+          </Section>
+        </Grid>
+      )}
     </Grid>
   );
 }

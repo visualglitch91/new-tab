@@ -13,6 +13,7 @@ import { useLongPress } from "@uidotdev/usehooks";
 const customSx: SxProps = {
   paddingRight: "16px",
   alignItems: "stretch",
+  flexShrink: 0,
 
   "& .MuiListItemText-root": {
     display: "flex",
@@ -44,6 +45,12 @@ const customSx: SxProps = {
   },
 };
 
+const sizesSx = {
+  sm: { minHeight: "42px", paddingTop: "5px", paddingBottom: "5px" },
+  md: { minHeight: "48px" },
+  lg: { minHeight: "54px" },
+};
+
 const ListButton = styled(ButtonBase)({
   position: "absolute",
   top: 0,
@@ -64,6 +71,7 @@ export default function ListItem({
   sx,
   icon,
   endSlot,
+  minSize = "md",
   startSlot,
   primaryText,
   secondaryText,
@@ -71,6 +79,7 @@ export default function ListItem({
   onLongPress,
 }: {
   sx?: SxProps;
+  minSize?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   disabled?: boolean;
   endSlot?: React.ReactNode;
@@ -84,7 +93,7 @@ export default function ListItem({
   const buttonProps = useLongPress(onLongPress || (() => {}));
 
   const props = {
-    sx: sxx(customSx, hasInteraction && interactionSx, sx),
+    sx: sxx(customSx, sizesSx[minSize], hasInteraction && interactionSx, sx),
     secondaryAction: endSlot,
   };
 

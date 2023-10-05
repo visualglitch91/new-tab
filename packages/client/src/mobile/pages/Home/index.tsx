@@ -26,6 +26,7 @@ export default function Home() {
             label: "Câmeras",
             icon: "webcam",
             path: "/home/cameras",
+            admin: true,
             component: <Cameras />,
           },
         ]}

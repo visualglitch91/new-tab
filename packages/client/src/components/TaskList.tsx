@@ -14,6 +14,7 @@ export default function TaskList({
     <>
       {items.map((item, index) => (
         <ListItem
+          minSize="sm"
           key={index}
           primaryText={item.title}
           endSlot={item.subtitle}

@@ -2,6 +2,7 @@ import { Route, Switch, useLocation } from "wouter";
 import { AppDrawer } from "./components/AppDrawer";
 import TimersAndSchedule from "./pages/Timers";
 import RouteRedirect from "../components/RouteRedirect";
+import Klipper from "../components/Klipper";
 import Downloads from "./pages/Downloads";
 import MediaCenter from "./pages/MediaCenter";
 import TV from "./pages/TV";
@@ -9,6 +10,7 @@ import Home from "./pages/Home";
 import SysAdmin from "./pages/SysAdmin";
 import { useEffect } from "react";
 import PackageTracker from "./pages/PackageTracker";
+import { useIsAdmin } from "../utils/hass";
 
 const pages = [
   {
@@ -28,6 +30,7 @@ const pages = [
     path: "/package-tracker",
     icon: "truck-delivery-outline",
     label: "Encomendas",
+    admin: true,
     component: <PackageTracker />,
   },
   {
@@ -47,9 +50,17 @@ const pages = [
   {
     path: "/downloads",
     matchAll: true,
+    admin: true,
     icon: "cloud-download-outline",
     label: "Downloads",
     component: <Downloads />,
+  },
+  {
+    path: "/printer",
+    icon: "printer-3d-nozzle",
+    label: "Impressora 3",
+    admin: true,
+    component: <Klipper />,
   },
   {
     path: "/sys-admin",
@@ -62,6 +73,7 @@ const pages = [
 
 export default function Mobile() {
   const [location] = useLocation();
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -72,14 +84,20 @@ export default function Mobile() {
       <RouteRedirect from="/" to="/home" />
       <AppDrawer pages={pages} />
       <Switch>
-        {pages.map((page) => (
-          <Route
-            key={page.path}
-            path={page.matchAll ? `${page.path}/:rest*` : page.path}
-          >
-            {page.component}
-          </Route>
-        ))}
+        {pages.map((page) => {
+          if (page.admin && !isAdmin) {
+            return null;
+          }
+
+          return (
+            <Route
+              key={page.path}
+              path={page.matchAll ? `${page.path}/:rest*` : page.path}
+            >
+              {page.component}
+            </Route>
+          );
+        })}
       </Switch>
     </>
   );

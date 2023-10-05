@@ -4,6 +4,7 @@ import WeatherInfo from "./WeatherInfo";
 
 const Root = styled(GlossyPaper)({
   padding: 16,
+  justifyContent: "center",
 });
 
 const Inner = styled("div")({

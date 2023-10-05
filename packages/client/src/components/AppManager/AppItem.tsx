@@ -68,6 +68,7 @@ export function AppItem({ app }: { app: ParsedApp }) {
 
   return (
     <ListItem
+      minSize="sm"
       icon={<ColorBadge size={12} color={STATUS_COLORS[app.status]} />}
       primaryText={
         <Stack direction="row" spacing={0.8} alignItems="center">

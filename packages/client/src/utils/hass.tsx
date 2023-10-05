@@ -253,6 +253,10 @@ export function useUser() {
   return user;
 }
 
+export function useIsAdmin() {
+  return useUser().is_admin;
+}
+
 export function useEntities(...entityIds: string[]) {
   const store = useHassStore();
   const stringifiedEntityIds = JSON.stringify(entityIds);

@@ -1,6 +1,6 @@
 import TabLayout from "../../components/TabLayout";
 import Timers from "./Timers";
-import Schedule from "./Schdule";
+import Schedule from "./Schedule";
 import RouteRedirect from "../../../components/RouteRedirect";
 
 export default function TimersAndSchedule() {
@@ -19,6 +19,7 @@ export default function TimersAndSchedule() {
             label: "Agendamentos",
             icon: "calendar-outline",
             path: "/timers/schedule",
+            admin: true,
             component: <Schedule />,
           },
         ]}

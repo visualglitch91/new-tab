@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
+import { getSearchParam } from "./url";
 
 export const isTouchDevice =
   "ontouchstart" in window ||
@@ -61,4 +62,4 @@ export function useBreakpoint() {
   return result;
 }
 
-export const isNewTab = false;
+export const isNewTab = getSearchParam("isNewTab") === "true";
