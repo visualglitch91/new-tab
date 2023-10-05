@@ -3,6 +3,7 @@ import GlossyPaper from "../../../components/GlossyPaper";
 
 export const Wrapper = styled("div")({
   height: "100vh",
+  width: "90vw",
   maxWidth: 1620,
   display: "flex",
   margin: "0 auto",

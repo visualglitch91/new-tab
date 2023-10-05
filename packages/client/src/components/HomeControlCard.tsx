@@ -7,8 +7,8 @@ import AltIconButton from "./AltIconButton";
 import ListSection from "./ListSection";
 import ListItem from "./ListItem";
 import Icon from "./Icon";
-import { getDevicePerformance, retryDevicePerformance } from "../utils/general";
 import useConfirm from "../utils/useConfirm";
+import devicePerformance from "../utils/devicePerformance";
 
 export default function HomeControlCard() {
   const socket = useSocketIO();
@@ -45,11 +45,15 @@ export default function HomeControlCard() {
       <ListItem
         icon="gauge"
         primaryText="Performance do Dispositivo"
-        endSlot={getDevicePerformance()?.toFixed(2)}
+        endSlot={devicePerformance.getScore().toFixed(2)}
         onClick={() =>
           confirm({
             title: "Dejesa recalcular a performance do dispositivo?",
-            onConfirm: () => retryDevicePerformance(),
+            onConfirm: () => {
+              devicePerformance
+                .recalculate()
+                .then(() => window.location.reload());
+            },
           })
         }
       />

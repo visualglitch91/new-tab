@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
-import { clearValue, loadValue, saveValue } from "./storage";
 import { useMediaQuery, useTheme } from "@mui/material";
 
 export const isTouchDevice =
@@ -20,59 +19,6 @@ export function formatNumericValue(
   ).toFixed(decimalPlaces);
 
   return `${formatted}${suffix}`;
-}
-
-const performanceDataVersion = 8;
-
-export function retryDevicePerformance() {
-  clearValue("device-performance");
-  window.location.reload();
-}
-
-export async function calculateDevicePerformance() {
-  console.log("Getting performance score from cache");
-  const cached = loadValue<{ version: number; value: number }>(
-    "device-performance"
-  );
-
-  if (cached && cached.version === performanceDataVersion) {
-    return;
-  }
-
-  console.log("Performance score not found, calculating");
-
-  const startTime = Date.now();
-  const iterations = 500_000_000;
-
-  for (let i = 0; i < iterations; i++) {
-    Math.pow(Math.random(), 2);
-  }
-
-  const ellapsedTime = Date.now() - startTime;
-
-  console.log(`Performance score is ${ellapsedTime}, less is better`);
-
-  saveValue("device-performance", {
-    version: performanceDataVersion,
-    value: ellapsedTime,
-  });
-
-  return;
-}
-
-export function getDevicePerformance() {
-  const cached = loadValue<{ version: number; value: number }>(
-    "device-performance"
-  );
-
-  if (cached && cached.version === performanceDataVersion) {
-    return cached.value;
-  }
-
-  retryDevicePerformance();
-
-  // Prevent everything else from breaking
-  return 0;
 }
 
 const BreakpointContext = createContext<
