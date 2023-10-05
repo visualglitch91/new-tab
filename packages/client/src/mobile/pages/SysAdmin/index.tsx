@@ -5,17 +5,17 @@ import Server from "../../../components/Server";
 import AppManager from "../../../components/AppManager";
 import Batteries from "../../../components/Batteries";
 import HACSUpdates from "../../../components/HACSUpdates";
-import HomeControlSystemCard from "../../../components/HomeControlSystemCard";
+import HomeControlCard from "../../../components/HomeControlCard";
 
 export default function SysAdmin() {
   return (
     <PageLayout header={<PageTile>Sistema</PageTile>}>
       <Stack spacing={5}>
-        <HomeControlSystemCard />
+        <HomeControlCard />
         <Server />
-        <Batteries />
-        <HACSUpdates />
         <AppManager />
+        <HACSUpdates />
+        <Batteries />
       </Stack>
     </PageLayout>
   );

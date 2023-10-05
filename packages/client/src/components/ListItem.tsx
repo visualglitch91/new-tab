@@ -45,6 +45,13 @@ const ListButton = styled(ButtonBase)({
   zIndex: 1,
 });
 
+const interactionSx: SxProps = {
+  transition: "backgroundColor 100ms var(--tween)",
+  "&:hover": {
+    backgroundColor: "rgba(20, 20, 20, 0.2)",
+  },
+};
+
 export default function ListItem({
   sx,
   icon,
@@ -87,7 +94,7 @@ export default function ListItem({
 
   if (hasInteraction) {
     return (
-      <MuiListItem {...props}>
+      <MuiListItem {...props} sx={sxx(interactionSx, sx)}>
         <ListButton {...buttonProps} onClick={onClick} />
         {content}
       </MuiListItem>

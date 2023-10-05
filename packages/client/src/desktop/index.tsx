@@ -15,7 +15,7 @@ import JDownloader, { useAddDownload } from "../components/JDownloader";
 import ServerModule from "../components/Server";
 import Batteries from "../components/Batteries";
 import HACSUpdates from "../components/HACSUpdates";
-import HomeControlSystemCard from "../components/HomeControlSystemCard";
+import HomeControlCard from "../components/HomeControlCard";
 import AppManager from "../components/AppManager";
 import { useEntity, useUser } from "../utils/hass";
 import Section from "../components/Section";

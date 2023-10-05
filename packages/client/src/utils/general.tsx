@@ -22,7 +22,12 @@ export function formatNumericValue(
   return `${formatted}${suffix}`;
 }
 
-const performanceDataVersion = 6;
+const performanceDataVersion = 8;
+
+export function retryDevicePerformance() {
+  clearValue("device-performance");
+  window.location.reload();
+}
 
 export function calculateDevicePerformance() {
   const cached = loadValue<{ version: number; value: number }>(
@@ -34,7 +39,7 @@ export function calculateDevicePerformance() {
   }
 
   const startTime = performance.now(); // Get the current time in milliseconds
-  const iterations = 1_000_000; // Adjust the number of iterations as needed
+  const iterations = 500_000_000; // Adjust the number of iterations as needed
 
   // Perform a simple mathematical operation repeatedly
   for (let i = 0; i < iterations; i++) {
@@ -47,8 +52,6 @@ export function calculateDevicePerformance() {
 
   // Calculate the time it took to complete the iterations in milliseconds
   const ellapsedTime = endTime - startTime;
-
-  alert(ellapsedTime);
 
   saveValue("device-performance", {
     version: performanceDataVersion,
@@ -65,8 +68,7 @@ export function getDevicePerformance() {
     return cached.value;
   }
 
-  clearValue("device-performance");
-  window.location.reload();
+  retryDevicePerformance();
 }
 
 const BreakpointContext = createContext<
