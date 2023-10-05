@@ -72,7 +72,7 @@ export default async function refresh() {
     Object.keys(packagesBycode).map((code) =>
       track(code).then((lastEvent) => ({
         ...packagesBycode[code],
-        lastEvent,
+        lastEvent: lastEvent || packagesBycode[code].lastEvent,
       }))
     )
   );

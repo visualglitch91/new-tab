@@ -7,5 +7,6 @@ import { calculateDevicePerformance } from "./utils/general";
 const LazyApp = lazy(() => import("./App"));
 
 disableEmotionWarnings();
-calculateDevicePerformance();
-createRoot(document.getElementById("app")!).render(<LazyApp />);
+calculateDevicePerformance().then(() => {
+  createRoot(document.getElementById("app")!).render(<LazyApp />);
+});

@@ -29,7 +29,7 @@ export function retryDevicePerformance() {
   window.location.reload();
 }
 
-export function calculateDevicePerformance() {
+export async function calculateDevicePerformance() {
   const cached = loadValue<{ version: number; value: number }>(
     "device-performance"
   );
@@ -38,25 +38,21 @@ export function calculateDevicePerformance() {
     return;
   }
 
-  const startTime = performance.now(); // Get the current time in milliseconds
-  const iterations = 500_000_000; // Adjust the number of iterations as needed
+  const startTime = Date.now();
+  const iterations = 500_000_000;
 
-  // Perform a simple mathematical operation repeatedly
   for (let i = 0; i < iterations; i++) {
-    // You can choose any mathematical operation here
-    // For example, squaring a number
     Math.pow(Math.random(), 2);
   }
 
-  const endTime = performance.now(); // Get the time after the loop
-
-  // Calculate the time it took to complete the iterations in milliseconds
-  const ellapsedTime = endTime - startTime;
+  const ellapsedTime = Date.now() - startTime;
 
   saveValue("device-performance", {
     version: performanceDataVersion,
     value: ellapsedTime,
   });
+
+  return;
 }
 
 export function getDevicePerformance() {
@@ -69,6 +65,9 @@ export function getDevicePerformance() {
   }
 
   retryDevicePerformance();
+
+  // Prevent everything else from breaking
+  return 0;
 }
 
 const BreakpointContext = createContext<
