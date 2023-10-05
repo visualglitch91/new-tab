@@ -30,6 +30,7 @@ export function retryDevicePerformance() {
 }
 
 export async function calculateDevicePerformance() {
+  console.log("Getting performance score from cache");
   const cached = loadValue<{ version: number; value: number }>(
     "device-performance"
   );
@@ -37,6 +38,8 @@ export async function calculateDevicePerformance() {
   if (cached && cached.version === performanceDataVersion) {
     return;
   }
+
+  console.log("Performance score not found, calculating");
 
   const startTime = Date.now();
   const iterations = 500_000_000;
@@ -46,6 +49,8 @@ export async function calculateDevicePerformance() {
   }
 
   const ellapsedTime = Date.now() - startTime;
+
+  console.log(`Performance score is ${ellapsedTime}, less is better`);
 
   saveValue("device-performance", {
     version: performanceDataVersion,
