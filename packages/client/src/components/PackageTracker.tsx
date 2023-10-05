@@ -10,6 +10,7 @@ import AltIconButton from "./AltIconButton";
 import Icon from "./Icon";
 import ListItem from "./ListItem";
 import useConfirm from "../utils/useConfirm";
+import { orderBy } from "lodash";
 
 const Desciption = styled("span")({
   opacity: 0.8,
@@ -82,47 +83,51 @@ export default function PackageTracker() {
           text="Nenhum pacote adicionado"
         />
       ) : (
-        packages.map(({ lastEvent, ...it }) => {
-          return (
-            <GlossyPaper key={it.code}>
-              <ListItem
-                sx={{
-                  "& .MuiListItemSecondaryAction-root": {
-                    py: "6px",
-                    alignItems: "flex-end",
-                    flexDirection: "column",
-                    justifyContent: lastEvent ? "space-between" : "center",
-                  },
-                }}
-                primaryText={`${it.name} (${it.code})`}
-                secondaryText={
-                  lastEvent ? (
-                    <Desciption>
-                      <span>{lastEvent!.description}</span>
-                      {lastEvent.location && <span>{lastEvent.location}</span>}
-                    </Desciption>
-                  ) : (
-                    <Desciption>Não Encontrado</Desciption>
-                  )
-                }
-                endSlot={
-                  <>
-                    {lastEvent?.at && (
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                        {parseDate(lastEvent.at)}
-                      </Typography>
-                    )}
-                    <span>
-                      <AltIconButton size="small" onClick={() => remove(it)}>
-                        <Icon size={18} icon="close" />
-                      </AltIconButton>
-                    </span>
-                  </>
-                }
-              />
-            </GlossyPaper>
-          );
-        })
+        orderBy(packages, ["date", "name"], ["desc", "asc"]).map(
+          ({ lastEvent, ...it }) => {
+            return (
+              <GlossyPaper key={it.code}>
+                <ListItem
+                  sx={{
+                    "& .MuiListItemSecondaryAction-root": {
+                      py: "6px",
+                      alignItems: "flex-end",
+                      flexDirection: "column",
+                      justifyContent: lastEvent ? "space-between" : "center",
+                    },
+                  }}
+                  primaryText={`${it.name} (${it.code})`}
+                  secondaryText={
+                    lastEvent ? (
+                      <Desciption>
+                        <span>{lastEvent!.description}</span>
+                        {lastEvent.location && (
+                          <span>{lastEvent.location}</span>
+                        )}
+                      </Desciption>
+                    ) : (
+                      <Desciption>Não Encontrado</Desciption>
+                    )
+                  }
+                  endSlot={
+                    <>
+                      {lastEvent?.at && (
+                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                          {parseDate(lastEvent.at)}
+                        </Typography>
+                      )}
+                      <span>
+                        <AltIconButton size="small" onClick={() => remove(it)}>
+                          <Icon size={18} icon="close" />
+                        </AltIconButton>
+                      </span>
+                    </>
+                  }
+                />
+              </GlossyPaper>
+            );
+          }
+        )
       )}
     </Stack>
   );

@@ -1,7 +1,13 @@
 body {
-  background-image: url(./assets/background-mobile.jpg);
+  background-image: url(./assets/background-desktop.jpg);
   background-size: cover;
   background-attachment: fixed;
   --tween: cubic-bezier(0.76, 0, 0.24, 1);
   min-height: 100vh;
+}
+
+@media (max-width: 600px) {
+  body {
+    background-image: url(./assets/background-mobile.jpg);
+  }
 }

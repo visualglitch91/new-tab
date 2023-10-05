@@ -68,7 +68,7 @@ export default function Mobile() {
   }, [location]);
 
   return (
-    <Route path="/:rest*">
+    <>
       <RouteRedirect from="/" to="/home" />
       <AppDrawer pages={pages} />
       <Switch>
@@ -81,6 +81,6 @@ export default function Mobile() {
           </Route>
         ))}
       </Switch>
-    </Route>
+    </>
   );
 }

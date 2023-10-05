@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import type RTCVideo from "../utils/RTCVideo";
 
 export default function CameraStream({
@@ -66,24 +66,26 @@ export default function CameraStream({
   }, [entityId]);
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         aspectRatio: aspectRatio.toString(),
         width: "100%",
         position: "relative",
       }}
     >
       {loading && (
-        <CircularProgress
+        <Box
           sx={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%,-50%)",
           }}
-        />
+        >
+          <CircularProgress />
+        </Box>
       )}
-      <div style={{ opacity: loading ? 0 : 1 }} ref={containerRef} />
-    </div>
+      <Box sx={{ opacity: loading ? 0 : 1 }} ref={containerRef} />
+    </Box>
   );
 }

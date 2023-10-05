@@ -1,23 +1,21 @@
 import { Stack, useMediaQuery } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { TickTickData } from "@home-control/types/ticktick";
-import api from "../utils/api";
-import Tasks from "../components/Tasks";
-import Links from "../components/Links";
-import Habits from "../components/Habits";
-import Forecast from "../components/Forecast";
-import MediaCard from "../components/MediaCard";
-import PackageTracker, { useAddPackage } from "../components/PackageTracker";
-import ClockAndWeather from "../components/ClockAndWeather";
-import Section from "../components/Section";
-import Icon from "../components/Icon";
-import AltIconButton from "../components/AltIconButton";
+import api from "../../utils/api";
+import Tasks from "../../components/Tasks";
+import Links from "../../components/Links";
+import Habits from "../../components/Habits";
+import Forecast from "../../components/Forecast";
+import MediaCard from "../../components/MediaCard";
+import PackageTracker, { useAddPackage } from "../../components/PackageTracker";
+import Section from "../../components/Section";
+import Icon from "../../components/Icon";
+import AltIconButton from "../../components/AltIconButton";
 
 const links = <Links />;
 const mediaCard = <MediaCard />;
-const clock = <ClockAndWeather />;
 
-export default function DesktopDashboard() {
+export default function DashboardPage() {
   const addPackage = useAddPackage();
   const sm = useMediaQuery("@media(max-width: 1100px)");
   const { data, refetch } = useQuery(["ticktick"], () =>
@@ -58,10 +56,7 @@ export default function DesktopDashboard() {
   if (sm) {
     return (
       <Stack spacing={5}>
-        <Stack direction="row" spacing={5}>
-          {clock}
-          <Forecast days={3} />
-        </Stack>
+        <Forecast days={3} />
         <Stack direction="row" spacing={5}>
           {habits}
           <Stack spacing={5}>
@@ -85,7 +80,6 @@ export default function DesktopDashboard() {
           maxWidth: "33%",
         }}
       >
-        {clock}
         {mediaCard}
         {habits}
         {packageTracker}

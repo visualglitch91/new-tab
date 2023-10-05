@@ -1,24 +1,26 @@
+import { Link } from "wouter";
 import Icon from "../../../components/Icon";
 import { TabRoot, TabTitle } from "./components";
 
 export default function Tab({
-  active,
-  title,
   icon,
-  onClick,
+  path,
+  label,
+  active,
 }: {
-  active: boolean;
-  title: string;
   icon: string;
-  onClick: () => void;
+  path: string;
+  label: string;
+  active: boolean;
 }) {
   return (
-    <TabRoot
-      startIcon={<Icon icon={icon} />}
-      variant={active ? "contained" : "text"}
-      onClick={onClick}
-    >
-      <TabTitle>{title}</TabTitle>
-    </TabRoot>
+    <Link to={path}>
+      <TabRoot
+        startIcon={<Icon icon={icon} />}
+        variant={active ? "contained" : "text"}
+      >
+        <TabTitle>{label}</TabTitle>
+      </TabRoot>
+    </Link>
   );
 }

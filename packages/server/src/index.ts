@@ -16,6 +16,7 @@ console.log({ isDev, port });
 
 const app = express();
 const server = http.createServer(app);
+const clientDir = path.resolve(__dirname + "/../../../dist");
 
 const sessionMiddleware = session({
   secret: String(Date.now()),
@@ -30,7 +31,7 @@ app.use("/api", expressAuth());
 app.use(io(server, sessionMiddleware));
 
 if (!isDev) {
-  app.use(express.static(path.resolve(__dirname + "/../../../dist")));
+  app.use(express.static(clientDir));
 }
 
 const modules = import.meta.glob("./modules/*/index.ts", { eager: true });
@@ -41,6 +42,10 @@ for (let key in modules) {
   app.use(`/api/${mod.name}`, await mod.setup());
   console.log(`module loaded: ${mod.name}`);
 }
+
+app.get("/*", (_, res) => {
+  res.sendFile(clientDir + "/index.html");
+});
 
 server.listen({ host, port }, () => {
   console.log(`Server listening at ${host}:${port}`);

@@ -14,7 +14,6 @@ const smallerColumnWidth = 320;
 const largerColumnWidth = 340;
 
 const Wrapper = styled("div")({
-  padding: "8px",
   transition: "opacity 70ms linear",
 });
 

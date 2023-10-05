@@ -80,7 +80,7 @@ export function AppDrawer({
       <ClockAndWeather
         compact
         sx={(theme) => ({
-          margin: "32px 32px 10px",
+          margin: "32px 26px 10px",
           background: theme.palette.white.main,
           color: theme.palette.white.contrastText,
         })}

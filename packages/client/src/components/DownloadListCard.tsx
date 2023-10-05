@@ -112,43 +112,41 @@ export default function DownloadListCard({
           />
         ) : (
           downloads.map((it) => (
-            <Tooltip key={it.id} title={it.name}>
-              <ItemCard onClick={() => onItemClick(it)}>
-                <ItemContent>
-                  <Header>
-                    <Icon
-                      size={16}
-                      icon={
-                        it.completed
-                          ? "mdi-check"
-                          : it.status === "seeding"
-                          ? "mdi-arrow-up"
-                          : it.active
-                          ? "mdi-arrow-down"
-                          : "mdi-pause"
-                      }
-                    />
-                    <Name>{it.name}</Name>
-                  </Header>
-                  <LinearProgress
-                    variant="determinate"
-                    value={it.percentDone}
-                    sx={{ width: "100%", height: "6px", borderRadius: "4px" }}
+            <ItemCard key={it.id} onClick={() => onItemClick(it)}>
+              <ItemContent>
+                <Header>
+                  <Icon
+                    size={16}
+                    icon={
+                      it.completed
+                        ? "mdi-check"
+                        : it.status === "seeding"
+                        ? "mdi-arrow-up"
+                        : it.active
+                        ? "mdi-arrow-down"
+                        : "mdi-pause"
+                    }
                   />
-                  <Details>
-                    <span>{STATUS_LABELS[it.status]}</span>
-                    <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                    <span>
-                      {it.eta &&
-                        humanizeDuration(it.eta, {
-                          round: true,
-                          language: "pt",
-                        })}
-                    </span>
-                  </Details>
-                </ItemContent>
-              </ItemCard>
-            </Tooltip>
+                  <Name>{it.name}</Name>
+                </Header>
+                <LinearProgress
+                  variant="determinate"
+                  value={it.percentDone}
+                  sx={{ width: "100%", height: "6px", borderRadius: "4px" }}
+                />
+                <Details>
+                  <span>{STATUS_LABELS[it.status]}</span>
+                  <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
+                  <span>
+                    {it.eta &&
+                      humanizeDuration(it.eta, {
+                        round: true,
+                        language: "pt",
+                      })}
+                  </span>
+                </Details>
+              </ItemContent>
+            </ItemCard>
           ))
         )}
       </List>

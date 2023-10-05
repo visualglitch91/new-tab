@@ -1,4 +1,4 @@
-import { Router, useLocation } from "wouter";
+import { Route, Router, Switch, useLocation } from "wouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -14,6 +14,22 @@ import useMountEffect from "./utils/useMountEffect";
 import theme from "./theme";
 import Mobile from "./mobile";
 import Desktop from "./desktop";
+
+function BaseRoute({
+  path,
+  children,
+}: {
+  path: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <Route path={`${path}/:rest*`}>
+      <Router base={path}>
+        <Route path="/:rest*">{children}</Route>
+      </Router>
+    </Route>
+  );
+}
 
 export default function MyApp() {
   const [location, navigate] = useLocation();
@@ -45,12 +61,12 @@ export default function MyApp() {
           <HassProvider>
             <SocketIOProvider>
               <ModalProvider>
-                <Router base="/mobile">
+                <BaseRoute path="/mobile">
                   <Mobile />
-                </Router>
-                <Router base="/mobile">
+                </BaseRoute>
+                <BaseRoute path="/desktop">
                   <Desktop />
-                </Router>
+                </BaseRoute>
               </ModalProvider>
             </SocketIOProvider>
           </HassProvider>

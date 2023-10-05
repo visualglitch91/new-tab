@@ -1,35 +1,22 @@
 import { styled, Button } from "@mui/material";
+import GlossyPaper from "../../../components/GlossyPaper";
 
 export const Wrapper = styled("div")({
+  height: "100vh",
+  maxWidth: 1620,
   display: "flex",
-
-  "& > div:nth-child(1)": {
-    flex: 1,
-    background: "rgba(100, 100, 100, 0.5)",
-  },
-
-  "& > div:nth-child(2)": {
-    height: "100vh",
-    minWidth: 1440,
-    display: "flex",
-    flex: 3,
-  },
-
-  "& > div:nth-child(3)": {
-    flex: 1,
-  },
+  margin: "0 auto",
 });
 
-export const Tabs = styled("div")({
-  background: "rgba(100, 100, 100, 0.5)",
-  height: "100%",
+export const Tabs = styled(GlossyPaper)(({ theme }) => ({
+  marginTop: 24,
   display: "flex",
   flexDirection: "column",
   rowGap: 14,
   color: "white",
-  padding: "24px 32px",
+  padding: 24,
   zIndex: 2,
-});
+}));
 
 export const Content = styled("div")({
   width: "100%",
@@ -43,7 +30,7 @@ export const TabRoot = styled(Button)({
   justifyContent: "flex-start",
   textTransform: "none",
   padding: "8px 22px",
-  height: 64,
+  width: "240px",
   fontWeight: 600,
   fontSize: "16px",
 });

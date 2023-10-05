@@ -8,15 +8,19 @@ export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
   return (
     <DialogBase {...props} bottomMobileSheet title="Controle">
       <Box
-        sx={{
+        sx={(theme) => ({
           display: "flex",
           flexDirection: "column",
           gap: "8px",
           minWidth: "286px",
           "& button": {
-            background: "rgba(28, 34, 48,0.9)",
+            background: theme.palette.white.main,
+            color: theme.palette.white.contrastText,
+            "&:hover": {
+              background: theme.palette.white.dark,
+            },
           },
-        }}
+        })}
       >
         <ButtonRow height={90}>
           <IconHugeButton

@@ -1,13 +1,9 @@
-import {
-  type ButtonProps,
-  DialogContentText,
-  Stack,
-  Button,
-} from "@mui/material";
+import { type ButtonProps, DialogContentText, Button } from "@mui/material";
 import DialogBase, { DialogBaseControlProps } from "./DialogBase";
 import { useBreakpoint } from "../utils/general";
 import DialogSlideTransition from "./DialogSlideTransition";
 import { sxx } from "../utils/styling";
+import { SxProps } from "../theme/utils";
 
 export type ActionMap<T extends string> = Record<
   T,
@@ -20,6 +16,7 @@ export type ActionMap<T extends string> = Record<
 
 interface ActionSheetProps<T extends string> {
   title: string;
+  sx?: SxProps;
   description?: string;
   hideCancelButton?: boolean;
   onSelect: (value: T) => void;

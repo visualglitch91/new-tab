@@ -5,7 +5,7 @@ const SectionTitle = styled("h2")({
   fontWeight: 600,
   margin: 0,
   display: "flex",
-  gap: "8px",
+  gap: "12px",
   alignItems: "center",
   "& > *": { flexShrink: 0 },
 });

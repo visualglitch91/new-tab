@@ -40,17 +40,15 @@ export default function FileListCard({
             <Icon size={18} icon="arrow-left" />
           </AltIconButton>
         )}
-        <Tooltip title={current.name}>
-          <span
-            style={{
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {current.name}
-          </span>
-        </Tooltip>
+        <span
+          style={{
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {current.name}
+        </span>
       </Stack>
 
       <List
@@ -61,26 +59,23 @@ export default function FileListCard({
           const isDir = item.type === "dir";
 
           return (
-            <Tooltip key={item.id} title={item.name}>
-              <span>
-                <ListItem
-                  sx={{
-                    "& [data-show-on-hover]": { opacity: 0 },
-                    "&:hover [data-show-on-hover]": { opacity: 1 },
-                  }}
-                  icon={isDir ? "folder" : "file"}
-                  primaryText={item.name}
-                  endSlot={
-                    <AltIconButton onClick={() => onOptions(item)}>
-                      <Icon icon="dots-vertical" />
-                    </AltIconButton>
-                  }
-                  onClick={
-                    isDir ? () => setTimeout(onChangeDir, 200, item) : undefined
-                  }
-                />
-              </span>
-            </Tooltip>
+            <ListItem
+              key={item.id}
+              sx={{
+                "& [data-show-on-hover]": { opacity: 0 },
+                "&:hover [data-show-on-hover]": { opacity: 1 },
+              }}
+              icon={isDir ? "folder" : "file"}
+              primaryText={item.name}
+              endSlot={
+                <AltIconButton onClick={() => onOptions(item)}>
+                  <Icon icon="dots-vertical" />
+                </AltIconButton>
+              }
+              onClick={
+                isDir ? () => setTimeout(onChangeDir, 200, item) : undefined
+              }
+            />
           );
         })}
       </List>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
-import { loadValue, saveValue } from "./storage";
+import { clearValue, loadValue, saveValue } from "./storage";
 import { useMediaQuery, useTheme } from "@mui/material";
 
 export const isTouchDevice =
@@ -21,18 +21,20 @@ export function formatNumericValue(
 
   return `${formatted}${suffix}`;
 }
-export function getDevicePerformance() {
-  const version = 1;
+
+const performanceDataVersion = 6;
+
+export function calculateDevicePerformance() {
   const cached = loadValue<{ version: number; value: number }>(
     "device-performance"
   );
 
-  if (cached?.version === version) {
-    return cached.value;
+  if (cached && cached.version === performanceDataVersion) {
+    return;
   }
 
   const startTime = performance.now(); // Get the current time in milliseconds
-  const iterations = 100_000_000; // Adjust the number of iterations as needed
+  const iterations = 1_000_000; // Adjust the number of iterations as needed
 
   // Perform a simple mathematical operation repeatedly
   for (let i = 0; i < iterations; i++) {
@@ -46,12 +48,25 @@ export function getDevicePerformance() {
   // Calculate the time it took to complete the iterations in milliseconds
   const ellapsedTime = endTime - startTime;
 
+  alert(ellapsedTime);
+
   saveValue("device-performance", {
-    version,
+    version: performanceDataVersion,
     value: ellapsedTime,
   });
+}
 
-  return ellapsedTime;
+export function getDevicePerformance() {
+  const cached = loadValue<{ version: number; value: number }>(
+    "device-performance"
+  );
+
+  if (cached && cached.version === performanceDataVersion) {
+    return cached.value;
+  }
+
+  clearValue("device-performance");
+  window.location.reload();
 }
 
 const BreakpointContext = createContext<
