@@ -9,7 +9,6 @@ import GlossyPaper from "./GlossyPaper";
 import ListItem from "./ListItem";
 import { useEffect, useState } from "react";
 import useLatestRef from "../utils/useLatestRef";
-import SectionTitle from "./SectionTitle";
 import EntityListItem from "./EntityListItem";
 import AltIconButton from "./AltIconButton";
 import Icon from "./Icon";
@@ -97,8 +96,42 @@ function AutoShutdown({ entity }: { entity: HassEntity }) {
   );
 }
 
-export default function Klipper() {
+export function useKlipperActionButton() {
   const confirm = useConfirm();
+
+  const isPrinting =
+    useEntity("sensor.impressora_3d_estado_atual")?.state === "printing";
+
+  return isPrinting ? (
+    <AltIconButton
+      onClick={() => {
+        confirm({
+          title: "Parar Impressão",
+          onConfirm: makeServiceCall("button", "turn_on", {
+            entity_id: "button.impressora_3d_macro_abort_print",
+          }),
+        });
+      }}
+    >
+      <Icon size={18} icon="stop" />
+    </AltIconButton>
+  ) : (
+    <AltIconButton
+      onClick={() => {
+        confirm({
+          title: "Desligar Impressora",
+          onConfirm: makeServiceCall("switch", "turn_off", {
+            entity_id: "switch.impressora_3d_servidor",
+          }),
+        });
+      }}
+    >
+      <Icon size={18} icon="power" />
+    </AltIconButton>
+  );
+}
+
+export default function Klipper() {
   const isPrinting =
     useEntity("sensor.impressora_3d_estado_atual")?.state === "printing";
 
@@ -108,36 +141,6 @@ export default function Klipper() {
 
   return (
     <Stack spacing={2}>
-      <SectionTitle>
-        <span>Impressora 3D</span>
-        {isPrinting ? (
-          <AltIconButton
-            onClick={() => {
-              confirm({
-                title: "Parar Impressão",
-                onConfirm: makeServiceCall("button", "turn_on", {
-                  entity_id: "button.impressora_3d_macro_abort_print",
-                }),
-              });
-            }}
-          >
-            <Icon size={18} icon="stop" />
-          </AltIconButton>
-        ) : (
-          <AltIconButton
-            onClick={() => {
-              confirm({
-                title: "Desligar Impressora",
-                onConfirm: makeServiceCall("switch", "turn_off", {
-                  entity_id: "switch.impressora_3d_servidor",
-                }),
-              });
-            }}
-          >
-            <Icon size={18} icon="power" />
-          </AltIconButton>
-        )}
-      </SectionTitle>
       <CameraWrapper>
         <CameraStream entityId="camera.impressora_3d" aspectRatio={4 / 3} />
       </CameraWrapper>

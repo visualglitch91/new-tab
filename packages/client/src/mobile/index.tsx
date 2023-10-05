@@ -2,7 +2,6 @@ import { Route, Switch, useLocation } from "wouter";
 import { AppDrawer } from "./components/AppDrawer";
 import TimersAndSchedule from "./pages/Timers";
 import RouteRedirect from "../components/RouteRedirect";
-import Klipper from "../components/Klipper";
 import Downloads from "./pages/Downloads";
 import MediaCenter from "./pages/MediaCenter";
 import TV from "./pages/TV";
@@ -11,6 +10,7 @@ import SysAdmin from "./pages/SysAdmin";
 import { useEffect } from "react";
 import PackageTracker from "./pages/PackageTracker";
 import { useIsAdmin } from "../utils/hass";
+import PrinterPage from "./pages/Printer";
 
 const pages = [
   {
@@ -60,7 +60,7 @@ const pages = [
     icon: "printer-3d-nozzle",
     label: "Impressora 3",
     admin: true,
-    component: <Klipper />,
+    component: <PrinterPage />,
   },
   {
     path: "/sys-admin",

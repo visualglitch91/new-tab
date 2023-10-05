@@ -1,6 +1,17 @@
-import Klipper from "../../components/Klipper";
+import Klipper, { useKlipperActionButton } from "../../components/Klipper";
+import Section from "../../components/Section";
 import MasonryLayout from "../components/DesktopLayout/MasonryLayout";
 
 export default function PrinterPage() {
-  return <MasonryLayout items={[<Klipper />]} />;
+  const klipperActionButton = useKlipperActionButton();
+
+  return (
+    <MasonryLayout
+      items={[
+        <Section title="Impressora 3D" button={klipperActionButton}>
+          <Klipper />
+        </Section>,
+      ]}
+    />
+  );
 }
