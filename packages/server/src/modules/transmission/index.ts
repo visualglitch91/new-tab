@@ -71,13 +71,13 @@ export default createAppModule("transmission", (instance) => {
 
   instance.post<{ Body: { ids: string[] } }>("/start", (req) => {
     return transmission<{ torrents: Torrent }>("torrent-start", {
-      ids: req.body.ids,
+      ids: req.body.ids.map(Number),
     });
   });
 
   instance.post<{ Body: { ids: string[] } }>("/stop", (req) => {
     return transmission<{ torrents: Torrent }>("torrent-stop", {
-      ids: req.body.ids,
+      ids: req.body.ids.map(Number),
     });
   });
 
@@ -85,7 +85,7 @@ export default createAppModule("transmission", (instance) => {
     "/remove",
     (req) => {
       return transmission<{ torrents: Torrent }>("torrent-remove", {
-        ids: req.body.ids,
+        ids: req.body.ids.map(Number),
         "delete-local-data": req.body.deleteData,
       });
     }
