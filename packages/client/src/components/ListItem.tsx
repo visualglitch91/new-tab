@@ -71,7 +71,7 @@ export default function ListItem({
   sx,
   icon,
   endSlot,
-  minSize = "md",
+  minSize = "lg",
   startSlot,
   primaryText,
   secondaryText,
