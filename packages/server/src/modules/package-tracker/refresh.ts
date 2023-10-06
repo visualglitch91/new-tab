@@ -76,12 +76,22 @@ export default async function refresh(logger: Logger) {
 
   const updatedPackages = await Promise.all(
     Object.keys(packagesBycode).map((code) =>
-      track(code).then((lastEvent) => {
+      track(code).then((result) => {
         const prevEvent = packagesBycode[code].lastEvent;
+        const lastEvent = result || prevEvent;
+
+        const status: PackageTrackerItem["status"] = lastEvent
+          ? lastEvent.description.includes("Objeto entregue")
+            ? "delivered"
+            : lastEvent.description.includes("aguardando pagamento")
+            ? "pending-payment"
+            : "in-transit"
+          : "not-found";
 
         const updatedPackage = {
           ...packagesBycode[code],
-          lastEvent: lastEvent || prevEvent,
+          status,
+          lastEvent,
         };
 
         if (!isEqual(prevEvent, lastEvent) && webhook) {

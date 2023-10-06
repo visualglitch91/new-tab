@@ -18,6 +18,7 @@ export default createAppModule("package-tracker", (instance, logger) => {
         id: req.body.code,
         code: req.body.code,
         name: req.body.name,
+        status: "not-found",
       });
 
       await refresh(logger);
