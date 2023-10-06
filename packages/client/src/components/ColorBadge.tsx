@@ -1,30 +1,34 @@
-import { alpha } from "@mui/material";
+import { Box, alpha } from "@mui/material";
+import { SxProps } from "../theme/utils";
+import { sxx } from "../utils/styling";
 
 export default function ColorBadge({
-  color,
+  color = "#222222",
   radius = "100%",
   size = 10,
   border = false,
-  style,
+  sx,
 }: {
   color: string;
   size?: number | string;
   radius?: number | string;
   border?: boolean;
-  style?: React.CSSProperties;
+  sx?: SxProps;
 }) {
   return (
-    <span
-      style={{
-        display: "inline-block",
-        width: size,
-        height: size,
-        borderRadius: radius,
-        background: alpha(color, 0.9),
-        boxSizing: "border-box",
-        border: border ? "1px solid rgba(0, 0, 0, 0.1)" : undefined,
-        ...style,
-      }}
+    <Box
+      sx={sxx(
+        {
+          display: "inline-block",
+          width: size,
+          height: size,
+          borderRadius: radius,
+          background: alpha(color, 0.9),
+          boxSizing: "border-box",
+          border: border ? "1px solid rgba(0, 0, 0, 0.1)" : undefined,
+        },
+        sx
+      )}
     />
   );
 }

@@ -4,12 +4,12 @@ import GlossyPaper from "../../../components/GlossyPaper";
 export const Wrapper = styled("div")({
   height: "100vh",
   width: "90vw",
-  maxWidth: 1620,
+  maxWidth: 2200,
   display: "flex",
   margin: "0 auto",
 });
 
-export const Tabs = styled(GlossyPaper)(({ theme }) => ({
+export const Tabs = styled(GlossyPaper)({
   marginTop: 24,
   display: "flex",
   flexDirection: "column",
@@ -17,7 +17,7 @@ export const Tabs = styled(GlossyPaper)(({ theme }) => ({
   color: "white",
   padding: 24,
   zIndex: 2,
-}));
+});
 
 export const Content = styled("div")({
   width: "100%",

@@ -19,8 +19,11 @@ const mediaCard = <MediaCard />;
 
 export default function DashboardPage() {
   const showPackageTrackerMenu = usePackageTrackerMenu();
-  const sm = useMediaQuery("@media(max-width: 1250px)");
-  const md = useMediaQuery("@media(max-width: 1400px)");
+
+  const sm = useMediaQuery("@media(max-width: 1000px)");
+  const md = useMediaQuery("@media(max-width: 1500px)");
+  const lg = useMediaQuery("@media(max-width: 2100px)");
+
   const { data, refetch } = useQuery(["ticktick"], () =>
     api<TickTickData>("/ticktick/data", "GET")
   );
@@ -98,20 +101,45 @@ export default function DashboardPage() {
     );
   }
 
+  if (lg) {
+    return (
+      <Stack direction="row" spacing={5}>
+        <Stack
+          spacing={5}
+          sx={{
+            minWidth: "33%",
+            maxWidth: "33%",
+          }}
+        >
+          {mediaCard}
+          {habits}
+          {packageTracker}
+        </Stack>
+        <Stack sx={{ width: "67%" }} spacing={5}>
+          <Forecast days={5} />
+          {links}
+          <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
+            {next}
+            {unscheduled}
+          </Stack>
+        </Stack>
+      </Stack>
+    );
+  }
+
   return (
     <Stack direction="row" spacing={5}>
       <Stack
         spacing={5}
         sx={{
-          minWidth: "33%",
-          maxWidth: "33%",
+          minWidth: "25%",
+          maxWidth: "25%",
         }}
       >
         {mediaCard}
         {habits}
-        {packageTracker}
       </Stack>
-      <Stack sx={{ width: "67%" }} spacing={5}>
+      <Stack sx={{ width: "50%" }} spacing={5}>
         <Forecast days={5} />
         {links}
         <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
@@ -119,6 +147,7 @@ export default function DashboardPage() {
           {unscheduled}
         </Stack>
       </Stack>
+      {packageTracker}
     </Stack>
   );
 }

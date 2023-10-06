@@ -12,6 +12,7 @@ import useLatestRef from "../utils/useLatestRef";
 import EntityListItem from "./EntityListItem";
 import AltIconButton from "./AltIconButton";
 import Icon from "./Icon";
+import EmptyState from "./EmptyState";
 
 const CameraWrapper = styled(GlossyPaper)({
   lineHeight: 0,
@@ -132,12 +133,20 @@ export function useKlipperActionButton() {
 }
 
 export default function Klipper() {
-  const isPrinting =
-    useEntity("sensor.impressora_3d_estado_atual")?.state === "printing";
+  const state = useEntity("sensor.impressora_3d_estado_atual")?.state;
+  const isPrinting = state === "printing";
 
   const autoShutdownEntity = useEntity(
     "script.impressora_3d_desligamento_automatico"
   );
+
+  if (!state || ["unavailable", "unknown", "off"].includes(state)) {
+    return (
+      <GlossyPaper>
+        <EmptyState text="Impressora desligada" />
+      </GlossyPaper>
+    );
+  }
 
   return (
     <Stack spacing={2}>

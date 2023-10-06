@@ -7,13 +7,11 @@ import AltIconButton from "./AltIconButton";
 import ListSection from "./ListSection";
 import ListItem from "./ListItem";
 import Icon from "./Icon";
-import useConfirm from "../utils/useConfirm";
 import { getConfig, setConfig } from "../utils/useConfig";
 import { Switch } from "@mui/material";
 
 export default function HomeControlCard() {
   const socket = useSocketIO();
-  const confirm = useConfirm();
 
   const checkWebSocket = () =>
     //@ts-expect-error
@@ -44,7 +42,7 @@ export default function HomeControlCard() {
         endSlot={isWebsocket ? "Sim" : "Não"}
       />
       <ListItem
-        icon="gauge"
+        icon="shimmer"
         primaryText="Efeitos de Blur"
         endSlot={
           <Switch
