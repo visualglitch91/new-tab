@@ -58,6 +58,10 @@ export const config = {
     webhook: "",
   },
 
+  pomodoro: {
+    websocket: "",
+  },
+
   links: [
     {
       name: "",

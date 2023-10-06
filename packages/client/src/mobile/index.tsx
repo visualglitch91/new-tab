@@ -57,7 +57,7 @@ const pages = [
   },
   {
     path: "/printer",
-    icon: "printer-3d-nozzle",
+    icon: "printer-3d-nozzle-outline",
     label: "Impressora 3D",
     admin: true,
     component: <PrinterPage />,

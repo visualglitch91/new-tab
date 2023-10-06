@@ -28,19 +28,19 @@ const pages = [
   {
     path: "/home",
     label: "Casa",
-    icon: "home",
+    icon: "home-outline",
     component: <HomePage />,
   },
   {
     path: "/timers",
     label: "Timers",
-    icon: "clock",
+    icon: "clock-outline",
     component: <TimersAndSchedulesPage />,
   },
   {
     path: "/printer",
     label: "Impressora 3D",
-    icon: "printer-3d-nozzle",
+    icon: "printer-3d-nozzle-outline",
     admin: true,
     component: <PrinterPage />,
   },

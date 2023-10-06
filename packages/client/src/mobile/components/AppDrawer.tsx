@@ -5,6 +5,7 @@ import Icon from "../../components/Icon";
 import useMountEffect from "../../utils/useMountEffect";
 import ClockAndWeather from "../../components/ClockAndWeather";
 import useSwipe from "../../utils/useSwipe";
+import Pomodoro from "../../components/Pomodoro";
 
 const DrawerButton = styled(Button)({
   justifyContent: "flex-start",
@@ -80,10 +81,15 @@ export function AppDrawer({
       <ClockAndWeather
         compact
         sx={(theme) => ({
-          margin: "32px 26px 10px",
+          margin: "32px 26px 24px",
           background: theme.palette.white.main,
           color: theme.palette.white.contrastText,
         })}
+      />
+      <Pomodoro
+        sx={{
+          margin: "0 26px 16px",
+        }}
       />
       <List sx={{ px: 1.2 }}>
         {pages.map((it, index) => (

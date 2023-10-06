@@ -2,6 +2,7 @@ import { useLocation } from "wouter";
 import Tab from "./Tab";
 import { Wrapper, Tabs, Content } from "./components";
 import ClockAndWeather from "../../../components/ClockAndWeather";
+import Pomodoro from "../../../components/Pomodoro";
 
 interface PageConfig {
   path: string;
@@ -33,6 +34,7 @@ export default function DesktopLayout({
               color: theme.palette.white.contrastText,
             })}
           />
+          <Pomodoro sx={{ marginBottom: "16px" }} />
           {pages.map(({ component, ...page }) => (
             <Tab
               key={page.path}
