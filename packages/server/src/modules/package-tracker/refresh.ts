@@ -72,9 +72,12 @@ function parseDateString(dateString: string): string | null {
 }
 
 export default async function refresh(logger: Logger) {
-  const packages = storage.getAll();
+  // No need to fetch status of delivered packages
+  const undeliveredPackages = storage
+    .getAll()
+    .filter((it) => it.status !== "delivered");
 
-  const packagesBycode = packages.reduce(
+  const packagesBycode = undeliveredPackages.reduce(
     (acc, it) => ({ ...acc, [it.code]: it }),
     {} as Record<string, PackageTrackerItem>
   );
