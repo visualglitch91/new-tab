@@ -55,6 +55,7 @@ export default function Tasks({
               ? () => {
                   confirm({
                     title: "Completar?",
+                    confirmLabel: "Sim",
                     onConfirm: () => {
                       api("/ticktick/tasks/complete", "POST", {
                         id: item.id,

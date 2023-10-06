@@ -34,7 +34,11 @@ export default function ScheduleDialog({
   return (
     <DialogBase
       {...props}
-      title="Novo Timer"
+      title={
+        initialValues?.id
+          ? `Editar "${initialValues.name}"`
+          : "Novo Agendamento"
+      }
       sx={{
         "& .MuiDialog-paper": {
           width: "90vw",

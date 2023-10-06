@@ -11,6 +11,8 @@ export type ActionMap<T extends string> = Record<
     label: string;
     color?: ButtonProps["color"];
     variant?: ButtonProps["variant"];
+    hidden?: boolean;
+    action: () => void;
   }
 >;
 
@@ -19,28 +21,50 @@ interface ActionSheetProps<T extends string> {
   sx?: SxProps;
   description?: string;
   hideCancelButton?: boolean;
-  onSelect: (value: T) => void;
+  keepOpen?: boolean;
   actions: ActionMap<T>;
 }
+
+const verticalButtonsSx: SxProps = {
+  "& .MuiDialogActions-root": {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+};
 
 export default function ActionSheet<T extends string>({
   title,
   description,
   actions,
   hideCancelButton,
+  keepOpen,
   sx,
-  onSelect,
   onClose,
   ...props
 }: ActionSheetProps<T> & DialogBaseControlProps) {
   const { isMobile } = useBreakpoint();
 
-  //@ts-expect-error
-  const buttons = Object.entries(actions).map(([key, { label, ...props }]) => (
-    <Button key={key} {...props} onClick={() => onSelect(key as T)}>
-      {label}
-    </Button>
-  ));
+  const buttons = Object.entries(actions)
+    .map(
+      //@ts-expect-error
+      ([key, { label, action, hidden, ...props }]) =>
+        hidden ? null : (
+          <Button
+            key={key}
+            {...props}
+            onClick={() => {
+              action();
+
+              if (!keepOpen) {
+                onClose();
+              }
+            }}
+          >
+            {label}
+          </Button>
+        )
+    )
+    .filter(Boolean);
 
   if (!hideCancelButton) {
     buttons.push(
@@ -56,14 +80,22 @@ export default function ActionSheet<T extends string>({
       sx={sxx(
         {
           "& .MuiDialogActions-root": {
-            flexDirection: "column",
             gap: 1.5,
-            alignItems: "stretch",
-            "& > *": {
-              marginLeft: "unset !important",
-            },
+            "& > *": { marginLeft: "unset !important" },
           },
         },
+        buttons.length === 2
+          ? (theme) => ({
+              [theme.breakpoints.down("sm")]: verticalButtonsSx,
+              [theme.breakpoints.up("sm")]: {
+                "& .MuiDialogActions-root": {
+                  flexDirection: "row-reverse",
+                  justifyContent: "stretch",
+                  "& > *": { flex: 1 },
+                },
+              },
+            })
+          : verticalButtonsSx,
         sx
       )}
       bottomMobileSheet

@@ -24,15 +24,8 @@ export default function useConfirm() {
         title={title}
         description={description}
         actions={{
-          true: { label: confirmLabel },
-          false: { label: cancelLabel },
-        }}
-        onSelect={(value) => {
-          if (value === "true") {
-            onConfirm();
-          }
-
-          props.onClose();
+          true: { label: confirmLabel, action: onConfirm },
+          false: { label: cancelLabel, action: props.onClose },
         }}
       />
     ));

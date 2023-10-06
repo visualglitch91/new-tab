@@ -64,17 +64,17 @@ export default function JDownloader({ maxHeight }: { maxHeight?: number }) {
   function onItemClick(item: DownloadItem) {
     showMenu({
       title: "Opções",
-      options: [{ value: "remove", label: "Remover download" }],
-      onSelect: (value) => {
-        if (value !== "remove") {
-          return;
-        }
-
-        mutate(() =>
-          api(`/jdownloader/remove`, "post", {
-            id: item.id,
-          })
-        );
+      options: {
+        remove: {
+          label: "Remover download",
+          action: () => {
+            mutate(() =>
+              api(`/jdownloader/remove`, "post", {
+                id: item.id,
+              })
+            );
+          },
+        },
       },
     });
   }

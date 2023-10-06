@@ -39,30 +39,49 @@ export function AppItem({ app }: { app: ParsedApp }) {
     mount((_, props) => <LogDialog app={app} {...props} />);
   }
 
+  function makeAction(action: Menu) {
+    return () => {
+      if (action === Menu.LOGS) {
+        showLogs();
+        return;
+      }
+
+      if (running) {
+        confirm({ title: "Continuar?", onConfirm: () => mutate({ action }) });
+      } else {
+        mutate({ action });
+      }
+    };
+  }
+
   function showActionsMenu() {
     showMenu({
       title: "Opções",
       options: [
-        ...(running
-          ? [
-              { value: Menu.STOP, label: "Parar" },
-              { value: Menu.RESTART, label: "Reiniciar" },
-            ]
-          : [{ value: Menu.START, label: "Iniciar" }]),
-        { value: Menu.LOGS, label: "Logs" },
+        {
+          key: Menu.STOP,
+          label: "Parar",
+          action: makeAction(Menu.STOP),
+          hidden: !running,
+        },
+        {
+          key: Menu.RESTART,
+          label: "Reiniciar",
+          action: makeAction(Menu.RESTART),
+          hidden: !running,
+        },
+        {
+          key: Menu.START,
+          label: "Iniciar",
+          action: makeAction(Menu.START),
+          hidden: running,
+        },
+        {
+          key: Menu.LOGS,
+          label: "Logs",
+          action: makeAction(Menu.LOGS),
+        },
       ],
-      onSelect: (action) => {
-        if (action === Menu.LOGS) {
-          showLogs();
-          return;
-        }
-
-        if (running) {
-          confirm({ title: "Continuar?", onConfirm: () => mutate({ action }) });
-        } else {
-          mutate({ action });
-        }
-      },
     });
   }
 

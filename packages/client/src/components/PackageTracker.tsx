@@ -11,6 +11,7 @@ import Icon from "./Icon";
 import ListItem from "./ListItem";
 import useConfirm from "../utils/useConfirm";
 import { orderBy } from "lodash";
+import { useMenu } from "../utils/useMenu";
 
 const Desciption = styled("span")({
   opacity: 0.8,
@@ -18,6 +19,7 @@ const Desciption = styled("span")({
   fontWeight: "bold",
   "& > span": {
     whiteSpace: "pre-wrap",
+    display: "block",
   },
 });
 
@@ -34,9 +36,14 @@ function useAction() {
       action,
       ...body
     }:
+      | { action: "refresh" }
       | { action: "add"; name: string; code: string }
       | { action: "remove"; code: string }) => {
-      return api(`/package-tracker/${action}`, "post", body).then(() => {
+      return api(
+        `/package-tracker/${action}`,
+        action === "refresh" ? "get" : "post",
+        body
+      ).then(() => {
         queryClient.invalidateQueries(["packages"]);
         return;
       });
@@ -44,11 +51,16 @@ function useAction() {
   );
 }
 
-export function useAddPackage() {
+export function usePackageTrackerMenu() {
   const prompt = usePrompt();
+  const showMenu = useMenu();
   const { mutate } = useAction();
 
-  return function add() {
+  function refresh() {
+    mutate({ action: "refresh" });
+  }
+
+  function addPackage() {
     prompt({
       title: "Adicionar",
       fields: ["Nome", "Código"],
@@ -56,6 +68,16 @@ export function useAddPackage() {
         if (values[0] && values[1]) {
           mutate({ action: "add", name: values[0], code: values[1] });
         }
+      },
+    });
+  }
+
+  return function showPackageTrackerMenu() {
+    showMenu({
+      title: "Opções",
+      options: {
+        refresh: { label: "Atualizar", action: refresh },
+        add: { label: "Rastrear", action: addPackage },
       },
     });
   };

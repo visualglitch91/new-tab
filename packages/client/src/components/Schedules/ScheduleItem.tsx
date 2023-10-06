@@ -60,7 +60,12 @@ export default function ScheduleItem({
           sx={{ "& .MuiButtonGroup-grouped": { minWidth: "unset" } }}
         >
           {options.map((it, index) => (
-            <AltIconButton size="medium" key={index} onClick={it.action}>
+            <AltIconButton
+              size="small"
+              sx={{ "--size": "36px" }}
+              key={index}
+              onClick={it.action}
+            >
               <Icon size={14} icon={it.icon} />
             </AltIconButton>
           ))}

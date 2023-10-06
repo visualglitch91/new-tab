@@ -7,7 +7,9 @@ import Links from "../../components/Links";
 import Habits from "../../components/Habits";
 import Forecast from "../../components/Forecast";
 import MediaCard from "../../components/MediaCard";
-import PackageTracker, { useAddPackage } from "../../components/PackageTracker";
+import PackageTracker, {
+  usePackageTrackerMenu,
+} from "../../components/PackageTracker";
 import Section from "../../components/Section";
 import Icon from "../../components/Icon";
 import AltIconButton from "../../components/AltIconButton";
@@ -16,7 +18,7 @@ const links = <Links />;
 const mediaCard = <MediaCard />;
 
 export default function DashboardPage() {
-  const addPackage = useAddPackage();
+  const showPackageTrackerMenu = usePackageTrackerMenu();
   const sm = useMediaQuery("@media(max-width: 1250px)");
   const md = useMediaQuery("@media(max-width: 1400px)");
   const { data, refetch } = useQuery(["ticktick"], () =>
@@ -29,8 +31,8 @@ export default function DashboardPage() {
     <Section
       title="Encomendas"
       button={
-        <AltIconButton onClick={addPackage}>
-          <Icon icon="plus" size={20} />
+        <AltIconButton onClick={showPackageTrackerMenu}>
+          <Icon icon="dots-vertical" size={20} />
         </AltIconButton>
       }
     >

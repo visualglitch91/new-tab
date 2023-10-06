@@ -18,37 +18,10 @@ export default function FileManager({ maxHeight }: { maxHeight?: number }) {
   function onOptions(item: Item) {
     showMenu({
       title: "Opções",
-      options: [
-        {
-          value: "rename",
+      options: {
+        rename: {
           label: "Renomear",
-        },
-        {
-          value: "download",
-          label: "Download",
-          hidden: item.type === "dir",
-        },
-        {
-          value: "install-switch",
-          label: "Instalar no Switch",
-          hidden: ![".xci", ".nsp"].some((it) => item.name.endsWith(it)),
-        },
-        {
-          value: "delete",
-          label: "Deletar",
-        },
-      ],
-      onSelect: (action) => {
-        switch (action) {
-          case "install-switch":
-            if (item.type === "file") {
-              mount((_, props) => (
-                <SwitchInstallDialog {...props} file={item} />
-              ));
-            }
-
-            return;
-          case "rename":
+          action: () => {
             prompt({
               title: "Renomear",
               fields: ["Nome"],
@@ -58,8 +31,22 @@ export default function FileManager({ maxHeight }: { maxHeight?: number }) {
                 }).then(refetch);
               },
             });
-            return;
-          case "delete":
+          },
+        },
+        "install-switch": {
+          label: "Instalar no Switch",
+          hidden: ![".xci", ".nsp"].some((it) => item.name.endsWith(it)),
+          action: () => {
+            if (item.type === "file") {
+              mount((_, props) => (
+                <SwitchInstallDialog {...props} file={item} />
+              ));
+            }
+          },
+        },
+        delete: {
+          label: "Deletar",
+          action: () => {
             confirm({
               title: "Deseja contiuar?",
               onConfirm: () => {
@@ -68,8 +55,8 @@ export default function FileManager({ maxHeight }: { maxHeight?: number }) {
                 );
               },
             });
-            return;
-        }
+          },
+        },
       },
     });
   }

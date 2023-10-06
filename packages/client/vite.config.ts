@@ -19,7 +19,7 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: `http://localhost:${config.development_server_port}`,
+        target: `http://${config.development_server_proxy}`,
         configure: (proxy) => {
           proxy.on("proxyReq", (proxyReq, _, res) => {
             res.on("close", () => {
@@ -31,7 +31,7 @@ export default defineConfig({
         },
       },
       "/socket": {
-        target: `ws://localhost:${config.development_server_port}`,
+        target: `ws://${config.development_server_proxy}`,
         ws: true,
       },
     },

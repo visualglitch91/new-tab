@@ -9,15 +9,19 @@ export function useMenu() {
     description,
     options,
     hideCancelButton,
-    onSelect,
   }: {
     title: string;
     description?: string;
     hideCancelButton?: boolean;
     options:
-      | { value: T; label: string; hidden?: boolean; primary?: boolean }[]
+      | {
+          key: T;
+          label: string;
+          hidden?: boolean;
+          primary?: boolean;
+          action: () => void;
+        }[]
       | ActionMap<T>;
-    onSelect: (value: T) => void;
   }) {
     mount((_, props) => (
       <ActionSheet
@@ -28,27 +32,18 @@ export function useMenu() {
         actions={
           Array.isArray(options)
             ? options.reduce(
-                (acc, it) =>
-                  it.hidden
-                    ? acc
-                    : {
-                        ...acc,
-                        [it.value]: {
-                          label: it.label,
-                          variant: it.primary ? "contained" : undefined,
-                        },
-                      },
+                (acc, it) => ({
+                  ...acc,
+                  [it.key]: {
+                    label: it.label,
+                    hidden: it.hidden,
+                    variant: it.primary ? "contained" : undefined,
+                  },
+                }),
                 {} as ActionMap<T>
               )
             : options
         }
-        onSelect={(value) => {
-          if (value) {
-            onSelect(value);
-          }
-
-          props.onClose();
-        }}
       />
     ));
   }

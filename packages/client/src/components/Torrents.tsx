@@ -93,28 +93,50 @@ export default function Torrents({ maxHeight }: { maxHeight?: number }) {
     { refetchInterval: 2_000 }
   );
 
+  function makeAction(
+    value: "stop" | "start" | "remove_without_data" | "remove_with_data",
+    torrent: DownloadItem
+  ) {
+    const action = value.startsWith("remove") ? "remove" : value;
+
+    return () => {
+      mutate(() =>
+        api(`/transmission/${action}`, "post", {
+          ids: [torrent.id],
+          ...(action === "remove"
+            ? { deleteData: value === "remove_with_data" }
+            : {}),
+        })
+      );
+    };
+  }
+
   function onItemClick(torrent: DownloadItem) {
     showMenu({
       title: "Opções",
       options: [
         torrent.active
-          ? { value: "stop", label: "Pausar" }
-          : { value: "start", label: "Continuar" },
-        { value: "remove_without_data", label: "Remover Torrent" },
-        { value: "remove_with_data", label: "Remover Torrent e Arquivos" },
+          ? {
+              key: "stop",
+              label: "Pausar",
+              action: makeAction("stop", torrent),
+            }
+          : {
+              key: "start",
+              label: "Continuar",
+              action: makeAction("start", torrent),
+            },
+        {
+          key: "remove_without_data",
+          label: "Remover Torrent",
+          action: makeAction("remove_without_data", torrent),
+        },
+        {
+          key: "remove_with_data",
+          label: "Remover Torrent e Arquivos",
+          action: makeAction("remove_with_data", torrent),
+        },
       ],
-      onSelect: (value) => {
-        const action = value.startsWith("remove") ? "remove" : value;
-
-        mutate(() =>
-          api(`/transmission/${action}`, "post", {
-            ids: [torrent.id],
-            ...(action === "remove"
-              ? { deleteData: value === "remove_with_data" }
-              : {}),
-          })
-        );
-      },
     });
   }
 

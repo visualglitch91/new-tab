@@ -1,4 +1,4 @@
-import { Chip, Tooltip, Stack, Button } from "@mui/material";
+import { Chip, Stack, Button } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   MediaItem as IMediaItem,
@@ -40,16 +40,17 @@ export default function MediaItem({
   function request() {
     showMenu({
       title: "Qualidade",
-      options: (qualityProfiles?.[item.type] || []).map((it) => ({
-        value: String(it.id),
-        label: it.name,
+      options: (qualityProfiles?.[item.type] || []).map((profile) => ({
+        key: String(profile.id),
+        label: profile.name,
+        action: () => {
+          requestMedia.mutate({
+            type: item.type,
+            mediaId: item.mediaId,
+            qualityProfile: profile.id,
+          });
+        },
       })),
-      onSelect: (profile) =>
-        requestMedia.mutate({
-          type: item.type,
-          mediaId: item.mediaId,
-          qualityProfile: profile,
-        }),
     });
   }
 
