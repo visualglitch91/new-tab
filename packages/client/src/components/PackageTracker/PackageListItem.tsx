@@ -16,7 +16,7 @@ const STATUS_COLORS = {
 const Desciption = styled("span")({
   opacity: 0.8,
   fontSize: "14px",
-  fontWeight: "bold",
+  fontWeight: 500,
   "& > span": {
     whiteSpace: "pre-wrap",
     display: "block",
@@ -55,22 +55,29 @@ export default function PackageListItem({
               sx={{ flexShrink: 0 }}
               color={STATUS_COLORS[item.status]}
             />
-            <Box
-              sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-            >{`${item.name} (${item.code})`}</Box>
+            <Box sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+              {item.name}
+            </Box>
           </Stack>
         }
         secondaryText={
-          item.lastEvent ? (
-            <Desciption>
-              <span>{item.lastEvent.description}</span>
-              {item.lastEvent.location && (
-                <span>{item.lastEvent.location}</span>
-              )}
-            </Desciption>
-          ) : (
-            <Desciption>Não Encontrado</Desciption>
-          )
+          <>
+            <Box sx={{ fontWeight: 600 }}>{item.code}</Box>
+            {item.lastEvent ? (
+              <Desciption>
+                <span>
+                  {item.lastEvent.description
+                    .replace(/Local: /g, "")
+                    .replace(/LOCAL: /g, "")}
+                </span>
+                {item.lastEvent.location && (
+                  <span>{item.lastEvent.location}</span>
+                )}
+              </Desciption>
+            ) : (
+              <Desciption>Não Encontrado</Desciption>
+            )}
+          </>
         }
         endSlot={
           <>
