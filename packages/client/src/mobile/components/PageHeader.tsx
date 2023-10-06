@@ -16,7 +16,7 @@ const ElevatedHeader = styled("div")({
     right: 0,
     bottom: 0,
     opacity: 0,
-    transition: "opacity 100ms var(--tween)",
+    transition: "opacity 300ms var(--tween)",
     backdropFilter: "blur(10px)",
     background: "",
     backgroundImage: `linear-gradient(
