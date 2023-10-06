@@ -13,7 +13,11 @@ export default createAppModule("matrix-bot", (instance) => {
     const json =
       format === "html"
         ? {
-            body: message.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/gi, ""),
+            body: message
+              .replace(/<br>/g, "\n")
+              .replace(/<br\/>/g, "\n")
+              .replace(/<br \/>/g, "\n")
+              .replace(/<\/?[a-z][a-z0-9]*[^<>]*>/gi, ""),
             formatted_body: message,
             format: "org.matrix.custom.html",
           }

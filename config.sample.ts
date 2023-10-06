@@ -54,6 +54,10 @@ export const config = {
     adb_host: "",
   },
 
+  package_tracker: {
+    webhook: "",
+  },
+
   links: [
     {
       name: "",

@@ -242,19 +242,21 @@ export { pinoHttp };
 
 export const logger = pinoHttp.logger;
 
+export type Logger = HttpLogger["logger"];
+
 export function createAppModule(
   name: string,
-  defineAppModule: (
-    instance: AppModuleInstance,
-    logger: HttpLogger["logger"]
-  ) => void
+  defineAppModule: (instance: AppModuleInstance, logger: Logger) => void
 ) {
   const router = Router();
 
   return {
     name,
     setup: async () => {
-      await defineAppModule(createAppModuleInstance(router), logger);
+      await defineAppModule(
+        createAppModuleInstance(router),
+        logger.child({ module: name })
+      );
       return router;
     },
   };

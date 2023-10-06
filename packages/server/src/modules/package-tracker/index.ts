@@ -6,7 +6,7 @@ import { createAppModule } from "../../utils";
 export default createAppModule("package-tracker", (instance, logger) => {
   job("0 * * * *", () => {
     logger.info("refreshing package statuses...");
-    refresh();
+    refresh(logger);
   }).start();
 
   instance.get("/list", async () => storage.getAll());
@@ -20,7 +20,7 @@ export default createAppModule("package-tracker", (instance, logger) => {
         name: req.body.name,
       });
 
-      await refresh();
+      await refresh(logger);
     }
   );
 
@@ -28,11 +28,11 @@ export default createAppModule("package-tracker", (instance, logger) => {
     const { code } = req.body;
 
     await storage.remove(code);
-    await refresh();
+    await refresh(logger);
   });
 
   instance.get("/refresh", async () => {
-    await refresh();
+    await refresh(logger);
     return undefined;
   });
 });

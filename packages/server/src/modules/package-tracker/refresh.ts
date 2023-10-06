@@ -1,7 +1,12 @@
 import axios from "axios";
+import { isEqual } from "lodash";
 import * as cheerio from "cheerio";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
+import { config } from "../../../../../config";
+import { Logger } from "../../utils";
 import storage from "./storage";
+
+const { webhook } = config.package_tracker;
 
 async function track(code: string) {
   try {
@@ -27,6 +32,7 @@ async function track(code: string) {
 
 function parseDateString(dateString: string): string | null {
   const parts = dateString.split(" às ");
+
   if (parts.length !== 2) {
     // Invalid format
     return null;
@@ -39,7 +45,7 @@ function parseDateString(dateString: string): string | null {
   }
 
   const timeParts = parts[1].split(":");
-  if (timeParts.length !== 2) {
+  if (timeParts.length !== 2 && timeParts.length !== 3) {
     // Invalid time format
     return null;
   }
@@ -60,7 +66,7 @@ function parseDateString(dateString: string): string | null {
   }
 }
 
-export default async function refresh() {
+export default async function refresh(logger: Logger) {
   const packages = storage.getAll();
 
   const packagesBycode = packages.reduce(
@@ -70,10 +76,26 @@ export default async function refresh() {
 
   const updatedPackages = await Promise.all(
     Object.keys(packagesBycode).map((code) =>
-      track(code).then((lastEvent) => ({
-        ...packagesBycode[code],
-        lastEvent: lastEvent || packagesBycode[code].lastEvent,
-      }))
+      track(code).then((lastEvent) => {
+        const prevEvent = packagesBycode[code].lastEvent;
+
+        const updatedPackage = {
+          ...packagesBycode[code],
+          lastEvent: lastEvent || prevEvent,
+        };
+
+        if (!isEqual(prevEvent, lastEvent) && webhook) {
+          logger.info(
+            "[package-tracker] calling webhook %s with package %o",
+            webhook,
+            updatedPackage
+          );
+
+          axios.post(webhook, updatedPackage).catch(logger.error);
+        }
+
+        return updatedPackage;
+      })
     )
   );
 
