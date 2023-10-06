@@ -1,5 +1,4 @@
 import axios from "axios";
-import { isEqual } from "lodash";
 import * as cheerio from "cheerio";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
 import { config } from "../../../../../config";
@@ -12,22 +11,28 @@ async function track(code: string) {
   try {
     const res = await axios.get(`https://linketrack.com/track?codigo=${code}`);
     const $ = cheerio.load(res.data);
-    const lastEventNode = $($(".boxEvento")[0]);
+    const events = $(".boxEvento");
+    const lastEventNode = $(events[0]);
 
     const textContents = lastEventNode
       .find("li")
       .map((_, li) => $(li).find("br").replaceWith("\n").end().text());
 
     if (textContents[0].includes("Código não localizado")) {
-      return undefined;
+      return { eventCount: 0 };
     }
 
     return {
-      at: parseDateString(textContents[1].substring(6)),
-      description: textContents[2],
-      location: textContents[0].substring(7),
+      eventCount: events.length,
+      lastEvent: {
+        at: parseDateString(textContents[1].substring(6)),
+        description: textContents[2],
+        location: textContents[0].substring(7),
+      },
     };
   } catch (_) {}
+
+  return { eventCount: 0 };
 }
 
 function parseDateString(dateString: string): string | null {
@@ -77,8 +82,8 @@ export default async function refresh(logger: Logger) {
   const updatedPackages = await Promise.all(
     Object.keys(packagesBycode).map((code) =>
       track(code).then((result) => {
-        const prevEvent = packagesBycode[code].lastEvent;
-        const lastEvent = result || prevEvent;
+        const prevPackage = packagesBycode[code];
+        const { eventCount, lastEvent = prevPackage.lastEvent } = result;
 
         const status: PackageTrackerItem["status"] = lastEvent
           ? lastEvent.description.includes("Objeto entregue")
@@ -89,12 +94,13 @@ export default async function refresh(logger: Logger) {
           : "not-found";
 
         const updatedPackage = {
-          ...packagesBycode[code],
+          ...prevPackage,
           status,
           lastEvent,
+          eventCount,
         };
 
-        if (!isEqual(prevEvent, lastEvent) && webhook) {
+        if (prevPackage.eventCount < eventCount && webhook) {
           logger.info(
             "[package-tracker] calling webhook %s with package %o",
             webhook,
