@@ -4,7 +4,7 @@ import { config } from "../../../../../config";
 
 const { homeserver, token } = config.matrix;
 
-export default createAppModule("matrix-bot", (instance) => {
+export default createAppModule("matrix-bot", (instance, logger) => {
   instance.post<{
     Body: { message: string; target: string; format?: "html" | "plain" };
   }>("/message", async (req) => {
@@ -23,12 +23,29 @@ export default createAppModule("matrix-bot", (instance) => {
           }
         : { body: message };
 
-    return axios
-      .put(
-        `${homeserver}/_matrix/client/v3/rooms/${target}/send/m.room.message/m${Date.now()}`,
-        { ...json, msgtype: "m.text" },
+    const sendMessage = () =>
+      axios
+        .put(
+          `${homeserver}/_matrix/client/v3/rooms/${target}/send/m.room.message/m${Date.now()}`,
+          { ...json, msgtype: "m.text" },
+          { timeout: 3_000, headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((res) => res.data);
+
+    const joinRoom = () =>
+      axios.post(
+        `${homeserver}/_matrix/client/v3/rooms/${target}/join`,
+        {},
         { timeout: 3_000, headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then((res) => res.data);
+      );
+
+    return sendMessage().catch(({ response }) => {
+      if (response.status === 403) {
+        logger.warn("Trying to join room %s", target);
+        return joinRoom().then(() => sendMessage());
+      }
+
+      throw response.data;
+    });
   });
 });
