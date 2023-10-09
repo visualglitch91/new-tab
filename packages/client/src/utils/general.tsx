@@ -23,22 +23,32 @@ export function formatNumericValue(
 }
 
 const BreakpointContext = createContext<
-  { isMobile: boolean; isDesktop: boolean } | undefined
+  | {
+      isMobile: boolean;
+      isDesktop: boolean;
+      isMobileExternalDisplay: boolean;
+    }
+  | undefined
 >(undefined);
 
 export function BreakpointProvider({
   onChange,
   children,
 }: {
-  onChange: (value: { isMobile: boolean; isDesktop: boolean }) => void;
+  onChange: (value: {
+    isMobile: boolean;
+    isDesktop: boolean;
+    isMobileExternalDisplay: boolean;
+  }) => void;
   children?: React.ReactNode;
 }) {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobileExternalDisplay = useMediaQuery("@media(max-height: 528px)");
 
   const value = useMemo(() => {
-    return { isMobile: mobile, isDesktop: !mobile };
-  }, [mobile]);
+    return { isMobile: mobile, isDesktop: !mobile, isMobileExternalDisplay };
+  }, [mobile, isMobileExternalDisplay]);
 
   useEffect(() => {
     onChange(value);

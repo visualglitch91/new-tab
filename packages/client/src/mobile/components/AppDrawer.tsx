@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Button, List, ListItem, SwipeableDrawer, styled } from "@mui/material";
+import { List, Button, styled, ListItem, SwipeableDrawer } from "@mui/material";
 import Icon from "../../components/Icon";
+import { useBreakpoint } from "../../utils/general";
 import useMountEffect from "../../utils/useMountEffect";
 import ClockAndWeather from "../../components/ClockAndWeather";
 import useSwipe from "../../utils/useSwipe";
@@ -47,6 +48,7 @@ export function AppDrawer({
 }: {
   pages: Omit<React.ComponentProps<typeof AppLink>, "active">[];
 }) {
+  const { isMobileExternalDisplay } = useBreakpoint();
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
 
@@ -78,19 +80,23 @@ export function AppDrawer({
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
     >
-      <ClockAndWeather
-        compact
-        sx={(theme) => ({
-          margin: "32px 26px 24px",
-          background: theme.palette.white.main,
-          color: theme.palette.white.contrastText,
-        })}
-      />
-      <Pomodoro
-        sx={{
-          margin: "0 26px 16px",
-        }}
-      />
+      {!isMobileExternalDisplay && (
+        <>
+          <ClockAndWeather
+            compact
+            sx={(theme) => ({
+              margin: "32px 26px 24px",
+              background: theme.palette.white.main,
+              color: theme.palette.white.contrastText,
+            })}
+          />
+          <Pomodoro
+            sx={{
+              margin: "0 26px 16px",
+            }}
+          />
+        </>
+      )}
       <List sx={{ px: 1.2 }}>
         {pages.map((it, index) => (
           <AppLink key={index} {...it} active={location.startsWith(it.path)} />

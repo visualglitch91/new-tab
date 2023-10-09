@@ -1,4 +1,5 @@
 import { styled, useScrollTrigger } from "@mui/material";
+import { useBreakpoint } from "../../utils/general";
 import Icon from "../../components/Icon";
 import AltIconButton from "../../components/AltIconButton";
 
@@ -27,6 +28,10 @@ const ElevatedHeader = styled("div")({
     )`,
   },
   '&[data-elevate="true"]:after': { opacity: 1 },
+  '&[data-mobile-external-display="true"]': {
+    position: "static",
+    "&:after": { display: "none" },
+  },
 });
 
 const Ghost = styled("div")({
@@ -69,6 +74,8 @@ export default function PageHeader({
   children: React.ReactNode;
   disableShrinking?: boolean;
 }) {
+  const { isMobileExternalDisplay } = useBreakpoint();
+
   const elevate = useScrollTrigger({
     disableHysteresis: true,
     threshold: 20,
@@ -99,12 +106,13 @@ export default function PageHeader({
   return (
     <>
       <ElevatedHeader
-        data-elevate={elevate}
-        data-shrink={!disableShrinking && shrink}
+        data-mobile-external-display={isMobileExternalDisplay}
+        data-elevate={!isMobileExternalDisplay && elevate}
+        data-shrink={isMobileExternalDisplay || (!disableShrinking && shrink)}
       >
         {content}
       </ElevatedHeader>
-      <Ghost>{content}</Ghost>
+      {!isMobileExternalDisplay && <Ghost>{content}</Ghost>}
     </>
   );
 }

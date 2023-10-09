@@ -1,5 +1,6 @@
 import { Box, BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { Route, useLocation } from "wouter";
+import { useBreakpoint } from "../../utils/general";
 import Icon from "../../components/Icon";
 import { useIsAdmin } from "../../utils/hass";
 
@@ -14,6 +15,7 @@ export default function TabLayout({
     component: React.ReactNode;
   }[];
 }) {
+  const { isMobileExternalDisplay } = useBreakpoint();
   const [location, navigate] = useLocation();
   const isAdmin = useIsAdmin();
 
@@ -39,7 +41,19 @@ export default function TabLayout({
             }}
           >
             <BottomNavigation
+              sx={
+                isMobileExternalDisplay
+                  ? {
+                      height: "48px",
+                      "& .MuiBottomNavigationAction-label": {
+                        fontWeight: 600,
+                        fontSize: 15,
+                      },
+                    }
+                  : {}
+              }
               value={location}
+              showLabels={isMobileExternalDisplay}
               onChange={(_, path) => navigate(path)}
             >
               {tabs.map((it) => {
@@ -53,7 +67,8 @@ export default function TabLayout({
                     value={it.path}
                     label={it.label}
                     icon={
-                      typeof it.icon === "string" ? (
+                      isMobileExternalDisplay ? null : typeof it.icon ===
+                        "string" ? (
                         <Icon icon={it.icon} />
                       ) : (
                         it.icon
