@@ -73,3 +73,10 @@ export function useBreakpoint() {
 }
 
 export const isNewTab = getSearchParam("isNewTab") === "true";
+
+export function formatDate(date: string | Date) {
+  return new Date(date).toLocaleDateString("pt-BR", {
+    month: "short",
+    day: "numeric",
+  });
+}

@@ -1,6 +1,7 @@
-import { differenceInCalendarDays, format } from "date-fns";
+import { differenceInCalendarDays } from "date-fns";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import api from "../utils/api";
+import { formatDate } from "../utils/general";
 import useConfirm from "../utils/useConfirm";
 import TaskList from "./TaskList";
 import ListSection from "./ListSection";
@@ -25,7 +26,7 @@ function DueDate({ date }: { date: Date }) {
         ? "Hoje"
         : diff === 1
         ? "Amanhã"
-        : format(date, "MMM d")}
+        : formatDate(date)}
     </span>
   );
 }

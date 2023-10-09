@@ -1,5 +1,6 @@
 import { Box, Stack, Typography, styled } from "@mui/material";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
+import { formatDate } from "../../utils/general";
 import GlossyPaper from "../GlossyPaper";
 import AltIconButton from "../AltIconButton";
 import Icon from "../Icon";
@@ -22,13 +23,6 @@ const Desciption = styled("span")({
     display: "block",
   },
 });
-
-function parseDate(date: string) {
-  return new Date(date).toLocaleDateString("pt-BR", {
-    month: "short",
-    day: "numeric",
-  });
-}
 
 export default function PackageListItem({
   item,
@@ -83,7 +77,7 @@ export default function PackageListItem({
           <>
             {item.lastEvent?.at && (
               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                {parseDate(item.lastEvent.at)}
+                {formatDate(item.lastEvent.at)}
               </Typography>
             )}
             <span>
