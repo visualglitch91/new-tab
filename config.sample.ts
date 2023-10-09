@@ -61,12 +61,4 @@ export const config = {
   pomodoro: {
     websocket: "",
   },
-
-  links: [
-    {
-      name: "",
-      icon: "",
-      url: "",
-    },
-  ],
 };
