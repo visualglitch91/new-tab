@@ -56,5 +56,11 @@ export default function usePomodoro() {
     }
   }
 
-  return [state, toggleRunning] as const;
+  function restart() {
+    if (state && wsRef.current) {
+      wsRef.current?.send("reset");
+    }
+  }
+
+  return [state, toggleRunning, restart] as const;
 }

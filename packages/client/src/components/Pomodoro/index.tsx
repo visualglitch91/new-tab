@@ -1,3 +1,7 @@
+import { SxProps } from "@mui/material";
+import { useLongPress } from "@uidotdev/usehooks";
+import { sxx } from "../../utils/styling";
+import useConfirm from "../../utils/useConfirm";
 import ProgressRing from "../ProgressRing";
 import Icon from "../Icon";
 import usePomodoro, { formatRemaining } from "./utils";
@@ -13,11 +17,18 @@ import {
   WidgetButton,
   statusSx,
 } from "./components";
-import { sxx } from "../../utils/styling";
-import { SxProps } from "@mui/material";
 
 export default function Pomodoro({ sx }: { sx: SxProps }) {
-  const [state, toggleRunning] = usePomodoro();
+  const [state, toggleRunning, restart] = usePomodoro();
+  const confirm = useConfirm();
+
+  const longPress = useLongPress(() => {
+    confirm({
+      title: "Reiniciar Pomodoro?",
+      confirmLabel: "Reiniciar",
+      onConfirm: () => restart(),
+    });
+  });
 
   if (!state) {
     return <Root />;
@@ -25,7 +36,7 @@ export default function Pomodoro({ sx }: { sx: SxProps }) {
 
   return (
     <Root sx={sxx(statusSx[state.status], sx)}>
-      <WidgetButton onClick={toggleRunning}>
+      <WidgetButton {...longPress} onClick={toggleRunning}>
         <ProgressRingWrapper>
           <GhostProgressRing
             stroke={PROGRESS_RING_STROKE}
