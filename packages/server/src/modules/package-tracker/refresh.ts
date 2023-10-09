@@ -4,6 +4,7 @@ import { PackageTrackerItem } from "@home-control/types/package-tracker";
 import { config } from "../../../../../config";
 import { Logger } from "../../utils";
 import storage from "./storage";
+import { orderBy } from "lodash";
 
 const { webhook } = config.package_tracker;
 
@@ -11,28 +12,37 @@ async function track(code: string) {
   try {
     const res = await axios.get(`https://linketrack.com/track?codigo=${code}`);
     const $ = cheerio.load(res.data);
-    const events = $(".boxEvento");
-    const lastEventNode = $(events[0]);
+    const $events = $(".boxEvento");
 
-    const textContents = lastEventNode
-      .find("li")
-      .map((_, li) => $(li).find("br").replaceWith("\n").end().text());
+    const events = orderBy(
+      $events
+        .map((_, eventNode) => {
+          const textContents = $(eventNode)
+            .find("li")
+            .map((_, li) => $(li).find("br").replaceWith("\n").end().text());
 
-    if (textContents[0].includes("Código não localizado")) {
-      return { eventCount: 0 };
-    }
+          if (textContents[0].includes("Código não localizado")) {
+            return null;
+          }
+
+          return {
+            at: parseDateString(textContents[1].substring(6)),
+            description: textContents[2],
+            location: textContents[0].substring(7),
+          };
+        })
+        .get(),
+      ["at"],
+      ["desc"]
+    );
 
     return {
-      eventCount: events.length,
-      lastEvent: {
-        at: parseDateString(textContents[1].substring(6)),
-        description: textContents[2],
-        location: textContents[0].substring(7),
-      },
+      eventCount: events[0] === null ? 0 : $events.length,
+      lastEvent: events[0],
     };
-  } catch (_) {}
-
-  return { eventCount: 0 };
+  } catch (_) {
+    return { eventCount: 0 };
+  }
 }
 
 function parseDateString(dateString: string): string | null {
