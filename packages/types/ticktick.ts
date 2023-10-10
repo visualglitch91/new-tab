@@ -4,6 +4,7 @@ export type ScheduledTask = {
   startDate: string;
   endDate: string;
   isAllDay: boolean;
+  raw: any;
 } & ({ projectId: string; type: "task" } | { type: "event" });
 
 export interface UnscheduledTask {
@@ -11,6 +12,7 @@ export interface UnscheduledTask {
   title: string;
   projectId: string;
   type: "task";
+  raw: any;
 }
 
 export interface Habit {
@@ -19,6 +21,7 @@ export interface Habit {
   name: string;
   goal: number;
   value: number;
+  raw: any;
 }
 
 export interface TickTickData {

@@ -1,4 +1,4 @@
-import { addSeconds, parse, subDays } from "date-fns";
+import { addSeconds, parse, subMilliseconds } from "date-fns";
 import { rrulestr } from "rrule";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import TickTick from "./ticktick";
@@ -67,6 +67,7 @@ export default createAppModule("ticktick", async (instance, logger) => {
             ).toISOString(),
             isAllDay: it.isAllDay,
             type: "task",
+            raw: it,
           });
         } else {
           data.unscheduled.push({
@@ -74,11 +75,12 @@ export default createAppModule("ticktick", async (instance, logger) => {
             title: it.title,
             projectId: it.projectId,
             type: "task",
+            raw: it,
           });
         }
       });
 
-      const yesterday = subDays(new Date(), 1);
+      const yesterday = subMilliseconds(new Date(), 1);
 
       calendars.forEach((calendar: any) => {
         if (excludedCalendarIds.includes(calendar.id)) {
@@ -122,6 +124,7 @@ export default createAppModule("ticktick", async (instance, logger) => {
               endDate: endDate.toISOString(),
               isAllDay: it.isAllDay,
               type: "event",
+              raw: it,
             });
           }
         });

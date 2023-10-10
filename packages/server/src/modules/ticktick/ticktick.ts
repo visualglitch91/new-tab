@@ -54,7 +54,7 @@ export default class TickTick {
   }
 
   getAllUncompletedTasks() {
-    return callAPI("v2/batch/check/1", "GET").then(
+    return callAPI("v2/batch/check/0", "GET").then(
       (res) => res.syncTaskBean.update
     );
   }
@@ -108,6 +108,7 @@ export default class TickTick {
         name: habit.name,
         goal: habit.goal,
         value: checkin?.value || 0,
+        raw: habit,
       };
     });
   }
