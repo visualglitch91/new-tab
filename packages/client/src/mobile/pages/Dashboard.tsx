@@ -23,6 +23,7 @@ const taskCustomSx: SxProps = {
 const habitsCustomSx: SxProps = {
   "& .HabitItem-root": { fontSize: 12, padding: "9px 12px" },
   "& .DraculaChip-root": { fontSize: 11, padding: "2px 6px" },
+  "& .DotLoading-root": { "--size": "6px" },
 };
 
 export default function MobileDashboardPage() {
@@ -61,21 +62,10 @@ export default function MobileDashboardPage() {
       <Tasks
         sx={taskCustomSx}
         title="Hoje"
-        items={[...tickTick.data.delayed, ...tickTick.data.today]}
-        requestRefetch={tickTick.refetch}
+        items={[...tickTick.delayed, ...tickTick.today]}
       />
-      <Tasks
-        sx={taskCustomSx}
-        title="Amanhã"
-        items={tickTick.data.tomorrow}
-        requestRefetch={tickTick.refetch}
-      />
-      <Tasks
-        sx={taskCustomSx}
-        title="Sem data"
-        items={tickTick.data.unscheduled}
-        requestRefetch={tickTick.refetch}
-      />
+      <Tasks sx={taskCustomSx} title="Amanhã" items={tickTick.tomorrow} />
+      <Tasks sx={taskCustomSx} title="Sem data" items={tickTick.unscheduled} />
     </Stack>
   );
 }

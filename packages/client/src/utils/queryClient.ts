@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
 
@@ -15,3 +15,14 @@ persistQueryClient({
   queryClient,
   persister: localStoragePersister,
 });
+
+export function useGenericMutation<T, R>({
+  onResolve,
+}: {
+  onResolve?: (result: T) => Promise<R>;
+} = {}) {
+  return useMutation((func: () => Promise<T>) =>
+    //@ts-expect-error
+    func().then(onResolve || ((f) => f))
+  );
+}

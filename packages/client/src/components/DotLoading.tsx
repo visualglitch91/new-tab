@@ -1,4 +1,5 @@
 import { alpha, keyframes, styled } from "@mui/material";
+import { SxProps } from "../theme/utils";
 
 const animation = keyframes`
   0% {
@@ -12,16 +13,17 @@ const animation = keyframes`
 `;
 
 const Wrapper = styled("div")(({ theme }) => ({
-  width: "40px",
+  width: "calc(var(--size) * 3 + 15px)",
   display: "inline-flex",
   justifyContent: "center",
+  "--size": "10px",
   "--Color1": theme.palette.primary.main,
   "--Color2": alpha(theme.palette.primary.main, 0.2),
 
   "& > div": {
     position: "relative",
-    width: "10px",
-    height: "10px",
+    width: "var(--size)",
+    height: "var(--size)",
     borderRadius: "5px",
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.main,
@@ -29,9 +31,9 @@ const Wrapper = styled("div")(({ theme }) => ({
     animationDelay: "0.5s",
 
     "&::before": {
-      left: "-15px",
-      width: "10px",
-      height: "10px",
+      left: "calc((var(--size) + 5px) * -1)",
+      width: "var(--size)",
+      height: "var(--size)",
       borderRadius: "5px",
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.main,
@@ -47,9 +49,9 @@ const Wrapper = styled("div")(({ theme }) => ({
     },
 
     "&::after": {
-      left: "15px",
-      width: "10px",
-      height: "10px",
+      left: "calc(var(--size) + 5px)",
+      width: "var(--size)",
+      height: "var(--size)",
       borderRadius: "5px",
       backgroundColor: theme.palette.primary.main,
       color: theme.palette.primary.main,
@@ -59,9 +61,9 @@ const Wrapper = styled("div")(({ theme }) => ({
   },
 }));
 
-export default function DotLoading() {
+export default function DotLoading({ sx }: { sx?: SxProps }) {
   return (
-    <Wrapper>
+    <Wrapper className="DotLoading-root" sx={sx}>
       <div />
     </Wrapper>
   );

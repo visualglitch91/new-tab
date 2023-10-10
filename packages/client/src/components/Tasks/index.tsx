@@ -7,17 +7,15 @@ export default function Tasks({
   sx,
   title,
   items,
-  requestRefetch,
 }: {
   sx?: SxProps;
   title: React.ReactNode;
   items: (ScheduledTask | UnscheduledTask)[];
-  requestRefetch: () => void;
 }) {
   return (
     <ListSection sx={sx} title={title}>
       {items.map((item) => (
-        <TaskItem key={item.id} task={item} requestRefetch={requestRefetch} />
+        <TaskItem key={item.id} task={item} />
       ))}
     </ListSection>
   );

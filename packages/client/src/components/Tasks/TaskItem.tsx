@@ -1,12 +1,15 @@
 import { get } from "lodash";
 import { format, differenceInCalendarDays } from "date-fns";
 import { Stack } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import api from "../../utils/api";
 import useConfirm from "../../utils/useConfirm";
 import ListItem from "../ListItem";
 import Icon from "../Icon";
 import DraculaChip, { Colors } from "../DraculaChip";
+import { queryClient } from "../../utils/queryClient";
+import DotLoading from "../DotLoading";
 
 function isEventCurrentlyHappening(startDate: Date, endDate: Date) {
   const now = new Date();
@@ -22,12 +25,20 @@ const colors = {
 
 export default function TaskItem({
   task,
-  requestRefetch,
 }: {
   task: ScheduledTask | UnscheduledTask;
-  requestRefetch: () => void;
 }) {
   const confirm = useConfirm();
+  const { mutate, isLoading } = useMutation(() => {
+    if ("projectId" in task) {
+      return api("/ticktick/tasks/complete", "POST", {
+        id: task.id,
+        projectId: task.projectId,
+      }).then(() => queryClient.invalidateQueries(["ticktick"]));
+    }
+
+    return Promise.reject();
+  });
 
   const dates =
     "startDate" in task
@@ -69,20 +80,24 @@ export default function TaskItem({
       }
       endSlot={
         dates ? (
-          <DraculaChip
-            color={colors[colorKey]}
-            sx={{ fontSize: "12px" }}
-            text={
-              isDelayed
-                ? "Atrasada"
-                : isAllDay
-                ? "Dia Todo"
-                : `${format(dates.start, "HH:mm")} - ${format(
-                    dates.end,
-                    "HH:mm"
-                  )}`
-            }
-          />
+          isLoading ? (
+            <DotLoading sx={{ "--size": "8px" }} />
+          ) : (
+            <DraculaChip
+              color={colors[colorKey]}
+              sx={{ fontSize: "12px" }}
+              text={
+                isDelayed
+                  ? "Atrasada"
+                  : isAllDay
+                  ? "Dia Todo"
+                  : `${format(dates.start, "HH:mm")} - ${format(
+                      dates.end,
+                      "HH:mm"
+                    )}`
+              }
+            />
+          )
         ) : undefined
       }
       onClick={() => {
@@ -90,14 +105,7 @@ export default function TaskItem({
           confirm({
             title: "Completar?",
             confirmLabel: "Sim",
-            onConfirm: () => {
-              api("/ticktick/tasks/complete", "POST", {
-                id: task.id,
-                projectId: task.projectId,
-              }).then(() => {
-                requestRefetch();
-              });
-            },
+            onConfirm: () => mutate(),
           });
         } else {
           window.open(`https://ticktick.com/webapp/#q/week/tasks/${task.id}`);

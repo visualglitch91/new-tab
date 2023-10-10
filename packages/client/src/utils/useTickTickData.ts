@@ -11,8 +11,7 @@ export default function useTickTickData() {
       unscheduled: [],
       habits: [],
     },
-    refetch,
   } = useQuery(["ticktick"], () => api<TickTickData>("/ticktick/data", "GET"));
 
-  return { data, refetch };
+  return data;
 }

@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useMenu } from "../utils/useMenu";
 import { usePrompt } from "../utils/usePrompt";
 import api from "../utils/api";
-import { queryClient } from "../utils/queryClient";
+import { queryClient, useGenericMutation } from "../utils/queryClient";
 import EntityListItem from "./EntityListItem";
 import DownloadListCard, { DownloadItem } from "./DownloadListCard";
 import { JDownloaderItem } from "@home-control/types/jdownloader";
@@ -24,9 +24,9 @@ function parseItem(item: JDownloaderItem): DownloadItem {
 }
 
 function useDownloadMutation() {
-  const { mutate } = useMutation((func: () => Promise<any>) =>
-    func().then(() => queryClient.refetchQueries(["torrents"]))
-  );
+  const { mutate } = useGenericMutation({
+    onResolve: () => queryClient.refetchQueries(["torrents"]),
+  });
 
   return mutate;
 }
