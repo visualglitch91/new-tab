@@ -1,8 +1,9 @@
 import { Habit } from "@home-control/types/ticktick";
 import api from "../utils/api";
 import useConfirm from "../utils/useConfirm";
-import TaskList from "./Tasks/TaskList";
 import ListSection from "./ListSection";
+import ListItem from "./ListItem";
+import useTickTickData from "../utils/useTickTickData";
 
 const colors = {
   zeroed: "#ff5555",
@@ -10,48 +11,45 @@ const colors = {
   done: "#50fa7b",
 };
 
-export default function Habits({
-  items,
-  requestRefresh,
-}: {
-  items: Habit[];
-  requestRefresh: () => void;
-}) {
+export default function Habits() {
   const confirm = useConfirm();
+  const { data, refetch } = useTickTickData();
+  const items = data.habits;
 
   return (
     <ListSection title="Hábitos">
-      <TaskList
-        items={items.map((item) => {
-          const stauts =
-            item.value >= item.goal
-              ? "done"
-              : item.value === 0
-              ? "zeroed"
-              : "partial";
+      {items.map((item) => {
+        const stauts =
+          item.value >= item.goal
+            ? "done"
+            : item.value === 0
+            ? "zeroed"
+            : "partial";
 
-          return {
-            title: item.name,
-            subtitle: (
+        return (
+          <ListItem
+            minSize="sm"
+            primaryText={item.name}
+            endSlot={
               <span
                 style={{ color: colors[stauts] }}
               >{`${item.value}/${item.goal}`}</span>
-            ),
-            click: () => {
+            }
+            onClick={() => {
               confirm({
                 title: "Marcar hábito?",
                 onConfirm: () => {
                   api("/ticktick/habits/checkin", "POST", {
                     habitId: item.habitId,
                   }).then(() => {
-                    requestRefresh();
+                    refetch();
                   });
                 },
               });
-            },
-          };
-        })}
-      />
+            }}
+          />
+        );
+      })}
     </ListSection>
   );
 }

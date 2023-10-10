@@ -8,15 +8,18 @@ import { keyBy } from "lodash";
 import PageLayout from "../components/PageLayout";
 import ClockAndWeather from "../../components/ClockAndWeather";
 import Forecast from "../../components/Forecast";
+import useTickTickData from "../../utils/useTickTickData";
+import Tasks from "../../components/Tasks";
 
 const { favorites: favoriteApps } = config.android_launcher;
 
 export default function MobileDashboardPage() {
   const androidApps = keyBy(useAndroidApps(), "name");
+  const tickTick = useTickTickData();
 
   return (
     <PageLayout>
-      <Stack spacing={5}>
+      <Stack spacing={5} data-small-section-titles="true">
         <ClockAndWeather />
         <Forecast days={3} />
         {isAndroidLauncher && (
@@ -43,6 +46,21 @@ export default function MobileDashboardPage() {
             />
           </GlossyPaper>
         )}
+        <Tasks
+          title="Hoje"
+          items={[...tickTick.data.delayed, ...tickTick.data.today]}
+          requestRefetch={tickTick.refetch}
+        />
+        <Tasks
+          title="Amanhã"
+          items={tickTick.data.tomorrow}
+          requestRefetch={tickTick.refetch}
+        />
+        <Tasks
+          title="Sem data"
+          items={tickTick.data.unscheduled}
+          requestRefetch={tickTick.refetch}
+        />
       </Stack>
     </PageLayout>
   );

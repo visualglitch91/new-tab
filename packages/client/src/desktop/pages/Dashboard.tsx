@@ -13,22 +13,20 @@ import PackageTracker, {
 import Section from "../../components/Section";
 import Icon from "../../components/Icon";
 import AltIconButton from "../../components/AltIconButton";
+import useTickTickData from "../../utils/useTickTickData";
 
 const bookmarks = <Bookmarks />;
 const mediaCard = <MediaCard />;
 
 export default function DashboardPage() {
-  const showPackageTrackerMenu = usePackageTrackerMenu();
-
   const sm = useMediaQuery("@media(max-width: 1000px)");
   const md = useMediaQuery("@media(max-width: 1500px)");
   const lg = useMediaQuery("@media(max-width: 2100px)");
 
-  const { data, refetch } = useQuery(["ticktick"], () =>
-    api<TickTickData>("/ticktick/data", "GET")
-  );
+  const { data, refetch } = useTickTickData();
+  const showPackageTrackerMenu = usePackageTrackerMenu();
 
-  const habits = <Habits items={data?.habits || []} requestRefresh={refetch} />;
+  const habits = <Habits />;
 
   const packageTracker = (
     <Section
@@ -43,24 +41,20 @@ export default function DashboardPage() {
     </Section>
   );
 
-  const next = (
+  const todayTasks = (
     <Tasks
-      title="Hoje e Próximas"
-      items={[
-        ["delayed", data?.delayed || []],
-        ["today", data?.today || []],
-        ["tomorrow", data?.tomorrow || []],
-      ]}
-      requestRefresh={refetch}
+      title="Hoje"
+      items={[...data.delayed, ...data.today]}
+      requestRefetch={refetch}
     />
   );
 
+  const tomorrowTasks = (
+    <Tasks title="Amanhã" items={data.tomorrow} requestRefetch={refetch} />
+  );
+
   const unscheduled = (
-    <Tasks
-      title="Sem data"
-      items={[["unscheduled", data?.unscheduled || []]]}
-      requestRefresh={refetch}
-    />
+    <Tasks title="Sem data" items={data.unscheduled} requestRefetch={refetch} />
   );
 
   if (sm) {
@@ -69,8 +63,9 @@ export default function DashboardPage() {
         <Box sx={{ width: "100%" }}>{mediaCard}</Box>
         <Forecast days={5} sx={{ width: "100%" }} />
         {bookmarks}
-        {next}
         {habits}
+        {todayTasks}
+        {tomorrowTasks}
         {unscheduled}
         {packageTracker}
       </Stack>
@@ -87,19 +82,20 @@ export default function DashboardPage() {
           </Stack>
         </Grid>
         <Grid item xs={12}>
-          {bookmarks}
-        </Grid>
-        <Grid item xs={6}>
           <Stack spacing={5}>
-            {next}
+            {bookmarks}
             {habits}
           </Stack>
         </Grid>
         <Grid item xs={6}>
           <Stack spacing={5}>
+            {todayTasks}
+            {tomorrowTasks}
             {unscheduled}
-            {packageTracker}
           </Stack>
+        </Grid>
+        <Grid item xs={6}>
+          {packageTracker}
         </Grid>
       </Grid>
     );
@@ -116,15 +112,20 @@ export default function DashboardPage() {
           }}
         >
           {mediaCard}
-          {habits}
           {packageTracker}
         </Stack>
         <Stack sx={{ width: "67%" }} spacing={5}>
           <Forecast days={5} />
           {bookmarks}
           <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
-            {next}
-            {unscheduled}
+            <Stack spacing={5}>
+              {todayTasks}
+              {tomorrowTasks}
+            </Stack>
+            <Stack spacing={5}>
+              {habits}
+              {unscheduled}
+            </Stack>
           </Stack>
         </Stack>
       </Stack>
@@ -141,17 +142,20 @@ export default function DashboardPage() {
         }}
       >
         {mediaCard}
-        {habits}
+        {packageTracker}
       </Stack>
-      <Stack sx={{ width: "50%" }} spacing={5}>
+      <Stack sx={{ minWidth: "45%", maxWidth: "45%" }} spacing={5}>
         <Forecast days={5} />
         {bookmarks}
         <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
-          {next}
-          {unscheduled}
+          {habits}
         </Stack>
       </Stack>
-      {packageTracker}
+      <Stack spacing={5} sx={{ flex: 1 }}>
+        {todayTasks}
+        {tomorrowTasks}
+        {unscheduled}
+      </Stack>
     </Stack>
   );
 }

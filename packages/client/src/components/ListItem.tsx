@@ -1,6 +1,5 @@
 import {
   styled,
-  SxProps,
   ButtonBase,
   ListItemText,
   ListItemIcon,
@@ -9,6 +8,7 @@ import {
 import Icon from "./Icon";
 import { sxx } from "../utils/styling";
 import { useLongPress } from "@uidotdev/usehooks";
+import { SxProps } from "../theme/utils";
 
 const customSx: SxProps = {
   paddingRight: "16px",
@@ -105,7 +105,12 @@ export default function ListItem({
             (typeof icon === "string" ? <Icon icon={icon} /> : icon)}
         </ListItemIcon>
       )}
-      <ListItemText primary={primaryText} secondary={secondaryText} />
+      <ListItemText
+        primary={primaryText}
+        secondary={secondaryText}
+        primaryTypographyProps={{ component: "div" }}
+        secondaryTypographyProps={{ component: "div" }}
+      />
     </>
   );
 

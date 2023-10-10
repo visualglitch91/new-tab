@@ -8,6 +8,9 @@ const SectionTitle = styled("h2")({
   gap: "12px",
   alignItems: "center",
   "& > *": { flexShrink: 0 },
+  '[data-small-section-titles="true"] &': {
+    fontSize: 18,
+  },
 });
 
 export default SectionTitle;
