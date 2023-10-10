@@ -1,11 +1,20 @@
-import { differenceInCalendarDays, isWithinInterval } from "date-fns";
+import { subDays } from "date-fns";
+import { rrulestr } from "rrule";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import TickTick from "./ticktick";
 import { createAppModule } from "../../utils";
 import { config } from "../../../../../config";
+import { checkDate } from "./utils";
+import { sortBy } from "lodash";
 
 const tick = new TickTick();
-const { username, password, project_ids: projectIds } = config.ticktick;
+
+const {
+  username,
+  password,
+  project_ids: projectIds,
+  excluded_calendar_ids: excludedCalendarIds,
+} = config.ticktick;
 
 function removeTimezone(date: string) {
   return date.split("+")[0];
@@ -26,9 +35,12 @@ export default createAppModule("ticktick", async (instance, logger) => {
       tick.getCalenderEvents(),
       tick.getTodayHabits(),
     ]).then(([tasks, calendars, habits]: any) => {
-      let scheduled: ScheduledTask[] = [];
-      const unscheduled: UnscheduledTask[] = [];
-      const today = new Date();
+      const data = {
+        today: new Array<ScheduledTask>(),
+        delayed: new Array<ScheduledTask>(),
+        tomorrow: new Array<ScheduledTask>(),
+        unscheduled: new Array<UnscheduledTask>(),
+      };
 
       tasks.forEach((it: any) => {
         if (it.status !== 0 || !projectIds.includes(it.projectId)) {
@@ -36,15 +48,25 @@ export default createAppModule("ticktick", async (instance, logger) => {
         }
 
         if (it.dueDate) {
-          scheduled.push({
+          const dueDate = fixTimezone(it.dueDate);
+          const when = checkDate(new Date(dueDate));
+          let key: keyof typeof data;
+
+          if (when === "future") return;
+          else if (when === "past") key = "delayed";
+          else key = when;
+
+          data[key].push({
             id: it.id,
             projectId: it.projectId,
             title: it.title,
-            dueDate: fixTimezone(it.dueDate),
+            startDate: fixTimezone(dueDate),
+            endDate: fixTimezone(dueDate),
+            isAllDay: it.isAllDay,
             type: "task",
           });
         } else {
-          unscheduled.push({
+          data.unscheduled.push({
             id: it.id,
             title: it.title,
             projectId: it.projectId,
@@ -53,45 +75,55 @@ export default createAppModule("ticktick", async (instance, logger) => {
         }
       });
 
+      const yesterday = subDays(new Date(), 1);
+
       calendars.forEach((calendar: any) => {
+        if (excludedCalendarIds.includes(calendar.id)) {
+          return;
+        }
+
         calendar.events.forEach((it: any) => {
-          const startDate = new Date(removeTimezone(it.dueStart));
-          const endDate = new Date(removeTimezone(it.dueEnd));
+          let startDate: Date | null = new Date(it.dueStart);
+          let endDate: Date | null = new Date(it.dueEnd);
 
-          const dueDate = isWithinInterval(today, {
-            start: startDate,
-            end: endDate,
-          })
-            ? today
-            : startDate;
+          if (it.repeatFlag) {
+            startDate = rrulestr(it.repeatFlag, { dtstart: startDate }).after(
+              yesterday
+            );
 
-          scheduled.push({
-            id: `${it.id}@${calendar.id}`,
-            title: it.title,
-            dueDate: dueDate.toISOString(),
-            type: "event",
-          });
+            endDate = rrulestr(it.repeatFlag, { dtstart: endDate }).after(
+              yesterday
+            );
+          }
+
+          if (startDate === null || endDate === null) {
+            return;
+          }
+
+          const key = checkDate(startDate);
+
+          if (endDate < new Date()) {
+            return;
+          }
+
+          if (key !== "future" && key !== "past") {
+            data[key].push({
+              id: `${it.id}@${calendar.id}`,
+              title: it.title,
+              startDate: startDate.toISOString(),
+              endDate: endDate.toISOString(),
+              isAllDay: it.isAllDay,
+              type: "event",
+            });
+          }
         });
       });
 
-      scheduled = scheduled.filter((it) => {
-        const diff = differenceInCalendarDays(new Date(it.dueDate), today);
+      data.today = sortBy(data.today, "startDate");
+      data.delayed = sortBy(data.delayed, "startDate");
+      data.tomorrow = sortBy(data.tomorrow, "startDate");
 
-        if (it.type === "task") {
-          return diff <= 7;
-        }
-
-        return diff >= 0 && diff <= 7;
-      });
-
-      scheduled = scheduled.sort((a, b) => {
-        return differenceInCalendarDays(
-          new Date(a.dueDate),
-          new Date(b.dueDate)
-        );
-      });
-
-      return { scheduled, unscheduled, habits };
+      return { ...data, habits };
     });
   });
 

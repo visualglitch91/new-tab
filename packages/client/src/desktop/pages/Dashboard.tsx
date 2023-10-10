@@ -46,7 +46,11 @@ export default function DashboardPage() {
   const next = (
     <Tasks
       title="Hoje e Próximas"
-      items={data?.scheduled || []}
+      items={[
+        ["delayed", data?.delayed || []],
+        ["today", data?.today || []],
+        ["tomorrow", data?.tomorrow || []],
+      ]}
       requestRefresh={refetch}
     />
   );
@@ -54,7 +58,7 @@ export default function DashboardPage() {
   const unscheduled = (
     <Tasks
       title="Sem data"
-      items={data?.unscheduled || []}
+      items={[["unscheduled", data?.unscheduled || []]]}
       requestRefresh={refetch}
     />
   );

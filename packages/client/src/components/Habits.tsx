@@ -1,7 +1,7 @@
 import { Habit } from "@home-control/types/ticktick";
 import api from "../utils/api";
 import useConfirm from "../utils/useConfirm";
-import TaskList from "./TaskList";
+import TaskList from "./Tasks/TaskList";
 import ListSection from "./ListSection";
 
 const colors = {

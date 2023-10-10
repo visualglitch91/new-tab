@@ -1,7 +1,9 @@
 export type ScheduledTask = {
   id: string;
   title: string;
-  dueDate: string;
+  startDate: string;
+  endDate: string;
+  isAllDay: boolean;
 } & ({ projectId: string; type: "task" } | { type: "event" });
 
 export interface UnscheduledTask {
@@ -20,7 +22,9 @@ export interface Habit {
 }
 
 export interface TickTickData {
-  scheduled: ScheduledTask[];
+  delayed: ScheduledTask[];
+  today: ScheduledTask[];
+  tomorrow: ScheduledTask[];
   unscheduled: UnscheduledTask[];
   habits: Habit[];
 }

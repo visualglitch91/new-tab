@@ -28,7 +28,8 @@ export const config = {
   ticktick: {
     username: "",
     password: "",
-    project_ids: "",
+    project_ids: [""],
+    excluded_calendar_ids: [""],
   },
 
   tmdb: {
