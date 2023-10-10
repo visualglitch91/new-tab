@@ -1,18 +1,21 @@
 import { ReactNode } from "react";
 import { Stack } from "@mui/material";
+import { SxProps } from "../theme/utils";
 import SectionTitle from "./SectionTitle";
 
 export default function Section({
+  sx,
   title,
   button,
   children,
 }: {
+  sx?: SxProps;
   title: ReactNode;
   button?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   return (
-    <Stack spacing={2}>
+    <Stack sx={sx} spacing={2}>
       <SectionTitle>
         {button ? (
           <>

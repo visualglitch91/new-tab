@@ -27,6 +27,7 @@ const ElevatedHeader = styled("div")({
       #242e42 100%
     )`,
   },
+  "body.android-launcher &": { paddingTop: 24 },
   '&[data-elevate="true"]:after': { opacity: 1 },
   '&[data-mobile-external-display="true"]': {
     position: "static",

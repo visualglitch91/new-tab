@@ -13,10 +13,10 @@ function isEventCurrentlyHappening(startDate: Date, endDate: Date) {
 }
 
 const colors = {
-  allDay: "#8be9fd",
-  current: "#ffb86c",
-  delayed: "#ff5555",
-  none: "#bbbbbb",
+  allDay: "#0aa7bd",
+  current: "#f02b92",
+  delayed: "#ee0f0f",
+  none: "#a0a0a0",
 } as const;
 
 export default function TaskItem({
@@ -69,8 +69,9 @@ export default function TaskItem({
       endSlot={
         dates ? (
           <Box
+            className="TaskItem-timeSlot"
             sx={{
-              backgroundColor: alpha(colors[colorKey], 0.3),
+              backgroundColor: alpha(colors[colorKey], 0.6),
               padding: "3px 8px",
               borderRadius: "12px",
               fontSize: "12px",

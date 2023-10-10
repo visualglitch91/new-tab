@@ -6,6 +6,10 @@ body {
   min-height: 100vh;
 }
 
+body.android-launcher {
+  padding-top: 24px;
+}
+
 @media (max-width: 600px) {
   body {
     background-image: url(./assets/background-mobile.jpg);
