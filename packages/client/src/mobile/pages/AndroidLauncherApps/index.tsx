@@ -1,49 +1,40 @@
-import { useQuery } from "@tanstack/react-query";
+import { sortBy } from "lodash";
+import useAndroidApps from "../../../utils/useAndroidApps";
 import GlossyPaper from "../../../components/GlossyPaper";
 import LinksGrid from "../../../components/LinksGrid";
 import PageLayout from "../../components/PageLayout";
 import PageTile from "../../components/PageTitle";
 
 export default function AndroidLauncherAppsPage() {
-  const { data = [] } = useQuery(["android-apps"], () => {
-    return new Promise<{ name: string; href: string; icon: string }[]>(
-      (resolve) => {
-        const iframe = document.createElement("iframe");
-
-        iframe.style.position = "absolute";
-        iframe.style.top = "-99999px";
-        iframe.style.left = "-99999px";
-        iframe.style.width = "1px";
-        iframe.style.height = "1px";
-        iframe.src = "fully://launcher";
-
-        document.body.appendChild(iframe);
-
-        const onMessage = (event: { data: string }) => {
-          try {
-            const data = JSON.parse(event.data);
-
-            if (data.message === "android-apps") {
-              resolve(data.data);
-              window.removeEventListener("message", onMessage);
-              document.body.removeChild(iframe);
-            }
-          } catch (err) {}
-        };
-
-        window.addEventListener("message", onMessage);
-      }
-    );
-  });
+  const data = useAndroidApps();
 
   return (
     <PageLayout header={<PageTile>Apps</PageTile>}>
-      <GlossyPaper>
+      <GlossyPaper
+        sx={{ padding: "24px 18px 20px", mx: "-16px", borderRadius: 0 }}
+      >
         <LinksGrid
+          gap="32px"
           linkSx={{
-            "& a img": { borderRadius: "100%", width: 52, height: 52 },
+            "--size": "58px",
+            "&": { width: "var(--size) !important" },
+            "& a img": {
+              borderRadius: "100% !important",
+              width: "var(--size) !important",
+              height: "var(--size) !important",
+            },
+            "& a span": {
+              width: "calc(var(--size) + 30px) !important",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            },
           }}
-          items={data.map((it, index) => ({ ...it, id: `app-index-${index}` }))}
+          items={sortBy(data, (it) => it.name.toLowerCase()).map(
+            (it, index) => ({
+              ...it,
+              id: `app-index-${index}`,
+            })
+          )}
         />
       </GlossyPaper>
     </PageLayout>

@@ -47,7 +47,13 @@ function ForecastItem({ daysFromNow }: { daysFromNow: number }) {
   );
 }
 
-export default function Forecast({ days, sx }: { days: number; sx?: SxProps }) {
+export default function Forecast({
+  days = 5,
+  sx,
+}: {
+  days?: number;
+  sx?: SxProps;
+}) {
   return (
     <Root sx={sx}>
       <Inner sx={{ maxWidth: days * 100 }}>

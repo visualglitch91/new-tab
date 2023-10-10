@@ -47,7 +47,7 @@ export default function Bookmarks() {
   );
 
   return (
-    <GlossyPaper>
+    <GlossyPaper sx={{ padding: "26px" }}>
       <LinksGrid
         target={isNewTab ? "_parent" : "_blank"}
         items={bookmarks.map((it) => ({ ...it, href: it.url }))}

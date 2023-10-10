@@ -12,9 +12,17 @@ import PackageTracker from "./pages/PackageTracker";
 import { useIsAdmin } from "../utils/hass";
 import PrinterPage from "./pages/Printer";
 import AndroidLauncherAppsPage from "./pages/AndroidLauncherApps";
-import { isAndroidLauncher } from "../utils/general";
+import { isAndroidLauncher, isNewTab } from "../utils/general";
+import MobileDashboardPage from "./pages/Dashboard";
 
 const pages = [
+  {
+    path: "/dashboard",
+    icon: "view-dashboard-variant-outline",
+    label: "Dashboard",
+    admin: true,
+    component: <MobileDashboardPage />,
+  },
   {
     path: "/tv",
     icon: "television",
@@ -90,7 +98,10 @@ export default function Mobile() {
 
   return (
     <>
-      <RouteRedirect from="/" to="/tv" />
+      <RouteRedirect
+        from="/"
+        to={isNewTab || isAndroidLauncher ? "/dashboard" : "/tv"}
+      />
       <AppDrawer pages={pages} />
       <Switch>
         {pages.map((page) => {

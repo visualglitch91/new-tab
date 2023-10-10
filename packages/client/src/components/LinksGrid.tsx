@@ -3,6 +3,7 @@ import { useLongPress } from "@uidotdev/usehooks";
 import { ButtonBase, styled } from "@mui/material";
 import Icon from "./Icon";
 import { SxProps } from "../theme/utils";
+import { sxx } from "../utils/styling";
 
 export interface Link {
   id: string;
@@ -18,12 +19,11 @@ const classNames = {
 
 const Root = styled("ul")({
   margin: 0,
-  padding: 26,
+  padding: 0,
   listStyle: "none",
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
-  gridGap: 28,
 
   "& li": { width: 90 },
 
@@ -104,19 +104,23 @@ function LinkItem({
 
 export default function LinksGrid({
   items,
+  gap = "28px",
+  sx,
   linkSx,
   target,
   onAdd,
   onHold,
 }: {
   items: Link[];
+  gap?: number | string;
+  sx?: SxProps;
   linkSx?: SxProps;
   target?: string;
   onAdd?: () => void;
   onHold?: (item: Link) => void;
 }) {
   return (
-    <Root>
+    <Root sx={sxx({ gap }, sx)}>
       {items.map((item) => (
         <LinkItem
           key={item.id}
