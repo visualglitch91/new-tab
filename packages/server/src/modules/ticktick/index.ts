@@ -1,4 +1,4 @@
-import { subDays } from "date-fns";
+import { addSeconds, parse, subDays } from "date-fns";
 import { rrulestr } from "rrule";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import TickTick from "./ticktick";
@@ -16,12 +16,12 @@ const {
   excluded_calendar_ids: excludedCalendarIds,
 } = config.ticktick;
 
-function removeTimezone(date: string) {
-  return date.split("+")[0];
-}
+function normalizeDate(date: string, isAllDay = false) {
+  if (isAllDay) {
+    return parse(date.substring(0, 10), "yyyy-MM-dd", new Date()).toISOString();
+  }
 
-function fixTimezone(date: string) {
-  return `${removeTimezone(date)}Z`;
+  return new Date(date).toISOString();
 }
 
 export default createAppModule("ticktick", async (instance, logger) => {
@@ -48,7 +48,7 @@ export default createAppModule("ticktick", async (instance, logger) => {
         }
 
         if (it.dueDate) {
-          const dueDate = fixTimezone(it.dueDate);
+          const dueDate = normalizeDate(it.dueDate, it.isAllDay);
           const when = checkDate(new Date(dueDate));
           let key: keyof typeof data;
 
@@ -60,8 +60,11 @@ export default createAppModule("ticktick", async (instance, logger) => {
             id: it.id,
             projectId: it.projectId,
             title: it.title,
-            startDate: fixTimezone(dueDate),
-            endDate: fixTimezone(dueDate),
+            startDate: dueDate,
+            endDate: addSeconds(
+              new Date(dueDate),
+              24 * 60 * 60 - 1
+            ).toISOString(),
             isAllDay: it.isAllDay,
             type: "task",
           });
@@ -83,8 +86,13 @@ export default createAppModule("ticktick", async (instance, logger) => {
         }
 
         calendar.events.forEach((it: any) => {
-          let startDate: Date | null = new Date(it.dueStart);
-          let endDate: Date | null = new Date(it.dueEnd);
+          let startDate: Date | null = new Date(
+            normalizeDate(it.dueStart, it.isAllDay)
+          );
+
+          let endDate: Date | null = new Date(
+            normalizeDate(it.dueEnd, it.isAllDay)
+          );
 
           if (it.repeatFlag) {
             startDate = rrulestr(it.repeatFlag, { dtstart: startDate }).after(
