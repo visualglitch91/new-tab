@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TickTickData } from "@home-control/types/ticktick";
 import api from "../../utils/api";
 import Tasks from "../../components/Tasks";
-import Links from "../../components/Links";
+import Bookmarks from "../../components/Bookmarks";
 import Habits from "../../components/Habits";
 import Forecast from "../../components/Forecast";
 import MediaCard from "../../components/MediaCard";
@@ -14,7 +14,7 @@ import Section from "../../components/Section";
 import Icon from "../../components/Icon";
 import AltIconButton from "../../components/AltIconButton";
 
-const links = <Links />;
+const bookmarks = <Bookmarks />;
 const mediaCard = <MediaCard />;
 
 export default function DashboardPage() {
@@ -64,7 +64,7 @@ export default function DashboardPage() {
       <Stack spacing={5}>
         <Box sx={{ width: "100%" }}>{mediaCard}</Box>
         <Forecast days={5} sx={{ width: "100%" }} />
-        {links}
+        {bookmarks}
         {next}
         {habits}
         {unscheduled}
@@ -83,7 +83,7 @@ export default function DashboardPage() {
           </Stack>
         </Grid>
         <Grid item xs={12}>
-          {links}
+          {bookmarks}
         </Grid>
         <Grid item xs={6}>
           <Stack spacing={5}>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
         </Stack>
         <Stack sx={{ width: "67%" }} spacing={5}>
           <Forecast days={5} />
-          {links}
+          {bookmarks}
           <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
             {next}
             {unscheduled}
@@ -141,7 +141,7 @@ export default function DashboardPage() {
       </Stack>
       <Stack sx={{ width: "50%" }} spacing={5}>
         <Forecast days={5} />
-        {links}
+        {bookmarks}
         <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
           {next}
           {unscheduled}

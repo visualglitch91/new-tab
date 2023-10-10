@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import PackageTracker from "./pages/PackageTracker";
 import { useIsAdmin } from "../utils/hass";
 import PrinterPage from "./pages/Printer";
+import AndroidLauncherAppsPage from "./pages/AndroidLauncherApps";
+import { isAndroidLauncher } from "../utils/general";
 
 const pages = [
   {
@@ -18,6 +20,13 @@ const pages = [
     icon: "television",
     label: "TV",
     component: <TV />,
+  },
+  {
+    path: "/apps",
+    icon: "apps",
+    label: "Apps",
+    hidden: !isAndroidLauncher,
+    component: <AndroidLauncherAppsPage />,
   },
   {
     path: "/home",
@@ -81,11 +90,11 @@ export default function Mobile() {
 
   return (
     <>
-      <RouteRedirect from="/" to="/home" />
+      <RouteRedirect from="/" to="/tv" />
       <AppDrawer pages={pages} />
       <Switch>
         {pages.map((page) => {
-          if (page.admin && !isAdmin) {
+          if (page.hidden || (page.admin && !isAdmin)) {
             return null;
           }
 

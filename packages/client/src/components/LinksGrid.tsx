@@ -1,22 +1,22 @@
 import { uniqueId } from "lodash";
 import { useLongPress } from "@uidotdev/usehooks";
 import { ButtonBase, styled } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { Bookmark } from "@home-control/types/bookmarks";
-import { isNewTab } from "../utils/general";
-import { usePrompt } from "../utils/usePrompt";
-import useConfirm from "../utils/useConfirm";
-import GlossyPaper from "./GlossyPaper";
-import api from "../utils/api";
 import Icon from "./Icon";
-import { queryClient } from "../utils/queryClient";
+import { SxProps } from "../theme/utils";
+
+export interface Link {
+  id: string;
+  name: string;
+  href: string;
+  icon: string;
+}
 
 const classNames = {
   linkTitle: uniqueId("link_"),
   addButton: uniqueId("link_"),
 };
 
-const LinksGrid = styled("ul")({
+const Root = styled("ul")({
   margin: 0,
   padding: 26,
   listStyle: "none",
@@ -79,67 +79,54 @@ const LinksGrid = styled("ul")({
   },
 });
 
-function LinkItem({ link }: { link: Bookmark }) {
-  const confirm = useConfirm();
-
-  const longPress = useLongPress(() => {
-    confirm({
-      title: `Deseja remover "${link.name}"?`,
-      confirmLabel: "Remover",
-      onConfirm: () => {
-        api(`/bookmarks/${link.id}`, "delete").then(() => {
-          queryClient.invalidateQueries(["bookmarks"]);
-        });
-      },
-    });
-  });
+function LinkItem({
+  link,
+  sx,
+  target,
+  onHold,
+}: {
+  link: Link;
+  sx?: SxProps;
+  target?: string;
+  onHold: () => void;
+}) {
+  const longPress = useLongPress(() => onHold());
 
   return (
-    <li>
-      <a
-        {...longPress}
-        href={link.url}
-        target={isNewTab ? "_parent" : "_blank"}
-        rel="noreferrer"
-      >
+    <ButtonBase component="li" sx={sx}>
+      <a {...longPress} href={link.href} target={target} rel="noreferrer">
         <img src={link.icon} alt="" />
         <span className={classNames.linkTitle}>{link.name}</span>
       </a>
-    </li>
+    </ButtonBase>
   );
 }
 
-export default function Links() {
-  const prompt = usePrompt();
-
-  const { data: links } = useQuery(["bookmarks"], () =>
-    api<Bookmark[]>("/bookmarks", "get")
-  );
-
-  function addLink() {
-    prompt({
-      title: "Adicionar Link",
-      fields: ["Nome", "URL", "Ícone"],
-      onConfirm: (values) => {
-        if (values.every(Boolean)) {
-          api("/bookmarks", "post", {
-            name: values[0],
-            url: values[1],
-            icon: values[2],
-          }).then(() => {
-            queryClient.invalidateQueries(["bookmarks"]);
-          });
-        }
-      },
-    });
-  }
-
+export default function LinksGrid({
+  items,
+  linkSx,
+  target,
+  onAdd,
+  onHold,
+}: {
+  items: Link[];
+  linkSx?: SxProps;
+  target?: string;
+  onAdd?: () => void;
+  onHold?: (item: Link) => void;
+}) {
   return (
-    <GlossyPaper>
-      <LinksGrid>
-        {links?.map((link) => (
-          <LinkItem key={link.id} link={link} />
-        ))}
+    <Root>
+      {items.map((item) => (
+        <LinkItem
+          key={item.id}
+          sx={linkSx}
+          link={item}
+          target={target}
+          onHold={() => onHold?.(item)}
+        />
+      ))}
+      {onAdd && (
         <li>
           <ButtonBase
             component="a"
@@ -148,13 +135,13 @@ export default function Links() {
             className={classNames.addButton}
             onClick={(e) => {
               e.preventDefault();
-              addLink();
+              onAdd();
             }}
           >
             <Icon icon="plus" size={32} />
           </ButtonBase>
         </li>
-      </LinksGrid>
-    </GlossyPaper>
+      )}
+    </Root>
   );
 }

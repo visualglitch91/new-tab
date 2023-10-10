@@ -7,6 +7,7 @@ import useMountEffect from "../../utils/useMountEffect";
 import ClockAndWeather from "../../components/ClockAndWeather";
 import useSwipe from "../../utils/useSwipe";
 import Pomodoro from "../../components/Pomodoro";
+import { useIsAdmin } from "../../utils/hass";
 
 const DrawerButton = styled(Button)({
   justifyContent: "flex-start",
@@ -46,8 +47,12 @@ function AppLink({
 export function AppDrawer({
   pages,
 }: {
-  pages: Omit<React.ComponentProps<typeof AppLink>, "active">[];
+  pages: (Omit<React.ComponentProps<typeof AppLink>, "active"> & {
+    admin?: boolean;
+    hidden?: boolean;
+  })[];
 }) {
+  const isAdmin = useIsAdmin();
   const { isMobileExternalDisplay } = useBreakpoint();
   const [open, setOpen] = useState(false);
   const [location] = useLocation();
@@ -98,9 +103,19 @@ export function AppDrawer({
         </>
       )}
       <List sx={{ px: 1.2 }}>
-        {pages.map((it, index) => (
-          <AppLink key={index} {...it} active={location.startsWith(it.path)} />
-        ))}
+        {pages.map(({ hidden, admin, ...it }, index) => {
+          if (hidden || (admin && !isAdmin)) {
+            return null;
+          }
+
+          return (
+            <AppLink
+              key={index}
+              {...it}
+              active={location.startsWith(it.path)}
+            />
+          );
+        })}
       </List>
     </SwipeableDrawer>
   );

@@ -72,7 +72,9 @@ export function useBreakpoint() {
   return result;
 }
 
-export const isNewTab = getSearchParam("isNewTab") === "true";
+export const isNewTab = getSearchParam("mode") === "new-tab";
+
+export const isAndroidLauncher = getSearchParam("mode") === "android-launcher";
 
 export function formatDate(date: string | Date) {
   return new Date(date).toLocaleDateString("pt-BR", {
