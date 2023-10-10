@@ -1,11 +1,12 @@
 import { get } from "lodash";
 import { format, differenceInCalendarDays } from "date-fns";
-import { Box, Stack, alpha } from "@mui/material";
+import { Stack } from "@mui/material";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import api from "../../utils/api";
 import useConfirm from "../../utils/useConfirm";
 import ListItem from "../ListItem";
 import Icon from "../Icon";
+import DraculaChip, { Colors } from "../DraculaChip";
 
 function isEventCurrentlyHappening(startDate: Date, endDate: Date) {
   const now = new Date();
@@ -13,10 +14,10 @@ function isEventCurrentlyHappening(startDate: Date, endDate: Date) {
 }
 
 const colors = {
-  allDay: "#0aa7bd",
-  current: "#f02b92",
-  delayed: "#ee0f0f",
-  none: "#a0a0a0",
+  allDay: Colors.Purple,
+  current: Colors.Pink,
+  delayed: Colors.Red,
+  none: Colors.Neutral,
 } as const;
 
 export default function TaskItem({
@@ -68,25 +69,20 @@ export default function TaskItem({
       }
       endSlot={
         dates ? (
-          <Box
-            className="TaskItem-timeSlot"
-            sx={{
-              backgroundColor: alpha(colors[colorKey], 0.6),
-              padding: "3px 8px",
-              borderRadius: "12px",
-              fontSize: "12px",
-              fontWeight: 500,
-            }}
-          >
-            {isDelayed
-              ? "Atrasada"
-              : isAllDay
-              ? "Dia Todo"
-              : `${format(dates.start, "HH:mm")} - ${format(
-                  dates.end,
-                  "HH:mm"
-                )}`}
-          </Box>
+          <DraculaChip
+            color={colors[colorKey]}
+            sx={{ fontSize: "12px" }}
+            text={
+              isDelayed
+                ? "Atrasada"
+                : isAllDay
+                ? "Dia Todo"
+                : `${format(dates.start, "HH:mm")} - ${format(
+                    dates.end,
+                    "HH:mm"
+                  )}`
+            }
+          />
         ) : undefined
       }
       onClick={() => {

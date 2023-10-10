@@ -1,11 +1,11 @@
-import { RGB } from "../../utils/colors";
+import { Colors } from "../DraculaChip";
 
 export const STATUS_COLORS = {
-  available: [56, 142, 60],
-  partially: [0, 151, 167],
-  monitored: [2, 119, 189],
-  "not-monitored": [198, 40, 40],
-} as Record<string, RGB>;
+  available: Colors.Green,
+  partially: Colors.Cyan,
+  monitored: Colors.Pink,
+  "not-monitored": Colors.Red,
+} as Record<string, Colors>;
 
 export const STATUS_LABELS = {
   available: "Disponível",

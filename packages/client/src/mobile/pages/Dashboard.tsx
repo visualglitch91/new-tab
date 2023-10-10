@@ -20,6 +20,11 @@ const taskCustomSx: SxProps = {
   "& .TaskItem-timeSlot": { fontSize: 10, padding: "2px 6px", fontWeight: 600 },
 };
 
+const habitsCustomSx: SxProps = {
+  "& .HabitItem-root": { fontSize: 12, padding: "9px 12px" },
+  "& .DraculaChip-root": { fontSize: 11, padding: "2px 6px" },
+};
+
 export default function MobileDashboardPage() {
   const androidApps = keyBy(useAndroidApps(), "name");
   const tickTick = useTickTickData();
@@ -52,10 +57,7 @@ export default function MobileDashboardPage() {
           />
         </GlossyPaper>
       )}
-      <Habits
-        sx={{ "& .HabitItem-root": { fontSize: 12 } }}
-        columnWidth={140}
-      />
+      <Habits sx={habitsCustomSx} columnWidth={140} />
       <Tasks
         sx={taskCustomSx}
         title="Hoje"

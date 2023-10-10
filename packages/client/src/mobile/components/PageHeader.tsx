@@ -27,7 +27,6 @@ const ElevatedHeader = styled("div")({
       #242e42 100%
     )`,
   },
-  "body.android-launcher &": { paddingTop: 24 },
   '&[data-elevate="true"]:after': { opacity: 1 },
   '&[data-mobile-external-display="true"]': {
     position: "static",
@@ -61,9 +60,7 @@ const Buttons = styled("div")({
 const ButtonsGhost = styled("div")({
   height: 40,
   transition: "height 200ms var(--tween)",
-  '[data-shrink="true"] &': {
-    height: 0,
-  },
+  '[data-shrink="true"] &': { height: 0 },
 });
 
 export default function PageHeader({

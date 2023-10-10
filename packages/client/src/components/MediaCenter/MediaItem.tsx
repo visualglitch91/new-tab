@@ -1,4 +1,4 @@
-import { Chip, Stack, Button } from "@mui/material";
+import { Stack, Button } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   MediaItem as IMediaItem,
@@ -12,6 +12,7 @@ import { useMenu } from "../../utils/useMenu";
 import DotLoading from "../DotLoading";
 import { queryClient } from "../../utils/queryClient";
 import MediaPoster from "./MediaPoster";
+import DraculaChip from "../DraculaChip";
 
 export default function MediaItem({
   item,
@@ -63,13 +64,9 @@ export default function MediaItem({
       endSlot={
         <Stack direction="row" alignItems="center" gap="6px">
           {item.status !== "not-monitored" ? (
-            <Chip
-              size="small"
-              sx={{
-                color: getContrastColor(STATUS_COLORS[item.status]),
-                backgroundColor: `rgb(${STATUS_COLORS[item.status].join(",")})`,
-              }}
-              label={STATUS_LABELS[item.status]}
+            <DraculaChip
+              color={STATUS_COLORS[item.status]}
+              text={STATUS_LABELS[item.status]}
             />
           ) : (
             qualityProfiles &&
