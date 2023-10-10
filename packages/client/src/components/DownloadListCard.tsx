@@ -1,17 +1,16 @@
-import humanizeDuration from "humanize-duration";
 import {
   List,
   alpha,
   Stack,
   styled,
-  Tooltip,
   ButtonBase,
   LinearProgress,
 } from "@mui/material";
-import Icon from "./Icon";
+import { humanizeDuration } from "../utils/dateTime";
 import { formatNumericValue } from "../utils/general";
 import EmptyState from "./EmptyState";
 import GlossyPaper from "./GlossyPaper";
+import Icon from "./Icon";
 
 const ItemCard = styled(ButtonBase)(({ theme }) => ({
   padding: "20px 16px",
@@ -137,13 +136,7 @@ export default function DownloadListCard({
                 <Details>
                   <span>{STATUS_LABELS[it.status]}</span>
                   <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                  <span>
-                    {it.eta &&
-                      humanizeDuration(it.eta, {
-                        round: true,
-                        language: "pt",
-                      })}
-                  </span>
+                  <span>{it.eta && humanizeDuration(it.eta)}</span>
                 </Details>
               </ItemContent>
             </ItemCard>

@@ -33,7 +33,7 @@ const pages = [
   },
   {
     path: "/timers",
-    label: "Timers",
+    label: "Timers e Agendamentos",
     icon: "clock-outline",
     component: <TimersAndSchedulesPage />,
   },

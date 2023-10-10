@@ -1,9 +1,9 @@
 import { Button, List, Stack, styled } from "@mui/material";
 import { HassEntity } from "home-assistant-js-websocket";
-import humanizeDuration from "humanize-duration";
 import { formatNumericValue } from "../utils/general";
 import useConfirm from "../utils/useConfirm";
 import { makeServiceCall, useEntities, useEntity } from "../utils/hass";
+import { humanizeDuration } from "../utils/dateTime";
 import CameraStream from "./CameraStream";
 import GlossyPaper from "./GlossyPaper";
 import ListItem from "./ListItem";
@@ -82,7 +82,7 @@ function AutoShutdown({ entity }: { entity: HassEntity }) {
       icon="power"
       endSlot={
         <Stack spacing={2}>
-          {humanizeDuration(remaningTime, { round: true, language: "pt" })}
+          {humanizeDuration(remaningTime)}
           <Button
             size="small"
             onClick={makeServiceCall("script", "turn_off", {
@@ -192,10 +192,8 @@ export default function Klipper() {
               if (entity.state !== "unknown") {
                 try {
                   return humanizeDuration(Number(entity.state) * 1000, {
-                    language: "pt",
                     largest: 2,
                     units: ["d", "h", "m"],
-                    round: true,
                   });
                 } catch (_) {}
               }

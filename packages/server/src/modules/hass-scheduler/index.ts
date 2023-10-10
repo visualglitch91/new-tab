@@ -1,6 +1,7 @@
 import { CronJob, job as createJob } from "cron";
 import CronTime from "cron-time-generator";
 import ObjectID from "bson-objectid";
+import { differenceInSeconds } from "date-fns";
 import {
   Schedule,
   Timer as TimerData,
@@ -30,14 +31,25 @@ export default createAppModule("hass-scheduler", (instance) => {
   });
 
   instance.post<{
-    Body: Omit<TimerData, "id" | "startedAt" | "name"> & { name?: string };
+    Body: Omit<TimerData, "id" | "startedAt" | "name" | "duration"> & {
+      name?: string;
+    } & (
+        | { until?: undefined; duration: number }
+        | { until: string; duration?: undefined }
+      );
   }>("/timers", async (req) => {
     const id = String(ObjectID());
+
+    const duration =
+      typeof req.body.duration === "number"
+        ? req.body.duration
+        : differenceInSeconds(new Date(req.body.until), new Date());
 
     timers[id] = new Timer(
       {
         ...req.body,
         id,
+        duration,
         startedAt: Date.now(),
         name: req.body.name || `Timer ${Object.keys(timers).length + 1}`,
       },

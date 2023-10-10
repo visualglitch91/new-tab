@@ -4,7 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Timer } from "@home-control/types/hass-scheduler";
 import api from "../../utils/api";
 import clock from "../../utils/clock";
-import { formatSecondsToMinutesAndSeconds } from "../../utils/dateTime";
+import {
+  humanizeDuration,
+  formatSecondsToMinutesAndSeconds,
+} from "../../utils/dateTime";
 import useMountEffect from "../../utils/useMountEffect";
 import { queryClient } from "../../utils/queryClient";
 import EmptyState from "../EmptyState";
@@ -22,14 +25,13 @@ function TimerItem({
   onDone: () => void;
   onDelete: () => void;
 }) {
-  const [remaining, setRemaining] = useState(() => {
-    return timer.duration - (Date.now() - timer.startedAt) / 1000;
-  });
+  const getRemaining = () =>
+    timer.duration - (Date.now() - timer.startedAt) / 1000;
+
+  const [remaining, setRemaining] = useState(getRemaining);
 
   useMountEffect(() => {
-    return clock.on(() => {
-      setRemaining((prev) => Math.max(prev - 1, 0));
-    });
+    return clock.on(() => setRemaining(getRemaining));
   });
 
   useEffect(() => {
@@ -43,10 +45,15 @@ function TimerItem({
     <ListItem
       primaryText={timer.name}
       endSlot={
-        <Stack direction="row" gap="6px">
-          {formatSecondsToMinutesAndSeconds(remaining)}
-          <AltIconButton onClick={onDelete}>
-            <Icon size={18} icon="close" />
+        <Stack direction="row" gap="6px" alignItems="center">
+          {remaining >= 3600
+            ? humanizeDuration(remaining * 1000, {
+                largest: 2,
+                units: ["d", "h", "m"],
+              })
+            : formatSecondsToMinutesAndSeconds(remaining)}
+          <AltIconButton sx={{ "--size": "28px" }} onClick={onDelete}>
+            <Icon size={16} icon="close" />
           </AltIconButton>
         </Stack>
       }
