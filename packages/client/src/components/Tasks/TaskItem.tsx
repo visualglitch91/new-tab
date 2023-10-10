@@ -10,6 +10,8 @@ import Icon from "../Icon";
 import DraculaChip, { Colors } from "../DraculaChip";
 import { queryClient } from "../../utils/queryClient";
 import DotLoading from "../DotLoading";
+import { isAndroidLauncher } from "../../utils/general";
+import { useMenu } from "../../utils/useMenu";
 
 function isEventCurrentlyHappening(startDate: Date, endDate: Date) {
   const now = new Date();
@@ -28,7 +30,9 @@ export default function TaskItem({
 }: {
   task: ScheduledTask | UnscheduledTask;
 }) {
+  const showMenu = useMenu();
   const confirm = useConfirm();
+
   const { mutate, isLoading } = useMutation(() => {
     if ("projectId" in task) {
       return api("/ticktick/tasks/complete", "POST", {
@@ -107,9 +111,31 @@ export default function TaskItem({
             confirmLabel: "Sim",
             onConfirm: () => mutate(),
           });
-        } else {
-          window.open(`https://ticktick.com/webapp/#q/week/tasks/${task.id}`);
+
+          return;
         }
+
+        if (isAndroidLauncher) {
+          return;
+        }
+
+        showMenu({
+          title: "",
+          options: {
+            openEvent: {
+              label: "Abrir Evento",
+              action: () =>
+                window.open(
+                  `https://ticktick.com/webapp/#q/week/tasks/${task.id}`
+                ),
+            },
+            openConference: {
+              label: "Abrir Conferência",
+              hidden: !conferenceLink,
+              action: () => window.open(conferenceLink),
+            },
+          },
+        });
       }}
     />
   );

@@ -10,7 +10,7 @@ export function useMenu() {
     options,
     hideCancelButton,
   }: {
-    title: string;
+    title?: string;
     description?: string;
     hideCancelButton?: boolean;
     options:

@@ -17,7 +17,7 @@ export type ActionMap<T extends string> = Record<
 >;
 
 interface ActionSheetProps<T extends string> {
-  title: string;
+  title?: string;
   sx?: SxProps;
   description?: string;
   hideCancelButton?: boolean;
@@ -82,6 +82,11 @@ export default function ActionSheet<T extends string>({
           "& .MuiDialogActions-root": {
             gap: 1.5,
             "& > *": { marginLeft: "unset !important" },
+          },
+        },
+        !title && {
+          "& .MuiDialogActions-root": {
+            paddingTop: "24px",
           },
         },
         buttons.length === 2

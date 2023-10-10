@@ -22,7 +22,7 @@ const ColorValues = {
   Orange: ["#ffb86c", "#000000"],
   Pink: ["#ff79c6", "#000000"],
   Purple: ["#bd93f9", "#000000"],
-  Red: ["#ff5555", "#FFFFFF"],
+  Red: ["#c23d27", "#FFFFFF"],
   Yellow: ["#f1fa8c", "#000000"],
 };
 

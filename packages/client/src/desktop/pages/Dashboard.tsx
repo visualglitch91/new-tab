@@ -23,7 +23,7 @@ export default function DashboardPage() {
   const md = useMediaQuery("@media(max-width: 1500px)");
   const lg = useMediaQuery("@media(max-width: 2100px)");
 
-  const { data, refetch } = useTickTickData();
+  const tickTick = useTickTickData();
   const showPackageTrackerMenu = usePackageTrackerMenu();
 
   const habits = <Habits />;
@@ -42,20 +42,12 @@ export default function DashboardPage() {
   );
 
   const todayTasks = (
-    <Tasks
-      title="Hoje"
-      items={[...data.delayed, ...data.today]}
-      requestRefetch={refetch}
-    />
+    <Tasks title="Hoje" items={[...tickTick.delayed, ...tickTick.today]} />
   );
 
-  const tomorrowTasks = (
-    <Tasks title="Amanhã" items={data.tomorrow} requestRefetch={refetch} />
-  );
+  const tomorrowTasks = <Tasks title="Amanhã" items={tickTick.tomorrow} />;
 
-  const unscheduled = (
-    <Tasks title="Sem data" items={data.unscheduled} requestRefetch={refetch} />
-  );
+  const unscheduled = <Tasks title="Sem data" items={tickTick.unscheduled} />;
 
   if (sm) {
     return (
