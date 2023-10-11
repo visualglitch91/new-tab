@@ -1,9 +1,10 @@
-import { ComponentOverride, getBlurredBackground } from "../utils";
+import { alpha } from "@mui/material";
+import { ComponentOverride } from "../utils";
 
 const MuiBackdrop: ComponentOverride["MuiBackdrop"] = {
   styleOverrides: {
     root: {
-      ...getBlurredBackground("#2f3b52", 0.2, 2),
+      background: alpha("#2f3b52", 0.5),
     },
   },
 };
