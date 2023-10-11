@@ -43,6 +43,15 @@ export default createAppModule("ticktick", async (instance, logger) => {
       };
 
       tasks.forEach((it: any) => {
+        try {
+          if (
+            it.attendees?.find((attendee: any) => attendee.self === true)
+              ?.responseStatus === "declined"
+          ) {
+            return;
+          }
+        } catch (_) {}
+
         if (it.status !== 0 || !projectIds.includes(it.projectId)) {
           return;
         }

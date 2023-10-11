@@ -78,10 +78,19 @@ export default function TaskItem({
       minSize="sm"
       primaryText={
         <Stack direction="row" spacing={1} alignItems="center">
+          <Icon
+            size={18}
+            icon={
+              conferenceLink
+                ? "webcam"
+                : task.type === "task"
+                ? "checkbox-blank-badge-outline"
+                : "calendar-text-outline"
+            }
+          />
           <span style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
             {task.title}
           </span>
-          {conferenceLink && <Icon size={18} icon="video-outline" />}
         </Stack>
       }
       endSlot={
