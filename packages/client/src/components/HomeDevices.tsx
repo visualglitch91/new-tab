@@ -27,11 +27,7 @@ const groups: {
       { entityId: "switch.sala_ambilight" },
       { entityId: "light.sala_rgb_tv" },
       { entityId: "light.sala_rgb_rack" },
-      {
-        entityId: "cover.sala_cortina",
-        changeTimeout: 30_000,
-        icon: "curtains",
-      },
+      { entityId: "cover.sala_cortina", icon: "curtains" },
       { entityId: "media_player.sala_tv" },
     ],
   },

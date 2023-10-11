@@ -24,17 +24,17 @@ const pages = [
     component: <MobileDashboardPage />,
   },
   {
-    path: "/tv",
-    icon: "television",
-    label: "TV",
-    component: <TV />,
-  },
-  {
     path: "/apps",
     icon: "apps",
     label: "Apps",
     hidden: !isAndroidLauncher,
     component: <AndroidLauncherAppsPage />,
+  },
+  {
+    path: "/tv",
+    icon: "television",
+    label: "TV",
+    component: <TV />,
   },
   {
     path: "/home",

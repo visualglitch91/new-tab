@@ -10,9 +10,7 @@ import useModal from "../utils/useModal";
 import BaseEntityButton from "./BaseEntityButton";
 import { SxProps } from "@mui/material";
 import LightEntityDialog from "./LightEntityDialog";
-// import EntityGroupDialog from "./EntityGroupDialog";
-
-const EntityGroupDialog = (props: any) => null;
+import { useMenu } from "../utils/useMenu";
 
 export interface EntityButtonProps {
   sx?: SxProps;
@@ -37,8 +35,9 @@ export default function EntityButton({
   onClick,
   onLongPress,
 }: EntityButtonProps) {
-  const entity = useEntity(entityId);
   const mount = useModal();
+  const showMenu = useMenu();
+  const entity = useEntity(entityId);
 
   if (!entity) {
     return <BaseEntityButton sx={sx} disabled label={_label || entityId} />;
@@ -93,20 +92,26 @@ export default function EntityButton({
       entity?.attributes.entity_id;
 
     if (Array.isArray(groupedIds) && groupedIds.length > 0) {
-      mount((unmount) => (
-        <EntityGroupDialog
-          title={label}
-          entityIds={groupedIds}
-          onClose={unmount}
-        />
-      ));
+      return;
     }
   }
 
   function defaultOnClick() {
     if (domain === "cover") {
-      callService("cover", checked ? "close_cover" : "open_cover", {
-        entity_id: entityId,
+      showMenu({
+        title: String(label),
+        options: {
+          open: {
+            label: "Abrir",
+            action: () =>
+              callService("cover", "open_cover", { entity_id: entityId }),
+          },
+          close: {
+            label: "Fechar",
+            action: () =>
+              callService("cover", "close_cover", { entity_id: entityId }),
+          },
+        },
       });
     } else {
       callService("homeassistant", checked ? "turn_off" : "turn_on", {

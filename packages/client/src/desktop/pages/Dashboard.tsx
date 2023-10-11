@@ -103,12 +103,12 @@ export default function DashboardPage() {
         <Stack sx={{ width: "67%" }} spacing={5}>
           <Forecast days={5} />
           {bookmarks}
-          <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
-            <Stack spacing={5}>
+          <Stack direction="row" spacing={5}>
+            <Stack spacing={5} sx={{ width: "50%" }}>
               {todayTasks}
               {tomorrowTasks}
             </Stack>
-            <Stack spacing={5}>
+            <Stack spacing={5} sx={{ width: "50%" }}>
               {habits}
               {unscheduled}
             </Stack>
