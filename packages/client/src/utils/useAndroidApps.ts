@@ -1,3 +1,4 @@
+import { uniqBy } from "lodash";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useAndroidApps() {
@@ -32,5 +33,5 @@ export default function useAndroidApps() {
     );
   });
 
-  return data;
+  return uniqBy(data, "name");
 }

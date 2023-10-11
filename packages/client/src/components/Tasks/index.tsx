@@ -1,7 +1,8 @@
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
-import ListSection from "../ListSection";
-import TaskItem from "./TaskItem";
 import { SxProps } from "../../theme/utils";
+import ListSection from "../ListSection";
+import EmptyState from "../EmptyState";
+import TaskItem from "./TaskItem";
 
 export default function Tasks({
   sx,
@@ -14,9 +15,11 @@ export default function Tasks({
 }) {
   return (
     <ListSection sx={sx} title={title}>
-      {items.map((item) => (
-        <TaskItem key={item.id} task={item} />
-      ))}
+      {items.length === 0 ? (
+        <EmptyState text="Nenhum evento ou tarefa" />
+      ) : (
+        items.map((item) => <TaskItem key={item.id} task={item} />)
+      )}
     </ListSection>
   );
 }

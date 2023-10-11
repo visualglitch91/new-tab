@@ -11,7 +11,11 @@ export default function AndroidLauncherAppsPage() {
   return (
     <PageLayout header={<PageTile>Apps</PageTile>}>
       <GlossyPaper
-        sx={{ padding: "24px 18px 20px", mx: "-16px", borderRadius: 0 }}
+        sx={{
+          padding: "24px 18px 20px",
+          margin: "0 -16px -16px",
+          borderRadius: 0,
+        }}
       >
         <LinksGrid
           gap="32px"
@@ -22,6 +26,7 @@ export default function AndroidLauncherAppsPage() {
               borderRadius: "100% !important",
               width: "var(--size) !important",
               height: "var(--size) !important",
+              background: "rgba(90,90,90,0.7)",
             },
             "& a span": {
               width: "calc(var(--size) + 30px) !important",

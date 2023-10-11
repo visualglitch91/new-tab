@@ -1,6 +1,6 @@
 import { uniqueId } from "lodash";
 import { useLongPress } from "@uidotdev/usehooks";
-import { ButtonBase, styled } from "@mui/material";
+import { Box, ButtonBase, ButtonBaseProps, styled } from "@mui/material";
 import Icon from "./Icon";
 import { SxProps } from "../theme/utils";
 import { sxx } from "../utils/styling";
@@ -9,7 +9,8 @@ export interface Link {
   id: string;
   name: string;
   href: string;
-  icon: string;
+  icon: string | React.ReactNode;
+  onClick?: () => void;
 }
 
 const classNames = {
@@ -92,13 +93,33 @@ function LinkItem({
 }) {
   const longPress = useLongPress(() => onHold());
 
+  const props: ButtonBaseProps = link.onClick
+    ? {
+        //@ts-expect-error
+        href: "#void",
+        role: "button",
+        onClick: (e) => {
+          e.preventDefault();
+          link.onClick?.();
+        },
+      }
+    : {
+        href: link.href,
+        target: target,
+        rel: "noreferrer",
+      };
+
   return (
-    <ButtonBase component="li" sx={sx}>
-      <a {...longPress} href={link.href} target={target} rel="noreferrer">
-        <img src={link.icon} alt="" />
+    <Box component="li" sx={sx}>
+      <ButtonBase component="a" {...props} {...longPress}>
+        {typeof link.icon === "string" ? (
+          <img src={link.icon} alt="" />
+        ) : (
+          link.icon
+        )}
         <span className={classNames.linkTitle}>{link.name}</span>
-      </a>
-    </ButtonBase>
+      </ButtonBase>
+    </Box>
   );
 }
 
