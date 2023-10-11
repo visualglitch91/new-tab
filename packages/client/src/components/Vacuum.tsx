@@ -6,6 +6,7 @@ import EntitiesSwitch from "./EntitiesSwitch";
 import EntityListItem, { EntityListItems } from "./EntityListItem";
 import GlossyPaper from "./GlossyPaper";
 import Icon from "./Icon";
+import AltIconButton from "./AltIconButton";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
@@ -59,30 +60,18 @@ function VacuumActionsRow() {
 
   return (
     <ButtonGroup>
-      <Button
-        startIcon={<Icon icon="mdi:play" />}
-        onClick={makeVacuumCall("start")}
-      >
-        Continuar
-      </Button>
-      <Button
-        startIcon={<Icon icon="mdi:pause" />}
-        onClick={makeVacuumCall("pause")}
-      >
-        Pausar
-      </Button>
-      <Button
-        startIcon={<Icon icon="mdi:stop" />}
-        onClick={makeVacuumCall("stop")}
-      >
-        Parar
-      </Button>
-      <Button
-        startIcon={<Icon icon="mdi:home" />}
-        onClick={makeVacuumCall("return_to_base")}
-      >
-        Retornar
-      </Button>
+      <AltIconButton onClick={makeVacuumCall("start")}>
+        <Icon icon="mdi:play" />
+      </AltIconButton>
+      <AltIconButton onClick={makeVacuumCall("pause")}>
+        <Icon icon="mdi:pause" />
+      </AltIconButton>
+      <AltIconButton onClick={makeVacuumCall("stop")}>
+        <Icon icon="mdi:stop" />
+      </AltIconButton>
+      <AltIconButton onClick={makeVacuumCall("return_to_base")}>
+        <Icon icon="mdi:home" />
+      </AltIconButton>
     </ButtonGroup>
   );
 }
