@@ -21,17 +21,19 @@ function AppLink({
   icon,
   label,
   path,
+  size = "large",
 }: {
-  active: boolean;
+  active?: boolean;
   icon: string;
   label: string;
   path: string;
+  size?: "small" | "medium" | "large";
 }) {
   return (
     <ListItem>
       <Link to={path}>
         <DrawerButton
-          size="large"
+          size={size}
           color="white"
           variant={active ? "contained" : "text"}
           fullWidth
