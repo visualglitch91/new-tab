@@ -9,7 +9,7 @@ export default function RouteRedirect({
 }) {
   return (
     <Route path={from}>
-      <Redirect to={to} />
+      <Redirect replace to={to} />
     </Route>
   );
 }
