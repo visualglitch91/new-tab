@@ -8,6 +8,7 @@ export function setSearchParam(map: { [key: string]: any }) {
 
   Object.keys(map).forEach((key) => {
     const value = map[key];
+
     if (typeof value === "undefined") {
       url.searchParams.delete(key);
     } else {

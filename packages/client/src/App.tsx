@@ -1,4 +1,4 @@
-import { Route, Router, Switch, useLocation } from "wouter";
+import { Route, Router, useLocation } from "wouter";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, useMediaQuery } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
