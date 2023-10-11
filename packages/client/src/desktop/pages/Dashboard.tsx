@@ -52,7 +52,7 @@ export default function DashboardPage() {
   if (sm) {
     return (
       <Stack spacing={5}>
-        <Box sx={{ width: "100%" }}>{mediaCard}</Box>
+        <Box width="100%">{mediaCard}</Box>
         <Forecast days={5} sx={{ width: "100%" }} />
         {bookmarks}
         {habits}
@@ -96,13 +96,7 @@ export default function DashboardPage() {
   if (lg) {
     return (
       <Stack direction="row" spacing={5}>
-        <Stack
-          spacing={5}
-          sx={{
-            minWidth: "33%",
-            maxWidth: "33%",
-          }}
-        >
+        <Stack spacing={5} width="33%">
           {mediaCard}
           {packageTracker}
         </Stack>
@@ -126,24 +120,18 @@ export default function DashboardPage() {
 
   return (
     <Stack direction="row" spacing={5}>
-      <Stack
-        spacing={5}
-        sx={{
-          minWidth: "25%",
-          maxWidth: "25%",
-        }}
-      >
+      <Stack width="25%" spacing={5}>
         {mediaCard}
         {packageTracker}
       </Stack>
-      <Stack sx={{ minWidth: "45%", maxWidth: "45%" }} spacing={5}>
+      <Stack width="45%" spacing={5}>
         <Forecast days={5} />
         {bookmarks}
         <Stack direction="row" spacing={5} sx={{ "& > *": { flex: 1 } }}>
           {habits}
         </Stack>
       </Stack>
-      <Stack spacing={5} sx={{ flex: 1 }}>
+      <Stack spacing={5} flex={1}>
         {todayTasks}
         {tomorrowTasks}
         {unscheduled}

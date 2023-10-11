@@ -78,7 +78,9 @@ export default function TaskItem({
       minSize="sm"
       primaryText={
         <Stack direction="row" spacing={1} alignItems="center">
-          <span>{task.title}</span>
+          <span style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
+            {task.title}
+          </span>
           {conferenceLink && <Icon size={18} icon="video-outline" />}
         </Stack>
       }

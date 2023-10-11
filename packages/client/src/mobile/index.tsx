@@ -40,7 +40,7 @@ const pages = [
     path: "/home",
     matchAll: true,
     icon: "home-outline",
-    label: "Home",
+    label: "Casa",
     component: <Home />,
   },
   {

@@ -38,6 +38,7 @@ export function useMenu() {
                     label: it.label,
                     hidden: it.hidden,
                     variant: it.primary ? "contained" : undefined,
+                    action: it.action,
                   },
                 }),
                 {} as ActionMap<T>
