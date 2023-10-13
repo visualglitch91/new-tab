@@ -1,7 +1,10 @@
 import { styled, useScrollTrigger } from "@mui/material";
 import { useBreakpoint } from "../../utils/general";
-import Icon from "../../components/Icon";
+import { getConfig } from "../../utils/useConfig";
 import AltIconButton from "../../components/AltIconButton";
+import Icon from "../../components/Icon";
+
+const hasCustomWallpaper = !!getConfig("wallpaper");
 
 const ElevatedHeader = styled("div")({
   position: "fixed",
@@ -18,14 +21,8 @@ const ElevatedHeader = styled("div")({
     bottom: 0,
     opacity: 0,
     transition: "opacity 300ms var(--tween)",
-    backdropFilter: "blur(10px)",
-    background: "",
-    backgroundImage: `linear-gradient(
-      to top,
-      rgba(200,200,200, 0.2) 0%,
-      rgba(200,200,200, 0.1) 34%,
-      #242e42 100%
-    )`,
+    backdropFilter: "blur(20px)",
+    backgroundColor: "rgba(28, 34, 48,0.5)",
   },
   '&[data-elevate="true"]:after': { opacity: 1 },
   '&[data-mobile-external-display="true"]': {
@@ -74,10 +71,11 @@ export default function PageHeader({
 }) {
   const { isMobileExternalDisplay } = useBreakpoint();
 
-  const elevate = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 20,
-  });
+  const elevate =
+    useScrollTrigger({
+      disableHysteresis: true,
+      threshold: 20,
+    }) || hasCustomWallpaper;
 
   const shrink = useScrollTrigger({
     disableHysteresis: true,

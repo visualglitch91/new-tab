@@ -5,8 +5,8 @@ const MuiBottomNavigation: ComponentOverride["MuiBottomNavigation"] = {
     root: {
       zIndex: 1,
       height: 62,
-      backdropFilter: "blur(10px)",
-      background: "rgba(180, 180, 180, 0.3)",
+      backdropFilter: "blur(20px)",
+      backgroundColor: "rgba(28, 34, 48,0.5)",
       "& .Mui-selected": { color: "white !important" },
     },
   },
