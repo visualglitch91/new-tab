@@ -1,11 +1,11 @@
-import { addSeconds, parse, subMilliseconds } from "date-fns";
+import { sortBy } from "lodash";
 import { rrulestr } from "rrule";
+import { addSeconds, isEqual, parse, subMilliseconds } from "date-fns";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import TickTick from "./ticktick";
 import { createAppModule } from "../../utils";
 import { config } from "../../../../../config";
 import { checkDate } from "./utils";
-import { sortBy } from "lodash";
 
 const tick = new TickTick();
 
@@ -106,12 +106,14 @@ export default createAppModule("ticktick", async (instance, logger) => {
           );
 
           if (it.repeatFlag) {
+            const afterDate = startDate < yesterday ? yesterday : startDate;
+
             startDate = rrulestr(it.repeatFlag, { dtstart: startDate }).after(
-              yesterday
+              afterDate
             );
 
             endDate = rrulestr(it.repeatFlag, { dtstart: endDate }).after(
-              yesterday
+              afterDate
             );
           }
 
@@ -122,6 +124,12 @@ export default createAppModule("ticktick", async (instance, logger) => {
           const key = checkDate(startDate);
 
           if (endDate < new Date()) {
+            return;
+          }
+
+          if (
+            it.eXDates?.some((it: string) => isEqual(startDate!, new Date(it)))
+          ) {
             return;
           }
 
