@@ -1,4 +1,7 @@
 import { ButtonBase, styled } from "@mui/material";
+import { getConfig } from "../utils/useConfig";
+
+const enableBlur = !!getConfig("wallpaper") && !getConfig("disableBlurEffects");
 
 const ButtonCard = styled(ButtonBase)({
   overflow: "hidden",
@@ -24,6 +27,8 @@ const ButtonCard = styled(ButtonBase)({
     0px 2px 2px 0px rgba(0,0,0,0.14),
     0px 1px 5px 0px rgba(0,0,0,0.12)
   `,
+
+  backdropFilter: enableBlur ? "blur(20px)" : undefined,
 
   "&:hover": {
     backgroundColor: "rgba(20, 20, 20, 0.6)",
