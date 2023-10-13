@@ -167,6 +167,7 @@ export default createAppModule("hass-scheduler", (instance) => {
     } = req;
 
     const current = storage.get(id);
+    const next = { ...current, ...body, id };
 
     if (!current) {
       res.status(404);
@@ -175,13 +176,11 @@ export default createAppModule("hass-scheduler", (instance) => {
 
     if (current.enabled && body.enabled === false) {
       stopSchedule(id);
+    } else if (!current.enabled && body.enabled === true) {
+      scheduleJob(next);
     }
 
-    storage.save({
-      ...current,
-      ...body,
-      id,
-    });
+    storage.save(next);
 
     return { success: true };
   });
