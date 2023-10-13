@@ -9,11 +9,11 @@ export default function AndroidLauncherAppsPage() {
   const data = useAndroidApps();
 
   return (
-    <PageLayout header={<PageTile>Apps</PageTile>}>
+    <PageLayout shrinkingHeader="force" header={<PageTile>Apps</PageTile>}>
       <GlossyPaper
         sx={{
-          padding: "24px 18px 20px",
-          margin: "0 -16px -16px",
+          padding: "32px 18px 20px",
+          margin: "-85px -16px -16px",
           borderRadius: 0,
         }}
       >

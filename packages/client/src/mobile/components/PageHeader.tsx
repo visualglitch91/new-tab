@@ -60,16 +60,20 @@ const ButtonsGhost = styled("div")({
   '[data-shrink="true"] &': { height: 0 },
 });
 
+export interface PageHeaderProps {
+  items?: React.ReactNode;
+  children: React.ReactNode;
+  shrinking?: "auto" | "disable" | "force";
+}
+
 export default function PageHeader({
   items,
   children,
-  disableShrinking,
-}: {
-  items?: React.ReactNode;
-  children: React.ReactNode;
-  disableShrinking?: boolean;
-}) {
+  shrinking = "auto",
+}: PageHeaderProps) {
   const { isMobileExternalDisplay } = useBreakpoint();
+  const disableShrinking = shrinking === "disable";
+  const forceShrinking = shrinking === "force";
 
   const elevate =
     useScrollTrigger({
@@ -103,8 +107,12 @@ export default function PageHeader({
     <>
       <ElevatedHeader
         data-mobile-external-display={isMobileExternalDisplay}
-        data-elevate={!isMobileExternalDisplay && elevate}
-        data-shrink={isMobileExternalDisplay || (!disableShrinking && shrink)}
+        data-elevate={forceShrinking || (!isMobileExternalDisplay && elevate)}
+        data-shrink={
+          forceShrinking ||
+          isMobileExternalDisplay ||
+          (!disableShrinking && shrink)
+        }
       >
         {content}
       </ElevatedHeader>

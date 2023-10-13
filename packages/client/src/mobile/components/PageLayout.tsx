@@ -1,20 +1,20 @@
 import { Box } from "@mui/material";
-import PageHeader from "./PageHeader";
+import PageHeader, { PageHeaderProps } from "./PageHeader";
 
 export default function PageLayout({
   header,
   headerItems,
   children,
-  disableShrinkingHeader,
+  shrinkingHeader,
 }: {
   header?: React.ReactNode;
   headerItems?: React.ReactNode;
   children: React.ReactNode;
-  disableShrinkingHeader?: boolean;
+  shrinkingHeader?: PageHeaderProps["shrinking"];
 }) {
   return (
     <Box>
-      <PageHeader disableShrinking={disableShrinkingHeader} items={headerItems}>
+      <PageHeader shrinking={shrinkingHeader} items={headerItems}>
         {header}
       </PageHeader>
       <Box sx={{ p: "16px" }}>{children}</Box>

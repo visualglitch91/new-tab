@@ -9,7 +9,7 @@ export default function TVPage() {
 
   return (
     <PageLayout
-      disableShrinkingHeader
+      shrinkingHeader="disable"
       header={
         <Box mt={isMobileExternalDisplay ? "52px" : "16px"} width="100%">
           <MediaCard />
