@@ -5,6 +5,7 @@ const storageKey = "user-config";
 
 interface UserConfig {
   disableBlurEffects?: boolean;
+  wallpaper?: string;
 }
 
 function loadConfig() {

@@ -3,8 +3,15 @@ import { createRoot } from "react-dom/client";
 import { disableEmotionWarnings } from "./utils/disableEmotionWarning";
 import { autoUpdater } from "./utils/updater";
 import { isAndroidLauncher } from "./utils/general";
+import { getConfig } from "./utils/useConfig";
 import App from "./App";
 import "./styles.css";
+
+const wallpaper = getConfig("wallpaper");
+
+if (wallpaper) {
+  document.body.style.backgroundImage = `url(${wallpaper})`;
+}
 
 window.addEventListener("focus", () => {
   autoUpdater();

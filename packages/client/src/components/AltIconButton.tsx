@@ -18,4 +18,4 @@ AltIconButton.defaultProps = {
   variant: "contained",
 };
 
-export default AltIconButton;
+export default AltIconButton as typeof Button;
