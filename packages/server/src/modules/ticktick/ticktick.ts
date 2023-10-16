@@ -1,3 +1,4 @@
+import { keyBy } from "lodash";
 import { differenceInCalendarDays, format, subDays } from "date-fns";
 import objectid from "bson-objectid";
 import axios from "axios";
@@ -55,7 +56,17 @@ export default class TickTick {
 
   getAllUncompletedTasks() {
     return callAPI("v2/batch/check/0", "GET").then(
-      (res) => res.syncTaskBean.update
+      ({ inboxId, projectProfiles, syncTaskBean }) => {
+        const projectsById = keyBy(projectProfiles, "id");
+
+        return syncTaskBean.update.map((task: any) => ({
+          ...task,
+          projectName:
+            task.projectId === inboxId
+              ? "Inbox"
+              : projectsById[task.projectId].name,
+        }));
+      }
     );
   }
 

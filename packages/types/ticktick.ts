@@ -4,13 +4,17 @@ export type ScheduledTask = {
   startDate: string;
   endDate: string;
   isAllDay: boolean;
+  projectId: string;
+  projectName: string;
+  type: "task" | "event";
   raw: any;
-} & ({ projectId: string; type: "task" } | { type: "event" });
+};
 
 export interface UnscheduledTask {
   id: string;
   title: string;
   projectId: string;
+  projectName: string;
   type: "task";
   raw: any;
 }

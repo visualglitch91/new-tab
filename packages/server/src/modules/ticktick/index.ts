@@ -74,6 +74,7 @@ export default createAppModule("ticktick", async (instance, logger) => {
           data[key].push({
             id: it.id,
             projectId: it.projectId,
+            projectName: it.projectName,
             title: it.title,
             startDate: dueDate,
             endDate: addSeconds(
@@ -89,6 +90,7 @@ export default createAppModule("ticktick", async (instance, logger) => {
             id: it.id,
             title: it.title,
             projectId: it.projectId,
+            projectName: it.projectName,
             type: "task",
             raw: it,
           });
@@ -143,6 +145,8 @@ export default createAppModule("ticktick", async (instance, logger) => {
             data[key].push({
               id: `${it.id}@${calendar.id}`,
               title: it.title,
+              projectId: calendar.id,
+              projectName: calendar.name,
               startDate: startDate.toISOString(),
               endDate: endDate.toISOString(),
               isAllDay: it.isAllDay,
