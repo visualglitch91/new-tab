@@ -59,7 +59,7 @@ function VacuumActionsRow() {
   }
 
   return (
-    <ButtonGroup>
+    <ButtonGroup sx={{ margin: "4px auto 8px" }}>
       <AltIconButton onClick={makeVacuumCall("start")}>
         <Icon icon="mdi:play" />
       </AltIconButton>
