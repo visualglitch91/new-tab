@@ -3,6 +3,7 @@ import http from "http";
 import express from "express";
 import bodyParser from "body-parser";
 import session from "express-session";
+import cors from "cors";
 import { config } from "../../../config";
 import { pinoHttp } from "./utils";
 import { expressAuth } from "./auth";
@@ -24,6 +25,7 @@ const sessionMiddleware = session({
   saveUninitialized: true,
 });
 
+app.use(cors());
 app.use(sessionMiddleware);
 app.use(bodyParser.json());
 app.use(pinoHttp);

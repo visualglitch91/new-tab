@@ -1,6 +1,12 @@
 import { sortBy } from "lodash";
 import { rrulestr } from "rrule";
-import { addSeconds, isEqual, parse, subMilliseconds } from "date-fns";
+import {
+  addSeconds,
+  isEqual,
+  parse,
+  startOfDay,
+  subMilliseconds,
+} from "date-fns";
 import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import TickTick from "./ticktick";
 import { createAppModule } from "../../utils";
@@ -89,7 +95,7 @@ export default createAppModule("ticktick", async (instance, logger) => {
         }
       });
 
-      const yesterday = subMilliseconds(new Date(), 1);
+      const yesterday = subMilliseconds(startOfDay(new Date()), 1);
 
       calendars.forEach((calendar: any) => {
         if (excludedCalendarIds.includes(calendar.id)) {
