@@ -1,4 +1,4 @@
-import { keyBy, sortBy } from "lodash";
+import { keyBy, orderBy, sortBy, uniqBy } from "lodash";
 import {
   format,
   isEqual,
@@ -215,7 +215,10 @@ export default class TickTick {
       });
     });
 
-    return sortBy(scheduled, "startDate");
+    return uniqBy(
+      orderBy(scheduled, ["startDate"], ["desc"]),
+      (it) => `${it.raw.uid}--${format(new Date(it.startDate), "yyyy-MM-dd")}`
+    ).reverse();
   }
 
   async getCalendar(
