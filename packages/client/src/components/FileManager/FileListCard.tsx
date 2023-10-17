@@ -4,6 +4,7 @@ import { Directory, Item } from "./utils";
 import GlossyPaper from "../GlossyPaper";
 import AltIconButton from "../AltIconButton";
 import Icon from "../Icon";
+import EmptyState from "../EmptyState";
 
 export default function FileListCard({
   items,
@@ -33,6 +34,7 @@ export default function FileListCard({
           fontSize: "18px",
           fontWeight: 500,
           height: "56px",
+          justifyContent: "flex-start",
         }}
       >
         {prev && (
@@ -55,29 +57,33 @@ export default function FileListCard({
         component={GlossyPaper}
         sx={maxHeight ? { maxHeight, overflow: "auto" } : {}}
       >
-        {items.map((item) => {
-          const isDir = item.type === "dir";
+        {items.length === 0 ? (
+          <EmptyState sx={{ pt: "18px" }} text="Nenhum arquivo nesta pasta" />
+        ) : (
+          items.map((item) => {
+            const isDir = item.type === "dir";
 
-          return (
-            <ListItem
-              key={item.id}
-              sx={{
-                "& [data-show-on-hover]": { opacity: 0 },
-                "&:hover [data-show-on-hover]": { opacity: 1 },
-              }}
-              icon={isDir ? "folder" : "file"}
-              primaryText={item.name}
-              endSlot={
-                <AltIconButton onClick={() => onOptions(item)}>
-                  <Icon icon="dots-vertical" />
-                </AltIconButton>
-              }
-              onClick={
-                isDir ? () => setTimeout(onChangeDir, 200, item) : undefined
-              }
-            />
-          );
-        })}
+            return (
+              <ListItem
+                key={item.id}
+                sx={{
+                  "& [data-show-on-hover]": { opacity: 0 },
+                  "&:hover [data-show-on-hover]": { opacity: 1 },
+                }}
+                icon={isDir ? "folder" : "file"}
+                primaryText={item.name}
+                endSlot={
+                  <AltIconButton onClick={() => onOptions(item)}>
+                    <Icon icon="dots-vertical" />
+                  </AltIconButton>
+                }
+                onClick={
+                  isDir ? () => setTimeout(onChangeDir, 200, item) : undefined
+                }
+              />
+            );
+          })
+        )}
       </List>
     </Stack>
   );
