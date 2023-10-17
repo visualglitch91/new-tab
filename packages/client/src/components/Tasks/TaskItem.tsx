@@ -12,6 +12,10 @@ import { queryClient } from "../../utils/queryClient";
 import DotLoading from "../DotLoading";
 import { isAndroidLauncher } from "../../utils/general";
 import { useMenu } from "../../utils/useMenu";
+import { config } from "../../../../../config";
+
+const customCalendarIcons: Record<string, string | undefined> =
+  config.ticktick.custom_calendar_icon;
 
 function isEventCurrentlyHappening(startDate: Date, endDate: Date) {
   const now = new Date();
@@ -81,11 +85,12 @@ export default function TaskItem({
           <Icon
             size={18}
             icon={
-              conferenceLink
+              customCalendarIcons[task.projectId] ||
+              (conferenceLink
                 ? "webcam"
                 : task.type === "task"
                 ? "checkbox-blank-badge-outline"
-                : "calendar-text-outline"
+                : "calendar-text-outline")
             }
           />
           <span style={{ textOverflow: "ellipsis", overflow: "hidden" }}>
