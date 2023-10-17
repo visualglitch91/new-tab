@@ -11,6 +11,7 @@ import { formatNumericValue } from "../utils/general";
 import EmptyState from "./EmptyState";
 import GlossyPaper from "./GlossyPaper";
 import Icon from "./Icon";
+import { sortBy } from "lodash";
 
 const ItemCard = styled(ButtonBase)(({ theme }) => ({
   padding: "20px 16px",
@@ -71,7 +72,6 @@ export type DownloadStatus =
   | "seeding"
   | "completed"
   | "stopped"
-  | "error"
   | "queued"
   | "verifying"
   | "error";
@@ -85,6 +85,16 @@ export interface DownloadItem {
   completed: boolean;
   percentDone: number;
 }
+
+const statusOrder: DownloadStatus[] = [
+  "verifying",
+  "downloading",
+  "stopped",
+  "queued",
+  "seeding",
+  "completed",
+  "error",
+];
 
 export default function DownloadListCard({
   downloads,
@@ -110,37 +120,39 @@ export default function DownloadListCard({
             text="Nenhum download adicionado"
           />
         ) : (
-          downloads.map((it) => (
-            <ItemCard key={it.id} onClick={() => onItemClick(it)}>
-              <ItemContent>
-                <Header>
-                  <Icon
-                    size={16}
-                    icon={
-                      it.completed
-                        ? "mdi-check"
-                        : it.status === "seeding"
-                        ? "mdi-arrow-up"
-                        : it.active
-                        ? "mdi-arrow-down"
-                        : "mdi-pause"
-                    }
+          sortBy(downloads, (it) => statusOrder.indexOf(it.status)).map(
+            (it) => (
+              <ItemCard key={it.id} onClick={() => onItemClick(it)}>
+                <ItemContent>
+                  <Header>
+                    <Icon
+                      size={16}
+                      icon={
+                        it.completed
+                          ? "mdi-check"
+                          : it.status === "seeding"
+                          ? "mdi-arrow-up"
+                          : it.active
+                          ? "mdi-arrow-down"
+                          : "mdi-pause"
+                      }
+                    />
+                    <Name>{it.name}</Name>
+                  </Header>
+                  <LinearProgress
+                    variant="determinate"
+                    value={it.percentDone}
+                    sx={{ width: "100%", height: "6px", borderRadius: "4px" }}
                   />
-                  <Name>{it.name}</Name>
-                </Header>
-                <LinearProgress
-                  variant="determinate"
-                  value={it.percentDone}
-                  sx={{ width: "100%", height: "6px", borderRadius: "4px" }}
-                />
-                <Details>
-                  <span>{STATUS_LABELS[it.status]}</span>
-                  <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
-                  <span>{it.eta && humanizeDuration(it.eta)}</span>
-                </Details>
-              </ItemContent>
-            </ItemCard>
-          ))
+                  <Details>
+                    <span>{STATUS_LABELS[it.status]}</span>
+                    <span>{formatNumericValue(it.percentDone, "%", 0)}</span>
+                    <span>{it.eta && humanizeDuration(it.eta)}</span>
+                  </Details>
+                </ItemContent>
+              </ItemCard>
+            )
+          )
         )}
       </List>
     </Stack>
