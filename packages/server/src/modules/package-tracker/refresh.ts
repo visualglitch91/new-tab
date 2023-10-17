@@ -10,9 +10,13 @@ const { webhook } = config.package_tracker;
 
 async function track(code: string) {
   try {
-    const res = await axios.get(`https://linketrack.com/track?codigo=${code}`);
+    const res = await axios.get(`https://www.linkcorreios.com.br/?id=+${code}`);
     const $ = cheerio.load(res.data);
-    const $events = $(".boxEvento");
+    const $events = $(".singlepost .linha_status");
+
+    if ($events.length === 0) {
+      return { eventCount: 0 };
+    }
 
     const events = orderBy(
       $events
@@ -21,14 +25,15 @@ async function track(code: string) {
             .find("li")
             .map((_, li) => $(li).find("br").replaceWith("\n").end().text());
 
-          if (textContents[0].includes("Código não localizado")) {
-            return null;
-          }
+          const [rawDescription, rawAt, ...rest] = textContents;
+          const rawLocation = rest.join("\n");
 
           return {
-            at: parseDateString(textContents[1].substring(6)),
-            description: textContents[2],
-            location: textContents[0].substring(7),
+            at: parseDateString(
+              rawAt.replace("Data  : ", "").replace("Hora: ", "")
+            ),
+            description: rawDescription.replace("Status: ", ""),
+            location: rawLocation.replace("Local: ", ""),
           };
         })
         .get(),
@@ -46,7 +51,7 @@ async function track(code: string) {
 }
 
 function parseDateString(dateString: string): string | null {
-  const parts = dateString.split(" às ");
+  const parts = dateString.split(" | ");
 
   if (parts.length !== 2) {
     // Invalid format
