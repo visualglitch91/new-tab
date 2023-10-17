@@ -1,19 +1,9 @@
-import { addDays, format } from "date-fns";
+import { parse } from "date-fns";
 
-export function checkDate(fullDate: Date) {
-  const today = format(new Date(), "yyyy-MM-dd");
-  const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
-  const date = format(fullDate, "yyyy-MM-dd");
-
-  if (date < today) {
-    return "past";
+export function normalizeDate(date: string, isAllDay = false) {
+  if (isAllDay) {
+    return parse(date.substring(0, 10), "yyyy-MM-dd", new Date());
   }
 
-  if (date === today) {
-    return "today";
-  } else if (date === tomorrow) {
-    return "tomorrow";
-  }
-
-  return "future";
+  return new Date(date);
 }

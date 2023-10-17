@@ -1,17 +1,16 @@
-import { sortBy } from "lodash";
-import { rrulestr } from "rrule";
+import { groupBy } from "lodash";
 import {
-  addSeconds,
-  isEqual,
-  parse,
+  addDays,
+  endOfDay,
+  isBefore,
+  isSameDay,
   startOfDay,
   subMilliseconds,
 } from "date-fns";
-import { ScheduledTask, UnscheduledTask } from "@home-control/types/ticktick";
 import TickTick from "./ticktick";
 import { createAppModule } from "../../utils";
 import { config } from "../../../../../config";
-import { checkDate } from "./utils";
+import { normalizeDate } from "./utils";
 
 const tick = new TickTick();
 
@@ -22,146 +21,55 @@ const {
   excluded_calendar_ids: excludedCalendarIds,
 } = config.ticktick;
 
-function normalizeDate(date: string, isAllDay = false) {
-  if (isAllDay) {
-    return parse(date.substring(0, 10), "yyyy-MM-dd", new Date()).toISOString();
-  }
-
-  return new Date(date).toISOString();
-}
-
 export default createAppModule("ticktick", async (instance, logger) => {
   await tick.login({ username, password });
 
   logger.info("ticktick logged in");
 
   instance.get("/data", () => {
+    const now = new Date();
+    const since = startOfDay(now);
+    const until = endOfDay(addDays(now, 1));
+
     return Promise.all([
-      tick.getAllUncompletedTasks(),
-      tick.getCalenderEvents(),
+      // Delayed
+      tick.getUncompletedTasks(
+        new Date(0),
+        subMilliseconds(since, 1),
+        projectIds
+      ),
+
+      // Today, tomorrow and unscheduled
+      tick.getCalendar(since, until, projectIds, excludedCalendarIds),
+
+      // Today's habits
       tick.getTodayHabits(),
-    ]).then(([tasks, calendars, habits]: any) => {
-      const data = {
-        today: new Array<ScheduledTask>(),
-        delayed: new Array<ScheduledTask>(),
-        tomorrow: new Array<ScheduledTask>(),
-        unscheduled: new Array<UnscheduledTask>(),
+    ]).then(([{ scheduled: delayed }, { scheduled, unscheduled }, habits]) => {
+      const { today, tomorrow } = groupBy(scheduled, (it) => {
+        const startDate = new Date(it.startDate);
+        const endDate = new Date(it.endDate);
+
+        if (isSameDay(startDate, until)) {
+          return "tomorrow";
+        }
+
+        if (
+          isSameDay(startDate, now) &&
+          (it.isAllDay || isBefore(now, endDate))
+        ) {
+          return "today";
+        }
+
+        return "other";
+      });
+
+      return {
+        delayed,
+        today,
+        tomorrow,
+        unscheduled,
+        habits,
       };
-
-      tasks.forEach((it: any) => {
-        try {
-          if (
-            it.attendees?.find((attendee: any) => attendee.self === true)
-              ?.responseStatus === "declined"
-          ) {
-            return;
-          }
-        } catch (_) {}
-
-        if (it.status !== 0 || !projectIds.includes(it.projectId)) {
-          return;
-        }
-
-        if (it.dueDate) {
-          const dueDate = normalizeDate(it.dueDate, it.isAllDay);
-          const when = checkDate(new Date(dueDate));
-          let key: keyof typeof data;
-
-          if (when === "future") return;
-          else if (when === "past") key = "delayed";
-          else key = when;
-
-          data[key].push({
-            id: it.id,
-            projectId: it.projectId,
-            projectName: it.projectName,
-            title: it.title,
-            startDate: dueDate,
-            endDate: addSeconds(
-              new Date(dueDate),
-              24 * 60 * 60 - 1
-            ).toISOString(),
-            isAllDay: it.isAllDay,
-            type: "task",
-            raw: it,
-          });
-        } else {
-          data.unscheduled.push({
-            id: it.id,
-            title: it.title,
-            projectId: it.projectId,
-            projectName: it.projectName,
-            type: "task",
-            raw: it,
-          });
-        }
-      });
-
-      const yesterday = subMilliseconds(startOfDay(new Date()), 1);
-
-      calendars.forEach((calendar: any) => {
-        if (excludedCalendarIds.includes(calendar.id)) {
-          return;
-        }
-
-        calendar.events.forEach((it: any) => {
-          let startDate: Date | null = new Date(
-            normalizeDate(it.dueStart, it.isAllDay)
-          );
-
-          let endDate: Date | null = new Date(
-            normalizeDate(it.dueEnd, it.isAllDay)
-          );
-
-          if (it.repeatFlag) {
-            const afterDate = startDate < yesterday ? yesterday : startDate;
-
-            startDate = rrulestr(it.repeatFlag, { dtstart: startDate }).after(
-              afterDate
-            );
-
-            endDate = rrulestr(it.repeatFlag, { dtstart: endDate }).after(
-              afterDate
-            );
-          }
-
-          if (startDate === null || endDate === null) {
-            return;
-          }
-
-          const key = checkDate(startDate);
-
-          if (endDate < new Date()) {
-            return;
-          }
-
-          if (
-            it.eXDates?.some((it: string) => isEqual(startDate!, new Date(it)))
-          ) {
-            return;
-          }
-
-          if (key !== "future" && key !== "past") {
-            data[key].push({
-              id: `${it.id}@${calendar.id}`,
-              title: it.title,
-              projectId: calendar.id,
-              projectName: calendar.name,
-              startDate: startDate.toISOString(),
-              endDate: endDate.toISOString(),
-              isAllDay: it.isAllDay,
-              type: "event",
-              raw: it,
-            });
-          }
-        });
-      });
-
-      data.today = sortBy(data.today, "startDate");
-      data.delayed = sortBy(data.delayed, "startDate");
-      data.tomorrow = sortBy(data.tomorrow, "startDate");
-
-      return { ...data, habits };
     });
   });
 
@@ -177,6 +85,23 @@ export default createAppModule("ticktick", async (instance, logger) => {
       return tick.completeTask(req.body.id, req.body.projectId).then(() => ({
         success: true,
       }));
+    }
+  );
+
+  instance.get<{ Query: { since: string; until: string } }>(
+    "/calendar",
+    async (req) => {
+      const since = startOfDay(normalizeDate(req.query.since, true));
+      const until = endOfDay(normalizeDate(req.query.until, true));
+
+      const { scheduled } = await tick.getCalendar(
+        since,
+        until,
+        projectIds,
+        excludedCalendarIds
+      );
+
+      return scheduled;
     }
   );
 });

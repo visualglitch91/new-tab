@@ -1,10 +1,24 @@
-import { keyBy } from "lodash";
-import { differenceInCalendarDays, format, subDays } from "date-fns";
+import { keyBy, sortBy } from "lodash";
+import {
+  format,
+  isEqual,
+  subDays,
+  endOfDay,
+  startOfDay,
+  isWithinInterval,
+  differenceInCalendarDays,
+} from "date-fns";
 import objectid from "bson-objectid";
 import axios from "axios";
 import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
-import { Habit } from "@home-control/types/ticktick";
+import {
+  Habit,
+  ScheduledTask,
+  UnscheduledTask,
+} from "@home-control/types/ticktick";
+import { normalizeDate } from "./utils";
+import { rrulestr } from "rrule";
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
@@ -54,26 +68,172 @@ export default class TickTick {
     });
   }
 
-  getAllUncompletedTasks() {
-    return callAPI("v2/batch/check/0", "GET").then(
-      ({ inboxId, projectProfiles, syncTaskBean }) => {
-        const projectsById = keyBy(projectProfiles, "id");
+  async getUncompletedTasks(
+    since: Date,
+    until: Date,
+    projectIds = new Array<string>()
+  ) {
+    const scheduled: ScheduledTask[] = [];
+    const unscheduled = new Array<UnscheduledTask>();
 
-        return syncTaskBean.update.map((task: any) => ({
-          ...task,
-          projectName:
-            task.projectId === inboxId
-              ? "Inbox"
-              : projectsById[task.projectId].name,
-        }));
-      }
+    const { inboxId, projectProfiles, syncTaskBean } = await callAPI(
+      "v2/batch/check/0",
+      "GET"
     );
+
+    const projectsById = keyBy(projectProfiles, "id");
+    const rawTasks = syncTaskBean.update;
+
+    rawTasks.forEach((rawTask: any) => {
+      if (rawTask.status !== 0 || !projectIds.includes(rawTask.projectId)) {
+        return;
+      }
+
+      const projectName =
+        rawTask.projectId === inboxId
+          ? "Inbox"
+          : projectsById[rawTask.projectId].name;
+
+      if (!rawTask.dueDate) {
+        unscheduled.push({
+          id: rawTask.id,
+          title: rawTask.title,
+          projectId: rawTask.projectId,
+          projectName,
+          type: "task",
+          raw: rawTask,
+        });
+
+        return;
+      }
+
+      let startDate = new Date(rawTask.startDate);
+      let dueDate = new Date(rawTask.dueDate);
+
+      if (rawTask.isAllDay) {
+        startDate = startOfDay(startDate);
+        dueDate = endOfDay(startDate);
+      }
+
+      if (!isWithinInterval(startDate, { start: since, end: until })) {
+        return;
+      }
+
+      scheduled.push({
+        id: rawTask.id,
+        projectId: rawTask.projectId,
+        projectName,
+        title: rawTask.title,
+        startDate: startDate.toISOString(),
+        endDate: dueDate.toISOString(),
+        isAllDay: rawTask.isAllDay,
+        type: "task",
+        raw: rawTask,
+      });
+    });
+
+    return { scheduled: sortBy(scheduled, "startDate"), unscheduled };
   }
 
-  getCalenderEvents() {
-    return callAPI("v2/calendar/bind/events/all", "GET").then(
-      (res) => res.events
+  async getEvents(
+    since: Date,
+    until: Date,
+    excludedCalendarIds = new Array<string>()
+  ) {
+    const scheduled: ScheduledTask[] = [];
+
+    const { events: rawEvents } = await callAPI(
+      "v2/calendar/bind/events/all",
+      "GET"
     );
+
+    rawEvents.forEach((calendar: any) => {
+      if (excludedCalendarIds.includes(calendar.id)) {
+        return;
+      }
+
+      calendar.events.forEach((rawEvent: any) => {
+        try {
+          if (
+            rawEvent.attendees?.find((attendee: any) => attendee.self === true)
+              ?.responseStatus === "declined"
+          ) {
+            return;
+          }
+        } catch (_) {}
+
+        const startDate = normalizeDate(rawEvent.dueStart, rawEvent.isAllDay);
+
+        const startDates = rawEvent.repeatFlag
+          ? rrulestr(rawEvent.repeatFlag, { dtstart: startDate }).between(
+              since,
+              until,
+              true
+            )
+          : [startDate];
+
+        startDates.forEach((startDate) => {
+          let endDate: Date | null = normalizeDate(
+            rawEvent.dueEnd,
+            rawEvent.isAllDay
+          );
+
+          if (rawEvent.repeatFlag) {
+            endDate = rrulestr(rawEvent.repeatFlag, {
+              dtstart: endDate,
+            }).after(startDate);
+          }
+
+          if (!endDate) {
+            return;
+          }
+
+          if (!isWithinInterval(startDate, { start: since, end: until })) {
+            return;
+          }
+
+          if (
+            rawEvent.eXDates?.some((dateStr: string) =>
+              isEqual(startDate!, new Date(dateStr))
+            )
+          ) {
+            return;
+          }
+
+          scheduled.push({
+            id: `${rawEvent.id}@${calendar.id}`,
+            title: rawEvent.title,
+            projectId: calendar.id,
+            projectName: calendar.name,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+            isAllDay: rawEvent.isAllDay,
+            type: "event",
+            raw: rawEvent,
+          });
+        });
+      });
+    });
+
+    return sortBy(scheduled, "startDate");
+  }
+
+  async getCalendar(
+    since: Date,
+    until: Date,
+    projectIds = new Array<string>(),
+    excludedCalendarIds = new Array<string>()
+  ) {
+    const [{ scheduled: scheduledTasks, unscheduled }, scheduledEvents] =
+      await Promise.all([
+        this.getUncompletedTasks(since, until, projectIds),
+        this.getEvents(since, until, excludedCalendarIds),
+      ]);
+
+    return {
+      unscheduled,
+      scheduled: sortBy([...scheduledTasks, ...scheduledEvents], "startDate"),
+    };
   }
 
   async getTodayHabits(): Promise<Habit[]> {
