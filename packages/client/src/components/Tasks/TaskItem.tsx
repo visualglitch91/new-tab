@@ -116,7 +116,7 @@ export default function TaskItem({
         ) : undefined
       }
       onClick={() => {
-        if ("projectId" in task) {
+        if (task.type === "task") {
           confirm({
             title: "Completar?",
             confirmLabel: "Sim",
