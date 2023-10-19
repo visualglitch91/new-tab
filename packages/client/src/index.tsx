@@ -2,7 +2,10 @@ import { navigate } from "wouter/use-location";
 import { createRoot } from "react-dom/client";
 import { disableEmotionWarnings } from "./utils/disableEmotionWarning";
 import { autoUpdater } from "./utils/updater";
-import { isAndroidLauncher } from "./utils/general";
+import {
+  isAndroidLauncher,
+  clearReactQueryCacheAndReload,
+} from "./utils/general";
 import { getConfig } from "./utils/useConfig";
 import App from "./App";
 import "./styles.css";
@@ -26,6 +29,9 @@ document.addEventListener("visibilitychange", () => {
     }
   }
 });
+
+window.addEventListener("error", clearReactQueryCacheAndReload);
+window.addEventListener("unhandledrejection", clearReactQueryCacheAndReload);
 
 autoUpdater();
 disableEmotionWarnings();

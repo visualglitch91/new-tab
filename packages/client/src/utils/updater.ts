@@ -1,5 +1,6 @@
 import version from "../version.json";
 import { setSearchParam } from "./url";
+import { mode } from "./general";
 
 export async function clearAllCachesAndReload() {
   const registration = await navigator.serviceWorker?.getRegistration();
@@ -14,7 +15,12 @@ export async function clearAllCachesAndReload() {
     });
   }
 
-  window.location.assign(setSearchParam({ reload: Date.now() }));
+  window.location.assign(
+    setSearchParam({
+      mode,
+      reload: Date.now(),
+    })
+  );
 }
 
 export function autoUpdater() {

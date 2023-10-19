@@ -2,6 +2,12 @@ import { createContext, useContext, useEffect, useMemo } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { getSearchParam } from "./url";
 
+export const mode = getSearchParam("mode");
+
+export const isNewTab = mode === "new-tab";
+
+export const isAndroidLauncher = mode === "android-launcher";
+
 export const isTouchDevice =
   "ontouchstart" in window ||
   navigator.maxTouchPoints > 0 ||
@@ -72,13 +78,16 @@ export function useBreakpoint() {
   return result;
 }
 
-export const isNewTab = getSearchParam("mode") === "new-tab";
-
-export const isAndroidLauncher = getSearchParam("mode") === "android-launcher";
-
 export function formatDate(date: string | Date) {
   return new Date(date).toLocaleDateString("pt-BR", {
     month: "short",
     day: "numeric",
   });
+}
+
+export function clearReactQueryCacheAndReload() {
+  if (!!window.localStorage.getItem("REACT_QUERY_OFFLINE_CACHE")) {
+    window.localStorage.removeItem("REACT_QUERY_OFFLINE_CACHE");
+    window.location.reload();
+  }
 }
