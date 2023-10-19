@@ -268,3 +268,24 @@ export function tap<T>(func: (value: T) => void) {
     return value;
   };
 }
+
+export function singleAsyncExecution<
+  T extends (...args: any[]) => Promise<any>,
+  P extends ReturnType<T>
+>(func: T) {
+  let current: P | null = null;
+
+  return (...args: Parameters<T>): P => {
+    if (current) {
+      return current;
+    }
+
+    current = func(...args) as P;
+
+    current.finally(() => {
+      current = null;
+    });
+
+    return current;
+  };
+}

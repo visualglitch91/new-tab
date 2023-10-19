@@ -2,7 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
 import { config } from "../../../../../config";
-import { Logger } from "../../utils";
+import { Logger, singleAsyncExecution } from "../../utils";
 import storage from "./storage";
 import { orderBy } from "lodash";
 
@@ -86,7 +86,7 @@ function parseDateString(dateString: string): string | null {
   }
 }
 
-export default async function refresh(logger: Logger) {
+const refresh = singleAsyncExecution(async function refresh(logger: Logger) {
   // No need to fetch status of delivered packages
   const undeliveredPackages = storage
     .getAll()
@@ -138,4 +138,6 @@ export default async function refresh(logger: Logger) {
   );
 
   updatedPackages.forEach((it) => storage.save(it));
-}
+});
+
+export default refresh;

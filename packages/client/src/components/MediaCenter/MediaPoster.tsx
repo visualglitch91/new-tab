@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { styled } from "@mui/material";
+import { MemoryCache } from "@home-control/utils";
 import { MediaItem as IMediaItem } from "@home-control/types/media-center";
 import api from "../../utils/api";
-import MemoryCache from "../../utils/MemoryCache";
 
 function modifyImageUrl(inputUrl: string) {
   const modifiedUrl = inputUrl.replace(
@@ -23,7 +23,7 @@ const PosterRoot = styled("img")(({ theme }) => ({
 }));
 
 const imageCache = new MemoryCache<string>({
-  ttl: 10_000, //5 * 60_000,
+  ttl: 5 * 60_000,
   onDispose: (url) => URL.revokeObjectURL(url),
 });
 

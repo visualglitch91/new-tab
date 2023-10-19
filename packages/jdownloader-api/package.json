@@ -1,5 +1,5 @@
 {
-  "name": "jdownloader-api",
+  "name": "@home-control/jdownloader-api",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",

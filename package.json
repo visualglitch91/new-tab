@@ -25,6 +25,7 @@
   },
   "workspaces": [
     "packages/jdownloader-api",
+    "packages/utils",
     "packages/server",
     "packages/client",
     "packages/types"

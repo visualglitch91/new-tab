@@ -1,4 +1,4 @@
-import * as jdownloader from "jdownloader-api";
+import * as jdownloader from "@home-control/jdownloader-api";
 import { JDownloaderItem } from "@home-control/types/jdownloader";
 import { createAppModule } from "../../utils";
 import { config } from "../../../../../config";

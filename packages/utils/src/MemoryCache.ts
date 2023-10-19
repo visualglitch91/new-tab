@@ -1,6 +1,6 @@
-export default class MemoryCache<T> {
+export class MemoryCache<T> {
   private cache = new Map<string, T>();
-  private timeouts = new Map<string, number>();
+  private timeouts = new Map<string, NodeJS.Timeout>();
   private ttl: number;
   private onDispose?: (value: T) => void;
 
@@ -24,11 +24,19 @@ export default class MemoryCache<T> {
 
     this.timeouts.set(
       key,
-      window.setTimeout(() => {
-        this.onDispose?.(value);
-        this.cache.delete(key);
-      }, this.ttl)
+      setTimeout(() => this.remove(key), this.ttl)
     );
+  }
+
+  remove(key: string) {
+    if (this.cache.has(key)) {
+      this.onDispose?.(this.cache.get(key)!);
+      this.cache.delete(key);
+    }
+
+    if (this.timeouts.has(key)) {
+      clearTimeout(this.timeouts.get(key));
+    }
   }
 
   has(key: string) {
@@ -37,5 +45,9 @@ export default class MemoryCache<T> {
 
   get(key: string) {
     return this.cache.get(key);
+  }
+
+  getKeys() {
+    return Array.from(this.cache.keys());
   }
 }

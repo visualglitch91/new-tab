@@ -12,6 +12,7 @@ import objectid from "bson-objectid";
 import axios from "axios";
 import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
+import { MemoryCache } from "@home-control/utils";
 import {
   Habit,
   ScheduledTask,
@@ -19,6 +20,7 @@ import {
 } from "@home-control/types/ticktick";
 import { normalizeDate } from "./utils";
 import { rrulestr } from "rrule";
+import { singleAsyncExecution } from "../../utils";
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
@@ -56,6 +58,21 @@ function callAPI<T = any>(
     .then((res) => res.data);
 }
 
+const memCache = new MemoryCache<any>({
+  ttl: 30_000,
+});
+
+function clearMethodCache(method: string) {
+  memCache.getKeys().forEach((it) => {
+    try {
+      const cacheKey = JSON.parse(it);
+      if (cacheKey.method === method) {
+        memCache.remove(it);
+      }
+    } catch (_) {}
+  });
+}
+
 export default class TickTick {
   login({ username, password }: { username: string; password: string }) {
     return callAPI("v2/user/signon?wc=true&remember=true", "POST", {
@@ -68,11 +85,23 @@ export default class TickTick {
     });
   }
 
-  async getUncompletedTasks(
+  getUncompletedTasks = singleAsyncExecution(async function getUncompletedTasks(
     since: Date,
     until: Date,
     projectIds = new Array<string>()
-  ) {
+  ): Promise<{
+    scheduled: ScheduledTask[];
+    unscheduled: UnscheduledTask[];
+  }> {
+    const cacheKey = JSON.stringify({
+      method: "getUncompletedTasks",
+      params: { since, until, projectIds },
+    });
+
+    if (memCache.has(cacheKey)) {
+      return memCache.get(cacheKey);
+    }
+
     const scheduled: ScheduledTask[] = [];
     const unscheduled = new Array<UnscheduledTask>();
 
@@ -132,14 +161,30 @@ export default class TickTick {
       });
     });
 
-    return { scheduled: sortBy(scheduled, "startDate"), unscheduled };
-  }
+    const result = {
+      scheduled: sortBy(scheduled, "startDate"),
+      unscheduled,
+    };
 
-  async getEvents(
+    memCache.set(cacheKey, result);
+
+    return result;
+  });
+
+  getEvents = singleAsyncExecution(async function getEvents(
     since: Date,
     until: Date,
     excludedCalendarIds = new Array<string>()
-  ) {
+  ): Promise<ScheduledTask[]> {
+    const cacheKey = JSON.stringify({
+      method: "getEvents",
+      params: { since, until, excludedCalendarIds },
+    });
+
+    if (memCache.has(cacheKey)) {
+      return memCache.get(cacheKey);
+    }
+
     const scheduled: ScheduledTask[] = [];
 
     const { events: rawEvents } = await callAPI(
@@ -215,11 +260,15 @@ export default class TickTick {
       });
     });
 
-    return uniqBy(
+    const result = uniqBy(
       orderBy(scheduled, ["startDate"], ["desc"]),
       (it) => `${it.raw.uid}--${format(new Date(it.startDate), "yyyy-MM-dd")}`
     ).reverse();
-  }
+
+    memCache.set(cacheKey, result);
+
+    return result;
+  });
 
   async getCalendar(
     since: Date,
@@ -239,55 +288,72 @@ export default class TickTick {
     };
   }
 
-  async getTodayHabits(): Promise<Habit[]> {
-    interface Checkin {
-      habitId: string;
-      id: string;
-      opTime: string;
-      status: 0 | 1 | 2;
-      value: number;
-    }
+  getTodayHabits = singleAsyncExecution(
+    async function getTodayHabits(): Promise<Habit[]> {
+      const cacheKey = JSON.stringify({
+        method: "getTodayHabits",
+        params: format(new Date(), "yyyy-MM-dd"),
+      });
 
-    const habits = await callAPI<{ id: string; name: string; goal: number }[]>(
-      "v2/habits",
-      "GET"
-    );
-
-    const today = new Date();
-
-    const checkins = await callAPI<Record<string, Checkin[]>>(
-      "v2/habitCheckins/query",
-      "POST",
-      {
-        habitIds: habits.map((it: any) => it.id),
-        afterStamp: tickStamp(subDays(new Date(), 1)),
+      if (memCache.has("getTodayHabits")) {
+        return memCache.get("getTodayHabits");
       }
-    ).then((res) => res.checkins);
 
-    const checkinsByHabitId = Object.values(checkins)
-      .flat()
-      .filter(
-        (it: any) => differenceInCalendarDays(new Date(it.opTime), today) === 0
-      )
-      .reduce<Record<string, Checkin>>((acc, it: any) => {
-        return { ...acc, [it.habitId]: it };
-      }, {});
+      interface Checkin {
+        habitId: string;
+        id: string;
+        opTime: string;
+        status: 0 | 1 | 2;
+        value: number;
+      }
 
-    return habits.map((habit: any) => {
-      const checkin = checkinsByHabitId[habit.id];
+      const habits = await callAPI<
+        { id: string; name: string; goal: number }[]
+      >("v2/habits", "GET");
 
-      return {
-        habitId: habit.id,
-        checkinId: checkin?.id,
-        name: habit.name,
-        goal: habit.goal,
-        value: checkin?.value || 0,
-        raw: habit,
-      };
-    });
-  }
+      const today = new Date();
+
+      const checkins = await callAPI<Record<string, Checkin[]>>(
+        "v2/habitCheckins/query",
+        "POST",
+        {
+          habitIds: habits.map((it: any) => it.id),
+          afterStamp: tickStamp(subDays(new Date(), 1)),
+        }
+      ).then((res) => res.checkins);
+
+      const checkinsByHabitId = Object.values(checkins)
+        .flat()
+        .filter(
+          (it: any) =>
+            differenceInCalendarDays(new Date(it.opTime), today) === 0
+        )
+        .reduce<Record<string, Checkin>>((acc, it: any) => {
+          return { ...acc, [it.habitId]: it };
+        }, {});
+
+      const result = habits.map((habit: any) => {
+        const checkin = checkinsByHabitId[habit.id];
+
+        return {
+          habitId: habit.id,
+          checkinId: checkin?.id,
+          name: habit.name,
+          goal: habit.goal,
+          value: checkin?.value || 0,
+          raw: habit,
+        };
+      });
+
+      memCache.set(cacheKey, result);
+
+      return result;
+    }
+  );
 
   async checkinHabit(habitId: string) {
+    clearMethodCache("getTodayHabits");
+
     const habit = (await this.getTodayHabits()).find(
       (it) => it.habitId === habitId
     );
@@ -321,6 +387,8 @@ export default class TickTick {
   }
 
   async completeTask(id: string, projectId: string) {
+    clearMethodCache("getUncompletedTasks");
+
     const task = await callAPI(`v2/task/${id}?projectId=${projectId}`, "GET");
 
     if (!task) {
