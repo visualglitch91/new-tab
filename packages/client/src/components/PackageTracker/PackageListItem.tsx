@@ -10,6 +10,7 @@ import ColorBadge from "../ColorBadge";
 const STATUS_COLORS = {
   delivered: "#50fa7b",
   "in-transit": "#8be9fd",
+  "en-route": "#f1fa8c",
   "pending-payment": "#f1fa8c",
   "not-found": "#ff5555",
 } as const;

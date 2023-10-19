@@ -108,6 +108,10 @@ export default async function refresh(logger: Logger) {
             ? "delivered"
             : lastEvent.description.includes("aguardando pagamento")
             ? "pending-payment"
+            : lastEvent.description.includes(
+                "Objeto saiu para entrega ao destinatário"
+              )
+            ? "en-route"
             : "in-transit"
           : "not-found";
 

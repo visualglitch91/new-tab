@@ -44,33 +44,39 @@ export default createAppModule("ticktick", async (instance, logger) => {
 
       // Today's habits
       tick.getTodayHabits(),
-    ]).then(([{ scheduled: delayed }, { scheduled, unscheduled }, habits]) => {
-      const { today, tomorrow } = groupBy(scheduled, (it) => {
-        const startDate = new Date(it.startDate);
-        const endDate = new Date(it.endDate);
+    ]).then(
+      ([
+        { scheduled: delayed = [] },
+        { scheduled, unscheduled },
+        habits = [],
+      ]) => {
+        const { today = [], tomorrow = [] } = groupBy(scheduled, (it) => {
+          const startDate = new Date(it.startDate);
+          const endDate = new Date(it.endDate);
 
-        if (isSameDay(startDate, until)) {
-          return "tomorrow";
-        }
+          if (isSameDay(startDate, until)) {
+            return "tomorrow";
+          }
 
-        if (
-          isSameDay(startDate, now) &&
-          (it.isAllDay || isBefore(now, endDate))
-        ) {
-          return "today";
-        }
+          if (
+            isSameDay(startDate, now) &&
+            (it.isAllDay || isBefore(now, endDate))
+          ) {
+            return "today";
+          }
 
-        return "other";
-      });
+          return "other";
+        });
 
-      return {
-        delayed,
-        today,
-        tomorrow,
-        unscheduled,
-        habits,
-      };
-    });
+        return {
+          delayed,
+          today,
+          tomorrow,
+          unscheduled,
+          habits,
+        };
+      }
+    );
   });
 
   instance.post<{ Body: { habitId: string } }>("/habits/checkin", (req) => {
