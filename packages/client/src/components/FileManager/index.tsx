@@ -35,7 +35,9 @@ export default function FileManager({ maxHeight }: { maxHeight?: number }) {
         },
         "install-switch": {
           label: "Instalar no Switch",
-          hidden: ![".xci", ".nsp"].some((it) => item.name.endsWith(it)),
+          hidden: ![".xci", ".nsp", ".nsz"].some((it) =>
+            item.name.toLowerCase().endsWith(it)
+          ),
           action: () => {
             if (item.type === "file") {
               mount((_, props) => (
