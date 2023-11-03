@@ -7,6 +7,7 @@ import {
   startOfDay,
   isWithinInterval,
   differenceInCalendarDays,
+  subMilliseconds,
 } from "date-fns";
 import objectid from "bson-objectid";
 import axios from "axios";
@@ -231,6 +232,10 @@ export default class TickTick {
 
           if (!endDate) {
             return;
+          }
+
+          if (rawEvent.isAllDay) {
+            endDate = subMilliseconds(endDate, 1);
           }
 
           if (!isWithinInterval(startDate, { start: since, end: until })) {
