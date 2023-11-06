@@ -29,9 +29,13 @@ const mediaInfo: Record<string, CurrentMedia> = {
     title: "PlayStation 5",
     volumeOnly: true,
   },
+  miboxGeneric: {
+    image: getImageUrl("androidtv.png"),
+    title: "AndroidTV",
+  },
   "com.globo.globotv": {
     image: getImageUrl("globoplay.jpg"),
-    title: "globoplay",
+    title: "GloboPlay",
   },
   "com.plexapp.android": {
     image: getImageUrl("plex.jpg"),
@@ -55,7 +59,7 @@ const mediaInfo: Record<string, CurrentMedia> = {
   },
   "com.crunchyroll.crunchyroid": {
     image: getImageUrl("crunchyroll.jpg"),
-    title: "crunchyroll",
+    title: "CrunchyRoll",
   },
   "com.teamsmart.videomanager.tv": {
     image: getImageUrl("youtube.jpg"),
@@ -72,6 +76,10 @@ const mediaInfo: Record<string, CurrentMedia> = {
   "com.spotify.tv.android": {
     image: getImageUrl("spotify.png"),
     title: "Spotify",
+  },
+  "org.jellyfin.androidtv": {
+    image: getImageUrl("jellyfin.jpg"),
+    title: "Jellyfin",
   },
 };
 
@@ -111,9 +119,9 @@ export function useCurrentMedia(): CurrentMedia | null {
   const appId = mibox.attributes.app_id;
 
   if (
-    appId === "com.spotify.tv.android" &&
     spotify &&
-    spotify.state !== "idle"
+    spotify.state !== "idle" &&
+    spotify.attributes.source === "Xiaomi TV Box"
   ) {
     const attrs = spotify.attributes;
 
@@ -130,5 +138,5 @@ export function useCurrentMedia(): CurrentMedia | null {
     return mediaInfo[appId] || null;
   }
 
-  return null;
+  return mediaInfo["miboxGeneric"];
 }
