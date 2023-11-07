@@ -273,9 +273,12 @@ export function singleAsyncExecution<
   T extends (...args: any[]) => Promise<any>,
   P extends ReturnType<T>
 >(func: T) {
-  let current: P | null = null;
+  let map = new Map<string, P>();
 
   return (...args: Parameters<T>): P => {
+    const key = JSON.stringify(args);
+    let current = map.get(key);
+
     if (current) {
       return current;
     }
@@ -283,8 +286,10 @@ export function singleAsyncExecution<
     current = func(...args) as P;
 
     current.finally(() => {
-      current = null;
+      map.delete(key);
     });
+
+    map.set(key, current);
 
     return current;
   };
