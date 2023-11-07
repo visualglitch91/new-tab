@@ -1,12 +1,30 @@
 import axios from "axios";
+import { orderBy } from "lodash";
 import * as cheerio from "cheerio";
 import { PackageTrackerItem } from "@home-control/types/package-tracker";
 import { config } from "../../../../../config";
 import { Logger, singleAsyncExecution } from "../../utils";
 import storage from "./storage";
-import { orderBy } from "lodash";
 
 const { webhook } = config.package_tracker;
+
+function normalizeEvent(str: string) {
+  let tmp = str;
+
+  [
+    ["Status: ", ""],
+    ["Local: ", ""],
+    ["Origem: ", "▼ "],
+    ["Destino: ", "⦿ "],
+    [" / ", "/"],
+    ["Objeto em trânsito - por favor aguarde", "Em trânsito"],
+    ["Objeto entregue ao destinatário", "Entregue"],
+  ].forEach(([a, b]) => {
+    tmp = tmp.replaceAll(a, b);
+  });
+
+  return tmp;
+}
 
 async function track(code: string) {
   try {
@@ -32,8 +50,8 @@ async function track(code: string) {
             at: parseDateString(
               rawAt.replace("Data  : ", "").replace("Hora: ", "")
             ),
-            description: rawDescription.replace("Status: ", ""),
-            location: rawLocation.replace("Local: ", ""),
+            description: normalizeEvent(rawDescription),
+            location: normalizeEvent(rawLocation),
           };
         })
         .get(),
@@ -104,7 +122,7 @@ const refresh = singleAsyncExecution(async function refresh(logger: Logger) {
         const { eventCount, lastEvent = prevPackage.lastEvent } = result;
 
         const status: PackageTrackerItem["status"] = lastEvent
-          ? lastEvent.description.includes("Objeto entregue")
+          ? lastEvent.description.includes("Entregue")
             ? "delivered"
             : lastEvent.description.includes("aguardando pagamento")
             ? "pending-payment"

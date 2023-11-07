@@ -79,15 +79,18 @@ export function useBreakpoint() {
 }
 
 export function formatDate(date: string | Date) {
-  return new Date(date).toLocaleDateString("pt-BR", {
-    month: "short",
-    day: "numeric",
-  });
+  return new Date(date)
+    .toLocaleDateString("pt-BR", {
+      month: "short",
+      day: "numeric",
+    })
+    .replaceAll(".", "");
 }
 
 export function clearReactQueryCacheAndReload() {
   if (!!window.localStorage.getItem("REACT_QUERY_OFFLINE_CACHE")) {
     window.localStorage.removeItem("REACT_QUERY_OFFLINE_CACHE");
-    window.location.reload();
   }
+
+  window.location.reload();
 }

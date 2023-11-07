@@ -65,7 +65,7 @@ export default function PackageListItem({
                     .replace(/Local: /g, "")
                     .replace(/LOCAL: /g, "")}
                 </span>
-                {item.lastEvent.location && (
+                {item.lastEvent.location && item.status !== "delivered" && (
                   <span>{item.lastEvent.location}</span>
                 )}
               </Desciption>
