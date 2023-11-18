@@ -90,12 +90,14 @@ export function useCurrentMedia(): CurrentMedia | null {
     "media_player.spotify_visualglitch91": spotify,
     "media_player.xiaomi_tv_box": mibox,
     "media_player.sala_tv": tv,
+    "media_player.sala_jellyfin": jellyfin,
   } = useEntities(
     "script.sala_mibox_ligar",
     "input_text.sala_receiver_entrada",
     "media_player.spotify_visualglitch91",
     "media_player.xiaomi_tv_box",
-    "media_player.sala_tv"
+    "media_player.sala_tv",
+    "media_player.sala_jellyfin"
   );
 
   if (miboxLoading === "on" || !tv || tv.state !== "on") {
@@ -128,6 +130,21 @@ export function useCurrentMedia(): CurrentMedia | null {
     return {
       spotify: true,
       image: `${hassUrl}${attrs.entity_picture}`,
+      album: attrs.media_album_name,
+      artist: attrs.media_artist,
+      title: attrs.media_title,
+    };
+  }
+
+  if (
+    appId === "org.jellyfin.androidtv" &&
+    jellyfin &&
+    jellyfin.state !== "idle"
+  ) {
+    const attrs = jellyfin.attributes;
+
+    return {
+      image: attrs.entity_picture!,
       album: attrs.media_album_name,
       artist: attrs.media_artist,
       title: attrs.media_title,

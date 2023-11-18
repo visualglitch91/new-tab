@@ -28,6 +28,7 @@ const assets = {
   retropi: getAssetUrl("logos/retropi.png"),
   kodi: getAssetUrl("logos/kodi.png"),
   crunchyroll: getAssetUrl("logos/crunchyroll.png"),
+  jellyfin: getAssetUrl("logos/jellyfin.png"),
 };
 
 export function ImageButtonCard({

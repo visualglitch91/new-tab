@@ -50,7 +50,7 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
           asset="globoplay"
           script="sala_mibox_globoplay"
         />
-        <ScriptImageButtonCard asset="plex" script="sala_mibox_plex" />
+        <ScriptImageButtonCard asset="jellyfin" script="sala_mibox_jellyfin" />
         <ScriptImageButtonCard
           asset="disneyplus"
           script="sala_mibox_disney_plus"
@@ -67,7 +67,6 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
           script="sala_mibox_crunchyroll"
         />
         <ScriptImageButtonCard asset="youtube" script="sala_mibox_youtube" />
-        <ScriptImageButtonCard asset="kodi" script="sala_mibox_kodi" />
         <ScriptImageButtonCard asset="twitch" script="sala_mibox_twitch" />
         <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
         <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
