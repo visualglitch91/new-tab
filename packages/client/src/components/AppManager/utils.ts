@@ -38,19 +38,8 @@ export function parseApp(app: App) {
   };
 }
 
-export function formatName(stack: string) {
-  return stack
-    .split("-")
-    .map((word) => {
-      if (word.length > 0) {
-        const firstLetter = word[0].toUpperCase();
-        const restOfWord = word.slice(1).toLowerCase();
-        return firstLetter + restOfWord;
-      }
-
-      return word;
-    })
-    .join(" ");
+export function formatName(appName: string) {
+  return appName;
 }
 
 export function formatStackName(stack: string) {
