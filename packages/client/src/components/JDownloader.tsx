@@ -70,7 +70,7 @@ export default function JDownloader({ maxHeight }: { maxHeight?: number }) {
           action: () => {
             mutate(() =>
               api(`/jdownloader/remove`, "post", {
-                id: item.id,
+                ids: [item.id],
               })
             );
           },

@@ -1,80 +1,27 @@
-import * as jdownloader from "@home-control/jdownloader-api";
+import axios from "axios";
 import { JDownloaderItem } from "@home-control/types/jdownloader";
 import { createAppModule } from "../../utils";
 import { config } from "../../../../../config";
 
-const { username, password } = config.jdownloader;
-
-async function connect() {
-  await jdownloader.disconnect();
-  return jdownloader.connect(username, password);
-}
+const { url } = config.jdownloader_http_api;
 
 export default createAppModule("jdownloader", async (instance, logger) => {
-  let deviceId: string | null = null;
-
-  await connect();
-
-  async function getDeviceId() {
-    if (!deviceId) {
-      const devices: { id: string }[] = await jdownloader.listDevices();
-
-      if (devices.length > 0) {
-        deviceId = devices[0].id;
-      }
-    }
-
-    return deviceId;
-  }
-
-  async function retryOn403<T>(func: () => Promise<T>) {
-    try {
-      return await func();
-    } catch (err: any) {
-      if (err === 403) {
-        await connect();
-        return func();
-      }
-
-      throw err;
-    }
-  }
-
   instance.get("/downloads", () => {
-    return retryOn403(async () => {
-      const deviceId = await getDeviceId();
-
-      if (!deviceId) {
-        return [];
-      }
-
-      return jdownloader
-        .queryLinks(deviceId)
-        .then((res: { data: JDownloaderItem }) => res.data);
-    });
+    console.log(`${url}/links`);
+    return axios
+      .get(`${url}/links`)
+      .then((res: { data: JDownloaderItem }) => res.data);
   });
 
-  instance.post<{ Body: { id: string } }>("/remove", (req) => {
-    return retryOn403(async () => {
-      const deviceId = await getDeviceId();
-
-      if (!deviceId) {
-        throw new Error("device not found");
-      }
-
-      await jdownloader.cleanUpLink(deviceId, req.body.id);
-    });
+  instance.post<{ Body: { ids: string[] } }>("/remove", (req) => {
+    return axios
+      .post(`${url}/links/delete`, { ids: req.body.ids })
+      .then((res: { data: JDownloaderItem }) => res.data);
   });
 
   instance.post<{ Body: { url: string } }>("/add", (req) => {
-    return retryOn403(async () => {
-      const deviceId = await getDeviceId();
-
-      if (!deviceId) {
-        throw new Error("device not found");
-      }
-
-      await jdownloader.addLinks([req.body.url], deviceId, true);
-    });
+    return axios
+      .post(`${url}/links`, { url: req.body.url })
+      .then((res: { data: JDownloaderItem }) => res.data);
   });
 });

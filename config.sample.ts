@@ -16,9 +16,8 @@ export const config = {
     url: "",
   },
 
-  jdownloader: {
-    username: "",
-    password: "",
+  jdownloader_http_api: {
+    url: "",
   },
 
   whats_up_docker: {
