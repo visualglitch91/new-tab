@@ -2,7 +2,9 @@ import * as pm2 from "./pm2";
 import * as docker from "./docker";
 import { createAppModule, compareByName } from "../../utils";
 
-export default createAppModule("app-manager", (instance) => {
+export default createAppModule("app-manager", (instance, logger) => {
+  docker.setupUpdateChecker(logger);
+
   instance.get("/apps", async () => {
     const containers = await docker.getContainers();
     const apps = await pm2.list();

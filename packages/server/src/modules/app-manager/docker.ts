@@ -6,6 +6,7 @@ import {
   bytesToSize,
   createProccessOutputStreamer,
   isDefined,
+  Logger,
 } from "../../utils";
 
 const docker = new Docker({ socketPath: "/var/run/docker.sock" });
@@ -22,24 +23,28 @@ const statusMap: Record<DockerStatus, AppStatus> = {
 
 const updatesAvailableByName: Record<string, boolean | undefined> = {};
 
-function checkForUpdates() {
-  axios
-    .get<{ name: string; updateAvailable: boolean }[]>(
-      `${config.whats_up_docker.url}/api/containers`
-    )
-    .then((res) =>
-      res.data.forEach((it) => {
-        if (it.updateAvailable) {
-          updatesAvailableByName[it.name] = true;
-        } else {
-          delete updatesAvailableByName[it.name];
-        }
-      })
-    );
-}
+export function setupUpdateChecker(logger: Logger) {
+  function checkForUpdates() {
+    axios
+      .get<{ name: string; updateAvailable: boolean }[]>(
+        `${config.whats_up_docker.url}/api/containers`
+      )
+      .then(
+        (res) =>
+          res.data.forEach((it) => {
+            if (it.updateAvailable) {
+              updatesAvailableByName[it.name] = true;
+            } else {
+              delete updatesAvailableByName[it.name];
+            }
+          }),
+        (err) => logger
+      );
+  }
 
-checkForUpdates();
-setInterval(checkForUpdates, 10 * 60_0000);
+  checkForUpdates();
+  setInterval(checkForUpdates, 10 * 60_0000);
+}
 
 function translateStatus(status: DockerStatus) {
   return statusMap[status];
