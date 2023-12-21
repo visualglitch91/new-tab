@@ -5,6 +5,7 @@ export const PROGRESS_RING_RADIUS = 30;
 export const PROGRESS_RING_STROKE = 4;
 
 export const statusSx = {
+  offline: { background: "#6272A4" },
   focus: { background: "#e24298" },
   "short-break": { background: "#32bdda" },
   "long-break": { background: "#5bb768" },

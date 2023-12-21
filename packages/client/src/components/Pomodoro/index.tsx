@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/material";
+import { CircularProgress, SxProps } from "@mui/material";
 import { useLongPress } from "@uidotdev/usehooks";
 import { sxx } from "../../utils/styling";
 import useConfirm from "../../utils/useConfirm";
@@ -19,7 +19,7 @@ import {
 } from "./components";
 
 export default function Pomodoro({ sx }: { sx: SxProps }) {
-  const [state, toggleRunning, restart] = usePomodoro();
+  const [state, toggleRunning, restart, connect] = usePomodoro();
   const confirm = useConfirm();
 
   const longPress = useLongPress(() => {
@@ -30,8 +30,26 @@ export default function Pomodoro({ sx }: { sx: SxProps }) {
     });
   });
 
-  if (!state) {
-    return <Root />;
+  if (state.connection !== "connected") {
+    return (
+      <Root sx={statusSx.offline}>
+        <WidgetButton
+          sx={{
+            py: 1.5,
+            height: 75,
+            fontSize: 14,
+            fontWeight: 600,
+          }}
+          onClick={() => connect()}
+        >
+          {state.connection === "idle" ? (
+            <CircularProgress />
+          ) : (
+            "Pomodoro Offline"
+          )}
+        </WidgetButton>
+      </Root>
+    );
   }
 
   return (

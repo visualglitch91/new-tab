@@ -29,7 +29,6 @@ export default function DesktopLayout({
           <ClockAndWeather
             compact
             sx={(theme) => ({
-              marginBottom: "16px",
               background: theme.palette.white.main,
               color: theme.palette.white.contrastText,
             })}

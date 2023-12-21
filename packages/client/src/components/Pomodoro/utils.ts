@@ -16,37 +16,52 @@ interface State {
   remaining: number;
   running: boolean;
   status: PomodoroStatus;
+  connection: "idle" | "connected" | "offline";
 }
 
 export default function usePomodoro() {
   const wsRef = useRef<WebSocket | null>(null);
-  const [state, setState] = useState<State>();
+
+  const [state, setState] = useState<State>({
+    cycleCount: 0,
+    duration: 0,
+    prevStatus: null,
+    remaining: 0,
+    running: false,
+    status: "focus",
+    connection: "idle",
+  });
+
+  const connect = () => {
+    const ws = (wsRef.current = new WebSocket(config.pomodoro.websocket));
+
+    ws.addEventListener("message", (e) => {
+      const state = JSON.parse(e.data);
+
+      setState((prev) => ({
+        ...prev,
+        ...state,
+        connection: "connected",
+      }));
+    });
+
+    const onError = () => {
+      setState((prev) => ({
+        ...prev,
+        connection: "offline",
+      }));
+    };
+
+    ws.addEventListener("close", onError);
+    ws.addEventListener("error", onError);
+  };
 
   useEffect(() => {
-    let retryTimeout = 0;
-
-    const retry = () => {
-      retryTimeout = window.setTimeout(connect, 1000);
-    };
-
-    const connect = () => {
-      const ws = (wsRef.current = new WebSocket(config.pomodoro.websocket));
-
-      ws.addEventListener("message", (e) => {
-        const state = JSON.parse(e.data);
-        setState(state);
-      });
-
-      ws.addEventListener("close", retry);
-      ws.addEventListener("error", retry);
-    };
-
     connect();
 
     return () => {
       wsRef.current?.close();
       wsRef.current = null;
-      window.clearTimeout(retryTimeout);
     };
   }, []);
 
@@ -62,5 +77,5 @@ export default function usePomodoro() {
     }
   }
 
-  return [state, toggleRunning, restart] as const;
+  return [state, toggleRunning, restart, connect] as const;
 }
