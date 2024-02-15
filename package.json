@@ -7,7 +7,7 @@
     "dev:server": "tsx watch src/server",
     "dev": "run-p dev:*",
     "start": "PORT=5173 node dist/server/",
-    "build": "tsc && vite build && tsc -p tsconfig.server.json",
+    "build": "tsc && rm -rf dist && vite build && tsc -p tsconfig.server.json",
     "preview": "vite preview"
   },
   "dependencies": {
