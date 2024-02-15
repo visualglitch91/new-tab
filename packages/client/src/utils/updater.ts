@@ -30,7 +30,7 @@ export function autoUpdater() {
 
   console.log(`Looking for a new version, current is ${version}`);
 
-  fetch(`./latest.json?c=${Date.now()}`)
+  fetch(`/latest.json?c=${Date.now()}`)
     .then((res) => res.json())
     .catch(() => undefined)
     .then(async (latest) => {
