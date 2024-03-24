@@ -1,9 +1,0 @@
-{
-  "name": "@home-control/utils",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/index.ts",
-  "author": "",
-  "license": "ISC",
-  "dependencies": {}
-}

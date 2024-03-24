@@ -23,7 +23,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-deploy.sh
-packages/client/src/version.json
-packages/next/src/version.json
-config.ts
+client/src/version.json
+config.json

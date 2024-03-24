@@ -18,5 +18,5 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "node"]
   },
-  "include": ["packages/**/*"]
+  "include": ["packages/**/*", "common/types"]
 }

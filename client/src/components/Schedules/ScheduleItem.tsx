@@ -1,0 +1,82 @@
+import { ListItem, Stack, ButtonGroup, styled } from "@mui/material";
+import { Schedule } from "$common/types/hass-scheduler";
+import DaysRow from "../DaysRow";
+import { formatTime } from "./utils";
+import Icon from "../Icon";
+import AltIconButton from "../AltIconButton";
+
+const Title = styled("div")({
+  flex: 1,
+  fontWeight: 600,
+  '&[data-disabled="true"]': {
+    textDecoration: "line-through",
+  },
+});
+
+const Time = styled("div")({
+  fontWeight: 600,
+  marginLeft: "auto",
+});
+
+export default function ScheduleItem({
+  schedule,
+  onPatch,
+  onEdit,
+  onDelete,
+}: {
+  schedule: Schedule;
+  onPatch: <K extends keyof Schedule>(key: K, value: Schedule[K]) => void;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  const options = [
+    {
+      label: schedule.enabled ? "Desativar" : "Ativar",
+      primary: !schedule.enabled,
+      value: "toggle",
+      icon: schedule.enabled
+        ? "mdi:checkbox-marked-circle-outline"
+        : "checkbox-blank-circle-outline",
+      action: () => onPatch("enabled", !schedule.enabled),
+    },
+    {
+      label: "Editar",
+      value: "edit",
+      icon: "pencil-outline",
+      action: onEdit,
+    },
+    {
+      label: "Deletar",
+      value: "delete",
+      icon: "close",
+      action: onDelete,
+    },
+  ];
+
+  return (
+    <ListItem sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <Stack direction="row" spacing={2} width="100%" alignItems="center">
+        <ButtonGroup
+          sx={{ "& .MuiButtonGroup-grouped": { minWidth: "unset" } }}
+        >
+          {options.map((it, index) => (
+            <AltIconButton
+              size="small"
+              sx={{ "--size": "36px" }}
+              key={index}
+              onClick={it.action}
+            >
+              <Icon size={14} icon={it.icon} />
+            </AltIconButton>
+          ))}
+        </ButtonGroup>
+        <Title data-disabled={!schedule.enabled}>{schedule.name}</Title>
+        <Time>{formatTime(schedule.time)}</Time>
+      </Stack>
+      <DaysRow
+        value={schedule.days}
+        onChange={(value) => onPatch("days", value)}
+      />
+    </ListItem>
+  );
+}

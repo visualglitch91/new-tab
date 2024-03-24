@@ -1,0 +1,20 @@
+{
+  "port": 6173,
+  "whats_up_docker": {
+    "url": ""
+  },
+  "home_assistant": {
+    "url": "",
+    "token": ""
+  },
+  "matrix": {
+    "homeserver": "",
+    "token": ""
+  },
+  "package_tracker": {
+    "webhook": ""
+  },
+  "tvbox": {
+    "adb_host": ""
+  }
+}
