@@ -1,6 +1,5 @@
 import { Button, ButtonProps } from "@mui/material";
 import { callService, useEntity } from "$client/utils/hass";
-import useAsyncChange from "$client/utils/useAsyncChange";
 import DotLoading from "./DotLoading";
 
 export default function RunScriptButton({
@@ -10,13 +9,9 @@ export default function RunScriptButton({
   entityId: string;
 } & Omit<ButtonProps, "onClick">) {
   const entity = useEntity(entityId);
+  const running = entity?.state === "on";
 
-  const { changing, change } = useAsyncChange({
-    flag: entity?.state === "on" || false,
-    timeout: 30_000,
-  });
-
-  if (changing) {
+  if (running) {
     return <DotLoading />;
   }
 
@@ -24,9 +19,7 @@ export default function RunScriptButton({
     <Button
       {...props}
       onClick={() => {
-        if (change()) {
-          callService("homeassistant", "turn_on", { entity_id: entityId });
-        }
+        callService("homeassistant", "turn_on", { entity_id: entityId });
       }}
     />
   );
