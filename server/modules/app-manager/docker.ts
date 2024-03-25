@@ -1,14 +1,59 @@
-import ky from "ky";
-import Docker from "dockerode";
-import { App, AppStatus, DockerStatus } from "$common/types/app-manager";
-import config from "$server/config";
+import PQueue from "p-queue";
+import {
+  App,
+  AppStatus,
+  DockerStatus,
+  UpdateStatus,
+} from "$common/types/app-manager";
 import {
   isDefined,
   bytesToSize,
   createProccessOutputStreamer,
+  logger,
 } from "$server/utils";
+import fetchImageUpdateStatus from "./fetchImageUpdateStatus";
+import dockerode from "./dockerode";
 
-const docker = new Docker({ socketPath: "/var/run/docker.sock" });
+const queue = new PQueue({ concurrency: 4 });
+const dockerImageUpdatesByName: Record<string, UpdateStatus> = {};
+
+export async function checkForContainerImageUpdates(container: string) {
+  const status = await fetchImageUpdateStatus(container);
+  dockerImageUpdatesByName[container] = status;
+  return status;
+}
+
+export function setupUpdateChecker() {
+  logger.info("Setup Docker Update Checker");
+
+  const check = async () => {
+    logger.info("Checking docker image updates");
+
+    // Fetch list of containers
+    const containers = await dockerode.listContainers({ all: true });
+
+    // Array to store results
+    const results: {
+      container: string;
+      status: UpdateStatus;
+    }[] = [];
+
+    const tasks = containers.map((containerInfo) => async () => {
+      const container = containerInfo.Names[0].substring(1);
+      const status = await fetchImageUpdateStatus(container);
+      results.push({ status, container });
+    });
+
+    await queue.addAll(tasks);
+
+    results.forEach((it) => {
+      dockerImageUpdatesByName[it.container] = it.status;
+    });
+  };
+
+  check();
+  setInterval(check, 10 * 60_0000);
+}
 
 const statusMap: Record<DockerStatus, AppStatus> = {
   created: "stoppped",
@@ -20,33 +65,12 @@ const statusMap: Record<DockerStatus, AppStatus> = {
   dead: "errored",
 };
 
-const updatesAvailableByName: Record<string, boolean | undefined> = {};
-
-export function setupUpdateChecker() {
-  function checkForUpdates() {
-    ky.get(`${config.whats_up_docker.url}/api/containers`)
-      .json<{ name: string; updateAvailable: boolean }[]>()
-      .then((res) =>
-        res.forEach((it) => {
-          if (it.updateAvailable) {
-            updatesAvailableByName[it.name] = true;
-          } else {
-            delete updatesAvailableByName[it.name];
-          }
-        })
-      );
-  }
-
-  checkForUpdates();
-  setInterval(checkForUpdates, 10 * 60_0000);
-}
-
 function translateStatus(status: DockerStatus) {
   return statusMap[status];
 }
 
 async function getStats(name: string) {
-  const container = await docker.getContainer(name);
+  const container = await dockerode.getContainer(name);
   return container.stats({ stream: false });
 }
 
@@ -67,7 +91,7 @@ function calculateCPUPercentUnix(cpuStats: any, precpuStats: any) {
 }
 
 export async function getContainers(name?: string): Promise<App[]> {
-  const promises = (await docker.listContainers({ all: true }))
+  const promises = (await dockerode.listContainers({ all: true }))
     .filter((it: any) => (name ? getName(it) === name : true))
     .map((container: any) => {
       const name = getName(container);
@@ -82,7 +106,7 @@ export async function getContainers(name?: string): Promise<App[]> {
           : "0mb",
         cpu: calculateCPUPercentUnix(stats.cpu_stats, stats.precpu_stats) || 0,
         uptime: container.Status,
-        updateAvailable: !!updatesAvailableByName[name],
+        updateStatus: dockerImageUpdatesByName[name],
       }));
     });
 
@@ -103,7 +127,7 @@ export async function action(
   name: string,
   action: "start" | "stop" | "restart"
 ) {
-  const container = await docker.getContainer(name);
+  const container = await dockerode.getContainer(name);
   //@ts-expect-error
   await container[action]();
 }

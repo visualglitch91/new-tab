@@ -1,3 +1,10 @@
+export type UpdateStatus =
+  | "updated"
+  | "update-available"
+  | "locked"
+  | "local"
+  | "unknown";
+
 export interface App {
   id: string;
   name: string;
@@ -6,7 +13,7 @@ export interface App {
   memory: string | null;
   uptime: string | null;
   type: "docker" | "pm2";
-  updateAvailable: boolean;
+  updateStatus?: UpdateStatus;
 }
 
 export type AppStatus = "running" | "stoppped" | "errored";

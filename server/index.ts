@@ -2,7 +2,7 @@ import http from "http";
 import express from "express";
 import ViteExpress from "vite-express";
 import session from "express-session";
-import config from "../config.json";
+import config from "./config";
 import { pinoHttp } from "./utils";
 import { expressAuth } from "./auth";
 import io from "./io";

@@ -47,6 +47,11 @@ export default createAppModule("app-manager", (instance) => {
     }
   );
 
+  instance.get<{ Params: { name: string } }>(
+    "/docker/:name/image-update-status",
+    (req) => docker.checkForContainerImageUpdates(req.params.name)
+  );
+
   /*
    * PM2 Apps
    */

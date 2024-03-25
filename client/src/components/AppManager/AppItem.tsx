@@ -19,6 +19,15 @@ enum Menu {
   RESTART = "restart",
 }
 
+const appStatusIcons = {
+  none: null,
+  local: null,
+  updated: null,
+  locked: "lock-outline",
+  unknown: "alert-outline",
+  "update-available": "arrow-up-circle-outline",
+};
+
 export function AppItem({ app }: { app: ParsedApp }) {
   const showMenu = useMenu();
   const confirm = useConfirm();
@@ -92,13 +101,13 @@ export function AppItem({ app }: { app: ParsedApp }) {
       primaryText={
         <Stack direction="row" spacing={0.8} alignItems="center">
           <span>{formatName(app.name)}</span>
-          {app.updateAvailable && (
-            <Icon
-              size={18}
-              sx={{ mt: "-1px" }}
-              icon="arrow-up-circle-outline"
-            />
-          )}
+          {(() => {
+            const icon = appStatusIcons[app.updateStatus || "none"];
+
+            return icon ? (
+              <Icon size={18} sx={{ mt: "-1px" }} icon={icon} />
+            ) : null;
+          })()}
         </Stack>
       }
       endSlot={isPending ? <DotLoading /> : running ? app.usage : "Parado"}

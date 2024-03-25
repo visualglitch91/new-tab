@@ -1,8 +1,5 @@
 {
   "port": 6173,
-  "whats_up_docker": {
-    "url": ""
-  },
   "home_assistant": {
     "url": "",
     "token": ""
@@ -16,5 +13,18 @@
   },
   "tvbox": {
     "adb_host": ""
+  },
+  "app_manager": {
+    "custom_registries": {
+      "ghcr.io": {
+        "type": "github",
+        "token": "...."
+      },
+      "gitlab-private": {
+        "type": "gitlab",
+        "auth_url": "https://.....",
+        "token": "...."
+      }
+    }
   }
 }
