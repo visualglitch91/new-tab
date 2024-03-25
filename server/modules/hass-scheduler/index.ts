@@ -1,9 +1,10 @@
+import { omit } from "lodash";
 import { CronJob } from "cron";
 import CronTime from "cron-time-generator";
 import ObjectID from "bson-objectid";
 import { differenceInSeconds } from "date-fns";
 import { Schedule, Timer as TimerData } from "$common/types/hass-scheduler";
-import { createAppModule } from "$server/utils";
+import { createAppModule, logger } from "$server/utils";
 import Storage from "$server/storage";
 import Timer from "./Timer";
 import { runActions } from "./utils";
@@ -106,6 +107,11 @@ export default createAppModule("hass-scheduler", (instance) => {
     );
 
     jobs[schedule.id] = new CronJob(cronString, () => {
+      logger.info(
+        { schedule: omit(schedule, "actions") },
+        "Running schedule on time"
+      );
+
       runActions(schedule.actions);
     });
 
@@ -121,9 +127,7 @@ export default createAppModule("hass-scheduler", (instance) => {
 
   storage.getAll().forEach(scheduleJob);
 
-  instance.get<{
-    Params: { id: string };
-  }>("/schedule", async () => {
+  instance.get("/schedule", async () => {
     return storage.getAll();
   });
 
@@ -141,6 +145,26 @@ export default createAppModule("hass-scheduler", (instance) => {
     storage.save(schedule);
 
     return { success: true };
+  });
+
+  instance.post<{
+    Params: { id: string };
+  }>("/schedule/:id/run-now", (req, res) => {
+    const schedule = storage.get(req.params.id);
+
+    if (schedule) {
+      logger.info(
+        { schedule: omit(schedule, "actions") },
+        "Running schedule now"
+      );
+
+      runActions(schedule.actions);
+      res.sendStatus(201);
+      return;
+    }
+
+    res.sendStatus(404);
+    return;
   });
 
   instance.delete<{

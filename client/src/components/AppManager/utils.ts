@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { App } from "$common/types/app-manager";
 import api from "$client/utils/api";
+import { capitalize } from "lodash";
 
 const LABELS: Record<string, string | undefined> = {
   other: "Outros",
   management: "Administração",
+  friends: "Amigos",
 };
 
 export const STATUS_COLORS = {
@@ -43,7 +45,9 @@ export function formatName(appName: string) {
 }
 
 export function formatStackName(stack: string) {
-  return LABELS[stack] || formatName(stack);
+  return (
+    LABELS[stack] || formatName(stack).split("-").map(capitalize).join(" ")
+  );
 }
 
 export type ParsedApp = ReturnType<typeof parseApp>;

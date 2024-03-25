@@ -12,7 +12,14 @@ interface SimpleAction {
   entityId: string;
 }
 
-const validDomains = ["light", "switch", "media_player", "curtain", "script"];
+const validDomains = [
+  "light",
+  "switch",
+  "media_player",
+  "curtain",
+  "script",
+  "climate",
+];
 
 export default function ActionsForm({
   value: actions,

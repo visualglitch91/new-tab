@@ -3,6 +3,7 @@ import { spawn } from "child_process";
 import { Request, Response, Router } from "express";
 import pino, { HttpLogger } from "pino-http";
 import { Socket, Server } from "socket.io";
+import config from "./config";
 
 export function wait(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -240,7 +241,8 @@ function createAppModuleInstance(router: Router) {
 type AppModuleInstance = ReturnType<typeof createAppModuleInstance>;
 
 const pinoHttp = pino({
-  level: "warn",
+  level: config.logLevel,
+  useLevel: "debug",
   transport: {
     target: "pino-pretty",
     options: {

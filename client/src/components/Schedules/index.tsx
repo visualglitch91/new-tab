@@ -50,6 +50,10 @@ export default function Schedules() {
     api(`/hass-scheduler/schedule/${item.id}`, "delete").then(() => refetch());
   }
 
+  function onRunNow(item: Schedule) {
+    api(`/hass-scheduler/schedule/${item.id}/run-now`, "post");
+  }
+
   return (
     <List component={GlossyPaper}>
       {data.length === 0 ? (
@@ -62,6 +66,7 @@ export default function Schedules() {
             onPatch={(key, value) => onPatch(it, key, value)}
             onEdit={() => upsertSchedule(it)}
             onDelete={() => onDelete(it)}
+            onRunNow={() => onRunNow(it)}
           />
         ))
       )}

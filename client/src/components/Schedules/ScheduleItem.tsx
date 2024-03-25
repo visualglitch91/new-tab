@@ -23,11 +23,13 @@ export default function ScheduleItem({
   onPatch,
   onEdit,
   onDelete,
+  onRunNow,
 }: {
   schedule: Schedule;
   onPatch: <K extends keyof Schedule>(key: K, value: Schedule[K]) => void;
   onEdit: () => void;
   onDelete: () => void;
+  onRunNow: () => void;
 }) {
   const options = [
     {
@@ -44,6 +46,12 @@ export default function ScheduleItem({
       value: "edit",
       icon: "pencil-outline",
       action: onEdit,
+    },
+    {
+      label: "Executar Agora",
+      value: "play",
+      icon: "play",
+      action: onRunNow,
     },
     {
       label: "Deletar",

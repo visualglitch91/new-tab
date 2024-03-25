@@ -13,8 +13,10 @@ export function runActions(actions: Actions) {
           json: action.data,
           headers: { Authorization: `Bearer ${token}` },
         })
-        .json()
-        .catch((err) => logger.error(err))
+        .then(
+          () => logger.info({ action }, "Action run"),
+          (error) => logger.error("Action errored", { action, error })
+        )
     )
   );
 }
