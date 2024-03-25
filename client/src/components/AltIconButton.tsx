@@ -1,5 +1,6 @@
 import { Button, styled } from "@mui/material";
 
+// eslint-disable-next-line react-refresh/only-export-components
 const AltIconButton = styled(Button)({
   borderRadius: "100%",
   minWidth: "var(--size)",
@@ -7,6 +8,7 @@ const AltIconButton = styled(Button)({
   minHeight: "var(--size)",
   maxHeight: "var(--size)",
   "--size": "32px",
+  "&[disabled]": { opacity: 0.4 },
   "&.MuiButton-sizeMedium": { "--size": "42px" },
   "&.MuiButton-sizeLarge": { "--size": "48px" },
 });

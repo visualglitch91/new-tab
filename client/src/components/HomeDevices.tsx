@@ -1,13 +1,14 @@
 import EntityButton, { EntityButtonProps } from "./EntityButton";
 import GridSection from "./GridSection";
+import HVAC from "./HVAC";
 
 const groups: {
   title?: string;
+  prepend?: React.ReactNode;
   horizontal?: boolean;
   items: EntityButtonProps[];
 }[] = [
   {
-    horizontal: true,
     items: [
       { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
@@ -19,6 +20,7 @@ const groups: {
   },
   {
     title: "Sala",
+    prepend: <HVAC />,
     items: [
       { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
@@ -127,6 +129,7 @@ export default function HomeDevices({ slice = [] }: { slice?: number[] }) {
         <GridSection
           key={index}
           title={group.title}
+          prepend={group.prepend}
           {...(group.horizontal ? horizontalSectionProps : {})}
         >
           {group.items.map((it) => (
