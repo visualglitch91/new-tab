@@ -1,4 +1,4 @@
-export class MemoryCache<T> {
+export default class MemoryCache<T> {
   private cache = new Map<string, T>();
   private timeouts = new Map<string, NodeJS.Timeout>();
   private ttl: number;
