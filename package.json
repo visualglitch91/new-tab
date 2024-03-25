@@ -45,6 +45,7 @@
     "@uiw/react-color-wheel": "^2.1.1",
     "bson-objectid": "^2.0.4",
     "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
     "cron": "^3.1.6",
     "cron-time-generator": "^2.0.3",
     "date-fns": "^3.6.0",
