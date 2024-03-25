@@ -151,7 +151,7 @@ export default function BaseEntityButton({
       style={color && !changing ? { background: color } : undefined}
     >
       {loading || changing ? (
-        <CircularProgress />
+        <CircularProgress size={horizontal ? 18 : 24} sx={{ mx: "auto" }} />
       ) : (
         <>
           {typeof icon === "string" && (
