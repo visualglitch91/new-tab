@@ -2,7 +2,6 @@ import { Stack } from "@mui/material";
 import HomeDevices from "$client/components/HomeDevices";
 import Cameras, { useAvailableCameras } from "$client/components/Cameras";
 import Vacuum from "$client/components/Vacuum";
-import Section from "$client/components/Section";
 import TV from "$client/components/TV";
 import { useIsAdmin } from "$client/utils/hass";
 import MasonryLayout from "$client/desktop/components/DesktopLayout/MasonryLayout";
@@ -23,11 +22,7 @@ export default function HomePage() {
           <HomeDevices slice={[4]} />
         </Stack>,
         isAdmin && camerasOn && <Cameras />,
-        isAdmin && (
-          <Section title="Aspirador">
-            <Vacuum />
-          </Section>
-        ),
+        isAdmin && <Vacuum />,
       ]}
     />
   );

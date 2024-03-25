@@ -5,7 +5,6 @@ import Section from "$client/components/Section";
 import useUpsertSchedule from "$client/components/Schedules/useUpsertSchedule";
 import useAddTimer from "$client/components/Timers/useAddTimer";
 import AltIconButton from "$client/components/AltIconButton";
-import Icon from "$client/components/Icon";
 import { useIsAdmin } from "$client/utils/hass";
 
 export default function TimersAndSchedulesPage() {
@@ -18,11 +17,7 @@ export default function TimersAndSchedulesPage() {
       <Grid item xs={12} lg={6} xl={4}>
         <Section
           title="Timers"
-          button={
-            <AltIconButton onClick={addTimer}>
-              <Icon icon="plus" size={20} />
-            </AltIconButton>
-          }
+          button={<AltIconButton icon="plus" onClick={addTimer} />}
         >
           <Timers />
         </Section>
@@ -32,9 +27,7 @@ export default function TimersAndSchedulesPage() {
           <Section
             title="Agendamentos"
             button={
-              <AltIconButton onClick={() => upsertSchedule()}>
-                <Icon icon="plus" size={20} />
-              </AltIconButton>
+              <AltIconButton icon="plus" onClick={() => upsertSchedule()} />
             }
           >
             <Schedules />

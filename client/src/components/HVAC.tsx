@@ -58,18 +58,16 @@ export default function HVAC() {
               <>
                 <AltIconButton
                   disabled={targetTemp === minTemp}
-                  sx={{ "--size": "24px" }}
+                  icon="mdi:minus"
+                  size={24}
                   onClick={setTemperature(targetTemp - 1)}
-                >
-                  <Icon size={16} icon="mdi:minus" />
-                </AltIconButton>
+                />
                 <AltIconButton
                   disabled={targetTemp === maxTemp}
-                  sx={{ "--size": "24px" }}
+                  icon="mdi:plus"
+                  size={24}
                   onClick={setTemperature(targetTemp + 1)}
-                >
-                  <Icon size={16} icon="mdi:plus" />
-                </AltIconButton>
+                />
               </>
             )}
             <Switch

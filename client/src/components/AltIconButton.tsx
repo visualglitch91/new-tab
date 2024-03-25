@@ -1,23 +1,46 @@
-import { Button, styled } from "@mui/material";
+import { Button, ButtonProps } from "@mui/material";
+import { sxx } from "$client/utils/styling";
+import Icon from "./Icon";
 
-// eslint-disable-next-line react-refresh/only-export-components
-const AltIconButton = styled(Button)({
-  borderRadius: "100%",
-  minWidth: "var(--size)",
-  maxWidth: "var(--size)",
-  minHeight: "var(--size)",
-  maxHeight: "var(--size)",
-  "--size": "32px",
-  "&[disabled]": { opacity: 0.4 },
-  "&.MuiButton-sizeMedium": { "--size": "42px" },
-  "&.MuiButton-sizeLarge": { "--size": "48px" },
-});
-
-AltIconButton.defaultProps = {
-  disableElevation: true,
-  size: "small",
-  color: "glossy",
-  variant: "contained",
-};
-
-export default AltIconButton as typeof Button;
+export default function AltIconButton({
+  size = 32,
+  iconSize,
+  icon,
+  disabled,
+  color = "glossy",
+  sx,
+  onClick,
+}: {
+  size?: number;
+  iconSize?: number;
+  icon: string;
+  disabled?: boolean;
+  color?: ButtonProps["color"];
+  sx?: ButtonProps["sx"];
+  onClick: () => void;
+}) {
+  return (
+    <Button
+      disableElevation
+      size="small"
+      variant="contained"
+      sx={sxx(
+        {
+          borderRadius: "100%",
+          minWidth: "var(--size)",
+          maxWidth: "var(--size)",
+          minHeight: "var(--size)",
+          maxHeight: "var(--size)",
+          "--size": `${size}px`,
+          "&[disabled]": { opacity: 0.4 },
+        },
+        sx
+      )}
+      color={color}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <Icon icon={icon} size={iconSize || Math.max(size * 0.6, 16)} />
+    </Button>
+  );
+}

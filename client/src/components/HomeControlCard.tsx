@@ -8,7 +8,6 @@ import version from "$client/version.json";
 import AltIconButton from "./AltIconButton";
 import ListSection from "./ListSection";
 import ListItem from "./ListItem";
-import Icon from "./Icon";
 
 export default function HomeControlCard() {
   const socket = useSocketIO();
@@ -29,9 +28,7 @@ export default function HomeControlCard() {
       title={
         <>
           <span>Home Control</span>
-          <AltIconButton onClick={clearAllCachesAndReload}>
-            <Icon icon="refresh" />
-          </AltIconButton>
+          <AltIconButton icon="refresh" onClick={clearAllCachesAndReload} />
         </>
       }
     >

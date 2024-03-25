@@ -61,13 +61,12 @@ export default function ScheduleItem({
         >
           {options.map((it, index) => (
             <AltIconButton
-              size="small"
-              sx={{ "--size": "36px" }}
+              size={26}
+              iconSize={14}
+              icon={it.icon}
               key={index}
               onClick={it.action}
-            >
-              <Icon size={14} icon={it.icon} />
-            </AltIconButton>
+            />
           ))}
         </ButtonGroup>
         <Title data-disabled={!schedule.enabled}>{schedule.name}</Title>

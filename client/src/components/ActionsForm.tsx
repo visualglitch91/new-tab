@@ -4,7 +4,6 @@ import { Stack, Switch, Button } from "@mui/material";
 import { removeItemAtIndex } from "$client/utils/array";
 import useModal from "$client/utils/useModal";
 import { useHassStore } from "$client/utils/hass";
-import Icon from "./Icon";
 import AltIconButton from "./AltIconButton";
 import EntitySelectorDialog, { formatEntity } from "./EntitySelectorDialog";
 
@@ -92,14 +91,9 @@ export default function ActionsForm({
                 : "Selecionar entidade"}
             </Button>
             <AltIconButton
+              icon={lastItem ? "plus" : "minus"}
               onClick={() => (lastItem ? addAction() : removeAction(index))}
-            >
-              {lastItem ? (
-                <Icon size={24} icon="plus" />
-              ) : (
-                <Icon size={24} icon="minus" />
-              )}
-            </AltIconButton>
+            />
           </Stack>
         );
       })}

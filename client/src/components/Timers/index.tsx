@@ -13,7 +13,6 @@ import { queryClient } from "$client/utils/queryClient";
 import EmptyState from "../EmptyState";
 import AltIconButton from "../AltIconButton";
 import ListItem from "../ListItem";
-import Icon from "../Icon";
 import GlossyPaper from "../GlossyPaper";
 
 function TimerItem({
@@ -52,9 +51,7 @@ function TimerItem({
                 units: ["d", "h", "m"],
               })
             : formatSecondsToMinutesAndSeconds(remaining)}
-          <AltIconButton sx={{ "--size": "28px" }} onClick={onDelete}>
-            <Icon size={16} icon="close" />
-          </AltIconButton>
+          <AltIconButton size={28} icon="close" onClick={onDelete} />
         </Stack>
       }
     />

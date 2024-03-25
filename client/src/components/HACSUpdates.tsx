@@ -2,7 +2,6 @@ import { hassUrl, useEntity } from "$client/utils/hass";
 import AltIconButton from "./AltIconButton";
 import ListSection from "./ListSection";
 import ListItem from "./ListItem";
-import Icon from "./Icon";
 
 export default function HACSUpdates() {
   const repos: {
@@ -17,10 +16,9 @@ export default function HACSUpdates() {
         <>
           <span>HACS</span>
           <AltIconButton
+            icon="mdi:open-in-new"
             onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
-          >
-            <Icon size={18} icon="mdi:open-in-new" />
-          </AltIconButton>
+          />
         </>
       }
     >

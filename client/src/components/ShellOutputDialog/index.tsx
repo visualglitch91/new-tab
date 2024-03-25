@@ -1,9 +1,8 @@
 import { Stack, styled } from "@mui/material";
-import { SxProps } from "../../theme/utils";
+import { SxProps } from "$client/theme/utils";
+import AltIconButton from "../AltIconButton";
 import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import useShellOutput from "./useShellOutput";
-import AltIconButton from "../AltIconButton";
-import Icon from "../Icon";
 
 interface Size {
   width: number;
@@ -59,9 +58,7 @@ export default function ShellOutputDialog({
       title={
         <Stack direction="row" justifyContent="space-between">
           <span>{title}</span>
-          <AltIconButton size="small" onClick={props.onClose}>
-            <Icon icon="close" size={16} />
-          </AltIconButton>
+          <AltIconButton icon="close" onClick={props.onClose} />
         </Stack>
       }
     >

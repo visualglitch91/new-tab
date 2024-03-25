@@ -89,9 +89,11 @@ export default function PageHeader({
   const content = (
     <>
       <Buttons>
-        <AltIconButton sx={{ marginRight: "auto" }} onClick={toggleAppDrawer}>
-          <Icon icon="menu" size={20} />
-        </AltIconButton>
+        <AltIconButton
+          sx={{ marginRight: "auto" }}
+          icon="menu"
+          onClick={toggleAppDrawer}
+        />
         {items}
       </Buttons>
       <ButtonsGhost />

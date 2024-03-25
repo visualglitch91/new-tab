@@ -5,7 +5,7 @@ import PageTile from "$client/mobile/components/PageTitle";
 export default function VacuumPage() {
   return (
     <PageLayout header={<PageTile>Aspirador</PageTile>}>
-      <Vacuum />
+      <Vacuum label="Status" />
     </PageLayout>
   );
 }

@@ -1,7 +1,6 @@
 import { Stack, styled } from "@mui/material";
 import CameraStream from "./CameraStream";
 import DialogBase, { DialogBaseControlProps } from "./DialogBase";
-import Icon from "./Icon";
 import AltIconButton from "./AltIconButton";
 
 const Wrapper = styled("div")(({ theme }) => ({
@@ -33,18 +32,26 @@ export default function FullScreenCamera({
           justifyContent="center"
           sx={{ margin: "12px auto" }}
         >
-          <AltIconButton color="primary" onClick={() => onMove("LEFT")}>
-            <Icon icon="arrow-left" />
-          </AltIconButton>
-          <AltIconButton color="primary" onClick={() => onMove("DOWN")}>
-            <Icon icon="arrow-down" />
-          </AltIconButton>
-          <AltIconButton color="primary" onClick={() => onMove("UP")}>
-            <Icon icon="arrow-up" />
-          </AltIconButton>
-          <AltIconButton color="primary" onClick={() => onMove("RIGHT")}>
-            <Icon icon="arrow-right" />
-          </AltIconButton>
+          <AltIconButton
+            icon="arrow-left"
+            color="primary"
+            onClick={() => onMove("LEFT")}
+          />
+          <AltIconButton
+            icon="arrow-down"
+            color="primary"
+            onClick={() => onMove("DOWN")}
+          />
+          <AltIconButton
+            icon="arrow-up"
+            color="primary"
+            onClick={() => onMove("UP")}
+          />
+          <AltIconButton
+            icon="arrow-right"
+            color="primary"
+            onClick={() => onMove("RIGHT")}
+          />
         </Stack>
       )}
     </DialogBase>

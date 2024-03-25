@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import ClockAndWeather from "$client/components/ClockAndWeather";
 import Pomodoro from "$client/components/Pomodoro";
+import { useIsAdmin } from "$client/utils/hass";
 import Tab from "./Tab";
 import { Wrapper, Tabs, Content } from "./components";
 
@@ -21,6 +22,7 @@ export default function DesktopLayout({
   contentRef?: React.RefObject<HTMLDivElement>;
 }) {
   const [location] = useLocation();
+  const isAdmin = useIsAdmin();
 
   return (
     <Wrapper>
@@ -33,7 +35,7 @@ export default function DesktopLayout({
               color: theme.palette.white.contrastText,
             })}
           />
-          <Pomodoro sx={{ marginBottom: "16px" }} />
+          {isAdmin && <Pomodoro sx={{ marginBottom: "16px" }} />}
           {pages.map(({ component, ...page }) => (
             <Tab
               key={page.path}

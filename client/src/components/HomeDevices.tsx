@@ -28,7 +28,7 @@ const groups: {
       { entityId: "switch.sala_ventilador" },
       { entityId: "switch.sala_ambilight" },
       { entityId: "light.sala_rgb_tv" },
-      { entityId: "light.sala_rgb_rack" },
+      // { entityId: "light.sala_rgb_rack" },
       { entityId: "cover.sala_cortina", icon: "curtains" },
       { entityId: "media_player.sala_tv" },
     ],
@@ -40,7 +40,7 @@ const groups: {
       { entityId: "switch.escritorio_alto_falantes", changeTimeout: 9_000 },
       { entityId: "light.escritorio_luminaria" },
       { entityId: "light.escritorio_rgb_mesa" },
-      { entityId: "light.escritorio_rgb_quadro" },
+      // { entityId: "light.escritorio_rgb_quadro" },
     ],
   },
   {

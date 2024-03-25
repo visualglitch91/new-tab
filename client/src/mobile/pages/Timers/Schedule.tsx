@@ -1,5 +1,4 @@
 import AltIconButton from "$client/components/AltIconButton";
-import Icon from "$client/components/Icon";
 import Schedules from "$client/components/Schedules";
 import useUpsertSchedule from "$client/components/Schedules/useUpsertSchedule";
 import PageLayout from "$client/mobile/components/PageLayout";
@@ -12,9 +11,7 @@ export default function SchedulePage() {
     <PageLayout
       header={<PageTile>Agendamentos</PageTile>}
       headerItems={
-        <AltIconButton onClick={() => upsertSchedule()}>
-          <Icon icon="plus" size={20} />
-        </AltIconButton>
+        <AltIconButton icon="plus" onClick={() => upsertSchedule()} />
       }
     >
       <Schedules />

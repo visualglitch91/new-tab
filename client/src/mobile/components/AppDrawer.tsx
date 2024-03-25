@@ -97,7 +97,7 @@ export function AppDrawer({
               color: theme.palette.white.contrastText,
             })}
           />
-          <Pomodoro sx={{ margin: "0 26px 16px" }} />
+          {isAdmin && <Pomodoro sx={{ margin: "0 26px 16px" }} />}
         </>
       )}
       <List sx={{ px: 1.2 }}>

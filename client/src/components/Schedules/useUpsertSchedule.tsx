@@ -15,7 +15,7 @@ export default function useUpsertSchedule() {
       (schedule.id
         ? api(`/hass-scheduler/schedule/${schedule.id}`, "patch", schedule)
         : api("/hass-scheduler/schedule", "post", schedule)
-      ).then(() => queryClient.invalidateQueries(["schedules"]));
+      ).then(() => queryClient.invalidateQueries({ queryKey: ["schedules"] }));
     };
   }
 

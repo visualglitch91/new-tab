@@ -1,16 +1,15 @@
-import { ButtonGroup, Button, List, Stack } from "@mui/material";
+import { Button, List, Stack, Divider } from "@mui/material";
 import { makeServiceCall, useEntity } from "$client/utils/hass";
 import ListItem from "./ListItem";
 import RunScriptButton from "./RunScriptButton";
 import EntitiesSwitch from "./EntitiesSwitch";
-import EntityListItem, { EntityListItems } from "./EntityListItem";
+import { EntityListItems } from "./EntityListItem";
 import GlossyPaper from "./GlossyPaper";
-import Icon from "./Icon";
 import AltIconButton from "./AltIconButton";
 
 const vacuumId = "vacuum.mi_robot_vacuum_mop_p";
 
-const statusLabels = {
+const statusLabels: Record<string, string> = {
   cleaning: "Limpando",
   docked: "Na Base",
   paused: "Pausado",
@@ -23,56 +22,59 @@ function makeVacuumCall(action: string) {
   return makeServiceCall("vacuum", action, { entity_id: vacuumId });
 }
 
-function VacuumActionsRow() {
+function VacuumActionsRow({ label }: { label: string }) {
   const vacuum = useEntity(vacuumId);
-  const state = vacuum?.state;
-
-  if (state && ["docked", "idle"].includes(state)) {
-    const clean = (
-      <ListItem
-        icon="mdi:robot-vacuum"
-        primaryText="Aspirar áreas selecionadas"
-        endSlot={
-          <RunScriptButton entityId="script.vacuum_clean_selected_zones">
-            Aspirar
-          </RunScriptButton>
-        }
-      />
-    );
-
-    if (state === "docked") {
-      return clean;
-    }
-
-    return (
-      <>
-        {clean}
-        <ListItem
-          icon="mdi:robot-vacuum"
-          primaryText="Retornar para a base"
-          endSlot={
-            <Button onClick={makeVacuumCall("return_to_base")}>Retornar</Button>
-          }
-        />
-      </>
-    );
-  }
+  const state = vacuum?.state || "error";
+  const battery = vacuum?.attributes.battery_level || null;
 
   return (
-    <ButtonGroup sx={{ margin: "4px auto 8px" }}>
-      <AltIconButton onClick={makeVacuumCall("start")}>
-        <Icon icon="mdi:play" />
-      </AltIconButton>
-      <AltIconButton onClick={makeVacuumCall("pause")}>
-        <Icon icon="mdi:pause" />
-      </AltIconButton>
-      <AltIconButton onClick={makeVacuumCall("stop")}>
-        <Icon icon="mdi:stop" />
-      </AltIconButton>
-      <AltIconButton onClick={makeVacuumCall("return_to_base")}>
-        <Icon icon="mdi:home" />
-      </AltIconButton>
-    </ButtonGroup>
+    <ListItem
+      icon="mdi:robot-vacuum"
+      primaryText={label}
+      secondaryText={[
+        statusLabels[state] || statusLabels.error,
+        battery === null ? false : `${battery}%`,
+      ]
+        .filter(Boolean)
+        .join(" - ")}
+      endSlot={
+        state === "idle" ? (
+          <Button size="small" onClick={makeVacuumCall("return_to_base")}>
+            Retornar
+          </Button>
+        ) : state === "docked" ? (
+          <RunScriptButton
+            size="small"
+            entityId="script.vacuum_clean_selected_zones"
+          >
+            Aspirar
+          </RunScriptButton>
+        ) : (
+          <Stack direction="row" gap={1}>
+            <AltIconButton
+              size={24}
+              icon="mdi:play"
+              onClick={makeVacuumCall("start")}
+            />
+            <AltIconButton
+              size={24}
+              icon="mdi:pause"
+              onClick={makeVacuumCall("pause")}
+            />
+            <AltIconButton
+              size={24}
+              icon="mdi:stop"
+              onClick={makeVacuumCall("stop")}
+            />
+            <AltIconButton
+              size={24}
+              icon="mdi:home"
+              onClick={makeVacuumCall("return_to_base")}
+            />
+          </Stack>
+        )
+      }
+    />
   );
 }
 
@@ -85,45 +87,26 @@ const booleanInputs = [
   { label: "Quarto", entityId: "input_boolean.vacuum_quarto" },
 ];
 
-export default function Vacuum() {
+export default function Vacuum({ label = "Aspirador" }: { label?: string }) {
   return (
-    <Stack spacing={3}>
-      <List component={GlossyPaper}>
-        <EntityListItem
-          label="Status"
-          entityId={vacuumId}
-          renderListContent={(entity) => {
-            const status = entity.attributes
-              .status as keyof typeof statusLabels;
-            return statusLabels[status] || "Desconhecido";
-          }}
-        />
-
-        <EntityListItem
-          label="Bateria"
-          icon="battery-50"
-          entityId={vacuumId}
-          renderListContent={(entity) => `${entity.attributes.battery_level}%`}
-        />
-        <VacuumActionsRow />
-      </List>
-      <List component={GlossyPaper}>
-        <EntityListItems
-          items={[
-            {
-              label: "Todos",
-              entityId: vacuumId,
-              renderListContent: () => (
-                <EntitiesSwitch
-                  condition="every"
-                  entityIds={booleanInputs.map((it) => it.entityId)}
-                />
-              ),
-            },
-            ...booleanInputs,
-          ]}
-        />
-      </List>
-    </Stack>
+    <List component={GlossyPaper}>
+      <VacuumActionsRow label={label} />
+      <Divider />
+      <EntityListItems
+        items={[
+          {
+            label: "Todos",
+            entityId: vacuumId,
+            renderListContent: () => (
+              <EntitiesSwitch
+                condition="every"
+                entityIds={booleanInputs.map((it) => it.entityId)}
+              />
+            ),
+          },
+          ...booleanInputs,
+        ]}
+      />
+    </List>
   );
 }

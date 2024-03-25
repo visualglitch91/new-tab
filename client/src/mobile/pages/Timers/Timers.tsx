@@ -1,5 +1,4 @@
 import AltIconButton from "$client/components/AltIconButton";
-import Icon from "$client/components/Icon";
 import Timers from "$client/components/Timers";
 import useAddTimer from "$client/components/Timers/useAddTimer";
 import PageLayout from "$client/mobile/components/PageLayout";
@@ -12,9 +11,7 @@ export default function TimersPage() {
     <PageLayout
       header={<PageTile>Timers</PageTile>}
       headerItems={
-        <AltIconButton onClick={addTimer}>
-          <Icon icon="plus" size={20} />
-        </AltIconButton>
+        <AltIconButton icon="plus" onClick={addTimer}/>
       }
     >
       <Timers />
