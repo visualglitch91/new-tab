@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Stack, TextField, Button } from "@mui/material";
 import { SimpleAction } from "$common/types/hass-scheduler";
-import DialogBase, { DialogBaseControlProps } from "../DialogBase";
-import ActionsForm from "../ActionsForm";
 import api from "$client/utils/api";
 import { queryClient } from "$client/utils/queryClient";
+import DialogBase, { DialogBaseControlProps } from "../DialogBase";
+import ActionsForm from "../ActionsForm";
 
 export default function NewTimerDialog({
   defaultName,
@@ -12,6 +12,7 @@ export default function NewTimerDialog({
 }: {
   defaultName: string;
 } & DialogBaseControlProps) {
+  const initialNameFocusRef = useRef(true);
   const [name, setName] = useState(defaultName);
   const [until, setUntil] = useState<string>("");
   const [duration, setDuration] = useState(0);
@@ -34,7 +35,7 @@ export default function NewTimerDialog({
         ? { name, duration, actions: parsedActions }
         : { name, until: new Date(until).toISOString(), actions: parsedActions }
     )
-      .then(() => queryClient.invalidateQueries(["timers"]))
+      .then(() => queryClient.invalidateQueries({ queryKey: ["timers"] }))
       .then(() => props.onClose());
   }
 
@@ -61,6 +62,13 @@ export default function NewTimerDialog({
           label="Name"
           value={name}
           onChange={(event) => setName(event.currentTarget.value)}
+          onFocus={() => {
+            if (initialNameFocusRef.current) {
+              setName("");
+            }
+
+            initialNameFocusRef.current = false;
+          }}
         />
         <Stack direction="row" gap={2}>
           <TextField

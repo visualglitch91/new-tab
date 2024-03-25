@@ -1,15 +1,18 @@
-import { List } from "@mui/material";
+import { Divider, List } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Schedule } from "$common/types/hass-scheduler";
 import api from "$client/utils/api";
 import { queryClient } from "$client/utils/queryClient";
+import useConfirm from "$client/utils/useConfirm";
 import GlossyPaper from "../GlossyPaper";
 import ScheduleItem from "./ScheduleItem";
 import EmptyState from "../EmptyState";
 import useUpsertSchedule from "./useUpsertSchedule";
+import { Fragment } from "react/jsx-runtime";
 
 export default function Schedules() {
   const upsertSchedule = useUpsertSchedule();
+  const confirm = useConfirm();
 
   const {
     data = [],
@@ -43,11 +46,19 @@ export default function Schedules() {
   }
 
   function onDelete(item: Schedule) {
-    queryClient.setQueryData<Schedule[]>(["schedules"], (prev) => {
-      return (prev || []).filter((it) => it.id !== item.id);
-    });
+    confirm({
+      title: "Deletar Agendamento",
+      confirmLabel: "Deletar",
+      onConfirm: () => {
+        queryClient.setQueryData<Schedule[]>(["schedules"], (prev) => {
+          return (prev || []).filter((it) => it.id !== item.id);
+        });
 
-    api(`/hass-scheduler/schedule/${item.id}`, "delete").then(() => refetch());
+        api(`/hass-scheduler/schedule/${item.id}`, "delete").then(() =>
+          refetch()
+        );
+      },
+    });
   }
 
   function onRunNow(item: Schedule) {
@@ -59,15 +70,17 @@ export default function Schedules() {
       {data.length === 0 ? (
         <EmptyState loading={isLoading} text="Nenhum agendamento criado" />
       ) : (
-        data.map((it) => (
-          <ScheduleItem
-            key={it.id}
-            schedule={it}
-            onPatch={(key, value) => onPatch(it, key, value)}
-            onEdit={() => upsertSchedule(it)}
-            onDelete={() => onDelete(it)}
-            onRunNow={() => onRunNow(it)}
-          />
+        data.map((it, index) => (
+          <Fragment key={it.id}>
+            <ScheduleItem
+              schedule={it}
+              onPatch={(key, value) => onPatch(it, key, value)}
+              onEdit={() => upsertSchedule(it)}
+              onDelete={() => onDelete(it)}
+              onRunNow={() => onRunNow(it)}
+            />
+            {index < data.length - 1 && <Divider sx={{ my: 1.5 }} />}
+          </Fragment>
         ))
       )}
     </List>

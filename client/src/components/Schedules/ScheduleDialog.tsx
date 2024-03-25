@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import { Button, Stack, TextField } from "@mui/material";
 import { Schedule, SimpleAction } from "$common/types/hass-scheduler";
@@ -15,6 +15,7 @@ export default function ScheduleDialog({
   initialValues: Partial<Schedule>;
   onSave: (value: Omit<Schedule, "id" | "enabled"> & { id?: string }) => void;
 } & DialogBaseControlProps) {
+  const initialNameFocusRef = useRef(true);
   const [name, setName] = useState(initialValues.name || "");
   const [days, setDays] = useState(initialValues.days || {});
 
@@ -82,6 +83,13 @@ export default function ScheduleDialog({
             label="Name"
             value={name}
             onChange={(event) => setName(event.currentTarget.value)}
+            onFocus={() => {
+              if (!initialValues.id && initialNameFocusRef.current) {
+                setName("");
+              }
+
+              initialNameFocusRef.current = false;
+            }}
           />
           <InputMask
             id="time"

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { List, Stack } from "@mui/material";
+import { Fragment, useEffect, useState } from "react";
+import { Divider, List, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { Timer } from "$common/types/hass-scheduler";
 import api from "$client/utils/api";
@@ -10,6 +10,7 @@ import {
 } from "$client/utils/dateTime";
 import useMountEffect from "$client/utils/useMountEffect";
 import { queryClient } from "$client/utils/queryClient";
+import useConfirm from "$client/utils/useConfirm";
 import EmptyState from "../EmptyState";
 import AltIconButton from "../AltIconButton";
 import ListItem from "../ListItem";
@@ -68,26 +69,38 @@ export default function Timers() {
     queryFn: () => api<Timer[]>("/hass-scheduler/timers", "get"),
   });
 
-  function onDelete(item: Timer) {
-    queryClient.setQueryData<Timer[]>(["timers"], (prev) => {
-      return (prev || []).filter((it) => it.id !== item.id);
-    });
+  const confirm = useConfirm();
 
-    api(`/hass-scheduler/timers/${item.id}`, "delete").then(() => refetch());
-  }
+  const onDelete = (item: Timer) => {
+    confirm({
+      title: "Deletar Timer",
+      confirmLabel: "Deletar",
+      onConfirm: () => {
+        queryClient.setQueryData<Timer[]>(["timers"], (prev) => {
+          return (prev || []).filter((it) => it.id !== item.id);
+        });
+
+        api(`/hass-scheduler/timers/${item.id}`, "delete").then(() =>
+          refetch()
+        );
+      },
+    });
+  };
 
   return (
     <List component={GlossyPaper}>
       {data.length === 0 ? (
         <EmptyState loading={isLoading} text="Nenhum timer criado" />
       ) : (
-        data.map((it) => (
-          <TimerItem
-            key={it.id}
-            timer={it}
-            onDone={refetch}
-            onDelete={() => onDelete(it)}
-          />
+        data.map((it, index) => (
+          <Fragment key={it.id}>
+            <TimerItem
+              timer={it}
+              onDone={refetch}
+              onDelete={() => onDelete(it)}
+            />
+            {index < data.length - 1 && <Divider sx={{ my: 0.5 }} />}
+          </Fragment>
         ))
       )}
     </List>
