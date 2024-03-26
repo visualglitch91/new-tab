@@ -32,7 +32,7 @@ export default function PackageListItem({
   onRemove: () => void;
 }) {
   return (
-    <GlossyPaper>
+    <GlossyPaper sx={{ opacity: item.status === "delivered" ? 0.5 : 1 }}>
       <ListItem
         sx={{
           "& .MuiListItemSecondaryAction-root": {

@@ -1,4 +1,4 @@
-import { orderBy, partition } from "lodash";
+import { chain, flatten, orderBy, partition } from "lodash";
 import { Stack } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { PackageTrackerItem } from "$common/types/package-tracker";
@@ -9,6 +9,14 @@ import useConfirm from "$client/utils/useConfirm";
 import { useMenu } from "$client/utils/useMenu";
 import EmptyState from "../EmptyState";
 import PackageListItem from "./PackageListItem";
+
+const statusPriority: Record<PackageTrackerItem["status"], number> = {
+  "en-route": 4,
+  "in-transit": 3,
+  "pending-payment": 2,
+  "not-found": 1,
+  delivered: 0,
+};
 
 function useAction() {
   return useMutation({
@@ -75,16 +83,15 @@ export default function PackageTracker() {
   const onRemove = (item: PackageTrackerItem) => {
     confirm({
       title: `Remover "${item.name}"`,
-      onConfirm: () => mutate({ action: "remove", code: item.code }),
+      onConfirm: () => mutate({ action: "remove", code: item.id }),
     });
   };
 
-  const sorted = partition(
-    orderBy(packages, [(it) => it.lastEvent?.at || 0, "name"], ["desc", "asc"]),
-    (it) => it.status === "delivered"
-  )
-    .reverse()
-    .flat();
+  const sorted = orderBy(
+    packages,
+    [(it) => statusPriority[it.status], (it) => it.lastEvent?.at || 0, "name"],
+    ["desc", "desc", "asc"]
+  );
 
   return (
     <>
@@ -93,7 +100,7 @@ export default function PackageTracker() {
       ) : (
         sorted.map((item) => (
           <PackageListItem
-            key={item.code}
+            key={item.id}
             item={item}
             onRemove={() => onRemove(item)}
           />
