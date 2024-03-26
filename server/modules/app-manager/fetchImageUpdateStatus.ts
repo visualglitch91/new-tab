@@ -1,3 +1,4 @@
+import pRetry from "p-retry";
 import { UpdateStatus } from "$common/types/app-manager";
 import { logger } from "$server/utils";
 import fetchImageDigest from "./fetchImagDigest";
@@ -37,26 +38,34 @@ export default async function fetchImageUpdateStatus(containerName: string) {
       localImageInfo.RepoDigests[0]?.split("@").pop() || null;
 
     if (localRepoDigest) {
-      localImageDigest = await fetchImageDigest(
-        image.registry,
-        image.namespace,
-        image.name,
-        localRepoDigest,
-        localImageInfo.Architecture,
-        localImageInfo.Os
+      localImageDigest = await pRetry(
+        () =>
+          fetchImageDigest(
+            image.registry,
+            image.namespace,
+            image.name,
+            localRepoDigest,
+            localImageInfo.Architecture,
+            localImageInfo.Os
+          ),
+        { retries: 3 }
       ).catch(() => null);
     } else {
       local = true;
     }
 
     if (localImageDigest) {
-      remoteImageDigest = await fetchImageDigest(
-        image.registry,
-        image.namespace,
-        image.name,
-        "latest",
-        localImageInfo.Architecture,
-        localImageInfo.Os
+      remoteImageDigest = await pRetry(
+        () =>
+          fetchImageDigest(
+            image.registry,
+            image.namespace,
+            image.name,
+            "latest",
+            localImageInfo.Architecture,
+            localImageInfo.Os
+          ),
+        { retries: 3 }
       ).catch(() => null);
     }
   }

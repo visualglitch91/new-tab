@@ -12,8 +12,6 @@ import config from "$server/config";
 import TickTick from "./ticktick";
 import { normalizeDate } from "./utils";
 
-const tick = new TickTick();
-
 const {
   username,
   password,
@@ -22,25 +20,15 @@ const {
   ignored_events: ignoredEvents,
 } = config.ticktick;
 
+const tick = new TickTick({ username, password });
+
 function filterIgnoredEvents<T>(array: T[]) {
   return array.filter(
     (it) => !ignoredEvents.some((toIgnore) => matches(toIgnore)(it))
   );
 }
 
-export default createAppModule("ticktick", async (instance, logger) => {
-  await tick.login({ username, password });
-
-  logger.info("ticktick logged in");
-
-  instance.router.use((_, res, next) => {
-    if (!tick.loggedIn) {
-      return res.status(500).send({ error: "Not logged in" });
-    }
-
-    return next();
-  });
-
+export default createAppModule("ticktick", async (instance) => {
   instance.get("/data", () => {
     const now = new Date();
     const since = startOfDay(now);

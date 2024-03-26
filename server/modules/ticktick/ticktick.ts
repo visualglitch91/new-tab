@@ -1,10 +1,9 @@
+import { CronJob } from "cron";
 import { keyBy, orderBy, sortBy, uniqBy } from "lodash";
 import {
   format,
   isEqual,
   subDays,
-  endOfDay,
-  startOfDay,
   isWithinInterval,
   differenceInCalendarDays,
   subMilliseconds,
@@ -12,14 +11,21 @@ import {
 import objectid from "bson-objectid";
 import ky from "ky";
 import { rrulestr } from "rrule";
-import MemoryCache from "$common/utils/MemoryCache";
 import { Habit, ScheduledTask, UnscheduledTask } from "$common/types/ticktick";
-import { singleAsyncExecution } from "$server/utils";
+import { logger } from "$server/utils";
 import { normalizeDate } from "./utils";
 
 const client = ky.create({});
 
 let token: string | undefined = undefined;
+
+interface Checkin {
+  habitId: string;
+  id: string;
+  opTime: string;
+  status: 0 | 1 | 2;
+  value: number;
+}
 
 function tickStamp(date: Date) {
   return format(date, "yyyy-MM-dd").split("-").join("");
@@ -52,37 +58,87 @@ function callAPI<T = any>(
   }).json();
 }
 
-const memCache = new MemoryCache<any>({ ttl: 30_000 });
-
-function clearMethodCache(method: string) {
-  memCache.getKeys().forEach((it) => {
-    try {
-      const cacheKey = JSON.parse(it);
-      if (cacheKey.method === method) {
-        memCache.remove(it);
-      }
-    } catch (_) {}
-  });
-}
-
 export default class TickTick {
   loggedIn = false;
+  username: string;
+  password: string;
 
-  login({ username, password }: { username: string; password: string }) {
+  private apiCache: {
+    "GET_v2/batch/check/0": {
+      inboxId: string;
+      projectProfiles: any[];
+      syncTaskBean: { update: any[] };
+    };
+    "GET_v2/calendar/bind/events/all": { events: any[] };
+    "GET_v2/habits": { id: string; name: string; goal: number }[];
+    "POST_v2/habitCheckins/query": Record<string, Checkin[]>;
+  } = {
+    "GET_v2/batch/check/0": {
+      inboxId: "",
+      projectProfiles: [],
+      syncTaskBean: { update: [] },
+    },
+    "GET_v2/calendar/bind/events/all": { events: [] },
+    "GET_v2/habits": [],
+    "POST_v2/habitCheckins/query": {},
+  };
+
+  constructor({ username, password }: { username: string; password: string }) {
+    this.username = username;
+    this.password = password;
+    this.updateAPICache();
+    new CronJob("* * * * *", () => this.updateAPICache()).start();
+  }
+
+  login() {
+    if (this.loggedIn) {
+      return Promise.resolve();
+    }
+
     return callAPI("v2/user/signon?wc=true&remember=true", "POST", {
-      username,
-      password,
+      username: this.username,
+      password: this.password,
     }).then((res) => {
       if (typeof res?.username === "undefined") {
-        throw new Error("Could not login");
+        logger.info("Error while loggin in on TickTick");
+      } else {
+        logger.info("TickTick logged in");
+        token = res.token;
+        this.loggedIn = true;
       }
-
-      token = res.token;
-      this.loggedIn = true;
     });
   }
 
-  getUncompletedTasks = singleAsyncExecution(async function getUncompletedTasks(
+  async updateAPICache() {
+    try {
+      await this.login();
+
+      this.apiCache["GET_v2/batch/check/0"] = await callAPI(
+        "v2/batch/check/0",
+        "GET"
+      );
+
+      this.apiCache["GET_v2/calendar/bind/events/all"] = await callAPI(
+        "v2/calendar/bind/events/all",
+        "GET"
+      );
+
+      this.apiCache["GET_v2/habits"] = await callAPI("v2/habits", "GET");
+
+      this.apiCache["POST_v2/habitCheckins/query"] = await callAPI(
+        "v2/habitCheckins/query",
+        "POST",
+        {
+          habitIds: this.apiCache["GET_v2/habits"].map((it: any) => it.id),
+          afterStamp: tickStamp(subDays(new Date(), 1)),
+        }
+      ).then((res) => res.checkins);
+    } catch (err) {
+      logger.error(err);
+    }
+  }
+
+  async getUncompletedTasks(
     since: Date,
     until: Date,
     projectIds = new Array<string>()
@@ -90,22 +146,11 @@ export default class TickTick {
     scheduled: ScheduledTask[];
     unscheduled: UnscheduledTask[];
   }> {
-    const cacheKey = JSON.stringify({
-      method: "getUncompletedTasks",
-      params: { since, until, projectIds },
-    });
-
-    if (memCache.has(cacheKey)) {
-      return memCache.get(cacheKey);
-    }
-
     const scheduled: ScheduledTask[] = [];
     const unscheduled = new Array<UnscheduledTask>();
 
-    const { inboxId, projectProfiles, syncTaskBean } = await callAPI(
-      "v2/batch/check/0",
-      "GET"
-    );
+    const { inboxId, projectProfiles, syncTaskBean } =
+      this.apiCache["GET_v2/batch/check/0"];
 
     const projectsById = keyBy(projectProfiles, "id");
     const rawTasks = syncTaskBean.update;
@@ -133,13 +178,13 @@ export default class TickTick {
         return;
       }
 
-      let startDate = new Date(rawTask.startDate);
-      let dueDate = new Date(rawTask.dueDate);
+      let startDate = normalizeDate(rawTask.startDate, rawTask.timezone);
+      let dueDate = normalizeDate(rawTask.dueDate, rawTask.timezone);
 
-      if (rawTask.isAllDay) {
-        startDate = startOfDay(startDate);
-        dueDate = endOfDay(startDate);
-      }
+      // if (rawTask.isAllDay) {
+      //   startDate = startOfDay(startDate);
+      //   dueDate = endOfDay(startDate);
+      // }
 
       if (!isWithinInterval(startDate, { start: since, end: until })) {
         return;
@@ -164,31 +209,18 @@ export default class TickTick {
       unscheduled,
     };
 
-    memCache.set(cacheKey, result);
-
     return result;
-  });
+  }
 
-  getEvents = singleAsyncExecution(async function getEvents(
+  async getEvents(
     since: Date,
     until: Date,
     excludedCalendarIds = new Array<string>()
   ): Promise<ScheduledTask[]> {
-    const cacheKey = JSON.stringify({
-      method: "getEvents",
-      params: { since, until, excludedCalendarIds },
-    });
-
-    if (memCache.has(cacheKey)) {
-      return memCache.get(cacheKey);
-    }
-
     const scheduled: ScheduledTask[] = [];
 
-    const { events: rawEvents } = await callAPI(
-      "v2/calendar/bind/events/all",
-      "GET"
-    );
+    const { events: rawEvents } =
+      this.apiCache["GET_v2/calendar/bind/events/all"];
 
     rawEvents.forEach((calendar: any) => {
       if (excludedCalendarIds.includes(calendar.id)) {
@@ -205,24 +237,24 @@ export default class TickTick {
           }
         } catch (_) {}
 
-        const startDate = normalizeDate(rawEvent.dueStart, rawEvent.isAllDay);
+        const startDate = normalizeDate(rawEvent.dueStart, rawEvent.timezone);
 
         const startDates = rawEvent.repeatFlag
-          ? rrulestr(rawEvent.repeatFlag, { dtstart: startDate }).between(
-              since,
-              until,
-              true
-            )
+          ? rrulestr(rawEvent.repeatFlag, {
+              tzid: rawEvent.timezone,
+              dtstart: startDate,
+            }).between(since, until, true)
           : [startDate];
 
         startDates.forEach((startDate) => {
           let endDate: Date | null = normalizeDate(
             rawEvent.dueEnd,
-            rawEvent.isAllDay
+            rawEvent.timezone
           );
 
           if (rawEvent.repeatFlag) {
             endDate = rrulestr(rawEvent.repeatFlag, {
+              tzid: rawEvent.timezone,
               dtstart: endDate,
             }).after(startDate);
           }
@@ -268,10 +300,8 @@ export default class TickTick {
       (it) => `${it.raw.uid}--${format(new Date(it.startDate), "yyyy-MM-dd")}`
     ).reverse();
 
-    memCache.set(cacheKey, result);
-
     return result;
-  });
+  }
 
   async getCalendar(
     since: Date,
@@ -291,72 +321,37 @@ export default class TickTick {
     };
   }
 
-  getTodayHabits = singleAsyncExecution(
-    async function getTodayHabits(): Promise<Habit[]> {
-      const cacheKey = JSON.stringify({
-        method: "getTodayHabits",
-        params: format(new Date(), "yyyy-MM-dd"),
-      });
+  async getTodayHabits(): Promise<Habit[]> {
+    const today = new Date();
+    const habits = this.apiCache["GET_v2/habits"];
+    const checkins = this.apiCache["POST_v2/habitCheckins/query"];
 
-      if (memCache.has("getTodayHabits")) {
-        return memCache.get("getTodayHabits");
-      }
+    const checkinsByHabitId = Object.values(checkins)
+      .flat()
+      .filter(
+        (it: any) => differenceInCalendarDays(new Date(it.opTime), today) === 0
+      )
+      .reduce<Record<string, Checkin>>((acc, it: any) => {
+        return { ...acc, [it.habitId]: it };
+      }, {});
 
-      interface Checkin {
-        habitId: string;
-        id: string;
-        opTime: string;
-        status: 0 | 1 | 2;
-        value: number;
-      }
+    const result = habits.map((habit: any) => {
+      const checkin = checkinsByHabitId[habit.id];
 
-      const habits = await callAPI<
-        { id: string; name: string; goal: number }[]
-      >("v2/habits", "GET");
+      return {
+        habitId: habit.id,
+        checkinId: checkin?.id,
+        name: habit.name,
+        goal: habit.goal,
+        value: checkin?.value || 0,
+        raw: habit,
+      };
+    });
 
-      const today = new Date();
-
-      const checkins = await callAPI<Record<string, Checkin[]>>(
-        "v2/habitCheckins/query",
-        "POST",
-        {
-          habitIds: habits.map((it: any) => it.id),
-          afterStamp: tickStamp(subDays(new Date(), 1)),
-        }
-      ).then((res) => res.checkins);
-
-      const checkinsByHabitId = Object.values(checkins)
-        .flat()
-        .filter(
-          (it: any) =>
-            differenceInCalendarDays(new Date(it.opTime), today) === 0
-        )
-        .reduce<Record<string, Checkin>>((acc, it: any) => {
-          return { ...acc, [it.habitId]: it };
-        }, {});
-
-      const result = habits.map((habit: any) => {
-        const checkin = checkinsByHabitId[habit.id];
-
-        return {
-          habitId: habit.id,
-          checkinId: checkin?.id,
-          name: habit.name,
-          goal: habit.goal,
-          value: checkin?.value || 0,
-          raw: habit,
-        };
-      });
-
-      memCache.set(cacheKey, result);
-
-      return result;
-    }
-  );
+    return result;
+  }
 
   async checkinHabit(habitId: string) {
-    clearMethodCache("getTodayHabits");
-
     const habit = (await this.getTodayHabits()).find(
       (it) => it.habitId === habitId
     );
@@ -382,16 +377,18 @@ export default class TickTick {
       value,
     };
 
-    return callAPI("v2/habitCheckins/batch", "POST", {
+    const res = await callAPI("v2/habitCheckins/batch", "POST", {
       add: !habit.checkinId ? [checkin] : [],
       update: habit.checkinId ? [checkin] : [],
       delete: [],
     });
+
+    await this.updateAPICache();
+
+    return res;
   }
 
   async completeTask(id: string, projectId: string) {
-    clearMethodCache("getUncompletedTasks");
-
     const task = await callAPI(`v2/task/${id}?projectId=${projectId}`, "GET");
 
     if (!task) {
@@ -400,7 +397,7 @@ export default class TickTick {
 
     const now = new Date();
 
-    return callAPI("v2/batch/task", "POST", {
+    const res = await callAPI("v2/batch/task", "POST", {
       add: [],
       update: [
         {
@@ -416,5 +413,9 @@ export default class TickTick {
       updateAttachments: [],
       deleteAttachments: [],
     });
+
+    await this.updateAPICache();
+
+    return res;
   }
 }

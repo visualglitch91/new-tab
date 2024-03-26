@@ -283,29 +283,3 @@ export function tap<T>(func: (value: T) => void) {
     return value;
   };
 }
-
-export function singleAsyncExecution<
-  T extends (...args: any[]) => Promise<any>,
-  P extends ReturnType<T>
->(func: T) {
-  const map = new Map<string, P>();
-
-  return (...args: Parameters<T>): P => {
-    const key = JSON.stringify(args);
-    let current = map.get(key);
-
-    if (current) {
-      return current;
-    }
-
-    current = func(...args) as P;
-
-    current.finally(() => {
-      map.delete(key);
-    });
-
-    map.set(key, current);
-
-    return current;
-  };
-}

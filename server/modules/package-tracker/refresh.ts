@@ -3,7 +3,7 @@ import { orderBy } from "lodash";
 import * as cheerio from "cheerio";
 import { PackageTrackerItem } from "$common/types/package-tracker";
 import config from "$server/config";
-import { Logger, singleAsyncExecution } from "$server/utils";
+import { Logger } from "$server/utils";
 import storage from "./storage";
 
 const { webhook } = config.package_tracker;
@@ -107,58 +107,71 @@ function parseDateString(dateString: string): string | null {
   }
 }
 
-const refresh = singleAsyncExecution(async function refresh(logger: Logger) {
-  // No need to fetch status of delivered packages
-  const undeliveredPackages = storage
-    .getAll()
-    .filter((it) => it.status !== "delivered");
+let refreshPromise: Promise<void> | null;
 
-  const packagesBycode = undeliveredPackages.reduce(
-    (acc, it) => ({ ...acc, [it.code]: it }),
-    {} as Record<string, PackageTrackerItem>
-  );
+export default async function refresh(logger: Logger) {
+  if (!refreshPromise) {
+    refreshPromise = new Promise<void>(async (resolve) => {
+      // No need to fetch status of delivered packages
+      const undeliveredPackages = storage
+        .getAll()
+        .filter((it) => it.status !== "delivered");
 
-  const updatedPackages = await Promise.all(
-    Object.keys(packagesBycode).map((code) =>
-      track(code).then((result) => {
-        const prevPackage = packagesBycode[code];
-        const { eventCount, lastEvent = prevPackage.lastEvent } = result;
+      const packagesBycode = undeliveredPackages.reduce(
+        (acc, it) => ({ ...acc, [it.code]: it }),
+        {} as Record<string, PackageTrackerItem>
+      );
 
-        const status: PackageTrackerItem["status"] = lastEvent
-          ? lastEvent.description.includes("Entregue")
-            ? "delivered"
-            : lastEvent.description.includes("aguardando pagamento")
-            ? "pending-payment"
-            : lastEvent.description.includes(
-                "Objeto saiu para entrega ao destinatário"
-              )
-            ? "en-route"
-            : "in-transit"
-          : "not-found";
+      const updatedPackages = await Promise.all(
+        Object.keys(packagesBycode).map((code) =>
+          track(code).then((result) => {
+            const prevPackage = packagesBycode[code];
+            const { eventCount, lastEvent = prevPackage.lastEvent } = result;
 
-        const updatedPackage = {
-          ...prevPackage,
-          status,
-          lastEvent,
-          eventCount,
-        };
+            const status: PackageTrackerItem["status"] = lastEvent
+              ? lastEvent.description.includes("Entregue")
+                ? "delivered"
+                : lastEvent.description.includes("aguardando pagamento")
+                ? "pending-payment"
+                : lastEvent.description.includes(
+                    "Objeto saiu para entrega ao destinatário"
+                  )
+                ? "en-route"
+                : "in-transit"
+              : "not-found";
 
-        if (prevPackage.eventCount < eventCount && webhook) {
-          logger.info(
-            "[package-tracker] calling webhook %s with package %o",
-            webhook,
-            updatedPackage
-          );
+            const updatedPackage = {
+              ...prevPackage,
+              status,
+              lastEvent,
+              eventCount,
+            };
 
-          ky.post(webhook, { json: updatedPackage }).catch(logger.error);
-        }
+            if (prevPackage.eventCount < eventCount && webhook) {
+              logger.info(
+                "[package-tracker] calling webhook %s with package %o",
+                webhook,
+                updatedPackage
+              );
 
-        return updatedPackage;
+              ky.post(webhook, { json: updatedPackage }).catch(logger.error);
+            }
+
+            return updatedPackage;
+          })
+        )
+      );
+
+      updatedPackages.forEach((it) => storage.save(it));
+      resolve();
+    })
+      .catch((err) => {
+        logger.error(err, "Error while refreshing package statuses");
       })
-    )
-  );
+      .then(() => {
+        refreshPromise = null;
+      });
+  }
 
-  updatedPackages.forEach((it) => storage.save(it));
-});
-
-export default refresh;
+  return refreshPromise;
+}

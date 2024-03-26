@@ -5,7 +5,7 @@ import refresh from "./refresh";
 
 export default createAppModule("package-tracker", (instance, logger) => {
   new CronJob("0 * * * *", () => {
-    logger.info("refreshing package statuses...");
+    logger.info("Refreshing package statuses...");
     refresh(logger);
   }).start();
 

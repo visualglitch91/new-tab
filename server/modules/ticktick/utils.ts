@@ -1,9 +1,25 @@
-import { parse } from "date-fns";
+export function normalizeDate(date: string, timeZone: string) {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
-export function normalizeDate(date: string, isAllDay = false) {
-  if (isAllDay) {
-    return parse(date.substring(0, 10), "yyyy-MM-dd", new Date());
-  }
+  const { year, month, day, hour, minute, second } = formatter
+    .formatToParts(new Date(date))
+    .reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {} as Record<string, string>);
 
-  return new Date(date);
+  const adjustedDate = new Date(
+    `${year}-${month}-${day} ${hour === "24" ? 0 : hour}:${minute}:${second}`
+  );
+
+  return adjustedDate;
 }
