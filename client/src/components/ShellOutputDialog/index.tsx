@@ -36,6 +36,9 @@ const Content = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   overflow: "hidden",
+  "& *": {
+    fontFamily: "monospace",
+  },
 }));
 
 export default function ShellOutputDialog({
