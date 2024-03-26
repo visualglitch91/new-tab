@@ -8,6 +8,7 @@ export default createAppModule("app-manager", (instance) => {
   instance.get("/apps", async () => {
     const containers = await docker.getContainers();
     const apps = await pm2.list();
+
     return { apps: [...containers, ...apps].sort(compareByName) };
   });
 

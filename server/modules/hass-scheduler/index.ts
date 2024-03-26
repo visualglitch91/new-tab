@@ -188,12 +188,13 @@ export default createAppModule("hass-scheduler", (instance) => {
     } = req;
 
     const current = storage.get(id);
-    const next = { ...current, ...body, id };
 
     if (!current) {
       res.status(404);
       throw new Error();
     }
+
+    const next = { ...current, ...body, id };
 
     if (current.enabled && body.enabled === false) {
       stopSchedule(id);

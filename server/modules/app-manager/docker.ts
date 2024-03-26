@@ -11,15 +11,20 @@ import {
   createProccessOutputStreamer,
   logger,
 } from "$server/utils";
+import Storage from "$server/storage";
 import fetchImageUpdateStatus from "./fetchImageUpdateStatus";
 import dockerode from "./dockerode";
+import { CronJob } from "cron";
+
+const updateStatusStorage = new Storage<{ id: string; status: UpdateStatus }>(
+  "docker-update-status"
+);
 
 const queue = new PQueue({ concurrency: 4 });
-const dockerImageUpdatesByName: Record<string, UpdateStatus> = {};
 
 export async function checkForContainerImageUpdates(container: string) {
   const status = await fetchImageUpdateStatus(container);
-  dockerImageUpdatesByName[container] = status;
+  updateStatusStorage.save({ id: container, status });
   return status;
 }
 
@@ -47,12 +52,11 @@ export function setupUpdateChecker() {
     await queue.addAll(tasks);
 
     results.forEach((it) => {
-      dockerImageUpdatesByName[it.container] = it.status;
+      updateStatusStorage.save({ id: it.container, status: it.status });
     });
   };
 
-  check();
-  setInterval(check, 10 * 60_0000);
+  new CronJob("0 * * * *", check).start();
 }
 
 const statusMap: Record<DockerStatus, AppStatus> = {
@@ -106,7 +110,7 @@ export async function getContainers(name?: string): Promise<App[]> {
           : "0mb",
         cpu: calculateCPUPercentUnix(stats.cpu_stats, stats.precpu_stats) || 0,
         uptime: container.Status,
-        updateStatus: dockerImageUpdatesByName[name],
+        updateStatus: updateStatusStorage.get(name)?.status || "unknown",
       }));
     });
 

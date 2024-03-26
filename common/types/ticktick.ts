@@ -3,6 +3,7 @@ export type ScheduledTask = {
   title: string;
   startDate: string;
   endDate: string;
+  timeZone: string;
   isAllDay: boolean;
   projectId: string;
   projectName: string;

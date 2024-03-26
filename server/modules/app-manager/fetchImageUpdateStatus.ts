@@ -24,6 +24,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
 
   let localImageDigest: string | null = null;
   let remoteImageDigest: string | null = null;
+  let local = false;
 
   logger.info({ containerName }, "Checking for image updates");
 
@@ -44,6 +45,8 @@ export default async function fetchImageUpdateStatus(containerName: string) {
         localImageInfo.Architecture,
         localImageInfo.Os
       ).catch(() => null);
+    } else {
+      local = true;
     }
 
     if (localImageDigest) {
@@ -61,9 +64,9 @@ export default async function fetchImageUpdateStatus(containerName: string) {
   const status = (
     locked
       ? "locked"
-      : localImageDigest === null
+      : local
       ? "local"
-      : remoteImageDigest === null
+      : localImageDigest === null || remoteImageDigest === null
       ? "unknown"
       : localImageDigest === remoteImageDigest
       ? "updated"

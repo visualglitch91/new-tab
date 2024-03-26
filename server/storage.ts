@@ -11,7 +11,7 @@ export default class Storage<T extends { id: string }> {
     return this.db.set(item.id, item);
   }
 
-  get(id: string): T {
+  get(id: string): T | undefined {
     return this.db.get(id);
   }
 
