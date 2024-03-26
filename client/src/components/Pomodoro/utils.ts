@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import useMountEffect from "$client/utils/useMountEffect";
 
 export function formatRemaining(remaining: number) {
   const minutes = Math.floor(remaining / 60);
@@ -31,12 +32,16 @@ export default function usePomodoro() {
     connection: "idle",
   });
 
+  const stateRef = useRef(state);
+
   const connect = () => {
+    if (stateRef.current.connection === "connected") {
+      return;
+    }
+
     const onError = () => {
-      setState((prev) => ({
-        ...prev,
-        connection: "offline",
-      }));
+      setState((prev) => ({ ...prev, connection: "offline" }));
+      setTimeout(connect, 1000);
     };
 
     if (!process.env.WEBSOCKET_URL) {
@@ -60,14 +65,16 @@ export default function usePomodoro() {
     ws.addEventListener("error", onError);
   };
 
-  useEffect(() => {
+  useMountEffect(() => {
     connect();
+    window.addEventListener("focus", connect);
 
     return () => {
+      window.removeEventListener("focus", connect);
       wsRef.current?.close();
       wsRef.current = null;
     };
-  }, []);
+  });
 
   function toggleRunning() {
     if (state && wsRef.current) {
