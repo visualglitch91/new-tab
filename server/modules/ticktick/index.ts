@@ -1,4 +1,4 @@
-import { groupBy } from "lodash";
+import { groupBy, matches } from "lodash";
 import {
   addDays,
   endOfDay,
@@ -19,12 +19,27 @@ const {
   password,
   project_ids: projectIds,
   excluded_calendar_ids: excludedCalendarIds,
+  ignored_events: ignoredEvents,
 } = config.ticktick;
+
+function filterIgnoredEvents<T>(array: T[]) {
+  return array.filter(
+    (it) => !ignoredEvents.some((toIgnore) => matches(toIgnore)(it))
+  );
+}
 
 export default createAppModule("ticktick", async (instance, logger) => {
   await tick.login({ username, password });
 
   logger.info("ticktick logged in");
+
+  instance.router.use((_, res, next) => {
+    if (!tick.loggedIn) {
+      return res.status(500).send({ error: "Not logged in" });
+    }
+
+    return next();
+  });
 
   instance.get("/data", () => {
     const now = new Date();
@@ -69,11 +84,11 @@ export default createAppModule("ticktick", async (instance, logger) => {
         });
 
         return {
-          delayed,
-          today,
-          tomorrow,
-          unscheduled,
-          habits,
+          delayed: filterIgnoredEvents(delayed),
+          today: filterIgnoredEvents(today),
+          tomorrow: filterIgnoredEvents(tomorrow),
+          unscheduled: filterIgnoredEvents(unscheduled),
+          habits: filterIgnoredEvents(habits),
         };
       }
     );

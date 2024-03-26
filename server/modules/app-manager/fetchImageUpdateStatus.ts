@@ -43,7 +43,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
         localRepoDigest,
         localImageInfo.Architecture,
         localImageInfo.Os
-      );
+      ).catch(() => null);
     }
 
     if (localImageDigest) {
@@ -54,7 +54,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
         "latest",
         localImageInfo.Architecture,
         localImageInfo.Os
-      );
+      ).catch(() => null);
     }
   }
 

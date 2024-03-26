@@ -66,16 +66,19 @@ function clearMethodCache(method: string) {
 }
 
 export default class TickTick {
+  loggedIn = false;
+
   login({ username, password }: { username: string; password: string }) {
     return callAPI("v2/user/signon?wc=true&remember=true", "POST", {
       username,
       password,
     }).then((res) => {
-      token = res.token;
-
       if (typeof res?.username === "undefined") {
         throw new Error("Could not login");
       }
+
+      token = res.token;
+      this.loggedIn = true;
     });
   }
 
