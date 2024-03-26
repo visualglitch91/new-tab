@@ -40,7 +40,7 @@ const groups: {
       { entityId: "switch.escritorio_alto_falantes", changeTimeout: 9_000 },
       { entityId: "light.escritorio_luminaria" },
       { entityId: "light.escritorio_rgb_mesa" },
-      // { entityId: "light.escritorio_rgb_quadro" },
+      { entityId: "light.escritorio_rgb_quadro" },
     ],
   },
   {
