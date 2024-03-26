@@ -23,10 +23,10 @@ export default function useConfirm() {
         hideCancelButton
         title={title}
         description={description}
-        actions={{
-          true: { label: confirmLabel, action: onConfirm },
-          false: { label: cancelLabel, action: props.onClose },
-        }}
+        actions={[
+          { label: confirmLabel, onClick: onConfirm },
+          { label: cancelLabel, onClick: props.onClose },
+        ]}
       />
     ));
   };

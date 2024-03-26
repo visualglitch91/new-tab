@@ -9,9 +9,33 @@ import {
 import { styled } from "@mui/material";
 import { useDebouncedCallback } from "$client/utils/useDebouncedCallback";
 
-const gutter = 32;
-const smallerColumnWidth = 320;
-const largerColumnWidth = 340;
+const gutterSize = 20;
+const minColumnWidth = 380;
+const maxColumnWidth = 500;
+
+function calculateColumnCount(
+  minWidth: number,
+  maxWidth: number,
+  availableWidth: number,
+  gutterSize: number
+) {
+  let optimalCount = 1;
+  let maxTotalWidth = 0;
+
+  for (let width = minWidth; width <= maxWidth; width++) {
+    const columnCount = Math.floor(
+      (availableWidth + gutterSize) / (width + gutterSize)
+    );
+    const totalWidth = columnCount * width + (columnCount - 1) * gutterSize;
+
+    if (totalWidth <= availableWidth && totalWidth > maxTotalWidth) {
+      maxTotalWidth = totalWidth;
+      optimalCount = columnCount;
+    }
+  }
+
+  return optimalCount;
+}
 
 const Wrapper = styled("div")({
   transition: "opacity 70ms linear",
@@ -31,15 +55,13 @@ export default function MasonryLayout({
 
   const getColumnCount = useCallback(() => {
     const availableWidth = nodeRef.current?.offsetWidth || 0;
-    const columnWidth =
-      availableWidth < 1000 ? smallerColumnWidth : largerColumnWidth;
 
-    const columnCount = Math.max(
-      1,
-      Math.floor(availableWidth / (columnWidth + gutter))
+    return calculateColumnCount(
+      minColumnWidth,
+      maxColumnWidth,
+      availableWidth,
+      gutterSize
     );
-
-    return columnCount;
   }, []);
 
   const recalculateMacy = useCallback(() => {
@@ -62,7 +84,7 @@ export default function MasonryLayout({
     //@ts-expect-error no typings for macy
     import("macy").then(({ default: Macy }) => {
       macyRef.current = Macy({
-        margin: { x: gutter, y: gutter },
+        margin: { x: gutterSize, y: gutterSize },
         container: node,
         columns: getColumnCount(),
       });

@@ -96,22 +96,24 @@ export default function EntityButton({
     }
   }
 
-  function defaultOnClick() {
+  function defaultOnClick(e: React.MouseEvent<HTMLElement>) {
     if (domain === "cover") {
       showMenu({
+        mouseEvent: e.nativeEvent,
+        clickAnchor: true,
         title: String(label),
-        options: {
-          open: {
+        options: [
+          {
             label: "Abrir",
-            action: () =>
+            onClick: () =>
               callService("cover", "open_cover", { entity_id: entityId }),
           },
-          close: {
+          {
             label: "Fechar",
-            action: () =>
+            onClick: () =>
               callService("cover", "close_cover", { entity_id: entityId }),
           },
-        },
+        ],
       });
     } else {
       callService("homeassistant", checked ? "turn_off" : "turn_on", {

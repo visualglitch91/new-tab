@@ -7,6 +7,7 @@ function getModuleName(filePath: string) {
 
 // Load all overrides from folder dinamically
 const overrides = Object.entries(
+  //@ts-expect-error
   import.meta.glob("./overrides/*.ts", { eager: true })
 ).reduce(
   //@ts-expect-error
@@ -33,6 +34,15 @@ const baseOverrides = {
 const theme = applyCustomColors(
   createTheme({
     ...baseOverrides,
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 700,
+        md: 1000,
+        lg: 1300,
+        xl: 1700,
+      },
+    },
     palette: {
       mode: "dark",
       primary: { main: "#ff79c6" },

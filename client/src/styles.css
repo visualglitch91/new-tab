@@ -4,6 +4,8 @@ body {
   background-attachment: fixed;
   --tween: cubic-bezier(0.76, 0, 0.24, 1);
   min-height: 100vh;
+  overflow: auto !important;
+  padding-right: 0 !important;
 }
 
 @media (max-width: 600px) {

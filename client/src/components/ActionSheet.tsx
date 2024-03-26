@@ -5,24 +5,19 @@ import { SxProps } from "$client/theme/utils";
 import DialogBase, { DialogBaseControlProps } from "./DialogBase";
 import DialogSlideTransition from "./DialogSlideTransition";
 
-export type ActionMap<T extends string> = Record<
-  T,
-  {
-    label: string;
-    color?: ButtonProps["color"];
-    variant?: ButtonProps["variant"];
-    hidden?: boolean;
-    action: () => void;
-  }
->;
-
-interface ActionSheetProps<T extends string> {
+export interface ActionSheetProps {
   title?: string;
   sx?: SxProps;
   description?: string;
   hideCancelButton?: boolean;
   keepOpen?: boolean;
-  actions: ActionMap<T>;
+  actions: {
+    label: string;
+    color?: ButtonProps["color"];
+    variant?: ButtonProps["variant"];
+    hidden?: boolean;
+    onClick: () => void;
+  }[];
 }
 
 const verticalButtonsSx: SxProps = {
@@ -32,7 +27,7 @@ const verticalButtonsSx: SxProps = {
   },
 };
 
-export default function ActionSheet<T extends string>({
+export default function ActionSheet({
   title,
   description,
   actions,
@@ -41,28 +36,26 @@ export default function ActionSheet<T extends string>({
   sx,
   onClose,
   ...props
-}: ActionSheetProps<T> & DialogBaseControlProps) {
+}: ActionSheetProps & DialogBaseControlProps) {
   const { isMobile } = useBreakpoint();
 
-  const buttons = Object.entries(actions)
-    .map(
-      //@ts-expect-error
-      ([key, { label, action, hidden, ...props }]) =>
-        hidden ? null : (
-          <Button
-            key={key}
-            {...props}
-            onClick={() => {
-              action();
+  const buttons = actions
+    .map(({ label, onClick, hidden, ...props }, index) =>
+      hidden ? null : (
+        <Button
+          key={index}
+          {...props}
+          onClick={() => {
+            onClick();
 
-              if (!keepOpen) {
-                onClose();
-              }
-            }}
-          >
-            {label}
-          </Button>
-        )
+            if (!keepOpen) {
+              onClose();
+            }
+          }}
+        >
+          {label}
+        </Button>
+      )
     )
     .filter(Boolean);
 

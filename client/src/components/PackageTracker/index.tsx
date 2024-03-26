@@ -1,5 +1,4 @@
-import { chain, flatten, orderBy, partition } from "lodash";
-import { Stack } from "@mui/material";
+import { orderBy } from "lodash";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { PackageTrackerItem } from "$common/types/package-tracker";
 import { queryClient } from "$client/utils/queryClient";
@@ -9,6 +8,7 @@ import useConfirm from "$client/utils/useConfirm";
 import { useMenu } from "$client/utils/useMenu";
 import EmptyState from "../EmptyState";
 import PackageListItem from "./PackageListItem";
+import AltIconButton from "../AltIconButton";
 
 const statusPriority: Record<PackageTrackerItem["status"], number> = {
   "en-route": 4,
@@ -39,16 +39,16 @@ function useAction() {
   });
 }
 
-export function usePackageTrackerMenu() {
+export function PackageTrackerMenu() {
   const prompt = usePrompt();
-  const showMenu = useMenu();
   const { mutate } = useAction();
+  const showMenu = useMenu();
 
-  function refresh() {
+  const refresh = () => {
     mutate({ action: "refresh" });
-  }
+  };
 
-  function addPackage() {
+  const addPackage = () => {
     prompt({
       title: "Adicionar",
       fields: ["Código", "Nome"],
@@ -58,17 +58,22 @@ export function usePackageTrackerMenu() {
         }
       },
     });
-  }
-
-  return function showPackageTrackerMenu() {
-    showMenu({
-      title: "Opções",
-      options: {
-        refresh: { label: "Atualizar", action: refresh },
-        add: { label: "Rastrear", action: addPackage },
-      },
-    });
   };
+
+  return (
+    <AltIconButton
+      icon="dots-vertical"
+      onClick={(e) =>
+        showMenu({
+          mouseEvent: e.nativeEvent,
+          options: [
+            { label: "Atualizar", onClick: refresh },
+            { label: "Rastrear", onClick: addPackage },
+          ],
+        })
+      }
+    />
+  );
 }
 
 export default function PackageTracker() {

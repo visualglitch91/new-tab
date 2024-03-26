@@ -3,9 +3,7 @@ import { ComponentOverride } from "../utils";
 
 const MuiBackdrop: ComponentOverride["MuiBackdrop"] = {
   styleOverrides: {
-    root: {
-      background: alpha("#2f3b52", 0.5),
-    },
+    root: {},
   },
 };
 

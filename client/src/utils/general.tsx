@@ -66,10 +66,14 @@ export function useBreakpoint() {
   const result = useContext(BreakpointContext);
 
   if (!result) {
-    throw new Error("Must be called inside a ResponsiveProvider");
+    throw new Error("Must be called inside a BreakpointProvider");
   }
 
   return result;
+}
+
+export function useIsMobile() {
+  return useBreakpoint().isMobile;
 }
 
 export function formatDate(date: string | Date) {

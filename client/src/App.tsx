@@ -1,6 +1,6 @@
-import { Route, Router, useLocation } from "wouter";
+import { Route, useLocation } from "wouter";
 import CssBaseline from "@mui/material/CssBaseline";
-import { GlobalStyles, ThemeProvider, useMediaQuery } from "@mui/material";
+import { GlobalStyles, ThemeProvider } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient } from "./utils/queryClient";
@@ -17,15 +17,6 @@ import Desktop from "./desktop";
 
 export default function App() {
   const [location, navigate] = useLocation();
-  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  function onBreakpointChange() {
-    const basePath = mobile ? "/mobile" : "/desktop";
-
-    if (!location.startsWith(basePath)) {
-      navigate(basePath);
-    }
-  }
 
   useMountEffect(() => {
     if (isTouchDevice) {
@@ -44,7 +35,15 @@ export default function App() {
           "body *": { fontFamily: theme.typography.fontFamily },
         })}
       />
-      <BreakpointProvider onChange={onBreakpointChange}>
+      <BreakpointProvider
+        onChange={({ isMobile }) => {
+          const basePath = isMobile ? "/mobile" : "/desktop";
+
+          if (!location.startsWith(basePath)) {
+            navigate(basePath);
+          }
+        }}
+      >
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools initialIsOpen={false} />
           <HassProvider>

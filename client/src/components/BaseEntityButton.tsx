@@ -94,7 +94,7 @@ export interface BaseEntityButtonProps {
   changeTimeout?: number;
   hiddenOnDesktop?: boolean;
   confirmBefore?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   onLongPress?: () => void;
   onHold?: () => void;
 }
@@ -128,10 +128,10 @@ export default function BaseEntityButton({
     <Wrapper
       {...props}
       {...buttonProps}
-      onClick={() => {
+      onClick={(e) => {
         const run = () => {
           if (change() && onClick) {
-            onClick();
+            onClick(e);
           }
         };
 

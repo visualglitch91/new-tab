@@ -86,7 +86,7 @@ export default function ListItem({
   startSlot?: React.ReactNode;
   primaryText?: React.ReactNode;
   secondaryText?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   onLongPress?: () => void;
 }) {
   const hasInteraction = onClick || onLongPress;

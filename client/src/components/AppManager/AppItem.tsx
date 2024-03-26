@@ -63,32 +63,30 @@ export function AppItem({ app }: { app: ParsedApp }) {
     };
   }
 
-  function showActionsMenu() {
+  function showActionsMenu(e: React.MouseEvent<HTMLElement>) {
     showMenu({
+      mouseEvent: e.nativeEvent,
+      clickAnchor: true,
       title: "Opções",
       options: [
         {
-          key: Menu.STOP,
           label: "Parar",
-          action: makeAction(Menu.STOP),
+          onClick: makeAction(Menu.STOP),
           hidden: !running,
         },
         {
-          key: Menu.RESTART,
           label: "Reiniciar",
-          action: makeAction(Menu.RESTART),
+          onClick: makeAction(Menu.RESTART),
           hidden: !running,
         },
         {
-          key: Menu.START,
           label: "Iniciar",
-          action: makeAction(Menu.START),
+          onClick: makeAction(Menu.START),
           hidden: running,
         },
         {
-          key: Menu.LOGS,
           label: "Logs",
-          action: makeAction(Menu.LOGS),
+          onClick: makeAction(Menu.LOGS),
         },
       ],
     });

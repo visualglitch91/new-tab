@@ -17,7 +17,7 @@ export default function AltIconButton({
   disabled?: boolean;
   color?: ButtonProps["color"];
   sx?: ButtonProps["sx"];
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }) {
   return (
     <Button
