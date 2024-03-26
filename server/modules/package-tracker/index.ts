@@ -1,4 +1,5 @@
 import { CronJob } from "cron";
+import objectid from "bson-objectid";
 import { createAppModule } from "$server/utils";
 import storage from "./storage";
 import refresh from "./refresh";
@@ -15,7 +16,7 @@ export default createAppModule("package-tracker", (instance, logger) => {
     "/add",
     async (req) => {
       storage.save({
-        id: req.body.code,
+        id: objectid().toHexString(),
         code: req.body.code,
         name: req.body.name,
         status: "not-found",
