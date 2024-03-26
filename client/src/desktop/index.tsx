@@ -7,6 +7,7 @@ import HomePage from "./pages/Home";
 import TimersAndSchedulesPage from "./pages/TimersAndSchedules";
 import ManagementPage from "./pages/Management";
 import AppManagerPage from "./pages/AppManager";
+import PackageTracker from "./pages/PackageTracker";
 
 const pages = [
   {
@@ -20,20 +21,28 @@ const pages = [
     label: "Timers e Agendamentos",
     icon: "clock-outline",
     component: <TimersAndSchedulesPage />,
+    admin: true,
+  },
+  {
+    path: "/desktop/package-tracker",
+    label: "Correios",
+    icon: "truck-delivery-outline",
+    component: <PackageTracker />,
+    admin: true,
   },
   {
     path: "/desktop/admin",
     icon: "cog-outline",
-    admin: true,
     label: "Administração",
     component: <ManagementPage />,
+    admin: true,
   },
   {
     path: "/desktop/apps",
     icon: "apps",
-    admin: true,
     label: "Aplicações",
     component: <AppManagerPage />,
+    admin: true,
   },
 ];
 

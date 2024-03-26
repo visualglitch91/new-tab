@@ -5,6 +5,7 @@ import { AppDrawer } from "./components/AppDrawer";
 import TimersAndSchedule from "./pages/Timers";
 import Home from "./pages/Home";
 import SysAdmin from "./pages/SysAdmin";
+import PackageTracker from "./pages/PackageTracker";
 
 const pages = [
   {
@@ -15,18 +16,27 @@ const pages = [
     component: <Home />,
   },
   {
+    path: "/mobile/package-tracker",
+    label: "Correios",
+    icon: "truck-delivery-outline",
+    component: <PackageTracker />,
+    admin: true,
+  },
+  {
     path: "/mobile/timers",
-    matchAll: true,
     icon: "clock-outline",
     label: "Timers e Agendamentos",
     component: <TimersAndSchedule />,
+    matchAll: true,
+    admin: true,
   },
   {
     path: "/mobile/admin",
-    matchAll: true,
     icon: "cog-outline",
     label: "Sistema",
     component: <SysAdmin />,
+    matchAll: true,
+    admin: true,
   },
 ];
 

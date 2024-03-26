@@ -24,7 +24,7 @@ export default function useSwipe(
     }
 
     function handleTouchMove(evt: TouchEvent) {
-      if (!xDown || !yDown) {
+      if (!xDown || !yDown || !!document.querySelector(".MuiDialog-root")) {
         return;
       }
 

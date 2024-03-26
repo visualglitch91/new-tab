@@ -5,7 +5,7 @@ import Icon from "$client/components/Icon";
 import { useBreakpoint } from "$client/utils/general";
 import useMountEffect from "$client/utils/useMountEffect";
 import ClockAndWeather from "$client/components/ClockAndWeather";
-import useSwipe from "../../utils/useSwipe";
+import useSwipe from "$client/utils/useSwipe";
 import Pomodoro from "$client/components/Pomodoro";
 import { useIsAdmin } from "$client/utils/hass";
 
