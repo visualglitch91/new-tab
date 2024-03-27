@@ -3,7 +3,7 @@ import { makeTurnOnCall } from "$client/utils/hass";
 import useModal from "$client/utils/useModal";
 import EntityButton from "../EntityButton";
 import MediaCard from "../MediaCard";
-import Grid from "../Grid";
+import AutoGrid from "../AutoGrid";
 import IconHugeButton from "../IconHugeButton";
 import BaseEntityButton from "../BaseEntityButton";
 import AndroidRemoteDialog from "../AndroidRemoteDialog";
@@ -44,7 +44,7 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
 
       {spacer(12)}
 
-      <Grid gap={12} columnWidth={120} rowHeight={70}>
+      <AutoGrid gap={12} columnWidth={120} rowHeight={70}>
         <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
         <ScriptImageButtonCard
           asset="globoplay"
@@ -76,7 +76,7 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
           size={40}
           action={makeTurnOnCall("script.sala_receiver_info")}
         />
-      </Grid>
+      </AutoGrid>
     </Stack>
   );
 }

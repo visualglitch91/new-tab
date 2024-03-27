@@ -1,14 +1,6 @@
 import { styled, Button } from "@mui/material";
 import GlossyPaper from "$client/components/GlossyPaper";
 
-export const Wrapper = styled("div")({
-  height: "100vh",
-  width: "90vw",
-  maxWidth: 2200,
-  display: "flex",
-  margin: "0 auto",
-});
-
 export const Tabs = styled(GlossyPaper)({
   marginTop: 24,
   display: "flex",

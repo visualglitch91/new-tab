@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Box, styled } from "@mui/material";
-import Grid from "./Grid";
+import AutoGrid from "./AutoGrid";
 import SectionTitle from "./SectionTitle";
 
 const Title = styled(SectionTitle)({ marginBottom: "16px" });
@@ -22,9 +22,9 @@ export default function GridSection({
     <div>
       {title && <Title>{title}</Title>}
       {prepend && <Box mb={`${gap * 1.5}px`}>{prepend}</Box>}
-      <Grid gap={gap} columnWidth={columnWidth}>
+      <AutoGrid gap={gap} columnWidth={columnWidth}>
         {children}
-      </Grid>
+      </AutoGrid>
     </div>
   );
 }

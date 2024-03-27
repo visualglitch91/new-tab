@@ -3,7 +3,7 @@ import { getConfig } from "$client/utils/useConfig";
 
 const enableBlur = !getConfig("disableBlurEffects");
 
-const ButtonCard = styled(ButtonBase)({
+const HugeButton = styled(ButtonBase)({
   overflow: "hidden",
   transition: "all 100ms var(--tween)",
   height: "100%",
@@ -38,6 +38,6 @@ const ButtonCard = styled(ButtonBase)({
     opacity: 0.6,
     pointerEvents: "none",
   },
-});
+}) as typeof ButtonBase;
 
-export default ButtonCard;
+export default HugeButton;

@@ -4,7 +4,7 @@ import { useSet } from "@uidotdev/usehooks";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import { useHassStore } from "$client/utils/hass";
 import DialogBase, { DialogBaseControlProps } from "./DialogBase";
-import Grid from "./Grid";
+import AutoGrid from "./AutoGrid";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function formatEntity(entity: HassEntity): {
@@ -164,7 +164,7 @@ export default function EntitySelectorDialog({
             <Typography marginBottom={1} fontWeight={500}>
               {zone}
             </Typography>
-            <Grid gap={16} columnWidth={120}>
+            <AutoGrid gap={16} columnWidth={120}>
               {entities.map((it) => (
                 <EntityItem
                   size="small"
@@ -182,7 +182,7 @@ export default function EntitySelectorDialog({
                   {it.name}
                 </EntityItem>
               ))}
-            </Grid>
+            </AutoGrid>
           </Box>
         ))}
       </Stack>

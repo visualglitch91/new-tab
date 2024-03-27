@@ -1,12 +1,12 @@
 import { useLocation } from "wouter";
-import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import ClockAndWeather from "$client/components/ClockAndWeather";
 import { AppDrawer } from "$client/mobile/components/AppDrawer";
 import Pomodoro from "$client/components/Pomodoro";
 import { useIsAdmin } from "$client/utils/hass";
-import Tab from "./Tab";
-import { Wrapper, Tabs, Content } from "./components";
 import PageLayout from "$client/mobile/components/PageLayout";
+import { Tabs, Content } from "./components";
+import Tab from "./Tab";
 
 interface PageConfig {
   path: string;
@@ -39,7 +39,7 @@ export default function DesktopLayout({
   }
 
   return (
-    <Wrapper>
+    <Container sx={{ display: "flex", maxWidth: 2200 }} maxWidth={false}>
       <div>
         <Tabs>
           <ClockAndWeather
@@ -60,6 +60,6 @@ export default function DesktopLayout({
         </Tabs>
       </div>
       <Content ref={contentRef}>{children}</Content>
-    </Wrapper>
+    </Container>
   );
 }

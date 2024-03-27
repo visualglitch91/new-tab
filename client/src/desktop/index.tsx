@@ -5,11 +5,18 @@ import { useIsAdmin } from "$client/utils/hass";
 import DesktopLayout from "./components/DesktopLayout";
 import HomePage from "./pages/Home";
 import TimersAndSchedulesPage from "./pages/TimersAndSchedules";
-import ManagementPage from "./pages/Management";
-import AppManagerPage from "./pages/AppManager";
+import SysAdminPage from "./pages/SysAdmin";
 import PackageTracker from "./pages/PackageTracker";
+import AppLauncherPage from "./AppLauncherPage";
 
 const pages = [
+  {
+    path: "/desktop/apps",
+    icon: "apps",
+    label: "Apps",
+    component: <AppLauncherPage />,
+    admin: true,
+  },
   {
     path: "/desktop/home",
     label: "Casa",
@@ -34,14 +41,7 @@ const pages = [
     path: "/desktop/admin",
     icon: "cog-outline",
     label: "Administração",
-    component: <ManagementPage />,
-    admin: true,
-  },
-  {
-    path: "/desktop/apps",
-    icon: "apps",
-    label: "Aplicações",
-    component: <AppManagerPage />,
+    component: <SysAdminPage />,
     admin: true,
   },
 ];

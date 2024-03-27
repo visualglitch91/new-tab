@@ -9,10 +9,6 @@ import {
 import { styled } from "@mui/material";
 import { useDebouncedCallback } from "$client/utils/useDebouncedCallback";
 
-const gutterSize = 20;
-const minColumnWidth = 380;
-const maxColumnWidth = 500;
-
 function calculateColumnCount(
   minWidth: number,
   maxWidth: number,
@@ -44,9 +40,15 @@ const Wrapper = styled("div")({
 export default function MasonryLayout({
   className,
   items: _items,
+  gutterSize = 20,
+  minColumnWidth = 380,
+  maxColumnWidth = 500,
 }: {
   className?: string;
   items: (React.ReactNode | false | undefined | null)[];
+  gutterSize?: number;
+  minColumnWidth?: number;
+  maxColumnWidth?: number;
 }) {
   const macyRef = useRef<any>();
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -62,14 +64,15 @@ export default function MasonryLayout({
       availableWidth,
       gutterSize
     );
-  }, []);
+  }, [gutterSize, minColumnWidth, maxColumnWidth]);
 
   const recalculateMacy = useCallback(() => {
     if (macyRef.current) {
+      macyRef.current.options.margin = { x: gutterSize, y: gutterSize };
       macyRef.current.options.columns = getColumnCount();
       macyRef.current.recalculate(true);
     }
-  }, [getColumnCount]);
+  }, [gutterSize, getColumnCount]);
 
   const onResize = useDebouncedCallback(recalculateMacy);
 
@@ -110,7 +113,10 @@ export default function MasonryLayout({
   }, []);
 
   return (
-    <Wrapper style={{ opacity: ready ? 1 : 0 }} className={className}>
+    <Wrapper
+      style={ready ? {} : { opacity: 1, height: 0, overflow: "hidden" }}
+      className={className}
+    >
       <div ref={nodeRef}>
         {items.map((item, index) => (
           <Fragment key={index}>{item}</Fragment>

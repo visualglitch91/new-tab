@@ -154,8 +154,10 @@ export default function BaseEntityButton({
         <CircularProgress size={horizontal ? 18 : 24} sx={{ mx: "auto" }} />
       ) : (
         <>
-          {typeof icon === "string" && (
+          {typeof icon === "string" ? (
             <Icon icon={disabled ? "cancel" : icon || "cancel"} />
+          ) : (
+            icon
           )}
           <Label>{label}</Label>
         </>

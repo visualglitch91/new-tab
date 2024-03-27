@@ -1,37 +1,22 @@
-import { ReactNode } from "react";
-import { Box, SxProps } from "@mui/material";
-import { sxx } from "$client/utils/styling";
+import { Box } from "@mui/material";
+import Grid2, { type Grid2Props } from "@mui/material/Unstable_Grid2";
 
-export default function Grid({
-  gap,
-  columnWidth,
-  rowHeight,
-  className,
-  sx,
-  children,
-}: {
-  gap: number;
-  columnWidth: number;
-  rowHeight?: number;
-  sx?: SxProps;
-  className?: string;
-  children: ReactNode;
-}) {
+export type GridProps<
+  D extends React.ElementType = "div",
+  P = { component?: D }
+> = Omit<Grid2Props<D, P>, "container"> & React.ComponentProps<D>;
+export type GridItemProps = Omit<Grid2Props, "container">;
+
+export function Grid<
+  D extends React.ElementType = "div",
+  P = { component?: React.ElementType }
+>({ spacing, gap, ...props }: GridProps<D, P>) {
   return (
-    <Box
-      sx={sxx(
-        {
-          display: "grid",
-          justifyContent: "center",
-          gridGap: `${gap}px`,
-          gridTemplateColumns: `repeat(auto-fill, minmax(${columnWidth}px, 1fr))`,
-          gridAutoRows: rowHeight ? `${rowHeight}px` : "unset",
-        },
-        sx
-      )}
-      className={className}
-    >
-      {children}
+    // Wrap it in a div so parent components don't mess with the Grid container's margin
+    <Box width="100%">
+      <Grid2 {...props} spacing={spacing || gap} container />
     </Box>
   );
 }
+
+export const GridItem = Grid2 as React.ElementType<GridItemProps>;

@@ -13,3 +13,9 @@ export function mergeWith<A, B>(a: A) {
     return { ...a, ...b };
   };
 }
+
+export function insertAtIndex<T>(array: T[], index: number, newItem: T): T[] {
+  const newArray = [...array];
+  newArray.splice(index, 0, newItem);
+  return newArray;
+}
