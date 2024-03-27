@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { groupBy, mapValues, orderBy } from "lodash";
 import { Box, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +10,7 @@ import api from "$client/utils/api";
 import useConfirm from "$client/utils/useConfirm";
 import { queryClient } from "$client/utils/queryClient";
 import { useMenu } from "$client/utils/useMenu";
-import MasonryLayout from "$client/desktop/components/DesktopLayout/MasonryLayout";
+import useMountEffect from "$client/utils/useMountEffect";
 import { insertAtIndex, removeItemAtIndex } from "$client/utils/array";
 import { mode } from "$client/utils/general";
 import AltIconButton from "../AltIconButton";
@@ -16,11 +18,29 @@ import SectionTitle from "../SectionTitle";
 import Sortable from "../Sortable";
 import AutoGrid from "../AutoGrid";
 import BookmarkItem from "./BookmarkItem";
+import { useBreakpointValue } from "$client/utils/useBreakpointValue";
+
+function Portal({
+  nodeId,
+  children,
+}: {
+  nodeId: string;
+  children: React.ReactNode;
+}) {
+  const node = document.getElementById(nodeId);
+
+  if (!node) {
+    return null;
+  }
+
+  return createPortal(children, node);
+}
 
 export default function Bookmarks() {
   const prompt = usePrompt();
   const confirm = useConfirm();
   const showMenu = useMenu();
+  const [ready, setReady] = useState(false);
 
   const { data: bookmarks } = useQuery({
     queryKey: ["bookmarks"],
@@ -73,24 +93,66 @@ export default function Bookmarks() {
     });
   };
 
+  const columnCount = useBreakpointValue({ xs: 1, sm: 1, md: 1, lg: 2, xl: 3 });
+  const columns: React.ReactNode[][] = Array.from(
+    { length: columnCount },
+    () => []
+  );
+
+  const itemsPerColumn = Math.ceil(
+    groups.reduce((acc, current) => acc + current.items.length, 0) / columnCount
+  );
+
+  let columnIndex = 0;
+  let currentColumnLength = 0;
+
+  groups.forEach((group) => {
+    const itemArray = group.items;
+
+    if (currentColumnLength + itemArray.length > itemsPerColumn) {
+      columnIndex++;
+
+      if (columnIndex === columnCount) {
+        columnIndex = 0;
+      }
+
+      currentColumnLength = 0;
+    }
+
+    columns[columnIndex].push(
+      <Stack gap={2} key={`cell_${group.id}`} id={`cell_${group.id}`} />
+    );
+
+    currentColumnLength += itemArray.length;
+  });
+
+  useMountEffect(() => setReady(true));
+
   return (
-    <MasonryLayout
-      minColumnWidth={500}
-      maxColumnWidth={500}
-      items={[
+    <div>
+      <Stack gap={4} direction="row" width="100%">
+        {columns.map((cells, index) => (
+          <Stack key={index} gap={4} direction="column" width="100%">
+            {cells}
+          </Stack>
+        ))}
+      </Stack>
+      {ready && (
         <Sortable
           groups={groups}
-          renderGroup={({ group, index }, children) => (
-            <Stack key={group.id} gap={2}>
-              <Stack direction="row" gap={2} alignItems="center">
-                <SectionTitle>{group.id}</SectionTitle>
-                {index === 0 && <AltIconButton icon="plus" onClick={onAdd} />}
-              </Stack>
-              <AutoGrid columnWidth={200} gap={6}>
-                {children}
-              </AutoGrid>
-            </Stack>
-          )}
+          renderGroup={({ group, index }, children) => {
+            return (
+              <Portal key={group.id} nodeId={`cell_${group.id}`}>
+                <Stack direction="row" gap={2} alignItems="center">
+                  <SectionTitle>{group.id}</SectionTitle>
+                  {index === 0 && <AltIconButton icon="plus" onClick={onAdd} />}
+                </Stack>
+                <AutoGrid columnWidth={200} gap={6}>
+                  {children}
+                </AutoGrid>
+              </Portal>
+            );
+          }}
           renderItem={(item, refs, wrapperProps, handleProps) => (
             <Box ref={refs.setWrapperRef} {...wrapperProps} {...handleProps}>
               <BookmarkItem
@@ -102,10 +164,7 @@ export default function Bookmarks() {
                     mouseEvent: e.nativeEvent,
                     clickAnchor: true,
                     options: [
-                      {
-                        label: "Deletar",
-                        onClick: () => onRemove(item),
-                      },
+                      { label: "Deletar", onClick: () => onRemove(item) },
                     ],
                   });
                 }}
@@ -145,8 +204,8 @@ export default function Bookmarks() {
             queryClient.setQueryData(["bookmarks"], () => newValues);
             api("/bookmarks/update-all", "post", { bookmarks: newValues });
           }}
-        />,
-      ]}
-    />
+        />
+      )}
+    </div>
   );
 }

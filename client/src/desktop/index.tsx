@@ -3,19 +3,19 @@ import { useEffect, useRef } from "react";
 import RouteRedirect from "$client/components/RouteRedirect";
 import { useIsAdmin } from "$client/utils/hass";
 import { mode } from "$client/utils/general";
+import Bookmarks from "$client/components/Bookmarks";
 import DesktopLayout from "./components/DesktopLayout";
 import HomePage from "./pages/Home";
 import TimersAndSchedulesPage from "./pages/TimersAndSchedules";
 import SysAdminPage from "./pages/SysAdmin";
 import PackageTracker from "./pages/PackageTracker";
-import AppLauncherPage from "./AppLauncherPage";
 
 const pages = [
   {
     path: "/desktop/apps",
     icon: "apps",
     label: "Apps",
-    component: <AppLauncherPage />,
+    component: <Bookmarks />,
     admin: true,
   },
   {

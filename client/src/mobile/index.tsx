@@ -6,8 +6,17 @@ import TimersAndSchedule from "./pages/Timers";
 import Home from "./pages/Home";
 import SysAdmin from "./pages/SysAdmin";
 import PackageTracker from "./pages/PackageTracker";
+import AppsPage from "./pages/Apps";
 
 const pages = [
+  {
+    path: "/mobile/apps",
+    icon: "apps",
+    label: "Apps",
+    component: <AppsPage />,
+    matchAll: true,
+    admin: true,
+  },
   {
     path: "/mobile/home",
     matchAll: true,

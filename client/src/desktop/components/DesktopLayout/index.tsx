@@ -39,7 +39,7 @@ export default function DesktopLayout({
   }
 
   return (
-    <Container sx={{ display: "flex", maxWidth: 2200 }} maxWidth={false}>
+    <Container sx={{ display: "flex", maxWidth: 1900 }} maxWidth={false}>
       <div>
         <Tabs>
           <ClockAndWeather

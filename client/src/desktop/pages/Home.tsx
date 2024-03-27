@@ -14,15 +14,19 @@ export default function HomePage() {
   return (
     <MasonryLayout
       items={[
-        <TV />,
         <Stack spacing={4.5}>
-          <HomeDevices slice={[1, 4]} />
+          <TV />
+          <HomeDevices slice={[1, 2]} />
         </Stack>,
         <Stack spacing={4.5}>
-          <HomeDevices slice={[4]} />
+          <HomeDevices slice={[2]} />
         </Stack>,
-        isAdmin && camerasOn && <Cameras />,
-        isAdmin && <Vacuum />,
+        isAdmin && (
+          <Stack spacing={4.5}>
+            {camerasOn && <Cameras />}
+            <Vacuum />
+          </Stack>
+        ),
       ]}
     />
   );

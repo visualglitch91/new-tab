@@ -33,15 +33,27 @@ export default function usePomodoro() {
   });
 
   const stateRef = useRef(state);
+  const errorTimeoutRef = useRef(0);
+  const reconnectTimeoutRef = useRef(0);
 
   const connect = () => {
     if (stateRef.current.connection === "connected") {
       return;
     }
 
+    window.clearTimeout(errorTimeoutRef.current);
+
     const onError = () => {
-      setState((prev) => ({ ...prev, connection: "offline" }));
-      setTimeout(connect, 1000);
+      window.clearTimeout(errorTimeoutRef.current);
+      window.clearTimeout(reconnectTimeoutRef.current);
+
+      errorTimeoutRef.current = window.setTimeout(() => {
+        setState((prev) => ({ ...prev, connection: "offline" }));
+      }, 1000);
+
+      reconnectTimeoutRef.current = window.setTimeout(() => {
+        connect();
+      }, 500);
     };
 
     if (!process.env.WEBSOCKET_URL) {

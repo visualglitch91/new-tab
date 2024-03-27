@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { find, findIndex, get } from "lodash";
 import {
   DndContext,
@@ -92,8 +92,8 @@ export default function Sortable<
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        delay: 60,
-        tolerance: 60,
+        delay: 100,
+        tolerance: 100,
       },
     }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
@@ -222,7 +222,7 @@ export default function Sortable<
           }
         }
 
-        if (items.length === 0) {
+        if (!items || items.length === 0) {
           return null;
         }
 
