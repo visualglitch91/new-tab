@@ -2,6 +2,7 @@ import { Route, Switch, useLocation } from "wouter";
 import { useEffect, useRef } from "react";
 import RouteRedirect from "$client/components/RouteRedirect";
 import { useIsAdmin } from "$client/utils/hass";
+import { mode } from "$client/utils/general";
 import DesktopLayout from "./components/DesktopLayout";
 import HomePage from "./pages/Home";
 import TimersAndSchedulesPage from "./pages/TimersAndSchedules";
@@ -59,7 +60,10 @@ export default function Desktop() {
 
   return (
     <DesktopLayout contentRef={contentRef} pages={pages}>
-      <RouteRedirect from="/desktop/" to="/desktop/home" />
+      <RouteRedirect
+        from="/desktop/"
+        to={mode.newTab ? "/desktop/apps" : "/desktop/home"}
+      />
       <Switch>
         {pages.map((page) =>
           page.admin && !isAdmin ? null : (

@@ -7,21 +7,20 @@ import { usePrompt } from "$client/utils/usePrompt";
 import api from "$client/utils/api";
 import useConfirm from "$client/utils/useConfirm";
 import { queryClient } from "$client/utils/queryClient";
-import { getSearchParam } from "$client/utils/url";
 import { useMenu } from "$client/utils/useMenu";
 import MasonryLayout from "$client/desktop/components/DesktopLayout/MasonryLayout";
+import { insertAtIndex, removeItemAtIndex } from "$client/utils/array";
+import { mode } from "$client/utils/general";
 import AltIconButton from "../AltIconButton";
 import SectionTitle from "../SectionTitle";
 import Sortable from "../Sortable";
 import AutoGrid from "../AutoGrid";
 import BookmarkItem from "./BookmarkItem";
-import { insertAtIndex, removeItemAtIndex } from "$client/utils/array";
 
 export default function Bookmarks() {
   const prompt = usePrompt();
   const confirm = useConfirm();
   const showMenu = useMenu();
-  const isNewTab = getSearchParam("mode") === "new-tab";
 
   const { data: bookmarks } = useQuery({
     queryKey: ["bookmarks"],
@@ -96,7 +95,7 @@ export default function Bookmarks() {
             <Box ref={refs.setWrapperRef} {...wrapperProps} {...handleProps}>
               <BookmarkItem
                 item={item}
-                openInNewTab={isNewTab}
+                openInNewTab={!mode.newTab}
                 onContextMenu={(e) => {
                   e.preventDefault();
                   showMenu({

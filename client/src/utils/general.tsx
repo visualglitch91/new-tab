@@ -1,6 +1,15 @@
 /* eslint "react-refresh/only-export-components": "off" */
 import { createContext, useContext, useEffect, useMemo } from "react";
 import { useMediaQuery, useTheme } from "@mui/material";
+import { getSearchParam, removeParamsFromUrl } from "./url";
+
+const curentMode = getSearchParam("mode");
+
+removeParamsFromUrl(["mode"]);
+
+export const mode = {
+  newTab: curentMode === "new-tab",
+};
 
 export const isTouchDevice =
   "ontouchstart" in window ||
