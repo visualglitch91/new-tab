@@ -14,17 +14,17 @@ interface CurrentMedia {
 }
 
 const mediaInfo: Record<string, CurrentMedia> = {
-  liveTV: {
+  Globo: {
     image: getImageUrl("globo.webp"),
     title: "Globo ao Vivo",
     volumeOnly: true,
   },
-  hdmi1: {
+  "Nintendo Switch": {
     image: getImageUrl("switch.png"),
     title: "Nintendo Switch",
     volumeOnly: true,
   },
-  hdmi2: {
+  "Playstation 5": {
     image: getImageUrl("playstation5.jpg"),
     title: "PlayStation 5",
     volumeOnly: true,
@@ -33,51 +33,43 @@ const mediaInfo: Record<string, CurrentMedia> = {
     image: getImageUrl("androidtv.png"),
     title: "AndroidTV",
   },
-  "com.globo.globotv": {
+  Globoplay: {
     image: getImageUrl("globoplay.jpg"),
     title: "GloboPlay",
   },
-  "com.plexapp.android": {
-    image: getImageUrl("plex.jpg"),
-    title: "Plex",
-  },
-  "com.disney.disneyplus": {
+  "Disney+": {
     image: getImageUrl("disneyplus.jpg"),
     title: "Disney+",
   },
-  "com.hbo.hbonow": {
+  "HBO Max": {
     image: getImageUrl("hbomax.jpg"),
     title: "HBO Max",
   },
-  "com.disney.starplus": {
+  "Star+": {
     image: getImageUrl("starplus.jpg"),
     title: "Star+",
   },
-  "com.amazon.amazonvideo.livingroom": {
+  PrimeVideo: {
     image: getImageUrl("primevideo.jpg"),
     title: "Prime Video",
   },
-  "com.crunchyroll.crunchyroid": {
+  Crunchyroll: {
     image: getImageUrl("crunchyroll.jpg"),
     title: "CrunchyRoll",
   },
-  "com.teamsmart.videomanager.tv": {
+  YouTube: {
     image: getImageUrl("youtube.jpg"),
     title: "YouTube",
   },
-  "org.xbmc.kodi": {
-    image: getImageUrl("kodi.jpg"),
-    title: "Kodi",
-  },
-  "tv.twitch.android.app": {
+  Twitch: {
     image: getImageUrl("twitch.jpg"),
     title: "Twitch",
   },
-  "com.spotify.tv.android": {
+  Spotify: {
     image: getImageUrl("spotify.png"),
     title: "Spotify",
   },
-  "org.jellyfin.androidtv": {
+  Jellyfin: {
     image: getImageUrl("jellyfin.jpg"),
     title: "Jellyfin",
   },
@@ -85,42 +77,30 @@ const mediaInfo: Record<string, CurrentMedia> = {
 
 export function useCurrentMedia(): CurrentMedia | null {
   const {
-    "script.sala_mibox_ligar": { state: miboxLoading } = { state: null },
-    "input_text.sala_receiver_entrada": { state: receiver } = { state: null },
     "media_player.spotify_visualglitch91": spotify,
     "media_player.xiaomi_tv_box": mibox,
     "media_player.sala_tv": tv,
     "media_player.sala_jellyfin": jellyfin,
   } = useEntities(
     "script.sala_mibox_ligar",
-    "input_text.sala_receiver_entrada",
     "media_player.spotify_visualglitch91",
     "media_player.xiaomi_tv_box",
     "media_player.sala_tv",
     "media_player.sala_jellyfin"
   );
 
-  if (miboxLoading === "on" || !tv || tv.state !== "on") {
+  if (!tv || tv.state !== "on") {
     return null;
-  }
-
-  if (tv.attributes.source === "live_tv") {
-    return mediaInfo["liveTV"];
-  }
-
-  switch (receiver) {
-    case "hdmi1":
-    case "hdmi2":
-      return mediaInfo[receiver];
   }
 
   if (!mibox) {
     return null;
   }
 
-  const appId = mibox.attributes.app_id;
+  const { source } = tv.attributes;
 
   if (
+    source === "Spotify" &&
     spotify &&
     spotify.state !== "idle" &&
     spotify.attributes.source === "Xiaomi TV Box"
@@ -136,11 +116,7 @@ export function useCurrentMedia(): CurrentMedia | null {
     };
   }
 
-  if (
-    appId === "org.jellyfin.androidtv" &&
-    jellyfin &&
-    jellyfin.state !== "idle"
-  ) {
+  if (source === "Jellyfin" && jellyfin && jellyfin.state !== "idle") {
     const attrs = jellyfin.attributes;
 
     return {
@@ -151,8 +127,8 @@ export function useCurrentMedia(): CurrentMedia | null {
     };
   }
 
-  if (appId) {
-    return mediaInfo[appId] || null;
+  if (source) {
+    return mediaInfo[source] || null;
   }
 
   return mediaInfo["miboxGeneric"];

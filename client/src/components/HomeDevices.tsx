@@ -37,7 +37,10 @@ const groups: {
     title: "Escritório",
     items: [
       { entityId: "switch.escritorio_luz" },
-      { entityId: "switch.escritorio_alto_falantes", changeTimeout: 9_000 },
+      {
+        entityId: "switch.computador_erica_alto_falantes",
+        changeTimeout: 9_000,
+      },
       { entityId: "light.escritorio_luminaria" },
       { entityId: "light.escritorio_rgb_mesa" },
       { entityId: "light.escritorio_rgb_quadro" },

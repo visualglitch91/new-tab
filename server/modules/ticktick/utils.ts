@@ -1,4 +1,9 @@
 export function normalizeDate(date: string, timeZone: string) {
+  if (!timeZone) {
+    const [parsedDate] = date.split(".");
+    return new Date(parsedDate);
+  }
+
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone,
     hour12: false,

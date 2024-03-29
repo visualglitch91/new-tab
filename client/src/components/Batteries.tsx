@@ -22,6 +22,14 @@ export default function Batteries() {
             label: "Sensor da Porta do Banheiro/Quarto",
           },
           {
+            entityId: "sensor.cozinha_porta_geladeira_bateria",
+            label: "Sensor da Porta da Geladeira",
+          },
+          {
+            entityId: "sensor.cozinha_porta_freezer_bateria",
+            label: "Sensor da Porta do Freezer",
+          },
+          {
             entityId: "sensor.sala_porta_bateria",
             label: "Sensor da Porta da Sala",
           },

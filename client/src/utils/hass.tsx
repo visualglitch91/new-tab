@@ -103,6 +103,8 @@ export function getIcon(entity: HassEntity) {
         return "mdi:robot-vacuum";
       case "script":
         return "mdi:code-braces";
+      case "media_player":
+        return "mdi:television";
     }
   }
 
