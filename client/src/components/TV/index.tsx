@@ -45,7 +45,10 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
       {spacer(12)}
 
       <AutoGrid gap={12} columnWidth={120} rowHeight={70}>
-        <ScriptImageButtonCard asset="globo" script="sala_tv_globo" />
+        <ScriptImageButtonCard
+          asset="globo"
+          script="sala_mibox_globoplay_ao_vivo"
+        />
         <ScriptImageButtonCard
           asset="globoplay"
           script="sala_mibox_globoplay"

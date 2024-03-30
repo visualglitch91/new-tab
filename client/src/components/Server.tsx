@@ -10,6 +10,7 @@ export default function ServerModule() {
           {
             entityId: "switch.pi_hole",
             changeTimeout: 30_000,
+            label: "Pi-Hole",
           },
           {
             label: "Uso do Disco de Mídia",

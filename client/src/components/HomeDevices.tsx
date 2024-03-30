@@ -38,7 +38,7 @@ const groups: {
     items: [
       { entityId: "switch.escritorio_luz" },
       {
-        entityId: "switch.computador_erica_alto_falantes",
+        entityId: "switch.computador_avell_alto_falantes",
         changeTimeout: 9_000,
       },
       { entityId: "light.escritorio_luminaria" },
