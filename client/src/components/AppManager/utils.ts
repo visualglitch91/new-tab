@@ -56,7 +56,7 @@ export function useData() {
   return useQuery({
     queryKey: ["apps"],
     queryFn: () =>
-      api<{ apps: App[] }>("/app-manager/apps", "get")
+      api<{ apps: App[] }>(`/app-manager/apps?d=${Date.now()}`, "get")
         .then(({ apps }) => apps.map(parseApp))
         .then((parsedApps) =>
           Object.entries(
