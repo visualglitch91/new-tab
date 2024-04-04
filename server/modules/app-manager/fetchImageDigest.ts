@@ -78,11 +78,13 @@ function fetchImageDigestFromGitHubRegistry(
   tag: string,
   architecture: string,
   os: string,
-  registryConfig: { token: string }
+  registryConfig: { token: string; registry_url?: string }
 ) {
+  const { registry_url, token } = registryConfig;
+
   return fetchImageDigestFromRegistryAPI({
-    baseUrl: `https://${registry}/v2`,
-    token: base64(registryConfig.token),
+    baseUrl: registry_url ? `${registry_url}/v2` : `https://${registry}/v2`,
+    token: base64(token),
     namespace,
     name,
     tag,

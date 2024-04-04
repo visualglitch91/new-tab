@@ -16,6 +16,16 @@ export default createAppModule("app-manager", (instance) => {
    * Docker Apps
    */
 
+  instance.post("/docker/all/update-image-status", () => {
+    docker.checkForAllContainersImageUpdates();
+    return Promise.resolve({ running: true });
+  });
+
+  instance.post<{ Params: { name: string } }>(
+    "/docker/:name/update-image-status",
+    (req) => docker.checkForContainerImageUpdates(req.params.name)
+  );
+
   instance.get<{ Params: { name: string } }>("/docker/:name", (req) => {
     const { name } = req.params;
     return docker.getContainerByName(name);
@@ -46,11 +56,6 @@ export default createAppModule("app-manager", (instance) => {
         .createLogStreamer(req.params.name)
         .then((streamLogs) => streamLogs(req, res));
     }
-  );
-
-  instance.get<{ Params: { name: string } }>(
-    "/docker/:name/image-update-status",
-    (req) => docker.checkForContainerImageUpdates(req.params.name)
   );
 
   /*

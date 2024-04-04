@@ -5,6 +5,7 @@ import {
   DockerStatus,
   UpdateStatus,
 } from "$common/types/app-manager";
+import createPromiseObj from "$common/utils/createPromiseObj";
 import {
   isDefined,
   bytesToSize,
@@ -28,35 +29,54 @@ export async function checkForContainerImageUpdates(container: string) {
   return status;
 }
 
+let checkingPromise: Promise<void> | null = null;
+
+export function checkForAllContainersImageUpdates() {
+  if (!checkingPromise) {
+    checkingPromise = new Promise(async (resolve, reject) => {
+      try {
+        logger.info("Checking docker image updates");
+
+        // Fetch list of containers
+        const containers = await dockerode.listContainers({ all: true });
+
+        // Array to store results
+        const results: {
+          container: string;
+          status: UpdateStatus;
+        }[] = [];
+
+        const tasks = containers.map((containerInfo) => async () => {
+          const container = containerInfo.Names[0].substring(1);
+          const status = await fetchImageUpdateStatus(container);
+          results.push({ status, container });
+        });
+
+        await queue.addAll(tasks);
+
+        results.forEach((it) => {
+          updateStatusStorage.save({ id: it.container, status: it.status });
+        });
+
+        resolve();
+      } catch (err) {
+        logger.error(err);
+        reject(err);
+      }
+    });
+
+    checkingPromise.finally(() => {
+      checkingPromise = null;
+    });
+  }
+
+  return checkingPromise;
+}
+
 export function setupUpdateChecker() {
   logger.info("Setup Docker Update Checker");
 
-  const check = async () => {
-    logger.info("Checking docker image updates");
-
-    // Fetch list of containers
-    const containers = await dockerode.listContainers({ all: true });
-
-    // Array to store results
-    const results: {
-      container: string;
-      status: UpdateStatus;
-    }[] = [];
-
-    const tasks = containers.map((containerInfo) => async () => {
-      const container = containerInfo.Names[0].substring(1);
-      const status = await fetchImageUpdateStatus(container);
-      results.push({ status, container });
-    });
-
-    await queue.addAll(tasks);
-
-    results.forEach((it) => {
-      updateStatusStorage.save({ id: it.container, status: it.status });
-    });
-  };
-
-  new CronJob("0 * * * *", check).start();
+  new CronJob("0 * * * *", checkForAllContainersImageUpdates).start();
 }
 
 const statusMap: Record<DockerStatus, AppStatus> = {

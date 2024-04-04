@@ -67,3 +67,8 @@ export function useData() {
         ),
   });
 }
+
+//@ts-expect-error
+window.refreshAppManager = () => {
+  return api("/app-manager/docker/all/update-image-status", "post");
+};

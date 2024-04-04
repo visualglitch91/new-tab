@@ -1,7 +1,7 @@
 import pRetry from "p-retry";
 import { UpdateStatus } from "$common/types/app-manager";
 import { logger } from "$server/utils";
-import fetchImageDigest from "./fetchImagDigest";
+import fetchImageDigest from "./fetchImageDigest";
 import dockerode from "./dockerode";
 
 function parseImageName(imageName: string) {
@@ -48,7 +48,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
             localImageInfo.Architecture,
             localImageInfo.Os
           ),
-        { retries: 3 }
+        { retries: 5, minTimeout: 1000 }
       ).catch(() => null);
     } else {
       local = true;
@@ -65,7 +65,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
             localImageInfo.Architecture,
             localImageInfo.Os
           ),
-        { retries: 3 }
+        { retries: 5, minTimeout: 1000 }
       ).catch(() => null);
     }
   }
