@@ -42,6 +42,7 @@ const groups: {
         changeTimeout: 9_000,
       },
       { entityId: "light.escritorio_luminaria" },
+      { entityId: "light.escritorio_apoio_headphone" },
       { entityId: "light.escritorio_rgb_mesa" },
       { entityId: "light.escritorio_rgb_quadro" },
     ],
