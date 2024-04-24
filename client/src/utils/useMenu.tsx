@@ -44,7 +44,7 @@ export function useMenu() {
     let anchorEl =
       clickAnchor && clickedElement
         ? (() => {
-            const pos = offset(mouseEvent, document.body);
+            const pos = offset(mouseEvent, document.getElementById("app"));
             const anchorEl = document.createElement("div");
 
             anchorEl.style.position = "absolute";

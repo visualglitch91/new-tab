@@ -103,7 +103,7 @@ export function useCurrentMedia(): CurrentMedia | null {
     source === "Spotify" &&
     spotify &&
     spotify.state !== "idle" &&
-    spotify.attributes.source === "Xiaomi TV Box"
+    ["Casa", "echo home teather"].includes(spotify.attributes.source)
   ) {
     const attrs = spotify.attributes;
 

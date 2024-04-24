@@ -45,6 +45,18 @@ export function ImageButtonCard({
   );
 }
 
+export function parseSourceName(source: string) {
+  return (
+    {
+      "echo banheiro": "Banheiro",
+      "echo quarto": "Quarto",
+      "echo home theater": "Sala",
+      "echo cozinha": "Cozinha",
+      "echo sala": "Sala (Echo Dot)",
+    }[source] || source
+  );
+}
+
 export function ScriptImageButtonCard({
   asset,
   script,
