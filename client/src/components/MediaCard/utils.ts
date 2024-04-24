@@ -15,7 +15,7 @@ interface CurrentMedia {
 
 const mediaInfo: Record<string, CurrentMedia> = {
   Globo: {
-    image: getImageUrl("globo.webp"),
+    image: getImageUrl("globo.jpg"),
     title: "Globo ao Vivo",
     volumeOnly: true,
   },
