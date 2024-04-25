@@ -26,5 +26,9 @@
         "token": "...."
       }
     }
+  },
+  "twitter_scraper": {
+    "users": ["twitter_screen_name"],
+    "webhook": "https://....."
   }
 }

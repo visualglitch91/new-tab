@@ -283,3 +283,27 @@ export function tap<T>(func: (value: T) => void) {
     return value;
   };
 }
+
+type Func<T> = (...args: any[]) => T;
+
+export function memoizeWithTimeout<T>(func: Func<T>, timeout: number): Func<T> {
+  const cache = new Map<string, { value: T; timestamp: number }>();
+
+  return (...args: any[]): T => {
+    const key = JSON.stringify(args);
+
+    // Check if the result is already in the cache
+    if (cache.has(key)) {
+      const { value, timestamp } = cache.get(key)!;
+      // Check if the cached result is still valid
+      if (Date.now() - timestamp <= timeout) {
+        return value;
+      }
+    }
+
+    // If not, calculate the result and cache it
+    const result = func(...args);
+    cache.set(key, { value: result, timestamp: Date.now() });
+    return result;
+  };
+}

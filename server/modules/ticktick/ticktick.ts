@@ -181,11 +181,6 @@ export default class TickTick {
       let startDate = normalizeDate(rawTask.startDate, rawTask.timezone);
       let dueDate = normalizeDate(rawTask.dueDate, rawTask.timezone);
 
-      // if (rawTask.isAllDay) {
-      //   startDate = startOfDay(startDate);
-      //   dueDate = endOfDay(startDate);
-      // }
-
       if (!isWithinInterval(startDate, { start: since, end: until })) {
         return;
       }
