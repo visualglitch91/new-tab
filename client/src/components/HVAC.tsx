@@ -1,15 +1,19 @@
-import { List, Stack, Switch } from "@mui/material";
+import { Button, List, Stack, Switch } from "@mui/material";
 import { callService, makeServiceCall, useEntity } from "$client/utils/hass";
 import { formatNumericValue } from "$client/utils/general";
+import { useMenu } from "$client/utils/useMenu";
 import ListItem from "./ListItem";
-import AltIconButton from "./AltIconButton";
-import Icon from "./Icon";
 import GlossyPaper from "./GlossyPaper";
 
 const entityId = "climate.ar_condicionado";
 
+function getSpeedLabels(speed: string) {
+  return { low: "Fraco", medium: "Médio", high: "Forte" }[speed] || speed;
+}
+
 export default function HVAC() {
   const { state, attributes } = useEntity(entityId) || {};
+  const showMenu = useMenu();
   const on = state !== "off";
 
   if (!attributes) {
@@ -17,10 +21,10 @@ export default function HVAC() {
   }
 
   const {
-    min_temp: minTemp,
-    max_temp: maxTemp,
     current_temperature: currentTemp,
     temperature: targetTemp,
+    fan_mode: speed,
+    fan_modes: availableSpeeds,
   } = attributes;
 
   const currentTempStr = currentTemp
@@ -30,13 +34,6 @@ export default function HVAC() {
   const targetTempStr = targetTemp
     ? formatNumericValue(targetTemp, "°C", 0)
     : null;
-
-  const setTemperature = (temperature: number) => {
-    return makeServiceCall("climate", "set_temperature", {
-      temperature,
-      entity_id: entityId,
-    });
-  };
 
   return (
     <List component={GlossyPaper}>
@@ -56,18 +53,44 @@ export default function HVAC() {
           <Stack direction="row" alignItems="center" gap={1}>
             {on && (
               <>
-                <AltIconButton
-                  disabled={targetTemp === minTemp}
-                  icon="mdi:minus"
-                  size={24}
-                  onClick={setTemperature(targetTemp - 1)}
-                />
-                <AltIconButton
-                  disabled={targetTemp === maxTemp}
-                  icon="mdi:plus"
-                  size={24}
-                  onClick={setTemperature(targetTemp + 1)}
-                />
+                <Button
+                  size="small"
+                  onClick={(e) => {
+                    showMenu({
+                      mouseEvent: e.nativeEvent,
+                      clickAnchor: true,
+                      title: "Temperatura",
+                      options: [16, 21, 30].map((temp) => ({
+                        label: `${temp}°C`,
+                        onClick: makeServiceCall("climate", "set_temperature", {
+                          entity_id: entityId,
+                          temperature: temp,
+                        }),
+                      })),
+                    });
+                  }}
+                >
+                  {targetTempStr}
+                </Button>
+                <Button
+                  size="small"
+                  onClick={(e) => {
+                    showMenu({
+                      mouseEvent: e.nativeEvent,
+                      clickAnchor: true,
+                      title: "Velocidade",
+                      options: availableSpeeds.map((speed: string) => ({
+                        label: getSpeedLabels(speed),
+                        onClick: makeServiceCall("climate", "set_fan_mode", {
+                          entity_id: entityId,
+                          fan_mode: speed,
+                        }),
+                      })),
+                    });
+                  }}
+                >
+                  {getSpeedLabels(speed)}
+                </Button>
               </>
             )}
             <Switch
