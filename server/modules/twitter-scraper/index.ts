@@ -19,24 +19,28 @@ async function fetchLatestTweets(
   userId: string,
   processTweet: (tweet: any) => Promise<void>
 ) {
-  const since = await getLastFetchDate(userId);
+  const since = getLastFetchDate(userId);
 
-  const tweets = await fetchTweets(
-    userId,
-    false,
-    since ? new Date(since) : null
-  );
+  try {
+    const tweets = await fetchTweets(
+      userId,
+      false,
+      since ? new Date(since) : null
+    );
 
-  if (tweets.length === 0) {
-    return;
-  }
+    if (tweets.length === 0) {
+      return;
+    }
 
-  setLastFetchDate(userId, tweets[0].created_at);
+    setLastFetchDate(userId, tweets[0].created_at);
 
-  const reversedTweets = [...tweets].reverse();
+    const reversedTweets = [...tweets].reverse();
 
-  for (let tweet of reversedTweets) {
-    await processTweet(tweet);
+    for (let tweet of reversedTweets) {
+      await processTweet(tweet);
+    }
+  } catch (err) {
+    logger.error(err);
   }
 }
 

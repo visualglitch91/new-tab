@@ -149,11 +149,11 @@ export async function getContainerByName(name: string) {
 
 export async function action(
   name: string,
-  action: "start" | "stop" | "restart"
+  action: "start" | "stop" | "restart",
+  options?: any
 ) {
   const container = await dockerode.getContainer(name);
-  //@ts-expect-error
-  await container[action]();
+  await container[action](options);
 }
 
 export async function createLogStreamer(name: string) {

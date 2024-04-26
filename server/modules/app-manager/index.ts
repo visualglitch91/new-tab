@@ -1,6 +1,6 @@
 import * as pm2 from "./pm2";
 import * as docker from "./docker";
-import { createAppModule, compareByName } from "$server/utils";
+import { createAppModule, compareByName, logger } from "$server/utils";
 
 export default createAppModule("app-manager", (instance) => {
   docker.setupUpdateChecker();
@@ -31,22 +31,30 @@ export default createAppModule("app-manager", (instance) => {
     return docker.getContainerByName(name);
   });
 
-  instance.post<{ Params: { name: string }; Body: { running: boolean } }>(
-    "/docker/:name",
-    async (req) => {
-      const { name } = req.params;
-      return docker.action(name, req.body.running ? "start" : "stop");
-    }
-  );
+  instance.post<{
+    Params: { name: string };
+    Body: { running: boolean; options?: any };
+  }>("/docker/:name", async (req) => {
+    const { name } = req.params;
+
+    return docker.action(
+      name,
+      req.body.running ? "start" : "stop",
+      req.body.options
+    );
+  });
 
   instance.post<{
     Params: {
       name: string;
       action: "start" | "stop" | "restart";
     };
+    Body: {
+      options?: any;
+    };
   }>("/docker/:name/:action", async (req) => {
     const { name, action } = req.params;
-    return docker.action(name, action);
+    return docker.action(name, action, req.body.options);
   });
 
   instance.get<{ Params: { name: string } }>(
