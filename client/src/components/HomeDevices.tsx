@@ -28,7 +28,7 @@ const groups: {
       { entityId: "switch.sala_luminaria" },
       { entityId: "switch.sala_ventilador" },
       { entityId: "light.sala_rgb_tv" },
-      // { entityId: "light.sala_rgb_rack" },
+      { entityId: "light.sala_rgb_rack" },
       { entityId: "cover.sala_cortina", icon: "curtains" },
       { entityId: "media_player.sala_tv" },
     ],

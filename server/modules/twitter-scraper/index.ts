@@ -56,7 +56,7 @@ async function scrape() {
 
 export default createAppModule("twitter-scraper", () => {
   const loop = () => {
-    scrape().then(() => setTimeout(loop, 5 * 60_000));
+    scrape().then(() => setTimeout(loop, 30 * 60_000));
   };
 
   loop();
