@@ -27,11 +27,7 @@ function useAction() {
       | { action: "refresh" }
       | { action: "add"; name: string; code: string }
       | { action: "remove"; code: string }) => {
-      return api(
-        `/package-tracker/${action}`,
-        action === "refresh" ? "get" : "post",
-        body
-      ).then(() => {
+      return api(`/package-tracker/${action}`, "post", body).then(() => {
         queryClient.invalidateQueries({ queryKey: ["packages"] });
         return;
       });

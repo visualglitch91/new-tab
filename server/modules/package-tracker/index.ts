@@ -34,7 +34,7 @@ export default createAppModule("package-tracker", (instance, logger) => {
     await refresh(logger);
   });
 
-  instance.get("/refresh", async () => {
+  instance.post("/refresh", async () => {
     await refresh(logger);
     return undefined;
   });

@@ -117,49 +117,51 @@ export default async function refresh(logger: Logger) {
         .getAll()
         .filter((it) => it.status !== "delivered");
 
-      const packagesBycode = undeliveredPackages.reduce(
-        (acc, it) => ({ ...acc, [it.code]: it }),
-        {} as Record<string, PackageTrackerItem>
-      );
+      const trackResultByCode: Record<
+        string,
+        Awaited<ReturnType<typeof track>>
+      > = {};
 
       const updatedPackages = await Promise.all(
-        Object.keys(packagesBycode).map((code) =>
-          track(code).then((result) => {
-            const prevPackage = packagesBycode[code];
-            const { eventCount, lastEvent = prevPackage.lastEvent } = result;
+        undeliveredPackages.map(async (prevData) => {
+          const result =
+            trackResultByCode[prevData.code] || (await track(prevData.code));
 
-            const status: PackageTrackerItem["status"] = lastEvent
-              ? lastEvent.description.includes("Entregue")
-                ? "delivered"
-                : lastEvent.description.includes("aguardando pagamento")
-                ? "pending-payment"
-                : lastEvent.description.includes(
-                    "Objeto saiu para entrega ao destinatário"
-                  )
-                ? "en-route"
-                : "in-transit"
-              : "not-found";
+          trackResultByCode[prevData.code] = result;
 
-            const updatedPackage = {
-              ...prevPackage,
-              status,
-              lastEvent,
-              eventCount,
-            };
+          const { eventCount, lastEvent = prevData.lastEvent } = result;
 
-            if (prevPackage.eventCount < eventCount && webhook) {
-              logger.info(
-                "[package-tracker] calling webhook %s with package %o",
-                webhook,
-                updatedPackage
-              );
+          const status: PackageTrackerItem["status"] = lastEvent
+            ? lastEvent.description.includes("Entregue")
+              ? "delivered"
+              : lastEvent.description.includes("aguardando pagamento")
+              ? "pending-payment"
+              : lastEvent.description.includes(
+                  "Objeto saiu para entrega ao destinatário"
+                )
+              ? "en-route"
+              : "in-transit"
+            : "not-found";
 
-              ky.post(webhook, { json: updatedPackage }).catch(logger.error);
-            }
+          const updatedData = {
+            ...prevData,
+            status,
+            lastEvent,
+            eventCount,
+          };
 
-            return updatedPackage;
-          })
-        )
+          if (prevData.eventCount < eventCount && webhook) {
+            logger.info(
+              "[package-tracker] calling webhook %s with package %o",
+              webhook,
+              updatedData
+            );
+
+            ky.post(webhook, { json: updatedData }).catch(logger.error);
+          }
+
+          return updatedData;
+        })
       );
 
       updatedPackages.forEach((it) => storage.save(it));

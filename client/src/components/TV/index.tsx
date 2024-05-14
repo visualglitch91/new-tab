@@ -98,6 +98,7 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
         <SpotifySource />
         {[
           ["media_player.sala_tv", "Volume Sala"],
+          ["media_player.escritorio_echo", "Volume Escritório"],
           ["media_player.cozinha_echo", "Volume Cozinha"],
           ["media_player.quarto_echo", "Volume Quarto"],
           ["media_player.banheiro_echo", "Volume Banheiro"],

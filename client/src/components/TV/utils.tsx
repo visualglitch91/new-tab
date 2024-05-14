@@ -49,10 +49,10 @@ export function parseSourceName(source: string) {
   return (
     {
       "echo banheiro": "Banheiro",
-      "echo quarto": "Quarto",
+      "Xiaomi Speaker-7874": "Quarto",
       "echo home theater": "Sala",
       "echo cozinha": "Cozinha",
-      "echo sala": "Sala (Echo Dot)",
+      "echo escritório": "Escritório",
     }[source] || source
   );
 }
