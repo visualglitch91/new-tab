@@ -146,12 +146,12 @@ export default function BaseEntityButton({
       className={cx(
         color && !changing && classes.wrapperCustomBG,
         checked && !changing && classes.wrapperActive,
-        horizontal && !changing && classes.horizontal
+        horizontal && classes.horizontal
       )}
       style={color && !changing ? { background: color } : undefined}
     >
       {loading || changing ? (
-        <CircularProgress size={horizontal ? 18 : 24} sx={{ mx: "auto" }} />
+        <CircularProgress size={24} sx={{ mx: "auto" }} />
       ) : (
         <>
           {typeof icon === "string" ? (

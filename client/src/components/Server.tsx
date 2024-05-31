@@ -1,6 +1,45 @@
+import { Button } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import { formatNumericValue } from "$client/utils/general";
+import api from "$client/utils/api";
 import { EntityListItems } from "./EntityListItem";
+import ListItem from "./ListItem";
 import ListSection from "./ListSection";
+import DotLoading from "./DotLoading";
+
+function DockerImageUpdatesListItem() {
+  const $status = useQuery({
+    queryKey: ["apps/docker-check-updates-status"],
+    queryFn: () =>
+      api<{ running: boolean }>(
+        "/app-manager/docker/all/check-image-updates/status",
+        "get"
+      ),
+    refetchInterval: 5000,
+  });
+
+  return (
+    <ListItem
+      icon="docker"
+      primaryText="Atualizações de Containers"
+      endSlot={
+        $status.data?.running ? (
+          <DotLoading />
+        ) : (
+          <Button
+            onClick={() => {
+              api("/app-manager/docker/all/check-image-updates", "post").then(
+                () => $status.refetch()
+              );
+            }}
+          >
+            Buscar
+          </Button>
+        )
+      }
+    />
+  );
+}
 
 export default function ServerModule() {
   return (
@@ -44,6 +83,7 @@ export default function ServerModule() {
           },
         ]}
       />
+      <DockerImageUpdatesListItem />
     </ListSection>
   );
 }

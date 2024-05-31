@@ -12,7 +12,7 @@ const groups: {
     items: [
       { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
-      { entityId: "switch.escritorio_luz", label: "Luz do\nEscritório" },
+      { entityId: "light.escritorio_luz", label: "Luz do\nEscritório" },
       { entityId: "light.quarto_luz", label: "Luz do Quarto" },
       { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
       { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
@@ -36,7 +36,7 @@ const groups: {
   {
     title: "Escritório",
     items: [
-      { entityId: "switch.escritorio_luz" },
+      { entityId: "light.escritorio_luz" },
       {
         entityId: "switch.computador_avell_alto_falantes",
         changeTimeout: 9_000,

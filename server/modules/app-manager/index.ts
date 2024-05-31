@@ -1,6 +1,6 @@
 import * as pm2 from "./pm2";
 import * as docker from "./docker";
-import { createAppModule, compareByName, logger } from "$server/utils";
+import { createAppModule, compareByName } from "$server/utils";
 
 export default createAppModule("app-manager", (instance) => {
   docker.setupUpdateChecker();
@@ -16,14 +16,21 @@ export default createAppModule("app-manager", (instance) => {
    * Docker Apps
    */
 
-  instance.post("/docker/all/update-image-status", () => {
+  instance.post("/docker/all/check-image-updates", () => {
     docker.checkForAllContainersImageUpdates();
     return Promise.resolve({ running: true });
   });
 
+  instance.get("/docker/all/check-image-updates/status", () => {
+    return Promise.resolve({ running: docker.isRunningFullCheck() });
+  });
+
   instance.post<{ Params: { name: string } }>(
     "/docker/:name/update-image-status",
-    (req) => docker.checkForContainerImageUpdates(req.params.name)
+    (req) =>
+      docker
+        .checkForContainerImageUpdates(req.params.name)
+        .then((status) => ({ status }))
   );
 
   instance.get<{ Params: { name: string } }>("/docker/:name", (req) => {

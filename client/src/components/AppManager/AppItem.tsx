@@ -17,6 +17,7 @@ enum Menu {
   STOP = "stop",
   START = "start",
   RESTART = "restart",
+  UPDATES = "update-image-status",
 }
 
 const appStatusIcons = {
@@ -35,10 +36,11 @@ export function AppItem({ app }: { app: ParsedApp }) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: ({ action }: { action: Omit<Menu, "LOGS"> }) => {
-      return api(
-        `/app-manager/${app.type}/${app.rawName}/${action}`,
-        "post"
-      ).then(() => queryClient.refetchQueries({ queryKey: ["apps"] }));
+      return api(`/app-manager/${app.type}/${app.rawName}/${action}`, "post");
+    },
+    onSuccess: () => {
+      console.log(`queryClient.refetchQueries({ queryKey: ["apps"] });`);
+      queryClient.refetchQueries({ queryKey: ["apps"] });
     },
   });
 
@@ -55,7 +57,7 @@ export function AppItem({ app }: { app: ParsedApp }) {
         return;
       }
 
-      if (running) {
+      if (running && action !== Menu.UPDATES) {
         confirm({ title: "Continuar?", onConfirm: () => mutate({ action }) });
       } else {
         mutate({ action });
@@ -87,6 +89,11 @@ export function AppItem({ app }: { app: ParsedApp }) {
         {
           label: "Logs",
           onClick: makeAction(Menu.LOGS),
+        },
+        {
+          label: "Procurar Autalizações",
+          onClick: makeAction(Menu.UPDATES),
+          hidden: app.type === "pm2",
         },
       ],
     });

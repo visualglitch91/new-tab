@@ -5,7 +5,6 @@ import {
   DockerStatus,
   UpdateStatus,
 } from "$common/types/app-manager";
-import createPromiseObj from "$common/utils/createPromiseObj";
 import {
   isDefined,
   bytesToSize,
@@ -30,6 +29,10 @@ export async function checkForContainerImageUpdates(container: string) {
 }
 
 let checkingPromise: Promise<void> | null = null;
+
+export function isRunningFullCheck() {
+  return checkingPromise !== null;
+}
 
 export function checkForAllContainersImageUpdates() {
   if (!checkingPromise) {
@@ -75,7 +78,6 @@ export function checkForAllContainersImageUpdates() {
 
 export function setupUpdateChecker() {
   logger.info("Setup Docker Update Checker");
-
   new CronJob("0 * * * *", checkForAllContainersImageUpdates).start();
 }
 
