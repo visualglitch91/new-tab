@@ -47,11 +47,6 @@ export default function ServerModule() {
       <EntityListItems
         items={[
           {
-            entityId: "switch.pi_hole",
-            changeTimeout: 30_000,
-            label: "Pi-Hole",
-          },
-          {
             label: "Uso do Disco de Mídia",
             entityId: "sensor.disk_use_percent_drives_visualglitch91",
             renderListContent: (entity) =>
