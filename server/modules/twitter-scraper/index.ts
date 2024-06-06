@@ -46,7 +46,11 @@ async function fetchLatestTweets(
 
 async function scrape() {
   for (let screenname of users) {
-    const user = await fetchUserByScreenName(screenname);
+    const user = await fetchUserByScreenName(screenname).catch(() => null);
+
+    if (!user) {
+      return;
+    }
 
     await fetchLatestTweets(user.id, async (tweet) => {
       ky.post(webhook, { json: { tweet, user } }).catch(logger.error);
