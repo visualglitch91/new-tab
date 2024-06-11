@@ -102,7 +102,7 @@ export default function MediaCard() {
                 <Album>{media.album}</Album>
               </>
             ) : (
-              <Controls volumeOnly={media.volumeOnly} />
+              !media.hideControls && <Controls />
             )}
           </Info>
         </Box>

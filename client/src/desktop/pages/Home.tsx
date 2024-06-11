@@ -16,10 +16,10 @@ export default function HomePage() {
       items={[
         <Stack spacing={4.5}>
           <TV />
-          <HomeDevices slice={[1, 2]} />
+          <HomeDevices slice={[1, 3]} />
         </Stack>,
         <Stack spacing={4.5}>
-          <HomeDevices slice={[2]} />
+          <HomeDevices slice={[3]} />
         </Stack>,
         isAdmin && (
           <Stack spacing={4.5}>

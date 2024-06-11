@@ -1,110 +1,88 @@
-import { Button, List, Stack } from "@mui/material";
-import {
-  callService,
-  makeServiceCall,
-  makeTurnOnCall,
-  useEntity,
-} from "$client/utils/hass";
-import useModal from "$client/utils/useModal";
+import { List, Stack, Switch } from "@mui/material";
+import { callService, makeServiceCall, useEntity } from "$client/utils/hass";
 import { formatNumericValue } from "$client/utils/general";
-import EntityButton from "../EntityButton";
-import MediaCard from "../MediaCard";
-import AutoGrid from "../AutoGrid";
-import IconHugeButton from "../IconHugeButton";
-import BaseEntityButton from "../BaseEntityButton";
-import AndroidRemoteDialog from "../AndroidRemoteDialog";
-import { ScriptImageButtonCard, parseSourceName } from "./utils";
-import ButtonRow from "../ButtonRow";
-import GlossyPaper from "../GlossyPaper";
-import ListItem from "../ListItem";
-import AltIconButton from "../AltIconButton";
-import Icon from "../Icon";
-import { useMenu } from "$client/utils/useMenu";
 import useMountEffect from "$client/utils/useMountEffect";
+import useModal from "$client/utils/useModal";
+import useAsyncChange from "$client/utils/useAsyncChange";
+import Icon from "../Icon";
+import ListItem from "../ListItem";
+import MediaCard from "../MediaCard";
+import GlossyPaper from "../GlossyPaper";
+import AltIconButton from "../AltIconButton";
+import DropdownButton from "../DropdownButton";
+import DialogBase from "../DialogBase";
+import DotLoading from "../DotLoading";
 
-function spacer(height?: number) {
-  return <div style={{ height: height && `${height}px` }} />;
-}
+const salaTVEntityId = "media_player.sala_tv";
+const ambilightEntityId = "input_select.base_sala_ambilight";
 
-function AndroidRemoteButton() {
-  const mount = useModal();
-
-  function showRemote() {
-    mount((_, props) => <AndroidRemoteDialog {...props} />);
-  }
-
+function parseSourceName(source: string) {
   return (
-    <BaseEntityButton icon="remote" label="Controle" onClick={showRemote} />
+    {
+      "echo banheiro": "Banheiro",
+      "Xiaomi Speaker-7874": "Quarto",
+      "echo home theater": "Sala",
+      "echo cozinha": "Cozinha",
+      "echo escritório": "Escritório",
+    }[source] || source
   );
 }
 
-export default function TV({ noMediCard }: { noMediCard?: boolean }) {
+export default function TV() {
+  const mount = useModal();
+  const ambilight = useEntity(ambilightEntityId)?.state;
+
   return (
     <Stack spacing={2}>
-      {!noMediCard && (
-        <>
-          <MediaCard />
-          {spacer(12)}
-        </>
-      )}
-
-      <ButtonRow>
-        <EntityButton entityId="media_player.sala_tv" changeTimeout={30_000} />
-        <EntityButton entityId="switch.sala_ambilight" changeTimeout={30_000} />
-        <EntityButton entityId="switch.sala_ledfx" changeTimeout={30_000} />
-        <AndroidRemoteButton />
-      </ButtonRow>
-
-      {spacer(12)}
-
-      <AutoGrid gap={12} columnWidth={120} rowHeight={70}>
-        <ScriptImageButtonCard
-          asset="globo"
-          script="sala_mibox_globoplay_ao_vivo"
-        />
-        <ScriptImageButtonCard
-          asset="globoplay"
-          script="sala_mibox_globoplay"
-        />
-        <ScriptImageButtonCard asset="jellyfin" script="sala_mibox_jellyfin" />
-        <ScriptImageButtonCard
-          asset="disneyplus"
-          script="sala_mibox_disney_plus"
-        />
-        <ScriptImageButtonCard asset="hbomax" script="sala_mibox_hbo_max" />
-        <ScriptImageButtonCard asset="starplus" script="sala_mibox_star_plus" />
-        <ScriptImageButtonCard
-          asset="prime_video"
-          script="sala_mibox_prime_video"
-        />
-        <ScriptImageButtonCard asset="spotify" script="sala_mibox_spotify" />
-        <ScriptImageButtonCard
-          asset="crunchyroll"
-          script="sala_mibox_crunchyroll"
-        />
-        <ScriptImageButtonCard asset="youtube" script="sala_mibox_youtube" />
-        <ScriptImageButtonCard asset="twitch" script="sala_mibox_twitch" />
-        <ScriptImageButtonCard asset="switch" script="sala_tv_switch" />
-        <ScriptImageButtonCard asset="ps5" script="sala_tv_playstation_5" />
-
-        <IconHugeButton
-          icon="mdi:information-outline"
-          size={40}
-          action={makeTurnOnCall("script.sala_receiver_info")}
-        />
-      </AutoGrid>
+      <MediaCard />
 
       <List component={GlossyPaper} dense>
+        <TVListItem />
+        <ListItem
+          icon="television-ambient-light"
+          primaryText="Ambilight"
+          endSlot={
+            <DropdownButton
+              value={ambilight || ""}
+              options={["Desligado", "Áudio", "Vídeo"].map((value) => ({
+                value,
+                label: value,
+              }))}
+              onChange={(option) =>
+                callService("input_select", "select_option", {
+                  entity_id: ambilightEntityId,
+                  option,
+                })
+              }
+            />
+          }
+        />
         <SpotifySource />
-        {[
-          ["media_player.sala_tv", "Volume Sala"],
-          ["media_player.escritorio_echo", "Volume Escritório"],
-          ["media_player.cozinha_echo", "Volume Cozinha"],
-          ["media_player.quarto_echo", "Volume Quarto"],
-          ["media_player.banheiro_echo", "Volume Banheiro"],
-        ].map(([id, label]) => (
-          <VolumeControlListItem key={id} label={label} entityId={id} />
-        ))}
+        <VolumeControlListItem
+          label="Volume"
+          entityId={salaTVEntityId}
+          onMore={() => {
+            mount((_, props) => (
+              <DialogBase title="Volume" bottomMobileSheet {...props}>
+                <List dense>
+                  {[
+                    [salaTVEntityId, "Volume Sala"],
+                    ["media_player.escritorio_echo", "Volume Escritório"],
+                    ["media_player.cozinha_echo", "Volume Cozinha"],
+                    ["media_player.quarto_echo", "Volume Quarto"],
+                    ["media_player.banheiro_echo", "Volume Banheiro"],
+                  ].map(([id, label]) => (
+                    <VolumeControlListItem
+                      key={id}
+                      label={label}
+                      entityId={id}
+                    />
+                  ))}
+                </List>
+              </DialogBase>
+            ));
+          }}
+        />
       </List>
     </Stack>
   );
@@ -112,7 +90,6 @@ export default function TV({ noMediCard }: { noMediCard?: boolean }) {
 
 function SpotifySource() {
   const entityId = "media_player.spotify_visualglitch91";
-  const showMenu = useMenu();
   const { source, source_list: sourceList = [] } =
     useEntity(entityId)?.attributes || {};
 
@@ -125,25 +102,79 @@ function SpotifySource() {
       primaryText="Tocando em"
       startSlot={<Icon icon="mdi:spotify" />}
       endSlot={
-        <Button
-          size="small"
-          onClick={(e) => {
-            showMenu({
-              mouseEvent: e.nativeEvent,
-              clickAnchor: true,
-              title: "Opções",
-              options: sourceList.map((source: string) => ({
-                label: parseSourceName(source),
-                onClick: makeServiceCall("media_player", "select_source", {
-                  entity_id: entityId,
-                  source,
-                }),
-              })),
+        <DropdownButton
+          value={source}
+          options={sourceList.map((value: string) => ({
+            label: parseSourceName(value),
+            value,
+          }))}
+          onChange={(source) => {
+            callService("media_player", "select_source", {
+              entity_id: entityId,
+              source,
             });
           }}
-        >
-          {parseSourceName(source)}
-        </Button>
+        />
+      }
+    />
+  );
+}
+
+function TVListItem() {
+  const {
+    state: salaTV,
+    attributes: {
+      source: salaTVSource = "",
+      source_list: salaTVSourceList = [] as string[],
+    } = {},
+  } = useEntity(salaTVEntityId) || {};
+
+  const isOn = salaTV === "on";
+
+  const { changing, change } = useAsyncChange({
+    flag: isOn,
+    timeout: 30_000,
+  });
+
+  return (
+    <ListItem
+      icon="television"
+      primaryText="TV"
+      endSlot={
+        changing ? (
+          <DotLoading />
+        ) : salaTV === "on" ? (
+          <DropdownButton
+            value={salaTVSource}
+            options={[...salaTVSourceList, "Desligar"].map((value: string) => ({
+              value,
+              label: value,
+            }))}
+            onChange={(source) => {
+              if (source === "Desligar" && change()) {
+                callService("media_player", "turn_off", {
+                  entity_id: salaTVEntityId,
+                });
+              } else {
+                callService("media_player", "select_source", {
+                  entity_id: salaTVEntityId,
+                  source,
+                });
+              }
+            }}
+          />
+        ) : (
+          <Switch
+            checked={isOn}
+            onChange={() => {
+              if (change()) {
+                callService("media_player", "turn_on", {
+                  entity_id: salaTVEntityId,
+                });
+              }
+            }}
+          />
+        )
       }
     />
   );
@@ -152,12 +183,17 @@ function SpotifySource() {
 function VolumeControlListItem({
   entityId,
   label,
+  onMore,
 }: {
   entityId: string;
   label: string;
+  onMore?: () => void;
 }) {
   const entity = useEntity(entityId);
   const volume = entity?.attributes.volume_level;
+  const isMuted = entity?.attributes.is_volume_muted;
+
+  console.log({ entityId, isMuted });
 
   useMountEffect(() => {
     if (typeof volume === "undefined") {
@@ -172,7 +208,9 @@ function VolumeControlListItem({
     <ListItem
       primaryText={label || entity?.attributes.friendly_name || entityId}
       secondaryText={
-        typeof volume === "undefined"
+        isMuted === true
+          ? "Mudo"
+          : typeof volume === "undefined"
           ? undefined
           : formatNumericValue(volume * 100, "%", 0)
       }
@@ -180,19 +218,34 @@ function VolumeControlListItem({
       endSlot={
         <Stack direction="row" alignItems="center" gap={1}>
           <AltIconButton
-            icon="mdi:minus"
+            icon="volume-minus"
             size={24}
             onClick={makeServiceCall("media_player", "volume_down", {
               entity_id: entityId,
             })}
           />
           <AltIconButton
-            icon="mdi:plus"
+            icon="volume-off"
+            size={24}
+            onClick={makeServiceCall("media_player", "volume_mute", {
+              entity_id: entityId,
+              is_volume_muted: typeof isMuted === "boolean" ? !isMuted : true,
+            })}
+          />
+          <AltIconButton
+            icon="volume-plus"
             size={24}
             onClick={makeServiceCall("media_player", "volume_up", {
               entity_id: entityId,
             })}
           />
+          {onMore && (
+            <AltIconButton
+              icon="mdi:dots-vertical"
+              size={24}
+              onClick={onMore}
+            />
+          )}
         </Stack>
       }
     />

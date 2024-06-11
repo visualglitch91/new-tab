@@ -1,16 +1,15 @@
+import { useLongPress } from "@uidotdev/usehooks";
 import { styled, ButtonBase, SxProps } from "@mui/material";
 import {
   callService,
   makeServiceCall,
   makeTurnOnCall,
 } from "$client/utils/hass";
+import useModal from "$client/utils/useModal";
+import AndroidRemoteDialog from "../AndroidRemoteDialog";
 import Icon from "../Icon";
-import { useLongPress } from "@uidotdev/usehooks";
 
-const Root = styled("div")({
-  display: "flex",
-  gap: 10,
-});
+const Root = styled("div")({ display: "flex", gap: 10 });
 
 const ControlRoot = styled(ButtonBase)({
   color: "white",
@@ -64,57 +63,41 @@ function makeSpotifyCall(service: string) {
   };
 }
 
-export default function Controls({
-  isSpotify,
-  volumeOnly,
-}: {
-  isSpotify?: boolean;
-  volumeOnly?: boolean;
-}) {
+export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
+  const mount = useModal();
+
   return (
     <Root>
       <Control
-        icon="volume-minus"
-        onClick={makeServiceCall("media_player", "volume_down", {
-          entity_id: "media_player.sala_tv",
-        })}
+        icon="remote"
+        onClick={() => {
+          mount((_, props) => <AndroidRemoteDialog {...props} />);
+        }}
       />
       <Control
-        icon="volume-off"
-        onClick={makeTurnOnCall("script.sala_volume_mute_unmute")}
+        sx={{ marginLeft: isSpotify ? "auto" : 0 }}
+        icon="skip-previous"
+        onClick={
+          isSpotify
+            ? makeSpotifyCall("previous_track")
+            : makeTurnOnCall("script.sala_mibox_rewind")
+        }
       />
+      {
+        <Control
+          icon="play-pause"
+          onClick={makeTurnOnCall("script.sala_mibox_play_pause")}
+          onLongPress={makeTurnOnCall("script.sala_mibox_play")}
+        />
+      }
       <Control
-        icon="volume-plus"
-        onClick={makeServiceCall("media_player", "volume_up", {
-          entity_id: "media_player.sala_tv",
-        })}
+        icon="skip-next"
+        onClick={
+          isSpotify
+            ? makeSpotifyCall("next_track")
+            : makeTurnOnCall("script.sala_mibox_fast_forward")
+        }
       />
-      {!volumeOnly && (
-        <>
-          <Control
-            sx={{ marginLeft: isSpotify ? "auto" : 0 }}
-            icon="skip-previous"
-            onClick={
-              isSpotify
-                ? makeSpotifyCall("previous_track")
-                : makeTurnOnCall("script.sala_mibox_rewind")
-            }
-          />
-          <Control
-            icon="play-pause"
-            onClick={makeTurnOnCall("script.sala_mibox_play_pause")}
-            onLongPress={makeTurnOnCall("script.sala_mibox_play")}
-          />
-          <Control
-            icon="skip-next"
-            onClick={
-              isSpotify
-                ? makeSpotifyCall("next_track")
-                : makeTurnOnCall("script.sala_mibox_fast_forward")
-            }
-          />
-        </>
-      )}
     </Root>
   );
 }

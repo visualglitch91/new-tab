@@ -1,6 +1,7 @@
 import EntityButton, { EntityButtonProps } from "./EntityButton";
 import GridSection from "./GridSection";
 import HVAC from "./HVAC";
+import TV from "./TV";
 
 const groups: {
   title?: string;
@@ -18,6 +19,7 @@ const groups: {
       { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
       { entityId: "light.banheiro_luz", label: "Luz do\nBanheiro" },
     ],
+    prepend: <TV />,
   },
   {
     title: "Sala",
@@ -30,7 +32,6 @@ const groups: {
       { entityId: "light.sala_rgb_tv" },
       { entityId: "light.sala_rgb_rack" },
       { entityId: "cover.sala_cortina", icon: "curtains" },
-      { entityId: "media_player.sala_tv" },
     ],
   },
   {

@@ -10,24 +10,23 @@ interface CurrentMedia {
   album?: string;
   artist?: string;
   spotify?: boolean;
-  volumeOnly?: boolean;
+  hideControls?: boolean;
 }
 
 const mediaInfo: Record<string, CurrentMedia> = {
   Globo: {
     image: getImageUrl("globo.jpg"),
     title: "Globo ao Vivo",
-    volumeOnly: true,
   },
   "Nintendo Switch": {
     image: getImageUrl("switch.png"),
     title: "Nintendo Switch",
-    volumeOnly: true,
+    hideControls: true,
   },
   "Playstation 5": {
     image: getImageUrl("playstation5.jpg"),
     title: "PlayStation 5",
-    volumeOnly: true,
+    hideControls: true,
   },
   miboxGeneric: {
     image: getImageUrl("androidtv.png"),
@@ -52,6 +51,10 @@ const mediaInfo: Record<string, CurrentMedia> = {
   PrimeVideo: {
     image: getImageUrl("primevideo.jpg"),
     title: "Prime Video",
+  },
+  Kodi: {
+    image: getImageUrl("kodi.jpg"),
+    title: "Kodi",
   },
   Crunchyroll: {
     image: getImageUrl("crunchyroll.jpg"),
