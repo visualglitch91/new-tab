@@ -232,24 +232,27 @@ export default class TickTick {
           }
         } catch (_) {}
 
-        const startDate = normalizeDate(rawEvent.dueStart, rawEvent.timezone);
+        const timezone = rawEvent.isAllDay
+          ? undefined
+          : rawEvent.repeatFlag
+          ? rawEvent.timezone
+          : "America/Sao_Paulo";
+
+        const startDate = normalizeDate(rawEvent.dueStart, timezone);
 
         const startDates = rawEvent.repeatFlag
           ? rrulestr(rawEvent.repeatFlag, {
-              tzid: rawEvent.timezone,
+              tzid: timezone,
               dtstart: startDate,
             }).between(since, until, true)
           : [startDate];
 
         startDates.forEach((startDate) => {
-          let endDate: Date | null = normalizeDate(
-            rawEvent.dueEnd,
-            rawEvent.timezone
-          );
+          let endDate: Date | null = normalizeDate(rawEvent.dueEnd, timezone);
 
           if (rawEvent.repeatFlag) {
             endDate = rrulestr(rawEvent.repeatFlag, {
-              tzid: rawEvent.timezone,
+              tzid: timezone,
               dtstart: endDate,
             }).after(startDate);
           }
@@ -274,7 +277,7 @@ export default class TickTick {
             return;
           }
 
-          scheduled.push({
+          const parsedEvent = {
             id: `${rawEvent.id}@${calendar.id}`,
             title: rawEvent.title,
             projectId: calendar.id,
@@ -283,9 +286,11 @@ export default class TickTick {
             endDate: endDate.toISOString(),
             timeZone: rawEvent.timezone,
             isAllDay: rawEvent.isAllDay,
-            type: "event",
+            type: "event" as const,
             raw: rawEvent,
-          });
+          };
+
+          scheduled.push(parsedEvent);
         });
       });
     });
