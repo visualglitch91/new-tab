@@ -63,6 +63,7 @@
     "mouse-event-offset": "^3.0.2",
     "p-queue": "^8.0.1",
     "p-retry": "^6.2.0",
+    "parse-docker-image-name": "^3.0.0",
     "pino-http": "^9.0.0",
     "pino-pretty": "^11.0.0",
     "pm2": "^5.3.1",

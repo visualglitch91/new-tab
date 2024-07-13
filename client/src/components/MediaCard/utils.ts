@@ -130,9 +130,5 @@ export function useCurrentMedia(): CurrentMedia | null {
     };
   }
 
-  if (source) {
-    return mediaInfo[source] || null;
-  }
-
-  return mediaInfo["miboxGeneric"];
+  return mediaInfo[source] || mediaInfo["miboxGeneric"];
 }

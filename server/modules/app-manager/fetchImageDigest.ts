@@ -9,27 +9,26 @@ function base64(value: string) {
 function fetchImageDigestFromRegistryAPI({
   baseUrl,
   token,
-  namespace,
-  name,
+  path,
   tag,
   architecture,
   os,
 }: {
   baseUrl: string;
   token: string;
-  namespace: string;
-  name: string;
+  path: string;
   tag: string;
   architecture: string;
   os: string;
 }) {
-  const url = `${baseUrl}/${namespace}/${name}/manifests/${tag}`;
+  const url = `${baseUrl}/${path}/manifests/${tag}`;
 
   return ky
     .get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.docker.distribution.manifest.list.v2+json",
+        Accept:
+          "application/vnd.docker.distribution.manifest.list.v2+json,application/vnd.oci.image.index.v1+json",
       },
     })
     .json<{ manifests: any[] }>()
@@ -43,28 +42,29 @@ function fetchImageDigestFromRegistryAPI({
         );
       },
       (error) => {
-        logger.error({ url, error }, "Error when fetching image manifest");
+        logger.error(
+          { url, token, error },
+          "Error when fetching image manifest"
+        );
         return null;
       }
     );
 }
 
 async function fetchImageDigestFromDockerRegistry(
-  namespace: string,
-  name: string,
+  path: string,
   tag: string,
   architecture: string,
   os: string
 ) {
   const baseUrl = "https://registry-1.docker.io/v2";
-  const tokenUrl = `https://auth.docker.io/token?service=registry.docker.io&scope=repository:${namespace}/${name}:pull`;
+  const tokenUrl = `https://auth.docker.io/token?service=registry.docker.io&scope=repository:${path}:pull`;
   const { token } = await ky.get(tokenUrl).json<{ token: string }>();
 
   return fetchImageDigestFromRegistryAPI({
     baseUrl,
     token,
-    namespace,
-    name,
+    path,
     tag,
     architecture,
     os,
@@ -73,8 +73,7 @@ async function fetchImageDigestFromDockerRegistry(
 
 function fetchImageDigestFromGitHubRegistry(
   registry: string,
-  namespace: string,
-  name: string,
+  path: string,
   tag: string,
   architecture: string,
   os: string,
@@ -85,8 +84,7 @@ function fetchImageDigestFromGitHubRegistry(
   return fetchImageDigestFromRegistryAPI({
     baseUrl: registry_url ? `${registry_url}/v2` : `https://${registry}/v2`,
     token: base64(token),
-    namespace,
-    name,
+    path,
     tag,
     architecture,
     os,
@@ -95,14 +93,13 @@ function fetchImageDigestFromGitHubRegistry(
 
 async function fetchImageDigestFromGitLabRegistry(
   registry: string,
-  namespace: string,
-  name: string,
+  path: string,
   tag: string,
   architecture: string,
   os: string,
   registryConfig: { auth_url: string; token: string }
 ) {
-  const tokenUrl = `${registryConfig.auth_url}/jwt/auth?service=container_registry&scope=repository:${namespace}/${name}:pull`;
+  const tokenUrl = `${registryConfig.auth_url}/jwt/auth?service=container_registry&scope=repository:${path}:pull`;
   const { token } = await ky
     .get(tokenUrl, {
       headers: { Authorization: `Basic ${base64(`:${registryConfig.token}`)}` },
@@ -112,8 +109,7 @@ async function fetchImageDigestFromGitLabRegistry(
   return fetchImageDigestFromRegistryAPI({
     baseUrl: `https://${registry}/v2`,
     token: token,
-    namespace,
-    name,
+    path,
     tag,
     architecture,
     os,
@@ -127,16 +123,14 @@ const fetchPerType = {
 
 export default function fetchImageDigest(
   registry: string,
-  namespace: string,
-  name: string,
+  path: string,
   tag: string,
   architecture: string,
   os: string
 ) {
   if (registry === "docker") {
     return fetchImageDigestFromDockerRegistry(
-      namespace,
-      name,
+      `library/${path}`,
       tag,
       architecture,
       os
@@ -164,5 +158,5 @@ export default function fetchImageDigest(
     return Promise.resolve(null);
   }
 
-  return func(registry, namespace, name, tag, architecture, os, registryConfig);
+  return func(registry, path, tag, architecture, os, registryConfig);
 }

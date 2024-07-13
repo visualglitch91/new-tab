@@ -6694,6 +6694,11 @@ parent-module@^1.0.0:
   dependencies:
     callsites "^3.0.0"
 
+parse-docker-image-name@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/parse-docker-image-name/-/parse-docker-image-name-3.0.0.tgz#1ea03afaf46499f5dfba2953927cfb5a6ed097d5"
+  integrity sha512-sxJ3KBv/8dXZ+E2cbJFFI9rLqgxtRgRuMv534b1g7hdWRxoB8tudlyyWONafEHO8itQSM0XWfMDodykLWAh5kQ==
+
 parse-json@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-4.0.0.tgz#be35f5425be1f7f6c747184f98a788cb99477ee0"

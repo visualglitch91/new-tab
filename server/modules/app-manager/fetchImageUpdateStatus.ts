@@ -1,16 +1,19 @@
 import pRetry from "p-retry";
+//@ts-expect-error
+import parseDockerImageName from "parse-docker-image-name";
 import { UpdateStatus } from "$common/types/app-manager";
 import { logger } from "$server/utils";
 import fetchImageDigest from "./fetchImageDigest";
 import dockerode from "./dockerode";
 
 function parseImageName(imageName: string) {
-  const [rest, tag = "latest"] = imageName.split(":");
-  const [name, namespace = "library", registry = "docker"] = rest
-    .split("/")
-    .reverse();
+  const {
+    path,
+    domain: registry = "docker",
+    tag = "latest",
+  } = parseDockerImageName(imageName);
 
-  return { raw: imageName, tag, name, namespace, registry };
+  return { raw: imageName, tag, path, registry };
 }
 
 export default async function fetchImageUpdateStatus(containerName: string) {
@@ -42,8 +45,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
         () =>
           fetchImageDigest(
             image.registry,
-            image.namespace,
-            image.name,
+            image.path,
             localRepoDigest,
             localImageInfo.Architecture,
             localImageInfo.Os
@@ -59,8 +61,7 @@ export default async function fetchImageUpdateStatus(containerName: string) {
         () =>
           fetchImageDigest(
             image.registry,
-            image.namespace,
-            image.name,
+            image.path,
             "latest",
             localImageInfo.Architecture,
             localImageInfo.Os

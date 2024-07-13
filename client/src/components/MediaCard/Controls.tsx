@@ -1,12 +1,9 @@
 import { useLongPress } from "@uidotdev/usehooks";
 import { styled, ButtonBase, SxProps } from "@mui/material";
-import {
-  callService,
-  makeServiceCall,
-  makeTurnOnCall,
-} from "$client/utils/hass";
+import { callService, makeTurnOnCall } from "$client/utils/hass";
 import useModal from "$client/utils/useModal";
 import AndroidRemoteDialog from "../AndroidRemoteDialog";
+import LGTVRemoteDialog from "../LGTVRemoteDialog";
 import Icon from "../Icon";
 
 const Root = styled("div")({ display: "flex", gap: 10 });
@@ -72,6 +69,9 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         icon="remote"
         onClick={() => {
           mount((_, props) => <AndroidRemoteDialog {...props} />);
+        }}
+        onLongPress={() => {
+          mount((_, props) => <LGTVRemoteDialog {...props} />);
         }}
       />
       <Control
