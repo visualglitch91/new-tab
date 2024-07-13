@@ -130,7 +130,7 @@ export default function fetchImageDigest(
 ) {
   if (registry === "docker") {
     return fetchImageDigestFromDockerRegistry(
-      `library/${path}`,
+      path.includes("/") ? path : `library/${path}`,
       tag,
       architecture,
       os
