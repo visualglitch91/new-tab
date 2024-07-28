@@ -17,7 +17,7 @@ export default function TVPage() {
       }
     >
       <Box mt="8px">
-        <TV noMediCard />
+        <TV />
       </Box>
     </PageLayout>
   );

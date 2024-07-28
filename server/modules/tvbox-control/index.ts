@@ -46,4 +46,9 @@ export default createAppModule("tvbox-control", (instance, logger) => {
     await adbShell("cmd media_session volume --set 15");
     return undefined;
   });
+
+  instance.post<{ Body: { command: string } }>("/command", async (req) => {
+    await adbShell(req.body.command);
+    return undefined;
+  });
 });

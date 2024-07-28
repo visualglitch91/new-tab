@@ -14,7 +14,7 @@ import DialogBase from "../DialogBase";
 import DotLoading from "../DotLoading";
 
 const salaTVEntityId = "media_player.sala_tv";
-const ambilightEntityId = "input_select.base_sala_ambilight";
+const ambilightEntityId = "input_select.sala_ambilight";
 
 function parseSourceName(source: string) {
   return (
