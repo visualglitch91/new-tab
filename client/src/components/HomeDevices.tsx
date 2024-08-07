@@ -1,14 +1,19 @@
+import { Fragment } from "react/jsx-runtime";
 import EntityButton, { EntityButtonProps } from "./EntityButton";
 import GridSection from "./GridSection";
 import HVAC from "./HVAC";
 import TV from "./TV";
+import Printers from "./Printers";
 
-const groups: {
-  title?: string;
-  prepend?: React.ReactNode;
-  horizontal?: boolean;
-  items: EntityButtonProps[];
-}[] = [
+const groups: (
+  | {
+      title?: string;
+      prepend?: React.ReactNode;
+      horizontal?: boolean;
+      items: EntityButtonProps[];
+    }
+  | { element: React.ReactNode }
+)[] = [
   {
     items: [
       { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
@@ -80,16 +85,12 @@ const groups: {
       },
     ],
   },
+  { title: "Impressoras", items: [], prepend: <Printers /> },
   {
     title: "Outros",
     horizontal: true,
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
-      {
-        entityId: "switch.impressora_3d_servidor",
-        changeTimeout: 40_000,
-        label: "Impressora 3D",
-      },
       { entityId: "script.casa_apagar_todas_luzes" },
       {
         entityId: "script.casa_apagar_todas_luzes_menos_sala",
@@ -130,22 +131,28 @@ const horizontalSectionProps = {
 export default function HomeDevices({ slice = [] }: { slice?: number[] }) {
   return (
     <>
-      {groups.slice(...slice).map((group, index) => (
-        <GridSection
-          key={index}
-          title={group.title}
-          prepend={group.prepend}
-          {...(group.horizontal ? horizontalSectionProps : {})}
-        >
-          {group.items.map((it) => (
-            <EntityButton
-              {...it}
-              key={it.entityId}
-              horizontal={group.horizontal}
-            />
-          ))}
-        </GridSection>
-      ))}
+      {groups.slice(...slice).map((group, index) => {
+        if ("element" in group) {
+          return <Fragment key={index}>{group.element}</Fragment>;
+        }
+
+        return (
+          <GridSection
+            key={index}
+            title={group.title}
+            prepend={group.prepend}
+            {...(group.horizontal ? horizontalSectionProps : {})}
+          >
+            {group.items.map((it) => (
+              <EntityButton
+                {...it}
+                key={it.entityId}
+                horizontal={group.horizontal}
+              />
+            ))}
+          </GridSection>
+        );
+      })}
     </>
   );
 }

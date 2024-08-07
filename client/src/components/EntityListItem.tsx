@@ -1,6 +1,11 @@
 import { HassEntity } from "home-assistant-js-websocket";
 import { SxProps, Button, Switch } from "@mui/material";
-import { useEntity, getIcon, makeServiceCall } from "$client/utils/hass";
+import {
+  useEntity,
+  getIcon,
+  makeServiceCall,
+  callService,
+} from "$client/utils/hass";
 import useModal from "$client/utils/useModal";
 import { rgbToHex } from "$client/utils/colors";
 import useAsyncChange from "$client/utils/useAsyncChange";
@@ -19,6 +24,7 @@ export interface EntityListItemProps {
   confirmBefore?: boolean;
   sx?: SxProps;
   renderListContent?: (entity: HassEntity) => React.ReactNode;
+  onClick?: () => void;
 }
 
 function BaseEntityListItem({
@@ -30,16 +36,17 @@ function BaseEntityListItem({
   entity,
   entityId,
   renderListContent,
+  onClick,
 }: EntityListItemProps & { entity: HassEntity }) {
   const icon = customIcon || getIcon(entity);
   const mount = useModal();
   const confirm = useConfirm();
 
-  function onLightClick() {
+  const onLightClick = () => {
     mount((_, props) => (
       <LightEntityDialog title={label} entityId={entity.entity_id} {...props} />
     ));
-  }
+  };
 
   const { state, attributes } = entity;
   const { friendly_name: friendlyName } = attributes;
@@ -50,11 +57,19 @@ function BaseEntityListItem({
   const label =
     _label || friendlyName?.replace(/\[[^()]*\]/g, "").trim() || entityId;
 
-  const onPrimaryAction = makeServiceCall(
-    "homeassistant",
-    checked ? "turn_off" : "turn_on",
-    { entity_id: entityId }
-  );
+  const onPrimaryAction = () => {
+    const doCall = () => {
+      callService("homeassistant", checked ? "turn_off" : "turn_on", {
+        entity_id: entityId,
+      });
+    };
+
+    if (confirmBefore) {
+      confirm({ title: "Continuar?", onConfirm: doCall });
+    } else {
+      doCall();
+    }
+  };
 
   const { changing, change } = useAsyncChange({
     flag: checked || false,
@@ -85,26 +100,7 @@ function BaseEntityListItem({
       }
     : domain === "script"
     ? {
-        endSlot: (
-          <Button
-            onClick={
-              onPrimaryAction
-                ? () => {
-                    if (confirmBefore) {
-                      confirm({
-                        title: "Continuar?",
-                        onConfirm: onPrimaryAction,
-                      });
-                    } else {
-                      onPrimaryAction();
-                    }
-                  }
-                : undefined
-            }
-          >
-            Executar
-          </Button>
-        ),
+        endSlot: <Button onClick={onPrimaryAction}>Executar</Button>,
       }
     : { endSlot: entity.state };
 
@@ -125,7 +121,9 @@ function BaseEntityListItem({
           label
         )
       }
-      onClick={domain === "light" && checked ? onLightClick : undefined}
+      onClick={
+        onClick || (domain === "light" && checked ? onLightClick : undefined)
+      }
       {...customProps}
     />
   );

@@ -86,7 +86,6 @@ export default createAppModule("app-manager", (instance) => {
     "/pm2/:name",
     async (req) => {
       const { name } = req.params;
-      console.log("aqio", name, req.body);
       return pm2.action(name, req.body.running ? "start" : "stop");
     }
   );
