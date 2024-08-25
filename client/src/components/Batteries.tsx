@@ -33,6 +33,18 @@ export default function Batteries() {
             entityId: "sensor.sala_porta_bateria",
             label: "Sensor da Porta da Sala",
           },
+          {
+            entityId: "sensor.motorola_one_hyper_battery_level",
+            label: "Display das Impressoras",
+          },
+          {
+            entityId: "sensor.motorola_razr_40_ultra_battery_level",
+            label: "Motorola Razr 40 Ultra",
+          },
+          {
+            entityId: "sensor.xiaomi_pad_5_pro_battery_level",
+            label: "Xiaomi Pad 5 Pro",
+          },
         ].map(
           mergeWith({
             icon: "battery-50",

@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from "@mui/material";
-import { callService, useEntity } from "$client/utils/hass";
+import { makeTurnOnCall, useEntity } from "$client/utils/hass";
 import DotLoading from "./DotLoading";
 
 export default function RunScriptButton({
@@ -15,12 +15,5 @@ export default function RunScriptButton({
     return <DotLoading />;
   }
 
-  return (
-    <Button
-      {...props}
-      onClick={() => {
-        callService("homeassistant", "turn_on", { entity_id: entityId });
-      }}
-    />
-  );
+  return <Button {...props} onClick={makeTurnOnCall(entityId)} />;
 }

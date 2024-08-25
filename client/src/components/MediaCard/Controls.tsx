@@ -80,14 +80,14 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         onClick={
           isSpotify
             ? makeSpotifyCall("previous_track")
-            : makeTurnOnCall("script.sala_mibox_rewind")
+            : makeTurnOnCall("button.sala_tvbox_rewind")
         }
       />
       {
         <Control
           icon="play-pause"
-          onClick={makeTurnOnCall("script.sala_mibox_play_pause")}
-          onLongPress={makeTurnOnCall("script.sala_mibox_play")}
+          onClick={makeTurnOnCall("button.sala_tvbox_play_pause")}
+          onLongPress={makeTurnOnCall("button.sala_tvbox_play")}
         />
       }
       <Control
@@ -95,7 +95,7 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         onClick={
           isSpotify
             ? makeSpotifyCall("next_track")
-            : makeTurnOnCall("script.sala_mibox_fast_forward")
+            : makeTurnOnCall("button.sala_tvbox_fast_forward")
         }
       />
     </Root>

@@ -71,11 +71,6 @@ export default function ServerModule() {
             renderListContent: (entity) =>
               formatNumericValue(entity.state, "%"),
           },
-          {
-            label: "Reiniciar Servidor",
-            confirmBefore: true,
-            entityId: "script.servidor_reiniciar",
-          },
         ]}
       />
       <DockerImageUpdatesListItem />

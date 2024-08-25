@@ -80,7 +80,7 @@ const groups: (
       { entityId: "light.banheiro_luz" },
       { entityId: "light.banheiro_luz_chuveiro" },
       {
-        entityId: "script.banheiro_luz_quente_no_chuveiro",
+        entityId: "button.banheiro_luz_quente_no_chuveiro",
         label: "Luz Quente\nno Chuveiro",
       },
     ],
@@ -91,33 +91,24 @@ const groups: (
     horizontal: true,
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
-      { entityId: "script.casa_apagar_todas_luzes" },
+      { entityId: "button.casa_apagar_todas_luzes" },
       {
-        entityId: "script.casa_apagar_todas_luzes_menos_sala",
+        entityId: "button.casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz da Sala",
       },
       {
-        entityId: "script.computador_erica_desligar_monitor",
-        confirmBefore: true,
-        label: "Desligar Monitor",
-      },
-      {
-        entityId: "script.computador_erica_suspender",
+        entityId: "button.erica_avell_suspender",
         confirmBefore: true,
         label: "Suspender Computador",
       },
       {
-        entityId: "script.computador_erica_reiniciar",
+        entityId: "button.erica_avell_reiniciar",
         confirmBefore: true,
         label: "Reiniciar Computador",
       },
       {
-        entityId: "script.encontrar_celular_erica_1",
-        label: "Encontrar Celular 1",
-      },
-      {
-        entityId: "script.encontrar_celular_erica_2",
-        label: "Encontrar Celular 2",
+        entityId: "button.encontrar_celular_erica_1",
+        label: "Encontrar Celular",
       },
     ],
   },

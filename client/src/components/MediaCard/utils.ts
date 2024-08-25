@@ -85,7 +85,6 @@ export function useCurrentMedia(): CurrentMedia | null {
     "media_player.sala_tv": tv,
     "media_player.sala_jellyfin": jellyfin,
   } = useEntities(
-    "script.sala_mibox_ligar",
     "media_player.spotify_visualglitch91",
     "media_player.xiaomi_tv_box",
     "media_player.sala_tv",

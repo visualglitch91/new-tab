@@ -64,7 +64,7 @@ const SpotifyControlWrapper = styled("div")({
 
 export default function MediaCard() {
   const media = useCurrentMedia();
-  const miboxLoading = useEntity("script.sala_mibox_ligar")?.state === "on";
+  const miboxLoading = useEntity("script.sala_tvbox_ligar")?.state === "on";
   const isSpotify = !!media?.spotify;
 
   if (!media || miboxLoading) {
