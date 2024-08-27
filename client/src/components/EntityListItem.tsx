@@ -59,9 +59,11 @@ function BaseEntityListItem({
 
   const onPrimaryAction = () => {
     const doCall = () => {
-      callService("homeassistant", checked ? "turn_off" : "turn_on", {
-        entity_id: entityId,
-      });
+      callService(
+        domain === "button" ? "button" : "homeassistant",
+        domain === "button" ? "press" : checked ? "turn_off" : "turn_on",
+        { entity_id: entityId }
+      );
     };
 
     if (confirmBefore) {
@@ -98,10 +100,8 @@ function BaseEntityListItem({
             )
           ) : null,
       }
-    : domain === "script"
-    ? {
-        endSlot: <Button onClick={onPrimaryAction}>Executar</Button>,
-      }
+    : domain === "script" || domain === "button"
+    ? { endSlot: <Button onClick={onPrimaryAction}>Executar</Button> }
     : { endSlot: entity.state };
 
   const colorBadge = attributes.rgb_color && rgbToHex(attributes.rgb_color);

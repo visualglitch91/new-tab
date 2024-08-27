@@ -106,10 +106,10 @@ const groups: (
         confirmBefore: true,
         label: "Reiniciar Computador",
       },
-      {
-        entityId: "button.encontrar_celular_erica_1",
-        label: "Encontrar Celular",
-      },
+      // {
+      //   entityId: "button.encontrar_celular_erica_1",
+      //   label: "Encontrar Celular",
+      // },
     ],
   },
 ];

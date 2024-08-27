@@ -14,7 +14,7 @@ import DialogBase from "../DialogBase";
 import DotLoading from "../DotLoading";
 
 const salaTVEntityId = "media_player.sala_tv";
-const ambilightEntityId = "input_select.sala_ambilight";
+const ambilightEntityId = "select.sala_ambilight";
 
 function parseSourceName(source: string) {
   return (
@@ -49,7 +49,7 @@ export default function TV() {
                 label: value,
               }))}
               onChange={(option) =>
-                callService("input_select", "select_option", {
+                callService("select", "select_option", {
                   entity_id: ambilightEntityId,
                   option,
                 })

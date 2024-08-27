@@ -18,6 +18,7 @@ const groups = [
       entityId: "switch.impressora_s1_servidor",
       label: "Creality Ender-3 S1",
       confirmBefore: true,
+      changeTimeout: 30_000,
       onClick: () => window.open("https://printer.crisalida.cc?index=0"),
     },
     {
@@ -30,6 +31,7 @@ const groups = [
       entityId: "switch.impressora_k1_servidor",
       label: "Creality K1",
       confirmBefore: true,
+      changeTimeout: 30_000,
       onClick: () => window.open("https://printer-k1.crisalida.cc?index=1"),
     },
     {

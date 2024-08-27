@@ -116,9 +116,11 @@ export default function EntityButton({
         ],
       });
     } else {
-      callService("homeassistant", checked ? "turn_off" : "turn_on", {
-        entity_id: entityId,
-      });
+      callService(
+        domain === "button" ? "button" : "homeassistant",
+        domain === "button" ? "press" : checked ? "turn_off" : "turn_on",
+        { entity_id: entityId }
+      );
     }
   }
 

@@ -18,6 +18,7 @@ const validDomains = [
   "media_player",
   "curtain",
   "script",
+  "button",
   "climate",
 ];
 
