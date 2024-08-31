@@ -25,7 +25,7 @@ export default function ScheduleDialog({
 
   const [actions, setActions] = useState<SimpleAction[]>(() => {
     return (initialValues.actions || []).map((it) => ({
-      on: it.service === "turn_on",
+      on: it.service === "turn_on" || it.service === "press",
       entityId: it.data?.entity_id,
     }));
   });
@@ -63,11 +63,19 @@ export default function ScheduleDialog({
                 time: { hour, minute },
                 actions: actions
                   .filter((it) => !!it.entityId)
-                  .map((it) => ({
-                    domain: "homeassistant",
-                    service: it.on ? "turn_on" : "turn_off",
-                    data: { entity_id: it.entityId },
-                  })),
+                  .map((it) => {
+                    const isButton = it.entityId.startsWith("button.");
+
+                    return {
+                      domain: isButton ? "button" : "homeassistant",
+                      service: it.on
+                        ? isButton
+                          ? "press"
+                          : "turn_on"
+                        : "turn_off",
+                      data: { entity_id: it.entityId },
+                    };
+                  }),
               });
             }}
           >

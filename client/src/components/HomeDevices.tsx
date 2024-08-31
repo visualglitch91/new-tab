@@ -44,7 +44,7 @@ const groups: (
     items: [
       { entityId: "light.escritorio_luz" },
       {
-        entityId: "switch.computador_avell_alto_falantes",
+        entityId: "switch.erica_avell_alto_falante",
         changeTimeout: 9_000,
       },
       { entityId: "light.escritorio_luminaria" },
@@ -70,8 +70,8 @@ const groups: (
       { entityId: "switch.quarto_abajur_esquerdo" },
       { entityId: "switch.quarto_abajur_direito" },
       { entityId: "switch.sacada_luz", label: "Sacada" },
-      // { entityId: "switch.quarto_umidificador" },
-      // { entityId: "switch.quarto_aquecedor" },
+      { entityId: "switch.quarto_umidificador" },
+      { entityId: "switch.quarto_aquecedor" },
     ],
   },
   {
@@ -82,6 +82,7 @@ const groups: (
       {
         entityId: "button.banheiro_luz_quente_no_chuveiro",
         label: "Luz Quente\nno Chuveiro",
+        icon: "shower-head",
       },
     ],
   },
@@ -91,20 +92,26 @@ const groups: (
     horizontal: true,
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
-      { entityId: "button.casa_apagar_todas_luzes" },
+      {
+        entityId: "button.casa_apagar_todas_luzes",
+        icon: "lightbulb-group-off-outline",
+      },
       {
         entityId: "button.casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz da Sala",
+        icon: "lightbulb-group-off-outline",
       },
       {
         entityId: "button.erica_avell_suspender",
         confirmBefore: true,
         label: "Suspender Computador",
+        icon: "mdi-sleep",
       },
       {
         entityId: "button.erica_avell_reiniciar",
         confirmBefore: true,
         label: "Reiniciar Computador",
+        icon: "restart",
       },
       // {
       //   entityId: "button.encontrar_celular_erica_1",

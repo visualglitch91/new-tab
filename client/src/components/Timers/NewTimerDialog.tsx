@@ -22,11 +22,15 @@ export default function NewTimerDialog({
   function onSave() {
     const parsedActions = actions
       .filter((it) => !!it.entityId)
-      .map((it) => ({
-        domain: "homeassistant",
-        service: it.on ? "turn_on" : "turn_off",
-        data: { entity_id: it.entityId },
-      }));
+      .map((it) => {
+        const isButton = it.entityId.startsWith("button.");
+
+        return {
+          domain: isButton ? "button" : "homeassistant",
+          service: it.on ? (isButton ? "press" : "turn_on") : "turn_off",
+          data: { entity_id: it.entityId },
+        };
+      });
 
     api(
       "/hass-scheduler/timers",
