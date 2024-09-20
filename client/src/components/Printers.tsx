@@ -4,7 +4,7 @@ import GlossyPaper from "./GlossyPaper";
 import { EntityListItems } from "./EntityListItem";
 
 const groups = [
-  [
+  /* [
     {
       entityId: "switch.printer_prusaslicer",
       label: "PrusaSlicer",
@@ -12,13 +12,14 @@ const groups = [
       changeTimeout: 30_000,
       onClick: () => window.open("https://slicer.crisalida.cc"),
     },
-  ],
+  ], */
   [
     {
       entityId: "switch.impressora_s1",
       label: "Creality Ender-3 S1",
       confirmBefore: true,
-      onClick: () => window.open("https://printers.crisalida.cc?index=0"),
+      onClick: () =>
+        window.open("https://printers.crisalida.cc?initial=creality-ender3-s1"),
     },
     {
       entityId: "input_boolean.impressora_s1_desligamento_automatico",
@@ -30,7 +31,8 @@ const groups = [
       entityId: "switch.impressora_k1",
       label: "Creality K1",
       confirmBefore: true,
-      onClick: () => window.open("https://printers.crisalida.cc?index=1"),
+      onClick: () =>
+        window.open("https://printers.crisalida.cc?initial=creality-k1"),
     },
     {
       entityId: "input_boolean.impressora_k1_desligamento_automatico",
