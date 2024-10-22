@@ -92,6 +92,9 @@ const groups: (
     horizontal: true,
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
+      { entityId: "button.casa_estou_saindo", icon: "location-exit" },
+      { entityId: "button.casa_cheguei", icon: "location-enter" },
+      { entityId: "input_boolean.casa_automacoes_cachorrinhos" },
       {
         entityId: "button.casa_apagar_todas_luzes",
         icon: "lightbulb-group-off-outline",
