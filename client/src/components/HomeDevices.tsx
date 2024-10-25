@@ -43,10 +43,6 @@ const groups: (
     title: "Escritório",
     items: [
       { entityId: "light.escritorio_luz" },
-      {
-        entityId: "switch.erica_avell_alto_falante",
-        changeTimeout: 9_000,
-      },
       { entityId: "light.escritorio_luminaria" },
       { entityId: "light.escritorio_apoio_headphone" },
       { entityId: "light.escritorio_rgb_mesa" },
@@ -71,7 +67,7 @@ const groups: (
       { entityId: "switch.quarto_abajur_direito" },
       { entityId: "switch.sacada_luz", label: "Sacada" },
       { entityId: "switch.quarto_umidificador" },
-      { entityId: "switch.quarto_aquecedor" },
+      // { entityId: "switch.quarto_aquecedor" },
     ],
   },
   {
@@ -80,7 +76,7 @@ const groups: (
       { entityId: "light.banheiro_luz" },
       { entityId: "light.banheiro_luz_chuveiro" },
       {
-        entityId: "button.banheiro_luz_quente_no_chuveiro",
+        entityId: "input_button.sidekick_lab_banheiro_luz_quente_no_chuveiro",
         label: "Luz Quente\nno Chuveiro",
         icon: "shower-head",
       },
@@ -92,32 +88,39 @@ const groups: (
     horizontal: true,
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
-      { entityId: "button.casa_estou_saindo", icon: "location-exit" },
-      { entityId: "button.casa_cheguei", icon: "location-enter" },
+      {
+        entityId: "input_button.sidekick_lab_casa_estou_saindo",
+        icon: "location-exit",
+      },
+      {
+        entityId: "input_button.sidekick_lab_casa_cheguei",
+        icon: "location-enter",
+      },
       { entityId: "input_boolean.casa_automacoes_cachorrinhos" },
       {
-        entityId: "button.casa_apagar_todas_luzes",
+        entityId: "input_button.sidekick_lab_casa_apagar_todas_luzes",
         icon: "lightbulb-group-off-outline",
       },
       {
-        entityId: "button.casa_apagar_todas_luzes_menos_sala",
+        entityId:
+          "input_button.sidekick_lab_casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz da Sala",
         icon: "lightbulb-group-off-outline",
       },
       {
-        entityId: "button.erica_avell_suspender",
+        entityId: "input_button.sidekick_office_erica_avell_suspender",
         confirmBefore: true,
         label: "Suspender Computador",
         icon: "mdi-sleep",
       },
       {
-        entityId: "button.erica_avell_reiniciar",
+        entityId: "input_button.sidekick_office_erica_avell_reiniciar",
         confirmBefore: true,
         label: "Reiniciar Computador",
         icon: "restart",
       },
       // {
-      //   entityId: "button.encontrar_celular_erica_1",
+      //   entityId: "input_button.sidekick_lab_encontrar_celular_erica_1",
       //   label: "Encontrar Celular",
       // },
     ],

@@ -23,6 +23,7 @@ const cameras = [
   },
 ];
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAvailableCameras() {
   const ids = cameras.map((it) => it.availability);
   const raw = useEntities(...ids);

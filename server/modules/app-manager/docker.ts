@@ -1,4 +1,7 @@
-import PQueue from "p-queue";
+import ky from "ky";
+import { CronJob } from "cron";
+//@ts-expect-error
+import parseDockerImageName from "parse-docker-image-name";
 import {
   App,
   AppStatus,
@@ -11,74 +14,39 @@ import {
   createProccessOutputStreamer,
   logger,
 } from "$server/utils";
-import Storage from "$server/storage";
-import fetchImageUpdateStatus from "./fetchImageUpdateStatus";
+import config from "$server/config";
 import dockerode from "./dockerode";
-import { CronJob } from "cron";
 
-const updateStatusStorage = new Storage<{ id: string; status: UpdateStatus }>(
-  "docker-update-status"
-);
+let updateMap: Record<string, boolean | undefined> = {};
 
-const queue = new PQueue({ concurrency: 4 });
+const cup = ky.create({
+  prefixUrl: config.app_manager.docker_cup_host,
+});
 
-export async function checkForContainerImageUpdates(container: string) {
-  const status = await fetchImageUpdateStatus(container);
-  updateStatusStorage.save({ id: container, status });
-  return status;
+export function refreshUpdateStatus() {
+  return cup.get("refresh").then(() => ({ ok: true }));
 }
 
-let checkingPromise: Promise<void> | null = null;
+export async function fetchUpdateStatuses() {
+  try {
+    logger.info("Checking docker image updates");
 
-export function isRunningFullCheck() {
-  return checkingPromise !== null;
-}
+    const data = await cup
+      .get("json")
+      .then((res) => res.json<{ images: Record<string, boolean> }>())
+      .then((res) => res.images);
 
-export function checkForAllContainersImageUpdates() {
-  if (!checkingPromise) {
-    checkingPromise = new Promise(async (resolve, reject) => {
-      try {
-        logger.info("Checking docker image updates");
-
-        // Fetch list of containers
-        const containers = await dockerode.listContainers({ all: true });
-
-        // Array to store results
-        const results: {
-          container: string;
-          status: UpdateStatus;
-        }[] = [];
-
-        const tasks = containers.map((containerInfo) => async () => {
-          const container = containerInfo.Names[0].substring(1);
-          const status = await fetchImageUpdateStatus(container);
-          results.push({ status, container });
-        });
-
-        await queue.addAll(tasks);
-
-        results.forEach((it) => {
-          updateStatusStorage.save({ id: it.container, status: it.status });
-        });
-
-        resolve();
-      } catch (err) {
-        logger.error(err);
-        reject(err);
-      }
-    });
-
-    checkingPromise.finally(() => {
-      checkingPromise = null;
-    });
+    updateMap = data;
+  } catch (err) {
+    logger.error(err);
+    throw err;
   }
-
-  return checkingPromise;
 }
 
 export function setupUpdateChecker() {
   logger.info("Setup Docker Update Checker");
-  new CronJob("0 * * * *", checkForAllContainersImageUpdates).start();
+  fetchUpdateStatuses();
+  new CronJob("0 * * * *", fetchUpdateStatuses).start();
 }
 
 const statusMap: Record<DockerStatus, AppStatus> = {
@@ -119,8 +87,26 @@ function calculateCPUPercentUnix(cpuStats: any, precpuStats: any) {
 export async function getContainers(name?: string): Promise<App[]> {
   const promises = (await dockerode.listContainers({ all: true }))
     .filter((it: any) => (name ? getName(it) === name : true))
-    .map((container: any) => {
+    .map(async (container: any) => {
       const name = getName(container);
+      let updateStatus: UpdateStatus = "unknown";
+
+      try {
+        const container = dockerode.getContainer(name);
+        const containerInspectInfo = await container.inspect();
+        const image = containerInspectInfo.Config.Image;
+        const tag = parseDockerImageName(image).tag;
+
+        if (tag && tag !== "latest") {
+          updateStatus = "locked";
+        } else {
+          updateStatus = updateMap[tag ? image : `${image}:latest`]
+            ? "update-available"
+            : "updated";
+        }
+      } catch (err) {
+        console.error({ name, err });
+      }
 
       return getStats(name).then((stats) => ({
         id: container.Id as string,
@@ -132,7 +118,7 @@ export async function getContainers(name?: string): Promise<App[]> {
           : "0mb",
         cpu: calculateCPUPercentUnix(stats.cpu_stats, stats.precpu_stats) || 0,
         uptime: container.Status,
-        updateStatus: updateStatusStorage.get(name)?.status || "unknown",
+        updateStatus,
       }));
     });
 

@@ -16,22 +16,9 @@ export default createAppModule("app-manager", (instance) => {
    * Docker Apps
    */
 
-  instance.post("/docker/all/check-image-updates", () => {
-    docker.checkForAllContainersImageUpdates();
-    return Promise.resolve({ running: true });
+  instance.post("/docker/refresh-update-statuses", () => {
+    return docker.refreshUpdateStatus();
   });
-
-  instance.get("/docker/all/check-image-updates/status", () => {
-    return Promise.resolve({ running: docker.isRunningFullCheck() });
-  });
-
-  instance.post<{ Params: { name: string } }>(
-    "/docker/:name/update-image-status",
-    (req) =>
-      docker
-        .checkForContainerImageUpdates(req.params.name)
-        .then((status) => ({ status }))
-  );
 
   instance.get<{ Params: { name: string } }>("/docker/:name", (req) => {
     const { name } = req.params;

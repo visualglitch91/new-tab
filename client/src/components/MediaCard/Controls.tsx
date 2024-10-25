@@ -80,14 +80,18 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         onClick={
           isSpotify
             ? makeSpotifyCall("previous_track")
-            : makeTurnOnCall("button.sala_tvbox_rewind")
+            : makeTurnOnCall("input_button.sidekick_lab_sala_tvbox_rewind")
         }
       />
       {
         <Control
           icon="play-pause"
-          onClick={makeTurnOnCall("button.sala_tvbox_play_pause")}
-          onLongPress={makeTurnOnCall("button.sala_tvbox_play")}
+          onClick={makeTurnOnCall(
+            "input_button.sidekick_lab_sala_tvbox_play_pause"
+          )}
+          onLongPress={makeTurnOnCall(
+            "input_button.sidekick_lab_sala_tvbox_play"
+          )}
         />
       }
       <Control
@@ -95,7 +99,9 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         onClick={
           isSpotify
             ? makeSpotifyCall("next_track")
-            : makeTurnOnCall("button.sala_tvbox_fast_forward")
+            : makeTurnOnCall(
+                "input_button.sidekick_lab_sala_tvbox_fast_forward"
+              )
         }
       />
     </Root>

@@ -40,7 +40,14 @@ export default function EntityButton({
   const entity = useEntity(entityId);
 
   if (!entity) {
-    return <BaseEntityButton sx={sx} disabled label={_label || entityId} />;
+    return (
+      <BaseEntityButton
+        disabled
+        sx={sx}
+        horizontal={horizontal}
+        label={_label || entityId}
+      />
+    );
   }
 
   const icon = customIcon || getIcon(entity);
@@ -117,8 +124,16 @@ export default function EntityButton({
       });
     } else {
       callService(
-        domain === "button" ? "button" : "homeassistant",
-        domain === "button" ? "press" : checked ? "turn_off" : "turn_on",
+        domain === "button"
+          ? "button"
+          : domain === "input_button"
+          ? "input_button"
+          : "homeassistant",
+        domain === "button" || domain === "input_button"
+          ? "press"
+          : checked
+          ? "turn_off"
+          : "turn_on",
         { entity_id: entityId }
       );
     }

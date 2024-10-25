@@ -65,9 +65,15 @@ export default function ScheduleDialog({
                   .filter((it) => !!it.entityId)
                   .map((it) => {
                     const isButton = it.entityId.startsWith("button.");
+                    const isInputButton =
+                      it.entityId.startsWith("input_button.");
 
                     return {
-                      domain: isButton ? "button" : "homeassistant",
+                      domain: isButton
+                        ? "button"
+                        : isInputButton
+                        ? "input_button"
+                        : "homeassistant",
                       service: it.on
                         ? isButton
                           ? "press"

@@ -28,7 +28,7 @@ function DockerImageUpdatesListItem() {
         ) : (
           <Button
             onClick={() => {
-              api("/app-manager/docker/all/check-image-updates", "post").then(
+              api("/app-manager/docker/refresh-update-statuses", "post").then(
                 () => $status.refetch()
               );
             }}

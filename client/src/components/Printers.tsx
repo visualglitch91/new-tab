@@ -4,18 +4,9 @@ import GlossyPaper from "./GlossyPaper";
 import { EntityListItems } from "./EntityListItem";
 
 const groups = [
-  /* [
-    {
-      entityId: "switch.printer_prusaslicer",
-      label: "PrusaSlicer",
-      icon: "mdi:docker",
-      changeTimeout: 30_000,
-      onClick: () => window.open("https://slicer.crisalida.cc"),
-    },
-  ], */
   [
     {
-      entityId: "switch.impressora_s1",
+      entityId: "input_boolean.sidekick_lab_impressora_s1",
       label: "Creality Ender-3 S1",
       confirmBefore: true,
       onClick: () =>
@@ -28,7 +19,7 @@ const groups = [
   ],
   [
     {
-      entityId: "switch.impressora_k1",
+      entityId: "input_boolean.sidekick_lab_impressora_k1",
       label: "Creality K1",
       confirmBefore: true,
       onClick: () =>

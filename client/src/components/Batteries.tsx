@@ -34,10 +34,6 @@ export default function Batteries() {
             label: "Sensor da Porta da Sala",
           },
           {
-            entityId: "sensor.motorola_one_hyper_battery_level",
-            label: "Display das Impressoras",
-          },
-          {
             entityId: "sensor.motorola_razr_40_ultra_battery_level",
             label: "Motorola Razr 40 Ultra",
           },

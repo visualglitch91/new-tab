@@ -193,8 +193,6 @@ function VolumeControlListItem({
   const volume = entity?.attributes.volume_level;
   const isMuted = entity?.attributes.is_volume_muted;
 
-  console.log({ entityId, isMuted });
-
   useMountEffect(() => {
     if (typeof volume === "undefined") {
       callService("media_player", "volume_set", {

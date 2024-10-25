@@ -100,7 +100,7 @@ export default function EntitySelectorDialog({
     };
 
     entities.forEach((entity) => {
-      if (entity.domain === "script." || entity.domain === "button.") {
+      if (["script.", "button.", "input_button."].includes(entity.domain)) {
         push("Scripts", entity);
         return;
       }

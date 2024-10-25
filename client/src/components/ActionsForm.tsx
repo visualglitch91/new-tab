@@ -20,6 +20,8 @@ const validDomains = [
   "script",
   "button",
   "climate",
+  "input_boolean",
+  "input_button",
 ];
 
 export default function ActionsForm({
