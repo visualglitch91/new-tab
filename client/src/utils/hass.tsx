@@ -128,6 +128,8 @@ export function makeServiceCall(domain: string, service: string, data?: any) {
 export function makeTurnOnCall(entityId: string) {
   return entityId.startsWith("button")
     ? makeServiceCall("button", "press", { entity_id: entityId })
+    : entityId.startsWith("input_button")
+    ? makeServiceCall("input_button", "press", { entity_id: entityId })
     : makeServiceCall("homeassistant", "turn_on", { entity_id: entityId });
 }
 

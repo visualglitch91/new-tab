@@ -12,9 +12,15 @@ import AltIconButton from "../AltIconButton";
 import DropdownButton from "../DropdownButton";
 import DialogBase from "../DialogBase";
 import DotLoading from "../DotLoading";
+import { useState } from "react";
 
 const salaTVEntityId = "media_player.sala_tv";
-const ambilightEntityId = "select.sala_ambilight";
+
+const ambilightVideoEntityId =
+  "input_boolean.sidekick_lab_sala_ambilight_video";
+
+const ambilightAudioEntityId =
+  "input_boolean.sidekick_lab_sala_ambilight_audio";
 
 function parseSourceName(source: string) {
   return (
@@ -30,7 +36,16 @@ function parseSourceName(source: string) {
 
 export default function TV() {
   const mount = useModal();
-  const ambilight = useEntity(ambilightEntityId)?.state;
+  const [ambilightChanging, setAmbilightChanging] = useState(false);
+  const ambilightVideoEntity = useEntity(ambilightVideoEntityId);
+  const ambilightAudioEntity = useEntity(ambilightAudioEntityId);
+
+  const selectedAmbilight =
+    ambilightVideoEntity?.state === "on"
+      ? { entity: ambilightVideoEntity, label: "Vídeo" }
+      : ambilightAudioEntity?.state === "on"
+      ? { entity: ambilightAudioEntity, label: "Áudio" }
+      : { entity: null, label: "Desligado" };
 
   return (
     <Stack spacing={2}>
@@ -42,19 +57,44 @@ export default function TV() {
           icon="television-ambient-light"
           primaryText="Ambilight"
           endSlot={
-            <DropdownButton
-              value={ambilight || ""}
-              options={["Desligado", "Áudio", "Vídeo"].map((value) => ({
-                value,
-                label: value,
-              }))}
-              onChange={(option) =>
-                callService("select", "select_option", {
-                  entity_id: ambilightEntityId,
-                  option,
-                })
-              }
-            />
+            ambilightChanging ? (
+              <DotLoading />
+            ) : (
+              <DropdownButton
+                value={selectedAmbilight.label}
+                options={["Desligado", "Áudio", "Vídeo"].map((value) => ({
+                  value,
+                  label: value,
+                }))}
+                onChange={(option) => {
+                  setAmbilightChanging(true);
+
+                  switch (option) {
+                    case "Desligado":
+                      if (selectedAmbilight.entity) {
+                        callService("input_boolean", "turn_off", {
+                          entity_id: selectedAmbilight.entity.entity_id,
+                        });
+                      }
+                      break;
+                    case "Vídeo":
+                      callService("input_boolean", "turn_on", {
+                        entity_id: ambilightVideoEntityId,
+                      });
+                      break;
+                    case "Áudio":
+                      callService("input_boolean", "turn_on", {
+                        entity_id: ambilightAudioEntityId,
+                      });
+                      break;
+                  }
+
+                  setTimeout(() => {
+                    setAmbilightChanging(false);
+                  }, 30_000);
+                }}
+              />
+            )
           }
         />
         <SpotifySource />
