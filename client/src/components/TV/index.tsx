@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { List, Stack, Switch } from "@mui/material";
 import { callService, makeServiceCall, useEntity } from "$client/utils/hass";
 import { formatNumericValue } from "$client/utils/general";
@@ -12,7 +13,6 @@ import AltIconButton from "../AltIconButton";
 import DropdownButton from "../DropdownButton";
 import DialogBase from "../DialogBase";
 import DotLoading from "../DotLoading";
-import { useState } from "react";
 
 const salaTVEntityId = "media_player.sala_tv";
 

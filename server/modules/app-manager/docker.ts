@@ -39,7 +39,7 @@ export async function fetchUpdateStatuses() {
     updateMap = data;
   } catch (err) {
     logger.error(err);
-    throw err;
+    updateMap = {};
   }
 }
 

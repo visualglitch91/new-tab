@@ -17,7 +17,7 @@ export default createAppModule("app-manager", (instance) => {
    */
 
   instance.post("/docker/refresh-update-statuses", () => {
-    return docker.refreshUpdateStatus();
+    return docker.refreshUpdateStatus().catch(() => ({ ok: false }));
   });
 
   instance.get<{ Params: { name: string } }>("/docker/:name", (req) => {

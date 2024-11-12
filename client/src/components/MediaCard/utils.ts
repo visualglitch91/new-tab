@@ -18,6 +18,11 @@ const mediaInfo: Record<string, CurrentMedia> = {
     image: getImageUrl("globo.jpg"),
     title: "Globo ao Vivo",
   },
+  KissFM: {
+    image: getImageUrl("kissfm.png"),
+    title: "Globo ao Vivo",
+    hideControls: true,
+  },
   "Nintendo Switch": {
     image: getImageUrl("switch.png"),
     title: "Nintendo Switch",
@@ -40,21 +45,9 @@ const mediaInfo: Record<string, CurrentMedia> = {
     image: getImageUrl("disneyplus.jpg"),
     title: "Disney+",
   },
-  "HBO Max": {
-    image: getImageUrl("hbomax.jpg"),
-    title: "HBO Max",
-  },
-  "Star+": {
-    image: getImageUrl("starplus.jpg"),
-    title: "Star+",
-  },
   PrimeVideo: {
     image: getImageUrl("primevideo.jpg"),
     title: "Prime Video",
-  },
-  Kodi: {
-    image: getImageUrl("kodi.jpg"),
-    title: "Kodi",
   },
   Crunchyroll: {
     image: getImageUrl("crunchyroll.jpg"),
