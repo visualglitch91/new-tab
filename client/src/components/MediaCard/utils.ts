@@ -20,7 +20,12 @@ const mediaInfo: Record<string, CurrentMedia> = {
   },
   KissFM: {
     image: getImageUrl("kissfm.png"),
-    title: "Globo ao Vivo",
+    title: "Kiss FM",
+    hideControls: true,
+  },
+  AlphaFM: {
+    image: getImageUrl("alphafm.png"),
+    title: "Alpha FM",
     hideControls: true,
   },
   "Nintendo Switch": {

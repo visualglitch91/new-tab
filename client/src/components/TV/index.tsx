@@ -186,10 +186,12 @@ function TVListItem() {
         ) : salaTV === "on" ? (
           <DropdownButton
             value={salaTVSource}
-            options={[...salaTVSourceList, "Desligar"].map((value: string) => ({
-              value,
-              label: value,
-            }))}
+            options={[...salaTVSourceList, "Desligar"]
+              .filter((it) => !["Noop", "AndroidTV"].includes(it))
+              .map((value: string) => ({
+                value,
+                label: value,
+              }))}
             onChange={(source) => {
               if (source === "Desligar" && change()) {
                 callService("media_player", "turn_off", {
