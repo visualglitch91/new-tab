@@ -5,11 +5,9 @@ import HugeButton from "../HugeButton";
 export default function BookmarkItem({
   item,
   openInNewTab,
-  onContextMenu,
 }: {
   item: Bookmark;
   openInNewTab: boolean;
-  onContextMenu: (e: React.MouseEvent<HTMLElement>) => void;
 }) {
   return (
     <HugeButton
@@ -17,7 +15,6 @@ export default function BookmarkItem({
       href={item.url}
       target={openInNewTab ? "_blank" : "_self"}
       rel="noreferrer"
-      onContextMenu={onContextMenu}
       sx={{
         flexDirection: "row",
         justifyContent: "flex-start",
