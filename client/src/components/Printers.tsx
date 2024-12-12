@@ -6,7 +6,7 @@ import { EntityListItems } from "./EntityListItem";
 const groups = [
   [
     {
-      entityId: "input_boolean.sidekick_lab_impressora_s1",
+      entityId: "switch.impressora_s1_servidor",
       label: "Creality Ender-3 S1",
       confirmBefore: true,
       onClick: () =>
@@ -19,7 +19,7 @@ const groups = [
   ],
   [
     {
-      entityId: "input_boolean.sidekick_lab_impressora_k1",
+      entityId: "switch.impressora_k1_servidor",
       label: "Creality K1",
       confirmBefore: true,
       onClick: () =>

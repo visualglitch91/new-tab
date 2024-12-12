@@ -1,4 +1,4 @@
-import { hassUrl, useEntities } from "$client/utils/hass";
+import { hassUrl, useEntities, useEntity } from "$client/utils/hass";
 
 function getImageUrl(file: string) {
   return new URL(`./images/${file}`, import.meta.url).href;
@@ -14,118 +14,88 @@ interface CurrentMedia {
 }
 
 const mediaInfo: Record<string, CurrentMedia> = {
-  Globo: {
-    image: getImageUrl("globo.jpg"),
-    title: "Globo ao Vivo",
-  },
-  KissFM: {
+  "kiss fm": {
     image: getImageUrl("kissfm.png"),
     title: "Kiss FM",
     hideControls: true,
   },
-  AlphaFM: {
+  "alpha fm": {
     image: getImageUrl("alphafm.png"),
     title: "Alpha FM",
     hideControls: true,
   },
-  "Nintendo Switch": {
+  "nintendo switch": {
     image: getImageUrl("switch.png"),
     title: "Nintendo Switch",
     hideControls: true,
   },
-  "Playstation 5": {
+  "playstation 5": {
     image: getImageUrl("playstation5.jpg"),
     title: "PlayStation 5",
     hideControls: true,
   },
-  miboxGeneric: {
+  generic: {
     image: getImageUrl("androidtv.png"),
     title: "AndroidTV",
   },
-  Globoplay: {
+  globoplay: {
     image: getImageUrl("globoplay.jpg"),
     title: "GloboPlay",
   },
-  "Disney+": {
+  disney: {
     image: getImageUrl("disneyplus.jpg"),
     title: "Disney+",
   },
-  PrimeVideo: {
+  primevideo: {
     image: getImageUrl("primevideo.jpg"),
     title: "Prime Video",
   },
-  Crunchyroll: {
+  crunchyroll: {
     image: getImageUrl("crunchyroll.jpg"),
     title: "CrunchyRoll",
   },
-  YouTube: {
+  youtube: {
     image: getImageUrl("youtube.jpg"),
     title: "YouTube",
   },
-  Twitch: {
+  twitch: {
     image: getImageUrl("twitch.jpg"),
     title: "Twitch",
   },
-  Spotify: {
+  spotify: {
     image: getImageUrl("spotify.png"),
     title: "Spotify",
   },
-  Jellyfin: {
+  jellyfin: {
     image: getImageUrl("jellyfin.jpg"),
     title: "Jellyfin",
   },
 };
 
 export function useCurrentMedia(): CurrentMedia | null {
-  const {
-    "media_player.spotify_visualglitch91": spotify,
-    "media_player.xiaomi_tv_box": mibox,
-    "media_player.sala_tv": tv,
-    "media_player.sala_jellyfin": jellyfin,
-  } = useEntities(
-    "media_player.spotify_visualglitch91",
-    "media_player.xiaomi_tv_box",
-    "media_player.sala_tv",
-    "media_player.sala_jellyfin"
+  const entity = useEntity("media_player.sala_media_player");
+
+  const isOn = Boolean(
+    entity?.state && !["off", "unknown", "unavailable"].includes(entity.state)
   );
 
-  if (!tv || tv.state !== "on") {
+  if (!entity || !isOn) {
     return null;
   }
 
-  if (!mibox) {
-    return null;
-  }
+  const { attributes: attrs } = entity;
 
-  const { source } = tv.attributes;
-
-  if (
-    source === "Spotify" &&
-    spotify &&
-    spotify.state !== "idle" &&
-    ["Casa", "echo home teather"].includes(spotify.attributes.source)
-  ) {
-    const attrs = spotify.attributes;
-
+  if (attrs.media_title) {
     return {
-      spotify: true,
-      image: `${hassUrl}${attrs.entity_picture}`,
+      spotify: attrs.source === "spotify",
+      image: attrs.entity_picture?.startsWith("http")
+        ? attrs.entity_picture
+        : `${hassUrl}${attrs.entity_picture}`,
       album: attrs.media_album_name,
       artist: attrs.media_artist,
       title: attrs.media_title,
     };
   }
 
-  if (source === "Jellyfin" && jellyfin && jellyfin.state !== "idle") {
-    const attrs = jellyfin.attributes;
-
-    return {
-      image: attrs.entity_picture!,
-      album: attrs.media_album_name,
-      artist: attrs.media_artist,
-      title: attrs.media_title,
-    };
-  }
-
-  return mediaInfo[source] || mediaInfo["miboxGeneric"];
+  return mediaInfo[attrs.source] || mediaInfo["generic"];
 }

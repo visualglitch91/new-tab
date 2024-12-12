@@ -1,3 +1,4 @@
+import { capitalize } from "lodash";
 import { useState } from "react";
 import { List, Stack, Switch } from "@mui/material";
 import { callService, makeServiceCall, useEntity } from "$client/utils/hass";
@@ -14,13 +15,8 @@ import DropdownButton from "../DropdownButton";
 import DialogBase from "../DialogBase";
 import DotLoading from "../DotLoading";
 
-const salaTVEntityId = "media_player.sala_tv";
-
-const ambilightVideoEntityId =
-  "input_boolean.sidekick_lab_sala_ambilight_video";
-
-const ambilightAudioEntityId =
-  "input_boolean.sidekick_lab_sala_ambilight_audio";
+const salaTVEntityId = "media_player.sala_media_player";
+const ambilightEntityId = "select.sala_ambilight";
 
 function parseSourceName(source: string) {
   return (
@@ -37,15 +33,7 @@ function parseSourceName(source: string) {
 export default function TV() {
   const mount = useModal();
   const [ambilightChanging, setAmbilightChanging] = useState(false);
-  const ambilightVideoEntity = useEntity(ambilightVideoEntityId);
-  const ambilightAudioEntity = useEntity(ambilightAudioEntityId);
-
-  const selectedAmbilight =
-    ambilightVideoEntity?.state === "on"
-      ? { entity: ambilightVideoEntity, label: "Vídeo" }
-      : ambilightAudioEntity?.state === "on"
-      ? { entity: ambilightAudioEntity, label: "Áudio" }
-      : { entity: null, label: "Desligado" };
+  const ambilightEntityState = useEntity(ambilightEntityId)?.state;
 
   return (
     <Stack spacing={2}>
@@ -61,7 +49,7 @@ export default function TV() {
               <DotLoading />
             ) : (
               <DropdownButton
-                value={selectedAmbilight.label}
+                value={ambilightEntityState || "Selecionar"}
                 options={["Desligado", "Áudio", "Vídeo"].map((value) => ({
                   value,
                   label: value,
@@ -69,29 +57,14 @@ export default function TV() {
                 onChange={(option) => {
                   setAmbilightChanging(true);
 
-                  switch (option) {
-                    case "Desligado":
-                      if (selectedAmbilight.entity) {
-                        callService("input_boolean", "turn_off", {
-                          entity_id: selectedAmbilight.entity.entity_id,
-                        });
-                      }
-                      break;
-                    case "Vídeo":
-                      callService("input_boolean", "turn_on", {
-                        entity_id: ambilightVideoEntityId,
-                      });
-                      break;
-                    case "Áudio":
-                      callService("input_boolean", "turn_on", {
-                        entity_id: ambilightAudioEntityId,
-                      });
-                      break;
-                  }
+                  callService("select", "select_option", {
+                    entity_id: ambilightEntityId,
+                    option,
+                  });
 
                   setTimeout(() => {
                     setAmbilightChanging(false);
-                  }, 30_000);
+                  }, 13_000);
                 }}
               />
             )
@@ -169,7 +142,9 @@ function TVListItem() {
     } = {},
   } = useEntity(salaTVEntityId) || {};
 
-  const isOn = salaTV === "on";
+  const isOn = Boolean(
+    salaTV && !["off", "unknown", "unavailable"].includes(salaTV)
+  );
 
   const { changing, change } = useAsyncChange({
     flag: isOn,
@@ -183,19 +158,23 @@ function TVListItem() {
       endSlot={
         changing ? (
           <DotLoading />
-        ) : salaTV === "on" ? (
+        ) : isOn ? (
           <DropdownButton
             value={salaTVSource}
-            options={[...salaTVSourceList, "Desligar"]
-              .filter((it) => !["Noop", "AndroidTV"].includes(it))
-              .map((value: string) => ({
+            options={["Globo ao Vivo", ...salaTVSourceList, "Desligar"].map(
+              (value: string) => ({
                 value,
-                label: value,
-              }))}
+                label: value.split(" ").map(capitalize).join(" "),
+              })
+            )}
             onChange={(source) => {
               if (source === "Desligar" && change()) {
                 callService("media_player", "turn_off", {
                   entity_id: salaTVEntityId,
+                });
+              } else if (source === "Globo ao Vivo") {
+                callService("button", "press", {
+                  entity_id: "button.sala_media_player_globo_ao_vivo",
                 });
               } else {
                 callService("media_player", "select_source", {

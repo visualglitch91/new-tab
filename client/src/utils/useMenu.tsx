@@ -1,24 +1,12 @@
+//@ts-expect-error
 import offset from "mouse-event-offset";
-import {
-  Box,
-  ClickAwayListener,
-  Grow,
-  Menu,
-  MenuItem,
-  MenuList,
-  Popper,
-  alpha,
-  darken,
-} from "@mui/material";
+import { Menu, MenuItem, alpha } from "@mui/material";
 import ActionSheet, { ActionSheetProps } from "$client/components/ActionSheet";
-import GlossyPaper from "$client/components/GlossyPaper";
 import { useIsMobile } from "./general";
 import useModal from "./useModal";
 import { getConfig } from "./useConfig";
 
 const enableBlur = !getConfig("disableBlurEffects");
-const arrowHeight = 6;
-const arrowWidth = 11;
 
 export function useMenu() {
   const mount = useModal();
@@ -41,7 +29,7 @@ export function useMenu() {
   }) {
     const clickedElement = mouseEvent?.target as HTMLElement | undefined;
 
-    let anchorEl =
+    const anchorEl =
       clickAnchor && clickedElement
         ? (() => {
             const pos = offset(mouseEvent, document.getElementById("app"));

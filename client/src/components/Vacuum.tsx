@@ -45,7 +45,7 @@ function VacuumActionsRow({ label }: { label: string }) {
         ) : state === "docked" ? (
           <RunScriptButton
             size="small"
-            entityId="input_button.sidekick_lab_vacuum_clean_selected_zones"
+            entityId="button.casa_aspirar_areas_selecionadas"
           >
             Aspirar
           </RunScriptButton>

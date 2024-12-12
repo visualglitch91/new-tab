@@ -76,7 +76,7 @@ const groups: (
       { entityId: "light.banheiro_luz" },
       { entityId: "light.banheiro_luz_chuveiro" },
       {
-        entityId: "input_button.sidekick_lab_banheiro_luz_quente_no_chuveiro",
+        entityId: "button.banheiro_luz_quente_no_chuveiro",
         label: "Luz Quente\nno Chuveiro",
         icon: "shower-head",
       },
@@ -89,32 +89,31 @@ const groups: (
     items: [
       { entityId: "input_boolean.casa_ignorar_interfone" },
       {
-        entityId: "input_button.sidekick_lab_casa_estou_saindo",
+        entityId: "button.casa_estou_saindo",
         icon: "location-exit",
       },
       {
-        entityId: "input_button.sidekick_lab_casa_cheguei",
+        entityId: "button.casa_cheguei",
         icon: "location-enter",
       },
       { entityId: "input_boolean.casa_automacoes_cachorrinhos" },
       {
-        entityId: "input_button.sidekick_lab_casa_apagar_todas_luzes",
+        entityId: "button.casa_apagar_todas_luzes",
         icon: "lightbulb-group-off-outline",
       },
       {
-        entityId:
-          "input_button.sidekick_lab_casa_apagar_todas_luzes_menos_sala",
+        entityId: "button.casa_apagar_todas_luzes_menos_sala",
         label: "Somente Luz da Sala",
         icon: "lightbulb-group-off-outline",
       },
       {
-        entityId: "input_button.sidekick_office_erica_avell_suspender",
+        entityId: "button.computador_avell_suspender",
         confirmBefore: true,
         label: "Suspender Computador",
         icon: "mdi-sleep",
       },
       {
-        entityId: "input_button.sidekick_office_erica_avell_reiniciar",
+        entityId: "button.computador_avell_reiniciar",
         confirmBefore: true,
         label: "Reiniciar Computador",
         icon: "restart",

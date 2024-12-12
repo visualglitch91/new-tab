@@ -21,7 +21,8 @@ const ControlRoot = styled(ButtonBase)({
   height: 30,
   flexGrow: 0,
   flexShrink: 0,
-  "&:hover": { background: "rgba(50,50,50,0.2)" },
+  transition: "background 0.2s",
+  "&:hover": { background: "rgba(40,40,40,0.6)" },
 });
 
 function Control({
@@ -80,18 +81,14 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         onClick={
           isSpotify
             ? makeSpotifyCall("previous_track")
-            : makeTurnOnCall("input_button.sidekick_lab_sala_tvbox_rewind")
+            : makeTurnOnCall("button.sala_media_player_rewind")
         }
       />
       {
         <Control
           icon="play-pause"
-          onClick={makeTurnOnCall(
-            "input_button.sidekick_lab_sala_tvbox_play_pause"
-          )}
-          onLongPress={makeTurnOnCall(
-            "input_button.sidekick_lab_sala_tvbox_play"
-          )}
+          onClick={makeTurnOnCall("button.sala_media_player_play_pause")}
+          onLongPress={makeTurnOnCall("button.sala_media_player_play")}
         />
       }
       <Control
@@ -99,9 +96,7 @@ export default function Controls({ isSpotify }: { isSpotify?: boolean }) {
         onClick={
           isSpotify
             ? makeSpotifyCall("next_track")
-            : makeTurnOnCall(
-                "input_button.sidekick_lab_sala_tvbox_fast_forward"
-              )
+            : makeTurnOnCall("button.sala_media_player_fast_forward")
         }
       />
     </Root>
