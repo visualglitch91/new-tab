@@ -1,71 +1,63 @@
+import "dotenv/config";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { VitePWA } from "vite-plugin-pwa";
-import { createHtmlPlugin } from "vite-plugin-html";
+import tsconfigPaths from "vite-tsconfig-paths";
 import react from "@vitejs/plugin-react";
-import config from "./config.json";
 
-const baseUrl = "/";
+const iconSizes = [72, 192, 512];
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: "./client",
-  base: baseUrl,
-  build: {
-    outDir: "../dist",
+  server: {
+    port: 6173,
+    host: "0.0.0.0",
   },
   define: {
-    "process.env.HASS_URL": JSON.stringify(config.home_assistant.url),
-    "process.env.WEBSOCKET_URL": JSON.stringify(config.pomodoro.websocket),
+    "process.env.HASS_URL": JSON.stringify(process.env.HASS_URL),
+    "process.env.SIDEKICK_URL": JSON.stringify(process.env.SIDEKICK_URL),
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
   },
   plugins: [
     tsconfigPaths(),
     react(),
-    createHtmlPlugin({
-      minify: true,
-      inject: { data: { baseUrl } },
-    }),
     VitePWA({
       registerType: "autoUpdate",
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,jpg,svg,woff2}"],
-        globIgnores: ["latest.json"],
-      },
-      includeAssets: [
-        "icons/180x180.png",
-        "icons/32x32.png",
-        "icons/16x16.png",
-        "icons/safari-pinned-tab.svg",
-        "icons/192x192.png",
-        "icons/512x512.png",
-        "icons/512x512-maskable.png",
-      ],
+      injectRegister: false,
+
+      includeAssets: iconSizes.map((size) => `icons/${size}.png`),
+
       manifest: {
-        name: "HomeControl",
-        short_name: "HomeControl",
-        description: "An app to control my home",
-        scope: baseUrl,
-        start_url: `${baseUrl}index.html`,
+        name: "home-control",
+        short_name: "home-control",
+        description: "home-control",
         theme_color: "#24324b",
-        background_color: "#24324b",
         icons: [
-          {
-            src: "icons/192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "icons/512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-          {
-            src: "icons/512x512-maskable.png",
-            sizes: "512x512",
+          ...iconSizes.map((size) => ({
+            src: `icons/x${size}.png`,
+            sizes: `${size}x${size}`,
             type: "image/png",
             purpose: "maskable",
+          })),
+          {
+            src: `icons/x192.png`,
+            sizes: `192x192`,
+            type: "image/png",
+            purpose: "any",
           },
         ],
+      },
+
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+      },
+
+      devOptions: {
+        enabled: false,
+        navigateFallback: "index.html",
+        suppressWarnings: true,
+        type: "module",
       },
     }),
   ],

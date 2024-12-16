@@ -1,0 +1,161 @@
+import { HassEntity } from "home-assistant-js-websocket";
+import { SxProps, Button, Switch } from "@mui/material";
+import { useEntity, getIcon, callService } from "$app/utils/hass";
+import useModal from "$app/utils/useModal";
+import { rgbToHex } from "$app/utils/colors";
+import useAsyncChange from "$app/utils/useAsyncChange";
+import useConfirm from "$app/utils/useConfirm";
+import ListItem from "./ListItem";
+import LightEntityDialog from "./LightEntityDialog";
+import ColorBadge from "./ColorBadge";
+import Icon from "./Icon";
+import DotLoading from "./DotLoading";
+
+export interface EntityListItemProps {
+  icon?: string | React.ReactNode;
+  label?: React.ReactNode;
+  changeTimeout?: number;
+  entityId: string;
+  confirmBefore?: boolean;
+  sx?: SxProps;
+  renderListContent?: (entity: HassEntity) => React.ReactNode;
+  onClick?: () => void;
+}
+
+function BaseEntityListItem({
+  sx,
+  icon: customIcon,
+  label: _label,
+  changeTimeout = 0,
+  confirmBefore,
+  entity,
+  entityId,
+  renderListContent,
+  onClick,
+}: EntityListItemProps & { entity: HassEntity }) {
+  const icon = customIcon || getIcon(entity);
+  const mount = useModal();
+  const confirm = useConfirm();
+
+  const onLightClick = () => {
+    mount((_, props) => (
+      <LightEntityDialog title={label} entityId={entity.entity_id} {...props} />
+    ));
+  };
+
+  const { state, attributes } = entity;
+  const { friendly_name: friendlyName } = attributes;
+  const [domain] = entityId.split(".");
+  const checked = state === "on";
+  const unavailable = state === "unavailable";
+
+  const label =
+    _label || friendlyName?.replace(/\[[^()]*\]/g, "").trim() || entityId;
+
+  const onPrimaryAction = () => {
+    const doCall = () => {
+      callService(
+        domain === "button"
+          ? "button"
+          : domain === "input_button"
+          ? "input_button"
+          : "homeassistant",
+        domain === "button" || domain === "input_button"
+          ? "press"
+          : checked
+          ? "turn_off"
+          : "turn_on",
+        { entity_id: entityId }
+      );
+    };
+
+    if (confirmBefore) {
+      confirm({ title: "Continuar?", onConfirm: doCall });
+    } else {
+      doCall();
+    }
+  };
+
+  const { changing, change } = useAsyncChange({
+    flag: checked || false,
+    timeout: changeTimeout,
+  });
+
+  const customProps = renderListContent
+    ? { endSlot: renderListContent(entity) }
+    : ["light", "switch", "input_boolean"].includes(domain)
+    ? {
+        endSlot:
+          typeof checked === "boolean" ? (
+            unavailable ? (
+              <Icon icon="cancel" />
+            ) : changing ? (
+              <DotLoading />
+            ) : (
+              <Switch
+                checked={checked}
+                onChange={() => {
+                  if (change()) {
+                    onPrimaryAction();
+                  }
+                }}
+              />
+            )
+          ) : null,
+      }
+    : domain === "script" || domain === "button"
+    ? { endSlot: <Button onClick={onPrimaryAction}>Executar</Button> }
+    : { endSlot: entity.state };
+
+  const colorBadge = attributes.rgb_color && rgbToHex(attributes.rgb_color);
+
+  return (
+    <ListItem
+      sx={sx}
+      disabled={unavailable}
+      icon={icon}
+      primaryText={
+        colorBadge ? (
+          <>
+            {label}
+            <ColorBadge size={12} color={colorBadge} />
+          </>
+        ) : (
+          label
+        )
+      }
+      onClick={
+        onClick || (domain === "light" && checked ? onLightClick : undefined)
+      }
+      {...customProps}
+    />
+  );
+}
+
+export function EntityListItems({ items }: { items: EntityListItemProps[] }) {
+  return (
+    <>
+      {items.map((props, index) => (
+        <EntityListItem key={index} {...props} />
+      ))}
+    </>
+  );
+}
+
+export default function EntityListItem(props: EntityListItemProps) {
+  const { entityId, label } = props;
+  const entity = useEntity(entityId);
+
+  if (!entity) {
+    return (
+      <ListItem
+        disabled
+        icon="cancel"
+        primaryText={entityId}
+        endSlot={label || entityId}
+      />
+    );
+  }
+
+  return <BaseEntityListItem {...props} entity={entity} />;
+}
