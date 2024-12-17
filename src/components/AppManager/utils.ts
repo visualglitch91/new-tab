@@ -11,7 +11,7 @@ const LABELS: Record<string, string | undefined> = {
 
 export const STATUS_COLORS = {
   running: "#50fa7b",
-  stoppped: "#ff79c6",
+  stopped: "#ff79c6",
   errored: "#ff5555",
 } as const;
 
@@ -34,7 +34,7 @@ export function parseApp(app: App) {
     stack,
     name,
     rawName,
-    status: status || "stoppped",
+    status: status || "stopped",
     usage: formatUsage(app),
     ...rest,
   };

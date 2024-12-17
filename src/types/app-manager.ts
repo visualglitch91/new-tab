@@ -15,7 +15,7 @@ export interface App {
   type: "docker" | "pm2";
 }
 
-export type AppStatus = "running" | "stoppped" | "errored";
+export type AppStatus = "running" | "stopped" | "errored";
 
 export type PM2Status =
   | "online"
