@@ -6,14 +6,14 @@ import { formatNumericValue } from "$app/utils/general";
 import useMountEffect from "$app/utils/useMountEffect";
 import useModal from "$app/utils/useModal";
 import useAsyncChange from "$app/utils/useAsyncChange";
-import Icon from "../Icon";
-import ListItem from "../ListItem";
-import MediaCard from "../MediaCard";
-import GlossyPaper from "../GlossyPaper";
-import AltIconButton from "../AltIconButton";
-import DropdownButton from "../DropdownButton";
-import DialogBase from "../DialogBase";
-import DotLoading from "../DotLoading";
+import Icon from "./Icon";
+import ListItem from "./ListItem";
+import MediaCard from "./MediaCard";
+import GlossyPaper from "./GlossyPaper";
+import AltIconButton from "./AltIconButton";
+import DropdownButton from "./DropdownButton";
+import DialogBase from "./DialogBase";
+import DotLoading from "./DotLoading";
 
 const salaTVEntityId = "media_player.sala_media_player";
 const ambilightEntityId = "select.sala_ambilight";
@@ -38,7 +38,6 @@ export default function TV() {
   return (
     <Stack spacing={2}>
       <MediaCard />
-
       <List component={GlossyPaper} dense>
         <TVListItem />
         <ListItem

@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import useLatestRef from "./useLatestRef";
 
+function shouldIgnore(el: HTMLElement) {
+  return (
+    el.getAttribute("data-ignore-swipe") === "true" ||
+    el.closest('[data-ignore-swipe="true"]')
+  );
+}
+
 export default function useSwipe(
   el: HTMLElement,
   onSwipe: (direction: "right" | "left" | "up" | "down") => void
@@ -24,7 +31,12 @@ export default function useSwipe(
     }
 
     function handleTouchMove(evt: TouchEvent) {
-      if (!xDown || !yDown || !!document.querySelector(".MuiDialog-root")) {
+      if (
+        !xDown ||
+        !yDown ||
+        !!document.querySelector(".MuiDialog-root") ||
+        shouldIgnore(evt.target as HTMLElement)
+      ) {
         return;
       }
 

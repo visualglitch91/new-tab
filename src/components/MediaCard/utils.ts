@@ -11,13 +11,15 @@ interface CurrentMedia {
   artist?: string;
   spotify?: boolean;
   hideControls?: boolean;
+  buildinImage?: boolean;
 }
 
-const mediaInfo: Record<string, CurrentMedia> = {
+const mediaInfoMap: Record<string, CurrentMedia> = {
   "kiss fm": {
     image: getImageUrl("kissfm.png"),
     title: "Kiss FM",
     hideControls: true,
+    buildinImage: true,
   },
   "alpha fm": {
     image: getImageUrl("alphafm.png"),
@@ -85,17 +87,27 @@ export function useCurrentMedia(): CurrentMedia | null {
 
   const { attributes: attrs } = entity;
 
+  const mediaInfo = mediaInfoMap[attrs.source];
+
   if (attrs.media_title) {
+    const image =
+      mediaInfo?.buildinImage || !attrs.entity_picture
+        ? mediaInfo?.image
+        : attrs.entity_picture;
+
     return {
       spotify: attrs.source === "spotify",
-      image: attrs.entity_picture?.startsWith("http")
-        ? attrs.entity_picture
-        : `${hassUrl}${attrs.entity_picture}`,
+      image: image
+        ? image.startsWith("http")
+          ? image
+          : `${hassUrl}${image}`
+        : "",
       album: attrs.media_album_name,
       artist: attrs.media_artist,
       title: attrs.media_title,
+      hideControls: mediaInfo?.hideControls,
     };
   }
 
-  return mediaInfo[attrs.source] || mediaInfo["generic"];
+  return mediaInfo || mediaInfoMap["generic"];
 }

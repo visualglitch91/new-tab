@@ -105,3 +105,15 @@ export function clearReactQueryCacheAndReload() {
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function stopClickPropagation() {
+  const stopPropagation = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+  };
+
+  return {
+    onMouseDown: stopPropagation,
+    onTouchStart: stopPropagation,
+    onClick: stopPropagation,
+  };
+}

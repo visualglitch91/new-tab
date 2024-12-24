@@ -35,30 +35,44 @@ export function rgbToHex([r, g, b]: RGB) {
   return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
-export function rgbToHS([r, g, b]: RGB) {
-  let computedH = 0;
-  let computedS = 0;
-
+export function rgbToHSL([r, g, b]: [number, number, number]): [
+  number,
+  number,
+  number
+] {
   r = r / 255;
   g = g / 255;
   b = b / 255;
 
-  const minRGB = Math.min(r, Math.min(g, b));
-  const maxRGB = Math.max(r, Math.max(g, b));
+  const minRGB = Math.min(r, g, b);
+  const maxRGB = Math.max(r, g, b);
+  const delta = maxRGB - minRGB;
 
-  // Black-gray-white
-  if (minRGB === maxRGB) {
-    return [0, 0];
+  let computedH = 0;
+  let computedS = 0;
+  const computedL = (maxRGB + minRGB) / 2;
+
+  // If there's no chroma (delta is 0), it's a shade of grey
+  if (delta === 0) {
+    return [0, 0, computedL * 100];
   }
 
-  // Colors other than black-gray-white:
-  const d = r === minRGB ? g - b : b === minRGB ? r - g : b - r;
-  const h = r === minRGB ? 3 : b === minRGB ? 1 : 5;
+  // Hue Calculation
+  if (maxRGB === r) {
+    computedH = ((g - b) / delta) % 6;
+  } else if (maxRGB === g) {
+    computedH = (b - r) / delta + 2;
+  } else {
+    computedH = (r - g) / delta + 4;
+  }
 
-  computedH = 60 * (h - d / (maxRGB - minRGB));
-  computedS = 100 * ((maxRGB - minRGB) / maxRGB);
+  computedH = Math.round(computedH * 60);
+  if (computedH < 0) computedH += 360;
 
-  return [computedH, computedS];
+  // Saturation Calculation
+  computedS = delta / (1 - Math.abs(2 * computedL - 1));
+
+  return [computedH, computedS * 100, computedL * 100];
 }
 
 export function hsvToRGB(h: number, s: number, v: number) {
@@ -117,4 +131,19 @@ export function getContrastColor(color: RGB) {
   return color[0] * 0.299 + color[1] * 0.587 + color[2] * 0.114 > 186
     ? "#000000"
     : "#FFFFFF";
+}
+
+export function rgbStringToRGB(color: string): [number, number, number] {
+  const match = color.match(
+    /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*\d*\.?\d+)?\s*\)/
+  );
+
+  if (match) {
+    const [, r, g, b] = match.map(Number);
+    return [r, g, b];
+  }
+
+  throw new Error(
+    `Invalid color format: "${color}". Expected 'rgb(r, g, b)' or 'rgba(r, g, b, a)'.`
+  );
 }

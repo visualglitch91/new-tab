@@ -16,7 +16,6 @@ import EventEmitter from "./EventEmitter";
 import { removeParamsFromUrl } from "./url";
 import { loadValue, saveValue, clearValue } from "./storage";
 import api from "./api";
-import peerConnectionManager from "./peerConnectionManager";
 
 let _connection: Connection | undefined;
 
@@ -44,8 +43,6 @@ function setupHASS({
       subscribeEntities(connection, (stateMap) => {
         onStatesChange(Object.values(stateMap));
       });
-
-      peerConnectionManager.preload();
 
       return Promise.all([getUser(connection), getStates(connection)]);
     })
@@ -139,15 +136,6 @@ export function makeWebOSCall(service: string, entityId: string, data: any) {
     entity_id: entityId,
     ...data,
   });
-}
-
-export function fetchStreamUrl(entityId: string): Promise<string> {
-  return _connection!
-    .sendMessagePromise({
-      type: "camera/stream",
-      entity_id: entityId,
-    })
-    .then((res: any) => res.url);
 }
 
 class HassStore {

@@ -9,7 +9,7 @@ import {
   getSupportedFeatures,
   getLightCurrentModeRgbColor,
 } from "../../utils/light";
-import { hsvToRGB, RGB, rgbToHS } from "../../utils/colors";
+import { hsvToRGB, RGB, rgbToHSL } from "../../utils/colors";
 import ColorPicker from "../ColorPicker";
 import DialogBase, { DialogBaseControlProps } from "../DialogBase";
 import LabeledSlider from "../LabeledSlider";
@@ -43,7 +43,7 @@ function Components({ entity }: { entity: HassEntity }) {
   }, [mode, initialMode]);
 
   const currentRGB = getLightCurrentModeRgbColor(entity);
-  const currentHS = currentRGB && rgbToHS(currentRGB.slice(0, 3) as RGB);
+  const currentHS = currentRGB && rgbToHSL(currentRGB.slice(0, 3) as RGB);
 
   const currentRGBWithoutBrightness =
     currentHS && hsvToRGB(currentHS[0], currentHS[1], 100);

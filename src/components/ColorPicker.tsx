@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Wheel from "@uiw/react-color-wheel";
 import { useDebouncedCallback } from "$app/utils/useDebouncedCallback";
-import { RGB, rgbToHS } from "$app/utils/colors";
+import { RGB, rgbToHSL } from "$app/utils/colors";
 
 function parseRGB(rgb: RGB) {
-  const hsv = rgbToHS(rgb);
+  const hsv = rgbToHSL(rgb);
   return { h: hsv[0], s: hsv[1], v: 100, a: 1 };
 }
 

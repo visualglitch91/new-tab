@@ -21,6 +21,10 @@ const customSx: SxProps = {
     justifyContent: "center",
   },
 
+  "& .MuiListItemText-primary": {
+    fontSize: 14,
+  },
+
   "& .MuiListItemText-primary, & .MuiListItemText-secondary": {
     whiteSpace: "nowrap",
     overflow: "hidden",
@@ -37,6 +41,7 @@ const customSx: SxProps = {
     right: "unset",
     marginLeft: "8px",
     flexShrink: 0,
+    fontSize: 14,
 
     "& button, & a, & .MuiSwitch-root": {
       position: "relative",

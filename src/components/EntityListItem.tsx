@@ -16,7 +16,7 @@ export interface EntityListItemProps {
   label?: React.ReactNode;
   changeTimeout?: number;
   entityId: string;
-  confirmBefore?: boolean;
+  confirmBefore?: "on" | "off" | "toggle";
   sx?: SxProps;
   renderListContent?: (entity: HassEntity) => React.ReactNode;
   onClick?: () => void;
@@ -69,7 +69,11 @@ function BaseEntityListItem({
       );
     };
 
-    if (confirmBefore) {
+    if (
+      confirmBefore == "toggle" ||
+      (confirmBefore == "on" && entity.state !== "on") ||
+      (confirmBefore == "off" && entity.state === "on")
+    ) {
       confirm({ title: "Continuar?", onConfirm: doCall });
     } else {
       doCall();

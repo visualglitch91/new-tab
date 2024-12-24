@@ -30,6 +30,8 @@ const ElevatedHeader = styled("div")({
 const Ghost = styled("div")({
   opacity: 0,
   pointerEvents: "none",
+  width: "100%",
+  overflow: "hidden",
 });
 
 const Root = styled("div")({

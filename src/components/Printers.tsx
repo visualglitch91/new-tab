@@ -8,7 +8,7 @@ const groups = [
     {
       entityId: "switch.impressora_s1_servidor",
       label: "Creality Ender-3 S1",
-      confirmBefore: true,
+      confirmBefore: "off" as const,
       onClick: () =>
         window.open("https://printers.crisalida.cc?initial=creality-ender3-s1"),
     },
@@ -21,7 +21,7 @@ const groups = [
     {
       entityId: "switch.impressora_k1_servidor",
       label: "Creality K1",
-      confirmBefore: true,
+      confirmBefore: "off" as const,
       onClick: () =>
         window.open("https://printers.crisalida.cc?initial=creality-k1"),
     },
