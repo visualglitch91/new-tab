@@ -7,7 +7,7 @@
     "prerun": "echo \"\\\"$(date +'%Y.%m.%d-%H:%M:%S')\\\"\" > src/version.json",
     "postbuild": "cp src/robots.txt ./dist && cp src/version.json dist/latest.json",
     "dev": "yarn prerun && vite",
-    "build": "yarn lint && yarn prerun && rm -rf dist && vite build",
+    "build": "yarn prerun && yarn lint && rm -rf dist && vite build",
     "lint": "tsc && eslint --ext .ts,.tsx src"
   },
   "dependencies": {
