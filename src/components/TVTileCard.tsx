@@ -9,8 +9,6 @@ import { useCurrentMedia } from "./MediaCard/utils";
 import AltIconButton from "./AltIconButton";
 import AndroidRemoteDialog from "./AndroidRemoteDialog";
 
-const salaTVEntityId = "media_player.sala_media_player";
-
 const MediaImg = styled("img")(({ theme }) => ({
   "--size": "68px",
   height: "var(--size)",
@@ -34,11 +32,11 @@ const Details = styled("span")(({ theme }) => ({
   marginBottom: 4,
 }));
 
-export default function TVTileCard() {
+export default function TVTileCard({ entityId }: { entityId: string }) {
   const mount = useModal();
   const showMenu = useMenu();
   const currentMedia = useCurrentMedia();
-  const { state, attributes } = useEntity(salaTVEntityId) || {};
+  const { state, attributes } = useEntity(entityId) || {};
   const isMuted = attributes?.is_volume_muted;
   const isOn = Boolean(
     state && !["off", "unknown", "unavailable"].includes(state)
@@ -50,7 +48,7 @@ export default function TVTileCard() {
         icon="monitor"
         primaryText="Televisão"
         onClick={makeServiceCall("media_player", "turn_on", {
-          entity_id: salaTVEntityId,
+          entity_id: entityId,
         })}
       />
     );
@@ -63,7 +61,7 @@ export default function TVTileCard() {
       });
     } else {
       callService("media_player", "select_source", {
-        entity_id: salaTVEntityId,
+        entity_id: entityId,
         source,
       });
     }
@@ -90,7 +88,7 @@ export default function TVTileCard() {
             icon="play-pause"
             size={24}
             onClick={makeServiceCall("media_player", "media_play_pause", {
-              entity_id: salaTVEntityId,
+              entity_id: entityId,
             })}
           />
         </>
@@ -99,14 +97,14 @@ export default function TVTileCard() {
         icon="volume-minus"
         size={24}
         onClick={makeServiceCall("media_player", "volume_down", {
-          entity_id: salaTVEntityId,
+          entity_id: entityId,
         })}
       />
       <AltIconButton
         icon="volume-off"
         size={24}
         onClick={makeServiceCall("media_player", "volume_mute", {
-          entity_id: salaTVEntityId,
+          entity_id: entityId,
           is_volume_muted: typeof isMuted === "boolean" ? !isMuted : true,
         })}
       />
@@ -114,14 +112,14 @@ export default function TVTileCard() {
         icon="volume-plus"
         size={24}
         onClick={makeServiceCall("media_player", "volume_up", {
-          entity_id: salaTVEntityId,
+          entity_id: entityId,
         })}
       />
       <AltIconButton
         icon="power"
         size={24}
         onClick={makeServiceCall("media_player", "turn_off", {
-          entity_id: salaTVEntityId,
+          entity_id: entityId,
         })}
       />
     </Stack>
@@ -151,12 +149,14 @@ export default function TVTileCard() {
           mouseEvent: e.nativeEvent,
           clickAnchor: true,
           title: "Canais",
-          options: ["Globo ao Vivo", ...(attributes?.source_list || [])].map(
-            (value: string) => ({
-              label: value.split(" ").map(capitalize).join(" "),
-              onClick: () => onSourceChange(value),
-            })
-          ),
+          options: (attributes?.source_list || [])
+            .filter((it) => it !== "Noop")
+            .map((value: string) => {
+              return {
+                label: value.split(" ").map(capitalize).join(" "),
+                onClick: () => onSourceChange(value),
+              };
+            }),
         });
       }}
     />

@@ -30,12 +30,11 @@ export default function Devices() {
             {[
               "Casa",
               "Sala",
-              "Escritório",
               "Cozinha e Lavanderia",
               "Quarto",
               "Banheiro",
+              "Oficina",
               "Outros",
-              "Impressoras",
             ].map((value, index) => (
               <Chip
                 clickable

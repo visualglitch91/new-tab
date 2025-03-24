@@ -2,7 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import Printers from "./Printers";
 import GridSection, { GridSectionProps } from "./GridSection";
 import EntityTileCard, { EntityTileCardProps } from "./EntityTileCard";
-import HVACTileCard from "./HVACTileCard";
+//import HVACTileCard from "./HVACTileCard";
 import TVTileCard from "./TVTileCard";
 
 const groups: (
@@ -20,92 +20,69 @@ const groups: (
   {
     title: "Casa",
     items: [
-      {
-        element: <TVTileCard />,
-        size: 12,
-      },
-      {
-        element: <HVACTileCard entityId="climate.ar_condicionado" />,
-        size: 12,
-      },
-      { entityId: "select.sala_ambilight" },
-      { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
+      // {
+      //   element: <HVACTileCard entityId="climate.ar_condicionado" />,
+      //   size: 12,
+      // },
+      // { entityId: "select.sala_ambilight" },
+      { entityId: "light.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
       { entityId: "light.escritorio_luz", label: "Luz do\nEscritório" },
       { entityId: "light.quarto_luz", label: "Luz do Quarto" },
-      { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
+      { entityId: "light.cozinha_luz", label: "Luz da\nCozinha" },
       { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
-      { entityId: "light.banheiro_luz", label: "Luz do\nBanheiro" },
+      { entityId: "light.casa_luz_do_hall" },
+      { entityId: "light.casa_luz_do_corredor" },
     ],
-    //prepend: <TV />,
   },
   {
     title: "Sala",
-    //prepend: <HVAC />,
     items: [
-      { entityId: "switch.mesa_jantar_luz", label: "Luz da Mesa" },
+      {
+        element: <TVTileCard entityId="media_player.sala_tv" />,
+        size: 12,
+      },
+      { entityId: "light.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
-      { entityId: "switch.sala_luminaria" },
-      { entityId: "switch.sala_ventilador" },
-      { entityId: "light.sala_rgb_tv", icon: "led-strip-variant" },
-      { entityId: "light.sala_rgb_rack", icon: "led-strip-variant" },
-      { entityId: "cover.sala_cortina", icon: "curtains" },
+      { entityId: "light.escritorio_luz", label: "Luz do\nEscritório" },
+      { entityId: "light.banheiro_2_luz", label: "Luz do\nBanheiro" },
+      // { entityId: "light.sala_rgb_tv", icon: "led-strip-variant" },
+      // { entityId: "light.sala_rgb_rack", icon: "led-strip-variant" },
     ],
   },
-  {
-    title: "Escritório",
-    items: [
-      { entityId: "light.escritorio_luz" },
-      { entityId: "light.escritorio_luminaria", icon: "desk-lamp" },
-      { entityId: "light.escritorio_apoio_headphone" },
-      { entityId: "light.escritorio_rgb_mesa", icon: "led-strip-variant" },
-      { entityId: "light.escritorio_rgb_quadro" },
-      {
-        entityId: "button.computador_avell_suspender",
-        confirmBefore: "off" as const,
-        label: "Suspender PC",
-        icon: "mdi-sleep",
-      },
-      {
-        entityId: "button.computador_avell_reiniciar",
-        confirmBefore: "off" as const,
-        label: "Reiniciar PC",
-        icon: "restart",
-      },
-    ],
-  },
+  // {
+  //   title: "Escritório",
+  //   items: [
+  //     { entityId: "light.escritorio_luminaria", icon: "desk-lamp" },
+  //     { entityId: "light.escritorio_apoio_headphone" },
+  //     { entityId: "light.escritorio_rgb_mesa", icon: "led-strip-variant" },
+  //     { entityId: "light.escritorio_rgb_quadro" },
+  //   ],
+  // },
   {
     title: "Cozinha e Lavanderia",
     items: [
-      { entityId: "switch.cozinha_luz", label: "Luz da\nCozinha" },
+      { entityId: "light.cozinha_luz", label: "Luz da\nCozinha" },
       { entityId: "switch.cozinha_cafeteira" },
       { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
-      { entityId: "switch.lavanderia_banheiro", label: "Luz do\nBanheiro" },
     ],
   },
   {
     title: "Quarto",
     items: [
-      { entityId: "light.quarto_luz" },
-      { entityId: "switch.quarto_ventilador" },
-      { entityId: "switch.quarto_abajur_esquerdo" },
-      { entityId: "switch.quarto_abajur_direito" },
-      { entityId: "switch.sacada_luz", label: "Sacada" },
-      { entityId: "switch.quarto_umidificador" },
-      // { entityId: "switch.quarto_aquecedor" },
-    ],
-  },
-  {
-    title: "Banheiro",
-    items: [
-      { entityId: "light.banheiro_luz" },
-      { entityId: "light.banheiro_luz_chuveiro" },
       {
-        entityId: "button.banheiro_luz_quente_no_chuveiro",
-        label: "Luz Quente\nno Chuveiro",
-        icon: "shower-head",
+        element: <TVTileCard entityId="media_player.quarto_tv" />,
         size: 12,
       },
+      { entityId: "light.quarto_luz" },
+      { entityId: "light.quarto_ventilador" },
+      { entityId: "light.banheiro_1_luz" },
+      { entityId: "light.banheiro_1_luz_chuveiro" },
+      // { entityId: "switch.quarto_abajur_esquerdo" },
+      // { entityId: "switch.quarto_abajur_direito" },
+      // { entityId: "switch.sacada_luz", label: "Sacada" },
+      // { entityId: "switch.quarto_umidificador" },
+      // { entityId: "switch.quarto_aquecedor" },
     ],
   },
   {
@@ -136,7 +113,13 @@ const groups: (
       // },
     ],
   },
-  { title: "Impressoras", items: [], prepend: <Printers /> },
+  {
+    title: "Oficina",
+    items: [
+      { entityId: "light.oficina_luz", size: 12 },
+      { element: <Printers />, size: 12 },
+    ],
+  },
 ];
 
 export default function HomeDevices({

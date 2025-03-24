@@ -15,14 +15,6 @@
     "url": "https://feedly.com/",
     "order": 4
   },
-  "LINK_5": {
-    "section": "Social, Email e Notícias",
-    "id": "LINK_5",
-    "name": "E-Mail",
-    "icon": "https://play-lh.googleusercontent.com/9AjFvEP6RP6zRd41Z9cuiyHe_qD47a1AN0QrvW9Ec0OfsmG9x-t09nmTQMAmmZuYrdso=s180-rw",
-    "url": "https://mail.crisalida.cc/",
-    "order": 1
-  },
   "LINK_6": {
     "section": "Media",
     "id": "LINK_6",
@@ -66,9 +58,9 @@
   "LINK_11": {
     "section": "Downloads e Arquivos",
     "id": "LINK_11",
-    "name": "Dropbox",
-    "icon": "https://play-lh.googleusercontent.com/b1-MIBjlMD9kvl0Okeglm9BL9ejRpOXMio303W0tiLb8Ul5WuVzBDoDKgGRcALOsCdw=s96",
-    "url": "https://www.dropbox.com/home",
+    "name": "Proton Drive",
+    "icon": "https://play-lh.googleusercontent.com/AvaTTF1BKzC6BiGR9BI6i6_Cyow4OTl_xRrjZY1pUIxQBMO2zRJtRDralcmm-V5IRQY=s512-rw",
+    "url": "https://drive.proton.me",
     "order": 9
   },
   "LINK_12": {
@@ -82,9 +74,9 @@
   "LINK_13": {
     "section": "Finanças",
     "id": "LINK_13",
-    "name": "Husky",
-    "icon": "https://is4-ssl.mzstatic.com/image/thumb/Purple126/v4/7b/9b/fa/7b9bfa32-5bd5-19ba-7ee2-4b7dab64b5f0/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/492x0w.webp",
-    "url": "https://app.husky.io/",
+    "name": "TechFX",
+    "icon": "https://play-lh.googleusercontent.com/Ichd-aGQOBu3xKEh-_QReYf5h_w667pUWVFoJkCnyZwNaWMlGSd7T2uxtG06Q9i0Rw=w480-h960-rw",
+    "url": "https://techfx.com.br/",
     "order": 23
   },
   "LINK_14": {
@@ -254,13 +246,5 @@
     "icon": "https://play-lh.googleusercontent.com/VsgCCgW-ct98JhgVoQzndWCAaXxlP6uMwcjzINYPmeja8cCNISsJDqDFNQrF2IRq9xM",
     "order": 0,
     "id": "6604388a1a4fae696dbdc309"
-  },
-  "6606188a7407f2197533383f": {
-    "section": "Downloads e Arquivos",
-    "name": "Locadora",
-    "url": "https://locadora.crisalida.cc",
-    "icon": "https://play-lh.googleusercontent.com/-T5sa38kAcStAxEf5mBapoPNel1aMtKBrMl18eDyMjeI6ZqxxiGPp7rK0uE-EUqOYQhY",
-    "order": 5,
-    "id": "6606188a7407f2197533383f"
   }
 }
