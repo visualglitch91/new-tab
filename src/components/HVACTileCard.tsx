@@ -1,57 +1,46 @@
 import { Button, Stack } from "@mui/material";
-import { callService, makeServiceCall, useEntity } from "$app/utils/hass";
-import { formatNumericValue, stopClickPropagation } from "$app/utils/general";
+import { makeServiceCall, useEntity } from "$app/utils/hass";
+import { stopClickPropagation } from "$app/utils/general";
 import { useMenu } from "$app/utils/useMenu";
 import BaseTileCard from "./BaseTileCard";
 
-function getSpeedLabels(speed: string) {
-  return { low: "Fraco", medium: "Médio", high: "Forte" }[speed] || speed;
-}
+const speeds = ["Baixo", "Medio", "Alto", "Turbo"];
+const temps = ["Ventilar", "16", "21", "30"];
 
-export default function HVACTileCard({ entityId }: { entityId: string }) {
-  const { state, attributes } = useEntity(entityId) || {};
+const defaultTemp = "16";
+const defaultSpeed = "Turbo";
+
+export default function HVACTileCard({
+  statusEntityId,
+  turnOffButtonEntityId,
+  getButtonEntityId,
+}: {
+  statusEntityId: string;
+  turnOffButtonEntityId: string;
+  getButtonEntityId: (speed: string, temp: string) => string;
+}) {
   const showMenu = useMenu();
-  const on = state !== "off";
 
-  if (!attributes) {
-    return null;
+  let { state: status = "Desligado" } = useEntity(statusEntityId) || {};
+
+  if (status === "unknown") {
+    status = "Desligado";
   }
 
-  const {
-    current_temperature: currentTemp,
-    temperature: targetTemp,
-    fan_mode: speed,
-    fan_modes: availableSpeeds,
-  } = attributes;
-
-  const currentTempStr = currentTemp
-    ? formatNumericValue(currentTemp, "°C", 0)
-    : null;
-
-  const targetTempStr = targetTemp
-    ? formatNumericValue(targetTemp, "°C", 0)
-    : null;
+  const on = status !== "Desligado";
+  const temp = on ? status.split(" / ")[0].replaceAll("°C", "") : defaultTemp;
+  const tempStr = isNaN(Number(temp)) ? temp : `${temp}°C`;
+  const speed = on ? status.split(" / ")[1] : defaultSpeed;
 
   return (
     <BaseTileCard
       active={on}
-      onClick={() => {
-        callService("climate", !on ? "turn_on" : "turn_off", {
-          entity_id: entityId,
-        });
-      }}
+      onClick={makeServiceCall("button", "press", {
+        entity_id: on
+          ? turnOffButtonEntityId
+          : getButtonEntityId(defaultSpeed, defaultTemp),
+      })}
       primaryText="Ar-Condicionado"
-      secondaryText={
-        on ? (
-          <>
-            {currentTemp &&
-            targetTemp &&
-            Math.abs(currentTemp - targetTemp) < 0.7
-              ? targetTempStr
-              : [currentTempStr, targetTempStr].filter(Boolean).join(" › ")}
-          </>
-        ) : null
-      }
       icon="mdi:snowflake-thermometer"
       endSlot={
         on ? (
@@ -69,17 +58,16 @@ export default function HVACTileCard({ entityId }: { entityId: string }) {
                   mouseEvent: e.nativeEvent,
                   clickAnchor: true,
                   title: "Temperatura",
-                  options: [16, 21, 30].map((temp) => ({
-                    label: `${temp}°C`,
-                    onClick: makeServiceCall("climate", "set_temperature", {
-                      entity_id: entityId,
-                      temperature: temp,
+                  options: temps.map((temp) => ({
+                    label: isNaN(Number(temp)) ? temp : `${temp}°C`,
+                    onClick: makeServiceCall("button", "press", {
+                      entity_id: getButtonEntityId(speed, temp),
                     }),
                   })),
                 });
               }}
             >
-              {targetTempStr}
+              {tempStr}
             </Button>
             <Button
               size="small"
@@ -89,17 +77,16 @@ export default function HVACTileCard({ entityId }: { entityId: string }) {
                   mouseEvent: e.nativeEvent,
                   clickAnchor: true,
                   title: "Velocidade",
-                  options: availableSpeeds.map((speed: string) => ({
-                    label: getSpeedLabels(speed),
-                    onClick: makeServiceCall("climate", "set_fan_mode", {
-                      entity_id: entityId,
-                      fan_mode: speed,
+                  options: speeds.map((speed: string) => ({
+                    label: speed,
+                    onClick: makeServiceCall("button", "press", {
+                      entity_id: getButtonEntityId(speed, temp),
                     }),
                   })),
                 });
               }}
             >
-              {getSpeedLabels(speed)}
+              {speed}
             </Button>
           </Stack>
         ) : null

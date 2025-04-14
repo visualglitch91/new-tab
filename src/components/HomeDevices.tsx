@@ -2,7 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import Printers from "./Printers";
 import GridSection, { GridSectionProps } from "./GridSection";
 import EntityTileCard, { EntityTileCardProps } from "./EntityTileCard";
-//import HVACTileCard from "./HVACTileCard";
+import HVACTileCard from "./HVACTileCard";
 import TVTileCard from "./TVTileCard";
 
 const groups: (
@@ -20,10 +20,19 @@ const groups: (
   {
     title: "Casa",
     items: [
-      // {
-      //   element: <HVACTileCard entityId="climate.ar_condicionado" />,
-      //   size: 12,
-      // },
+      {
+        element: (
+          <HVACTileCard
+            statusEntityId="input_text.casa_ar_condicionado_status"
+            turnOffButtonEntityId="button.casa_ar_condicionado_desligar"
+            getButtonEntityId={(speed, temp) => {
+              const tempStr = isNaN(Number(temp)) ? temp : `${temp}oc`;
+              return `button.casa_ar_condicionado_${tempStr}_${speed}`;
+            }}
+          />
+        ),
+        size: 12,
+      },
       // { entityId: "select.sala_ambilight" },
       { entityId: "light.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
