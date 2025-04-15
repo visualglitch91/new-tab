@@ -1,14 +1,26 @@
+import { Fragment } from "react";
 import { groupBy, mapValues, orderBy } from "lodash";
-import { Stack } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
 import { Bookmark } from "$app/types/bookmarks";
-import { useBreakpointValue } from "$app/utils/useBreakpointValue";
 import { mode } from "$app/utils/general";
+import Flex from "$app/components/Flex";
 import bookmarksJSON from "$app/bookmarks.json";
 import SectionTitle from "../SectionTitle";
-import AutoGrid from "../AutoGrid";
 import BookmarkItem from "./BookmarkItem";
+import { PaletteColors } from "$app/theme/palette";
 
 const bookmarks: Bookmark[] = orderBy(bookmarksJSON, ["order"], ["asc"]);
+
+const iconColors: PaletteColors[] = [
+  "mauve",
+  "red",
+  "peach",
+  "yellow",
+  "green",
+  "sky",
+  "blue",
+  "lavender",
+];
 
 export default function Bookmarks() {
   const groupsByKey = mapValues(
@@ -24,61 +36,30 @@ export default function Bookmarks() {
 
   const groups = Object.values(groupsByKey);
 
-  const columnCount = useBreakpointValue({ xs: 1, sm: 1, md: 1, lg: 2, xl: 3 });
-  const columns: React.ReactNode[][] = Array.from(
-    { length: columnCount },
-    () => []
-  );
-
-  const itemsPerColumn = Math.ceil(
-    groups.reduce((acc, current) => acc + current.items.length, 0) / columnCount
-  );
-
-  let columnIndex = 0;
-  let currentColumnLength = 0;
-
-  groups.forEach((group) => {
-    const itemArray = group.items;
-
-    if (currentColumnLength + itemArray.length > itemsPerColumn) {
-      columnIndex++;
-
-      if (columnIndex === columnCount) {
-        columnIndex = 0;
-      }
-
-      currentColumnLength = 0;
-    }
-
-    columns[columnIndex].push(
-      <Stack gap={2} key={`cell_${group.id}`}>
-        <Stack direction="row" gap={2} alignItems="center">
-          <SectionTitle>{group.id}</SectionTitle>
-        </Stack>
-        <AutoGrid columnWidth={200} gap={6}>
-          {group.items.map((item) => (
-            <BookmarkItem
-              key={item.id}
-              item={item}
-              openInNewTab={!mode.newTab}
-            />
-          ))}
-        </AutoGrid>
-      </Stack>
-    );
-
-    currentColumnLength += itemArray.length;
-  });
-
   return (
-    <div>
-      <Stack gap={4} direction="row" width="100%">
-        {columns.map((cells, index) => (
-          <Stack key={index} gap={4} direction="column" width="100%">
-            {cells}
+    <Stack gap={3}>
+      {groups.map((group, index) => (
+        <Fragment key={index}>
+          <Stack gap={2}>
+            <SectionTitle>{group.id}</SectionTitle>
+            <Flex wrap="wrap" gap={1} sx={{ "& > *": { flexShrink: 0 } }}>
+              {group.items.map((item, index) => {
+                const iconColor = iconColors[index % iconColors.length];
+
+                return (
+                  <BookmarkItem
+                    key={item.id}
+                    item={item}
+                    color={iconColor}
+                    openInNewTab={!mode.newTab}
+                  />
+                );
+              })}
+            </Flex>
           </Stack>
-        ))}
-      </Stack>
-    </div>
+          {index < groups.length - 1 && <Divider />}
+        </Fragment>
+      ))}
+    </Stack>
   );
 }

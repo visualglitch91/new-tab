@@ -1,9 +1,8 @@
 import { useState } from "react";
 import useMountEffect from "$app/utils/useMountEffect";
 import clock from "$app/utils/clock";
-import { SxProps } from "$app/theme/utils";
-import { sxx } from "$app/utils/styling";
-import GlossyPaper from "./GlossyPaper";
+import Icon from "$app/components/Icon";
+import Flex from "../components/Flex";
 
 function getTime() {
   const now = new Date();
@@ -13,7 +12,7 @@ function getTime() {
   return `${hours}:${minutes}`;
 }
 
-export default function Clock({ sx }: { sx: SxProps }) {
+export default function Clock() {
   const [time, setTime] = useState(getTime);
 
   useMountEffect(() => {
@@ -21,18 +20,9 @@ export default function Clock({ sx }: { sx: SxProps }) {
   });
 
   return (
-    <GlossyPaper
-      sx={sxx(
-        {
-          backgroundColor: "white",
-          textAlign: "center",
-          fontSize: "86px",
-          padding: "12px 0 24px",
-        },
-        sx
-      )}
-    >
+    <Flex align="center" gap={0.5}>
+      <Icon icon="clock-outline" color="red" size={16} />
       {time}
-    </GlossyPaper>
+    </Flex>
   );
 }

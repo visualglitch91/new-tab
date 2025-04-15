@@ -1,14 +1,17 @@
 import { ReactNode } from "react";
-import { Box, Grid2, styled } from "@mui/material";
+import { Box, Grid2, Grid2Props, styled } from "@mui/material";
 import SectionTitle from "./SectionTitle";
 
 const Title = styled(SectionTitle)({ marginBottom: "16px" });
 
 export interface GridSectionProps {
   title?: string;
-  defaultSize?: number;
+  defaultSize?: Grid2Props["size"];
   prepend?: ReactNode;
-  items: (React.ReactElement | { element: React.ReactNode; size?: number })[];
+  items: (
+    | React.ReactElement
+    | { element: React.ReactNode; size?: Grid2Props["size"] }
+  )[];
 }
 
 export default function EntityTileGridSection({
@@ -18,11 +21,11 @@ export default function EntityTileGridSection({
   items,
 }: GridSectionProps) {
   return (
-    <div>
+    <div title={title}>
       {title && <Title>{title}</Title>}
       {prepend && <Box mb={1.5}>{prepend}</Box>}
 
-      <Grid2 container spacing={1}>
+      <Grid2 container spacing={2}>
         {items.map((item, i) => {
           if (typeof item !== "object") {
             return null;

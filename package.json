@@ -24,6 +24,7 @@
     "@uiw/react-color-wheel": "^2.3.4",
     "home-assistant-js-websocket": "^9.4.0",
     "humanize-duration": "^3.32.1",
+    "jotai": "^2.12.3",
     "ky": "^1.7.3",
     "lodash": "^4.17.21",
     "macy": "^2.5.1",

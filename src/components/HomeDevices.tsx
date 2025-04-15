@@ -1,22 +1,21 @@
-import { Fragment } from "react/jsx-runtime";
-import Printers from "./Printers";
+import { Fragment } from "react";
+import { Divider } from "@mui/material";
 import GridSection, { GridSectionProps } from "./GridSection";
 import EntityTileCard, { EntityTileCardProps } from "./EntityTileCard";
 import HVACTileCard from "./HVACTileCard";
 import TVTileCard from "./TVTileCard";
 
-const groups: (
-  | {
-      title?: string;
-      prepend?: React.ReactNode;
-      items: (
-        | GridSectionProps["items"][number]
-        | (EntityTileCardProps & { size?: number })
-        | string
-      )[];
-    }
-  | { element: React.ReactNode }
-)[] = [
+const largeCard = { xs: 12, sm: 8, md: 6, xl: 4 };
+
+const groups: {
+  title?: string;
+  prepend?: React.ReactNode;
+  items: (
+    | GridSectionProps["items"][number]
+    | (EntityTileCardProps & { size?: number })
+    | string
+  )[];
+}[] = [
   {
     title: "Casa",
     items: [
@@ -31,7 +30,7 @@ const groups: (
             }}
           />
         ),
-        size: 12,
+        size: largeCard,
       },
       // { entityId: "select.sala_ambilight" },
       { entityId: "light.mesa_jantar_luz", label: "Luz da Mesa" },
@@ -49,7 +48,7 @@ const groups: (
     items: [
       {
         element: <TVTileCard entityId="media_player.sala_tv" />,
-        size: 12,
+        size: largeCard,
       },
       { entityId: "light.mesa_jantar_luz", label: "Luz da Mesa" },
       { entityId: "light.sala_luz", label: "Luz da Sala" },
@@ -81,7 +80,7 @@ const groups: (
     items: [
       {
         element: <TVTileCard entityId="media_player.quarto_tv" />,
-        size: 12,
+        size: largeCard,
       },
       { entityId: "light.quarto_luz" },
       { entityId: "light.quarto_ventilador" },
@@ -92,6 +91,22 @@ const groups: (
       // { entityId: "switch.sacada_luz", label: "Sacada" },
       // { entityId: "switch.quarto_umidificador" },
       // { entityId: "switch.quarto_aquecedor" },
+    ],
+  },
+  {
+    title: "Oficina",
+    items: [
+      { entityId: "light.oficina_luz" },
+      {
+        entityId: "switch.impressora_s1_servidor",
+        label: "Creality Ender-3 S1",
+        confirmBefore: "off",
+      },
+      {
+        entityId: "switch.impressora_k1_servidor",
+        label: "Creality K1",
+        confirmBefore: "off",
+      },
     ],
   },
   {
@@ -122,33 +137,24 @@ const groups: (
       // },
     ],
   },
-  {
-    title: "Oficina",
-    items: [
-      { entityId: "light.oficina_luz", size: 12 },
-      { element: <Printers />, size: 12 },
-    ],
-  },
 ];
 
 export default function HomeDevices({
   slice = [],
+  dividers,
   hideFirstGroupTitle,
 }: {
   slice?: number[];
+  dividers?: boolean;
   hideFirstGroupTitle?: boolean;
 }) {
   return (
     <>
       {groups.slice(...slice).map((group, index) => {
-        if ("element" in group) {
-          return <Fragment key={index}>{group.element}</Fragment>;
-        }
-
         return (
-          <div key={index} title={group.title}>
+          <Fragment key={index}>
             <GridSection
-              defaultSize={6}
+              defaultSize={{ xs: 6, sm: 4, md: 3, xl: 2 }}
               title={
                 hideFirstGroupTitle && index === 0 ? undefined : group.title
               }
@@ -166,7 +172,8 @@ export default function HomeDevices({
                 return item;
               })}
             />
-          </div>
+            {dividers && index < groups.length - 1 && <Divider />}
+          </Fragment>
         );
       })}
     </>

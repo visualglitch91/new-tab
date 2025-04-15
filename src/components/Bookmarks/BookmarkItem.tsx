@@ -1,35 +1,26 @@
 import { Bookmark } from "$app/types/bookmarks";
-import { Typography } from "@mui/material";
-import HugeButton from "../HugeButton";
+import DesktopButton from "$app/desktop/DesktopButton";
+import { PaletteColors } from "$app/theme/palette";
 
 export default function BookmarkItem({
   item,
+  color,
   openInNewTab,
 }: {
   item: Bookmark;
+  color: PaletteColors;
   openInNewTab: boolean;
 }) {
   return (
-    <HugeButton
+    <DesktopButton
       component="a"
       href={item.url}
       target={openInNewTab ? "_blank" : "_self"}
       rel="noreferrer"
-      sx={{
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        py: 1.5,
-        px: 1.8,
-        borderRadius: "8px",
-        gap: 1.8,
-      }}
+      icon={item.icon}
+      color={color}
     >
-      <img
-        style={{ width: 32, height: 32, borderRadius: 4 }}
-        src={item.icon}
-        alt=""
-      />
-      <Typography fontWeight="medium">{item.name}</Typography>
-    </HugeButton>
+      {item.name}
+    </DesktopButton>
   );
 }

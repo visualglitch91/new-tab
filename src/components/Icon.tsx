@@ -1,6 +1,7 @@
 import { styled } from "@mui/material";
 import { SxProps } from "$app/theme/utils";
 import { cx, sxx } from "$app/utils/styling";
+import { PaletteColors } from "$app/theme/palette";
 
 const ImageIcon = styled("img")({
   display: "inline-flex",
@@ -17,6 +18,7 @@ export default function Icon({
   src,
   size = 24,
   style,
+  color,
 }: {
   sx?: SxProps;
   className?: string;
@@ -24,6 +26,7 @@ export default function Icon({
   src?: string;
   size?: number;
   style?: React.CSSProperties;
+  color?: PaletteColors;
 }) {
   const sx = sxx(
     {
@@ -32,6 +35,7 @@ export default function Icon({
       minHeight: size,
       maxWidth: size,
       maxHeight: size,
+      color: color ? (theme) => theme.palette[color].main : undefined,
     },
     _sx
   );

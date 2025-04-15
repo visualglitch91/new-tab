@@ -33,7 +33,6 @@ function AppLink({
       <Link to={path} asChild>
         <DrawerButton
           size={size}
-          color="white"
           variant={active ? "contained" : "text"}
           fullWidth
           startIcon={<Icon icon={icon} />}
@@ -98,7 +97,7 @@ export function AppDrawer({
           />
         </>
       )}
-      <List sx={{ px: 1.2 }}>
+      <List sx={{ px: 1.2, minWidth: 320 }}>
         {pages.map(({ hidden, admin, ...it }, index) => {
           if (hidden || (admin && !isAdmin)) {
             return null;

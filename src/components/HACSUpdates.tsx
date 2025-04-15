@@ -1,5 +1,4 @@
-import { hassUrl, useEntity } from "$app/utils/hass";
-import AltIconButton from "./AltIconButton";
+import { useEntity } from "$app/utils/hass";
 import ListSection from "./ListSection";
 import ListItem from "./ListItem";
 
@@ -11,17 +10,7 @@ export default function HACSUpdates() {
   }[] = useEntity("sensor.hacs")?.attributes?.repositories || [];
 
   return (
-    <ListSection
-      title={
-        <>
-          <span>HACS</span>
-          <AltIconButton
-            icon="mdi:open-in-new"
-            onClick={() => window.open(`${hassUrl}/hacs/integrations`)}
-          />
-        </>
-      }
-    >
+    <ListSection title="HACS">
       {repos.length === 0 ? (
         <ListItem primaryText="Sem atualizações pendentes" />
       ) : (

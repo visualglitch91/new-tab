@@ -10,8 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { getConfig } from "$app/utils/useConfig";
-import Icon from "./Icon";
 import { rgbStringToRGB, rgbToHSL } from "$app/utils/colors";
+import { PaletteColors } from "$app/theme/palette";
+import { usePageColor } from "$app/atoms/pageColor";
+import Icon from "./Icon";
 
 const enableBlur = !getConfig("disableBlurEffects");
 
@@ -20,18 +22,20 @@ const Root = styled(ButtonBase, {
     !["color", "active", "disableIconBackground"].includes(String(name)),
 })<{
   color?: string;
+  hoverColor?: PaletteColors;
   active?: boolean;
   disableIconBackground?: boolean;
 }>(
   ({
     theme,
     color = "#FFFFFF",
+    hoverColor,
     disabled,
     active: _active,
     disableIconBackground,
   }) => {
     const active = disabled ? false : _active;
-    const background = "rgb(28, 34, 48)";
+    const background = theme.palette.base.dark;
     const iconBackground = disableIconBackground
       ? "#FFFFFF00"
       : active
@@ -44,7 +48,7 @@ const Root = styled(ButtonBase, {
       justifyContent: "flex-start",
       borderRadius: theme.shape.borderRadius,
       padding: theme.spacing(0.8, 1.2),
-      background: alpha(background, 0.5),
+      background,
       backdropFilter: enableBlur ? "blur(20px)" : undefined,
       boxShadow: "rgb(25, 25, 25) 3px 3px 13px -6px",
       opacity: disabled ? 0.5 : 1,
@@ -57,6 +61,9 @@ const Root = styled(ButtonBase, {
         "& > *": {
           color: theme.palette.getContrastText(iconBackground),
         },
+      },
+      "body.mobile &": {
+        background: alpha(background, 0.6),
       },
       "& .MuiTypography-root": {
         margin: 0,
@@ -71,7 +78,8 @@ const Root = styled(ButtonBase, {
         width: "100%",
       },
       "&:not(:has(.MuiIconButton-root:hover)):hover": {
-        background: alpha(background, 0.7),
+        background: theme.palette.base.main,
+        color: hoverColor && theme.palette[hoverColor].main,
         "& .MuiIconButton-root": {
           background: darken(iconBackground, 0.15),
         },
@@ -109,6 +117,8 @@ export default function BaseTileCard({
 }) {
   let color: string | undefined;
 
+  const [pageColor] = usePageColor();
+
   const rgbString = _color?.startsWith("#")
     ? hexToRgb(_color)
     : _color?.startsWith("rgb")
@@ -129,6 +139,7 @@ export default function BaseTileCard({
     <Root
       disabled={disabled}
       color={color}
+      hoverColor={pageColor}
       active={active}
       disableIconBackground={disableIconBackground}
       onClick={onClick}

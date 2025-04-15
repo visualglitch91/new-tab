@@ -18,7 +18,7 @@ const ElevatedHeader = styled("div")({
     opacity: 0,
     transition: "opacity 300ms var(--tween)",
     backdropFilter: "blur(20px)",
-    backgroundColor: "rgba(28, 34, 48,0.5)",
+    backgroundColor: "rgba(28, 34, 48, 0.3)",
   },
   '&[data-elevate="true"]:after': { opacity: 1 },
   '&[data-mobile-external-display="true"]': {

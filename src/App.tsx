@@ -14,6 +14,14 @@ import theme from "./theme";
 import Mobile from "./mobile";
 import Desktop from "./desktop";
 
+const globalStyles = (
+  <GlobalStyles
+    styles={(theme) => ({
+      "body *": { fontFamily: theme.typography.fontFamily },
+    })}
+  />
+);
+
 export default function App() {
   const [location, navigate] = useLocation();
 
@@ -29,13 +37,11 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <GlobalStyles
-        styles={(theme) => ({
-          "body *": { fontFamily: theme.typography.fontFamily },
-        })}
-      />
+      {globalStyles}
       <BreakpointProvider
         onChange={({ isMobile }) => {
+          document.body.classList.toggle("mobile", isMobile);
+
           const basePath = isMobile ? "/mobile" : "/desktop";
 
           if (!location.startsWith(basePath)) {

@@ -7,7 +7,7 @@ export default function AltIconButton({
   iconSize,
   icon,
   disabled,
-  color = "glossy",
+  color,
   sx,
   onClick,
 }: {

@@ -3,7 +3,7 @@
     "section": "Social, Email e Notícias",
     "id": "LINK_3",
     "name": "Instagram",
-    "icon": "https://play-lh.googleusercontent.com/VRMWkE5p3CkWhJs6nv-9ZsLAs1QOg5ob1_3qg-rckwYW7yp1fMrYZqnEFpk0IoVP4LM=w480-h960-rw",
+    "icon": "mdi-instagram",
     "url": "https://instagram.com",
     "order": 3
   },
@@ -11,7 +11,7 @@
     "section": "Social, Email e Notícias",
     "id": "LINK_4",
     "name": "Feedly",
-    "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple124/v4/d6/09/b0/d609b0a3-8cd5-71ba-ad7d-2f46ee041a68/AppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/230x0w.webp",
+    "icon": "rss",
     "url": "https://feedly.com/",
     "order": 4
   },
@@ -19,7 +19,7 @@
     "section": "Media",
     "id": "LINK_6",
     "name": "Spotify",
-    "icon": "https://is2-ssl.mzstatic.com/image/thumb/Purple124/v4/15/0e/ce/150ecec1-c05e-b42f-771b-95ec75df3acc/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/230x0w.png",
+    "icon": "spotify",
     "url": "https://open.spotify.com/",
     "order": 25
   },
@@ -27,7 +27,7 @@
     "section": "Finanças",
     "id": "LINK_7",
     "name": "Organizze",
-    "icon": "https://play-lh.googleusercontent.com/prPgPlq7wRcd7OGw0MKylsmoe9mB5r23n8K1YGYh417__fBP9bI_PhhLhTwZsrO8SA=s180-rw",
+    "icon": "piggy-bank-outline",
     "url": "https://app.organizze.com.br/1343439/inicio",
     "order": 21
   },
@@ -35,7 +35,7 @@
     "section": "Lojas",
     "id": "LINK_8",
     "name": "Mercado Livre",
-    "icon": "https://play-lh.googleusercontent.com/Ed5JtmBBRXogvZgW0xO8Cj96wo54k7-1c8NPjoUC3FqcCd2jGgMPaWdKH64EjJxbuPI=s180-rw",
+    "icon": "handshake-outline",
     "url": "https://www.mercadolivre.com.br/",
     "order": 16
   },
@@ -43,7 +43,7 @@
     "section": "Lojas",
     "id": "LINK_9",
     "name": "AliExpress",
-    "icon": "https://play-lh.googleusercontent.com/8XePOjdAbTm12TJ4Cu3-DnQxT7kG-ptsu6yqXMusO5nbCs1s9GeVPwDMqMAMi4rxTYSV=s360-rw",
+    "icon": "shopping-outline",
     "url": "https://www.aliexpress.com/",
     "order": 15
   },
@@ -51,7 +51,7 @@
     "section": "Lojas",
     "id": "LINK_10",
     "name": "Shopee",
-    "icon": "https://is4-ssl.mzstatic.com/image/thumb/Purple122/v4/69/c9/f1/69c9f1be-73ca-76db-c504-3b3531b3661f/AppIcon-1x_U007emarketing-0-5-0-0-85-220.png/492x0w.webp",
+    "icon": "shopping-outline",
     "url": "https://shopee.com.br/",
     "order": 14
   },
@@ -59,31 +59,31 @@
     "section": "Downloads e Arquivos",
     "id": "LINK_11",
     "name": "Proton Drive",
-    "icon": "https://play-lh.googleusercontent.com/AvaTTF1BKzC6BiGR9BI6i6_Cyow4OTl_xRrjZY1pUIxQBMO2zRJtRDralcmm-V5IRQY=s512-rw",
+    "icon": "folder-outline",
     "url": "https://drive.proton.me",
     "order": 9
   },
   "LINK_12": {
     "section": "Media",
     "id": "LINK_12",
-    "name": "Google Fotos",
-    "icon": "https://play-lh.googleusercontent.com/ZyWNGIfzUyoajtFcD7NhMksHEZh37f-MkHVGr5Yfefa-IX7yj9SMfI82Z7a2wpdKCA=s180-rw",
-    "url": "https://photos.google.com/",
+    "name": "Immich",
+    "icon": "camera",
+    "url": "https://immich.crisalida.cc/",
     "order": 28
   },
   "LINK_13": {
     "section": "Finanças",
     "id": "LINK_13",
     "name": "TechFX",
-    "icon": "https://play-lh.googleusercontent.com/Ichd-aGQOBu3xKEh-_QReYf5h_w667pUWVFoJkCnyZwNaWMlGSd7T2uxtG06Q9i0Rw=w480-h960-rw",
+    "icon": "bank",
     "url": "https://techfx.com.br/",
     "order": 23
   },
   "LINK_14": {
-    "section": "Finanças",
+    "section": "Trabalho e Tarefas",
     "id": "LINK_14",
     "name": "TickTick",
-    "icon": "https://play-lh.googleusercontent.com/JkYolPNuRAlrXEI9vlk-XOid3VFJ0IPjDj2eM_xrriuE3Zu8IX9cuMkI7JOTw1upNxbW",
+    "icon": "checkbox-marked-circle-auto-outline",
     "url": "https://ticktick.com/webapp/#q/all/week",
     "order": 24
   },
@@ -91,7 +91,7 @@
     "section": "Home Lab e Automação",
     "id": "LINK_16",
     "name": "Home Assistant",
-    "icon": "https://play-lh.googleusercontent.com/iS3Wa525QXuFdSkWi-s45GUK4oiPpOgmWQosv81pk0P1dF8Al6opybbofk5v-5hTQhua=w480-h960",
+    "icon": "home-assistant",
     "url": "https://trlukhmv4wvg9a.crisalida.cc/lovelace/0",
     "order": 29
   },
@@ -99,7 +99,7 @@
     "section": "Downloads e Arquivos",
     "name": "Radarr",
     "url": "https://radarr.crisalida.cc",
-    "icon": "https://getumbrel.github.io/umbrel-apps-gallery/radarr/icon.svg",
+    "icon": "filmstrip",
     "id": "65651274e9ab4fe665818ef6",
     "order": 12
   },
@@ -107,7 +107,7 @@
     "section": "Downloads e Arquivos",
     "name": "Sonarr",
     "url": "https://sonarr.crisalida.cc",
-    "icon": "https://getumbrel.github.io/umbrel-apps-gallery/sonarr/icon.svg",
+    "icon": "television-classic",
     "id": "6565128ae9ab4fe665818ef7",
     "order": 10
   },
@@ -115,7 +115,7 @@
     "section": "Downloads e Arquivos",
     "name": "Bazarr",
     "url": "https://bazarr.crisalida.cc",
-    "icon": "https://getumbrel.github.io/umbrel-apps-gallery/bazarr/icon.svg",
+    "icon": "subtitles-outline",
     "id": "6565129ee9ab4fe665818ef8",
     "order": 11
   },
@@ -123,7 +123,7 @@
     "section": "Downloads e Arquivos",
     "name": "Torrents",
     "url": "https://torrents.crisalida.cc",
-    "icon": "https://metatrone.fr/wp-content/uploads/2023/10/qBittorrent-460.png",
+    "icon": "cloud-download-outline",
     "id": "6565135ae9ab4fe665818efc",
     "order": 7
   },
@@ -131,7 +131,7 @@
     "section": "Home Lab e Automação",
     "name": "Impressoras 3D",
     "url": "https://printers.crisalida.cc",
-    "icon": "https://raw.githubusercontent.com/visualglitch91/app-icons-library/main/original/3DPrinting.png",
+    "icon": "mdi-printer-3d-nozzle-outline",
     "id": "65651371e9ab4fe665818efd",
     "order": 31
   },
@@ -139,7 +139,7 @@
     "section": "Home Lab e Automação",
     "name": "OrcaSlicer",
     "url": "https://slicer.crisalida.cc",
-    "icon": "https://raw.githubusercontent.com/visualglitch91/app-icons-library/refs/heads/main/original/OrcaSlicer.jpg",
+    "icon": "knife",
     "id": "65651371e9ab4fe66581abcd",
     "order": 32
   },
@@ -147,23 +147,23 @@
     "section": "Finanças",
     "name": "Bonusly",
     "url": "https://app.bonus.ly/",
-    "icon": "https://play-lh.googleusercontent.com/W_fBiCALW6sxGvqhR9IkZtkrWmCDnrSyisFv7wY0Bd146YDaDM4CWrJT82gBRIQa1A",
+    "icon": "trophy-outline",
     "id": "66033348c5f9336fc83a078c",
     "order": 20
   },
   "6603337ec5f9336fc83a078d": {
-    "section": "Trabalho",
+    "section": "Trabalho e Tarefas",
     "name": "Calendário",
     "url": "https://calendar.google.com/calendar/u/2/r",
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/2048px-Google_Calendar_icon_%282020%29.svg.png",
+    "icon": "calendar-month",
     "id": "6603337ec5f9336fc83a078d",
     "order": 19
   },
   "6603354a6de6d2bb40e6fc39": {
-    "section": "Trabalho",
+    "section": "Trabalho e Tarefas",
     "name": "Jira",
     "url": "https://telnyx.atlassian.net/jira/software/c/projects/INIT/boards/312?assignee=712020%3Af94318e5-fd9b-410e-a9d9-9796ba8b897e",
-    "icon": "https://play-lh.googleusercontent.com/_AZCbg39DTuk8k3DiPRASr9EwyW058pOfzvAu1DsfN9ygtbOlbuucmXaHJi5ooYbokQX",
+    "icon": "jira",
     "id": "6603354a6de6d2bb40e6fc39",
     "order": 17
   },
@@ -171,7 +171,7 @@
     "section": "Social, Email e Notícias",
     "name": "Proton Mail",
     "url": "https://mail.proton.me/",
-    "icon": "https://play-lh.googleusercontent.com/99IPL5W1HvN1TM7awcJ2gihUie-LQ5Ae7W9g0FgCBFJ8hNZnFIOJElyBPNcx4Wcx7A=w240-h480-rw",
+    "icon": "mdi-email-outline",
     "id": "660335826de6d2bb40e6fc3a",
     "order": 2
   },
@@ -179,7 +179,7 @@
     "section": "Downloads e Arquivos",
     "name": "JDownloader",
     "url": "https://jdownloader.crisalida.cc",
-    "icon": "https://cdn.icon-icons.com/icons2/3053/PNG/512/jdownloader_macos_bigsur_icon_189499.png",
+    "icon": "cloud-download-outline",
     "id": "660335c86de6d2bb40e6fc3b",
     "order": 8
   },
@@ -187,15 +187,15 @@
     "section": "Downloads e Arquivos",
     "name": "Prowlarr",
     "url": "https://prowlarr.crisalida.cc",
-    "icon": "https://static-00.iconduck.com/assets.00/prowlarr-icon-2048x2048-2pxvehfe.png",
+    "icon": "cat",
     "id": "660336501e1197e4ddab88ac",
     "order": 13
   },
   "6603369c1e1197e4ddab88ad": {
-    "section": "Trabalho",
+    "section": "Trabalho e Tarefas",
     "name": "Email",
     "url": "https://mail.google.com/mail/u/2/#inbox",
-    "icon": "https://play-lh.googleusercontent.com/KSuaRLiI_FlDP8cM4MzJ23ml3og5Hxb9AapaGTMZ2GgR103mvJ3AAnoOFz1yheeQBBI",
+    "icon": "mdi-email-outline",
     "id": "6603369c1e1197e4ddab88ad",
     "order": 18
   },
@@ -203,7 +203,7 @@
     "section": "Media",
     "name": "YouTube",
     "url": "https://youtube.com",
-    "icon": "https://play-lh.googleusercontent.com/lMoItBgdPPVDJsNOVtP26EKHePkwBg-PkuY9NOrc-fumRtTFP4XhpUNk_22syN4Datc=w240-h480-rw",
+    "icon": "youtube",
     "id": "660336cb1e1197e4ddab88ae",
     "order": 26
   },
@@ -211,23 +211,15 @@
     "section": "Downloads e Arquivos",
     "name": "Switch Shop",
     "url": "https://switch-shop.local.crisalida.cc",
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Nintendo-switch-icon.png",
+    "icon": "nintendo-switch",
     "id": "660337521e1197e4ddab88af",
     "order": 6
-  },
-  "660337b01e1197e4ddab88b0": {
-    "section": "Home Lab e Automação",
-    "name": "HASS Alexa",
-    "url": "https://alexa.local.crisalida.cc",
-    "icon": "https://cdn.icon-icons.com/icons2/2108/PNG/512/amazon_alexa_icon_130998.png",
-    "id": "660337b01e1197e4ddab88b0",
-    "order": 30
   },
   "660426e6e4339f28eb9280eb": {
     "section": "Finanças",
     "name": "NuInvest",
     "url": "https://www.nuinvest.com.br/",
-    "icon": "https://play-lh.googleusercontent.com/Q7gF3JtHhRx8jfjDlKNq0_hSG7-3kdNwvy9z8w_uwf1YXvO-pjx2IkDMok30IhtgAPYp",
+    "icon": "chart-line",
     "order": 22,
     "id": "660426e6e4339f28eb9280eb"
   },
@@ -235,7 +227,7 @@
     "section": "Media",
     "name": "Jellyfin",
     "url": "https://jellyfin.crisalida.cc",
-    "icon": "https://play-lh.googleusercontent.com/nYoxcDZjLKXpZnIyGUPSOG-0CodCtOB0OOY7zcCgtyQfFmhKfJeVImILUUTaWKo06w",
+    "icon": "jellyfish-outline",
     "order": 27,
     "id": "660432d31a4fae696dbdc306"
   },
@@ -243,7 +235,7 @@
     "section": "Social, Email e Notícias",
     "name": "BlueSky",
     "url": "https://bsky.app/",
-    "icon": "https://play-lh.googleusercontent.com/VsgCCgW-ct98JhgVoQzndWCAaXxlP6uMwcjzINYPmeja8cCNISsJDqDFNQrF2IRq9xM",
+    "icon": "butterfly-outline",
     "order": 0,
     "id": "6604388a1a4fae696dbdc309"
   }

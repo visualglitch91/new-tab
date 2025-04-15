@@ -2,42 +2,46 @@ import { useEffect } from "react";
 import { Route, Switch, useLocation } from "wouter";
 import RouteRedirect from "$app/components/RouteRedirect";
 import { AppDrawer } from "./components/AppDrawer";
-import TimersAndSchedule from "./pages/Timers";
-import Home from "./pages/Home";
-import SysAdmin from "./pages/SysAdmin";
-import AppsPage from "./pages/Apps";
+import HomePage from "./pages/Home";
+import SchedulesPage from "./pages/Schedules";
+import TimersPage from "./pages/Timers";
+import ManagementPage from "./pages/Management";
+import AppManagerPage from "./pages/AppManager";
 
 const pages = [
-  {
-    path: "/mobile/apps",
-    icon: "apps",
-    label: "Apps",
-    component: <AppsPage />,
-    matchAll: true,
-    admin: true,
-  },
   {
     path: "/mobile/home",
     matchAll: true,
     icon: "home-outline",
     label: "Casa",
-    component: <Home />,
+    component: <HomePage />,
   },
   {
-    path: "/mobile/timers",
+    label: "Timers",
     icon: "clock-outline",
-    label: "Timers e Agendamentos",
-    component: <TimersAndSchedule />,
-    matchAll: true,
+    path: "/mobile/timers/timers",
     admin: true,
+    component: <TimersPage />,
   },
   {
-    path: "/mobile/admin",
-    icon: "cog-outline",
-    label: "Sistema",
-    component: <SysAdmin />,
-    matchAll: true,
+    label: "Agendamentos",
+    icon: "calendar-outline",
+    path: "/mobile/timers/schedule",
     admin: true,
+    component: <SchedulesPage />,
+  },
+  {
+    label: "Administração",
+    icon: "cog-outline",
+    path: "/mobile/admin/management",
+    component: <ManagementPage />,
+  },
+  {
+    label: "Aplicações",
+    icon: "apps",
+    path: "/mobile/admin/apps",
+    admin: true,
+    component: <AppManagerPage />,
   },
 ];
 

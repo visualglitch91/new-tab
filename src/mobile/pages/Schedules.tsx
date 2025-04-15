@@ -4,7 +4,7 @@ import useUpsertSchedule from "$app/components/Schedules/useUpsertSchedule";
 import PageLayout from "$app/mobile/components/PageLayout";
 import PageTile from "$app/mobile/components/PageTitle";
 
-export default function SchedulePage() {
+export default function SchedulesPage() {
   const upsertSchedule = useUpsertSchedule();
 
   return (

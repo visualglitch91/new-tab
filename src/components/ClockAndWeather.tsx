@@ -50,6 +50,7 @@ const Root = styled(GlossyPaper)({
   justifyContent: "space-between",
   padding: 24,
   fontWeight: "500",
+  backgroundColor: "white !important",
 });
 
 const compactSx: SxProps = {
@@ -77,7 +78,9 @@ export default function ClockAndWeather({
   compact?: boolean;
 }) {
   const [date, setDate] = useState(() => new Date());
-  const weatherEntity = useEntity<WeatherEntity>("weather.republica");
+  const weatherEntity = useEntity<WeatherEntity>(
+    "weather.casa_temperatura_externa"
+  );
 
   useMountEffect(() => {
     return clock.on(() => setDate(() => new Date()));

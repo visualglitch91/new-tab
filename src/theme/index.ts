@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material";
-import { applyCustomColors } from "./colors";
+import palette from "./palette";
 
 function getModuleName(filePath: string) {
   return filePath.match(/\/([^/]+)\.ts$/)?.[1] || null;
@@ -26,29 +26,23 @@ const baseOverrides = {
     borderRadius: 12,
   },
   typography: {
-    fontFamily: "San Francisco",
+    fontFamily: '"Fira Sans", "San Francisco"',
   },
   components: overrides,
 };
 
-const theme = applyCustomColors(
-  createTheme({
-    ...baseOverrides,
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 700,
-        md: 1000,
-        lg: 1300,
-        xl: 1700,
-      },
+const theme = createTheme({
+  ...baseOverrides,
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 700,
+      md: 1000,
+      lg: 1300,
+      xl: 1700,
     },
-    palette: {
-      mode: "dark",
-      primary: { main: "#ff79c6" },
-      secondary: { main: "#885ba3" },
-    },
-  })
-);
+  },
+  palette,
+});
 
 export default theme;
