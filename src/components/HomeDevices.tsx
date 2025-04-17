@@ -25,8 +25,7 @@ const groups: {
             statusEntityId="input_text.casa_ar_condicionado_status"
             turnOffButtonEntityId="button.casa_ar_condicionado_desligar"
             getButtonEntityId={(speed, temp) => {
-              const tempStr = isNaN(Number(temp)) ? temp : `${temp}oc`;
-              return `button.casa_ar_condicionado_${tempStr}_${speed}`;
+              return `button.casa_ar_condicionado_${temp}_${speed}`;
             }}
           />
         ),
@@ -38,7 +37,7 @@ const groups: {
       { entityId: "light.escritorio_luz", label: "Luz do\nEscritório" },
       { entityId: "light.quarto_luz", label: "Luz do Quarto" },
       { entityId: "light.cozinha_luz", label: "Luz da\nCozinha" },
-      { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
+      { entityId: "light.lavanderia_luz", label: "Luz da\nLavanderia" },
       { entityId: "light.casa_luz_do_hall" },
       { entityId: "light.casa_luz_do_corredor" },
     ],
@@ -72,7 +71,7 @@ const groups: {
     items: [
       { entityId: "light.cozinha_luz", label: "Luz da\nCozinha" },
       { entityId: "switch.cozinha_cafeteira" },
-      { entityId: "switch.lavanderia_luz", label: "Luz da\nLavanderia" },
+      { entityId: "light.lavanderia_luz", label: "Luz da\nLavanderia" },
     ],
   },
   {
@@ -83,7 +82,7 @@ const groups: {
         size: largeCard,
       },
       { entityId: "light.quarto_luz" },
-      { entityId: "light.quarto_ventilador" },
+      { entityId: "switch.quarto_ventilador" },
       { entityId: "light.banheiro_1_luz" },
       { entityId: "light.banheiro_1_luz_chuveiro" },
       // { entityId: "switch.quarto_abajur_esquerdo" },
