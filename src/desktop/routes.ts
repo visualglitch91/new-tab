@@ -1,5 +1,6 @@
 import { PaletteColors } from "$app/theme/palette";
 import Bookmarks from "$app/components/Bookmarks";
+import { getNextBanner } from "$app/components/DesktopPage/Banner";
 import HomePage from "./pages/Home";
 import TimersPage from "./pages/Timers";
 import SchedulesPage from "./pages/Schedules";
@@ -17,7 +18,7 @@ const routes: {
     path: "/desktop",
     label: "Bookmarks",
     color: "red",
-    banner: "cbg-13.gif",
+    banner: getNextBanner(),
     component: Bookmarks,
     admin: true,
   },
@@ -25,28 +26,28 @@ const routes: {
     path: "/desktop/home",
     label: "Casa",
     color: "green",
-    banner: "howls-lofi.gif",
+    banner: getNextBanner(),
     component: HomePage,
   },
   {
     path: "/desktop/timers",
     label: "Timers",
     color: "teal",
-    banner: "cbg-10.gif",
+    banner: getNextBanner(),
     component: TimersPage,
   },
   {
     path: "/desktop/schedules",
     label: "Agendamentos",
     color: "peach",
-    banner: "cbg-03.gif",
+    banner: getNextBanner(),
     component: SchedulesPage,
   },
   {
     path: "/desktop/system",
     label: "Sistema",
     color: "mauve",
-    banner: "cbg-07.gif",
+    banner: getNextBanner(),
     component: SysAdminPage,
     admin: true,
   },
