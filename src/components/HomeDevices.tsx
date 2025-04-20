@@ -46,7 +46,12 @@ const groups: {
     title: "Sala",
     items: [
       {
-        element: <TVTileCard entityId="media_player.sala_tv" />,
+        element: (
+          <TVTileCard
+            entityId="media_player.sala_tv"
+            remoteId="remote.base_sala_androidtv"
+          />
+        ),
         size: largeCard,
       },
       { entityId: "light.mesa_jantar_luz", label: "Luz da Mesa" },
@@ -78,7 +83,12 @@ const groups: {
     title: "Quarto",
     items: [
       {
-        element: <TVTileCard entityId="media_player.quarto_tv" />,
+        element: (
+          <TVTileCard
+            entityId="media_player.quarto_tv"
+            remoteId="remote.base_quarto_androidtv"
+          />
+        ),
         size: largeCard,
       },
       { entityId: "light.quarto_luz" },

@@ -155,37 +155,39 @@ export default function EntitySelectorDialog({
       }
     >
       <Stack spacing={3}>
-        {groupedEntities.map(([zone, entities]) => (
-          <Box
-            key={zone}
-            borderBottom="1px solid rgba(100,100,100,0.5)"
-            paddingBottom={4}
-          >
-            <Typography marginBottom={1} fontWeight={500}>
-              {zone}
-            </Typography>
-            <AutoGrid gap={16} columnWidth={120}>
-              {entities.map((it) => (
-                <EntityItem
-                  key={it.id}
-                  size="small"
-                  variant={selected.has(it.id) ? "contained" : "outlined"}
-                  onClick={() => {
-                    if (selected.has(it.id)) {
-                      selected.delete(it.id);
-                    } else if (maxSelected === 1) {
-                      setTimeout(submit, 150, [it.id]);
-                    } else if (Array.from(selected).length < maxSelected) {
-                      selected.add(it.id);
-                    }
-                  }}
-                >
-                  {it.name}
-                </EntityItem>
-              ))}
-            </AutoGrid>
-          </Box>
-        ))}
+        {groupedEntities.map(([zone, entities = []]) =>
+          entities.length ? (
+            <Box
+              key={zone}
+              borderBottom="1px solid rgba(100,100,100,0.5)"
+              paddingBottom={4}
+            >
+              <Typography marginBottom={1} fontWeight={500}>
+                {zone}
+              </Typography>
+              <AutoGrid gap={16} columnWidth={120}>
+                {entities.map((it) => (
+                  <EntityItem
+                    key={it.id}
+                    size="small"
+                    variant={selected.has(it.id) ? "contained" : "outlined"}
+                    onClick={() => {
+                      if (selected.has(it.id)) {
+                        selected.delete(it.id);
+                      } else if (maxSelected === 1) {
+                        setTimeout(submit, 150, [it.id]);
+                      } else if (Array.from(selected).length < maxSelected) {
+                        selected.add(it.id);
+                      }
+                    }}
+                  >
+                    {it.name}
+                  </EntityItem>
+                ))}
+              </AutoGrid>
+            </Box>
+          ) : null
+        )}
       </Stack>
     </DialogBase>
   );

@@ -1,10 +1,20 @@
 import { Box } from "@mui/material";
-import { makeTurnOnCall } from "$app/utils/hass";
+import { makeServiceCall } from "$app/utils/hass";
 import IconHugeButton from "./IconHugeButton";
 import DialogBase, { DialogBaseControlProps } from "./DialogBase";
 import ButtonRow from "./ButtonRow";
 
-export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
+export default function AndroidRemoteDialog({
+  entityId,
+  ...props
+}: DialogBaseControlProps & { entityId: string }) {
+  const makeCommandCall = (command: string) => {
+    return makeServiceCall("remote", "send_command", {
+      entity_id: entityId,
+      command,
+    });
+  };
+
   return (
     <DialogBase {...props} bottomMobileSheet title="Controle">
       <Box
@@ -16,61 +26,51 @@ export default function AndroidRemoteDialog(props: DialogBaseControlProps) {
           "& button": {
             background: theme.palette.white.main,
             color: theme.palette.white.contrastText,
-            "&:hover": {
-              background: theme.palette.white.dark,
-            },
+            "&:hover": { background: theme.palette.white.dark },
           },
         })}
       >
         <ButtonRow height={90}>
-          <IconHugeButton
-            icon="mdi:image-outline"
-            size={28}
-            action={makeTurnOnCall("button.sala_media_player_ligar_tela")}
-          />
+          <span />
           <IconHugeButton
             icon="mdi:chevron-up"
             size={32}
-            action={makeTurnOnCall("button.sala_media_player_move_up")}
+            action={makeCommandCall("DPAD_UP")}
           />
-          <IconHugeButton
-            icon="mdi:image-off-outline"
-            size={28}
-            action={makeTurnOnCall("button.sala_media_player_desligar_tela")}
-          />
+          <span />
         </ButtonRow>
         <ButtonRow height={90}>
           <IconHugeButton
             icon="mdi:chevron-left"
             size={32}
-            action={makeTurnOnCall("button.sala_media_player_move_left")}
+            action={makeCommandCall("DPAD_LEFT")}
           />
           <IconHugeButton
             icon="mdi:record-circle-outline"
             size={25}
-            action={makeTurnOnCall("button.sala_media_player_select")}
+            action={makeCommandCall("DPAD_CENTER")}
           />
           <IconHugeButton
             icon="mdi:chevron-right"
             size={32}
-            action={makeTurnOnCall("button.sala_media_player_move_right")}
+            action={makeCommandCall("DPAD_RIGHT")}
           />
         </ButtonRow>
         <ButtonRow height={90}>
           <IconHugeButton
             icon="mdi:undo"
             size={30}
-            action={makeTurnOnCall("button.sala_media_player_back")}
+            action={makeCommandCall("BACK")}
           />
           <IconHugeButton
             icon="mdi:chevron-down"
             size={32}
-            action={makeTurnOnCall("button.sala_media_player_move_down")}
+            action={makeCommandCall("DPAD_DOWN")}
           />
           <IconHugeButton
             icon="mdi:home"
             size={25}
-            action={makeTurnOnCall("button.sala_media_player_home")}
+            action={makeCommandCall("HOME")}
           />
         </ButtonRow>
       </Box>
