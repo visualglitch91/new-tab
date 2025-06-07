@@ -8,7 +8,8 @@
     "postbuild": "cp src/robots.txt ./dist && cp src/version.json dist/latest.json",
     "dev": "yarn prerun && vite",
     "build": "yarn prerun && yarn lint && rm -rf dist && vite build",
-    "lint": "tsc && eslint --ext .ts,.tsx src"
+    "lint": "tsc && eslint --ext .ts,.tsx src",
+    "serve": "serve dist --single -p 3000"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -31,6 +32,7 @@
     "mouse-event-offset": "^3.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "serve": "^14.2.4",
     "wouter": "^3.1.0"
   },
   "devDependencies": {

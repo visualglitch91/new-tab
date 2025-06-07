@@ -8,8 +8,23 @@ export default function ServerModule() {
       <EntityListItems
         items={[
           {
-            label: "Uso do Disco de Mídia",
-            entityId: "sensor.disk_use_percent_drives_visualglitch91",
+            label: "/root",
+            icon: "harddisk",
+            entityId: "sensor.system_monitor_disk_usage_disks_root",
+            renderListContent: (entity) =>
+              formatNumericValue(entity.state, "%"),
+          },
+          {
+            label: "/sunsetdrive91",
+            icon: "harddisk",
+            entityId: "sensor.system_monitor_disk_usage_disks_sunsetdrive91",
+            renderListContent: (entity) =>
+              formatNumericValue(entity.state, "%"),
+          },
+          {
+            label: "/visualglitch91",
+            icon: "harddisk",
+            entityId: "sensor.system_monitor_disk_usage_disks_visualglitch91",
             renderListContent: (entity) =>
               formatNumericValue(entity.state, "%"),
           },
