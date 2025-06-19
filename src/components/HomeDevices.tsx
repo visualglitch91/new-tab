@@ -99,7 +99,7 @@ const groups: {
       // { entityId: "switch.quarto_abajur_direito" },
       // { entityId: "switch.sacada_luz", label: "Sacada" },
       // { entityId: "switch.quarto_umidificador" },
-      // { entityId: "switch.quarto_aquecedor" },
+      { entityId: "switch.quarto_aquecedor" },
     ],
   },
   {
