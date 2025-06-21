@@ -58,8 +58,12 @@ const groups: {
       { entityId: "light.sala_luz", label: "Luz da Sala" },
       { entityId: "light.escritorio_luz", label: "Luz do\nEscritório" },
       { entityId: "light.banheiro_2_luz", label: "Luz do\nBanheiro" },
-      // { entityId: "light.sala_rgb_tv", icon: "led-strip-variant" },
-      // { entityId: "light.sala_rgb_rack", icon: "led-strip-variant" },
+      {
+        label: "Ambilight",
+        icon: "mdi:television-ambient-light",
+        entityId: "switch.home_lab_apps_home_control_hyperhdr",
+      },
+      { entityId: "light.sala_rgb_tv", icon: "mdi:television-ambient-light" },
     ],
   },
   // {
