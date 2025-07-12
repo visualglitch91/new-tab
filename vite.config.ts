@@ -9,7 +9,7 @@ const iconSizes = [72, 192, 512];
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    port: 6173,
+    port: Number(process.env.PORT),
     host: "0.0.0.0",
   },
   define: {
@@ -23,9 +23,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       injectRegister: false,
-
       includeAssets: iconSizes.map((size) => `icons/${size}.png`),
-
       manifest: {
         name: "home-control",
         short_name: "home-control",
@@ -46,13 +44,11 @@ export default defineConfig({
           },
         ],
       },
-
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
       },
-
       devOptions: {
         enabled: false,
         navigateFallback: "index.html",

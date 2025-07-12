@@ -9,7 +9,8 @@
     "dev": "yarn prerun && vite",
     "build": "yarn prerun && yarn lint && rm -rf dist && vite build",
     "lint": "tsc && eslint --ext .ts,.tsx src",
-    "serve": "serve dist --single -p 3000"
+    "serve": "serve dist --single -p $PORT",
+    "prod": "bun run build && bun run serve"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
